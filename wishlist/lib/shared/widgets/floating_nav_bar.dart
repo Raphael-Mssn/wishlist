@@ -32,7 +32,7 @@ class FloatingNavBar extends StatelessWidget {
 }
 
 class _TabIcon extends StatelessWidget {
-  const _TabIcon({super.key, required this.icon});
+  const _TabIcon({required this.icon});
 
   final IconData icon;
 
