@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/app/navigation/router.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
+import 'package:wishlist/shared/theme/theme.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       // Flutter web url navigation and deep linking.
       onGenerateRoute: onGenerateRoute,
 
-      theme: ThemeData(fontFamily: 'Poppins'),
+      theme: theme,
     );
   }
 }
