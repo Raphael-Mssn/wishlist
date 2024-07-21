@@ -6,4 +6,10 @@ ThemeData get theme => ThemeData(
       fontFamily: 'Truculenta',
       scaffoldBackgroundColor: AppColors.background,
       primaryColor: AppColors.primary,
+      tabBarTheme: const TabBarTheme(
+        labelColor: AppColors.primary,
+        unselectedLabelColor: AppColors.background,
+        dividerColor: Colors.transparent,
+        indicatorColor: AppColors.primary,
+      ),
     );

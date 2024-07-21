@@ -3,7 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/shared/theme/widgets/app_scaffold.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/widgets/floating_nav_bar.dart';
+import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,7 +15,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return Scaffold(
+    return AppScaffold(
       body: SafeArea(
         child: Center(
           child: Column(
@@ -38,6 +41,10 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: NavBarAddButton(
+        onPressed: () {},
+      ),
+      bottomNavigationBar: const FloatingNavBar(),
     );
   }
 }

@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:wishlist/shared/theme/colors.dart';
+
+class FloatingNavBar extends StatelessWidget {
+  const FloatingNavBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.darkGrey,
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+        vertical: 8.0,
+      ),
+      child: const DefaultTabController(
+        length: 3,
+        child: TabBar(
+          tabs: [
+            _TabIcon(icon: Icons.home),
+            _TabIcon(icon: Icons.person),
+            _TabIcon(icon: Icons.settings),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TabIcon extends StatelessWidget {
+  const _TabIcon({required this.icon});
+
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tab(
+      child: Icon(
+        icon,
+        size: 32,
+      ),
+    );
+  }
+}
