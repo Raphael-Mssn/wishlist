@@ -22,7 +22,7 @@ class PrimaryButton extends StatelessWidget {
       ),
       onPressed: () {},
       child: Text(
-        'Créer',
+        text,
         style: GoogleFonts.truculenta(
           color: Colors.black,
           fontSize: 28,
