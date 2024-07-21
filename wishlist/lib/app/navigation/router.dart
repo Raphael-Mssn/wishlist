@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wishlist/modules/view/home_screen.dart';
+import 'package:wishlist/modules/home/view/home_screen.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 
 MaterialPageRoute<void> onGenerateRoute(RouteSettings settings) =>
