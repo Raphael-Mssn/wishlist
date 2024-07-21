@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       restorationScopeId: 'app',
 
-      onGenerateTitle: (context) => 'PhotoFiesta',
+      onGenerateTitle: (context) => 'Wishlist',
 
       initialRoute: AppRoutes.home.name,
       // Define a function to handle named routes in order to support
