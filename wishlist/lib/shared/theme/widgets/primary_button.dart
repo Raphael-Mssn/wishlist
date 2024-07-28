@@ -20,7 +20,7 @@ class PrimaryButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
       ),
-      onPressed: () {},
+      onPressed: onPressed,
       child: Text(
         text,
         style: GoogleFonts.truculenta(

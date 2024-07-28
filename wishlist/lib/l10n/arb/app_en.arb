@@ -1,5 +1,8 @@
 {
   "@@locale": "en",
   "no_wishlist": "No wishlist",
-  "create_button": "Create"
+  "create_button": "Create",
+  "create_new_wishlist": "Create a new wishlist",
+  "wishlist_name": "Wishlist's name",
+  "cancel_button": "Cancel"
 }

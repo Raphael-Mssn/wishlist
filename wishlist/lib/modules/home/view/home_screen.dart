@@ -7,6 +7,7 @@ import 'package:wishlist/shared/theme/widgets/app_scaffold.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/floating_nav_bar.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
+import 'package:wishlist/shared/widgets/create_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -35,16 +36,42 @@ class HomeScreen extends StatelessWidget {
               const Gap(16),
               PrimaryButton(
                 text: l10n.create_button,
-                onPressed: () {},
+                onPressed: () {
+                  _showCreateDialog(context);
+                },
               ),
             ],
           ),
         ),
       ),
       floatingActionButton: NavBarAddButton(
-        onPressed: () {},
+        onPressed: () {
+          _showCreateDialog(context);
+        },
       ),
       bottomNavigationBar: const FloatingNavBar(),
+    );
+  }
+
+  Future<void> _showCreateDialog(BuildContext context) async {
+    return showGeneralDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: '', // Combinaison barrierDismissible: true et barrierLabel != null pour pouvoir fermer le dialog en cliquant ailleurs
+      transitionDuration: const Duration(milliseconds: 300),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeInOut,
+        );
+        return ScaleTransition(
+          scale: curvedAnimation,
+          child: child,
+        );
+      },
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return CreateDialog(animation: animation);
+      },
     );
   }
 }
