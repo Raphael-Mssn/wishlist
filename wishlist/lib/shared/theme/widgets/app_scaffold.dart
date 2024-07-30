@@ -16,29 +16,27 @@ class AppScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            body,
-            Positioned(
-              bottom: 0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                ),
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(child: bottomNavigationBar),
-                    const Gap(24),
-                    floatingActionButton,
-                  ],
-                ),
+      body: Stack(
+        children: <Widget>[
+          body,
+          Positioned(
+            bottom: 24,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+              ),
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(child: bottomNavigationBar),
+                  const Gap(32),
+                  floatingActionButton,
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
