@@ -14,19 +14,19 @@ class NavBarAddButton extends StatelessWidget {
     return Material(
       child: InkWell(
         onTap: onPressed,
-        borderRadius: BorderRadius.circular(50.0),
+        borderRadius: BorderRadius.circular(50),
         child: Ink(
           decoration: const BoxDecoration(
             color: AppColors.primary,
             shape: BoxShape.circle,
           ),
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10),
           child: Ink(
             decoration: const BoxDecoration(
               color: AppColors.darkOrange,
               shape: BoxShape.circle,
             ),
-            padding: const EdgeInsets.all(2.0),
+            padding: const EdgeInsets.all(2),
             child: const Icon(
               Icons.add,
               size: 46,

@@ -14,8 +14,8 @@ class FloatingNavBar extends StatelessWidget {
         ),
       ),
       padding: const EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 8.0,
+        horizontal: 16,
+        vertical: 8,
       ),
       child: const DefaultTabController(
         length: 3,

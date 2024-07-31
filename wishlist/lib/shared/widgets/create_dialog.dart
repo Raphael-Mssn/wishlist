@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:wishlist/l10n/l10n.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wishlist/l10n/l10n.dart';
 
 class CreateDialog extends StatelessWidget {
-  final Animation<double> animation;
 
   const CreateDialog({super.key, required this.animation});
+  final Animation<double> animation;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class CreateDialog extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: l10n.wishlist_name,
                         hintStyle: GoogleFonts.truculenta(
-                            fontSize: 20, fontStyle: FontStyle.italic),
+                            fontSize: 20, fontStyle: FontStyle.italic,),
                         focusedBorder: UnderlineInputBorder(
                           borderSide:
                               BorderSide(color: Theme.of(context).primaryColor),
@@ -56,7 +56,7 @@ class CreateDialog extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
-                  )),
+                  ),),
               onPressed: () {
                 Navigator.of(context).pop();
               },

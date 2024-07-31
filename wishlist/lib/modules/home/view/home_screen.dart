@@ -5,9 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/widgets/app_scaffold.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/widgets/create_dialog.dart';
 import 'package:wishlist/shared/widgets/floating_nav_bar.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
-import 'package:wishlist/shared/widgets/create_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -57,7 +57,8 @@ class HomeScreen extends StatelessWidget {
     return showGeneralDialog<void>(
       context: context,
       barrierDismissible: true,
-      barrierLabel: '', // Combinaison barrierDismissible: true et barrierLabel != null pour pouvoir fermer le dialog en cliquant ailleurs
+      barrierLabel:
+          '', // Combinaison barrierDismissible: true et barrierLabel != null pour pouvoir fermer le dialog en cliquant ailleurs
       transitionDuration: const Duration(milliseconds: 300),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         final curvedAnimation = CurvedAnimation(

@@ -23,7 +23,7 @@ class AppScaffold extends StatelessWidget {
             bottom: 24,
             child: Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
+                horizontal: 24,
               ),
               width: MediaQuery.of(context).size.width,
               child: Row(
