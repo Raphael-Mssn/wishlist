@@ -5,24 +5,80 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "wishlist",
-            "cwd": "wishlist",
-            "request": "launch",
-            "type": "dart"
+          "name": "Launch dev debug",
+          "request": "launch",
+          "type": "dart",
+          "cwd": "wishlist",
+          "program": "lib/main.dart",
+          "args": [
+            "--dart-define=APP_ENV=dev",
+            "--dart-define=APP_ID_SUFFIX=.dev",
+            "--dart-define=APP_NAME_PREFIX=[DEV]"
+          ]
         },
         {
-            "name": "wishlist (profile mode)",
-            "cwd": "wishlist",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
+          "name": "Launch dev profile",
+          "request": "launch",
+          "type": "dart",
+          "cwd": "wishlist",
+          "program": "lib/main.dart",
+          "flutterMode": "profile",
+          "args": [
+            "--dart-define=APP_ENV=dev",
+            "--dart-define=APP_ID_SUFFIX=.dev",
+            "--dart-define=APP_NAME_PREFIX=[DEV]"
+          ]
         },
         {
-            "name": "wishlist (release mode)",
-            "cwd": "wishlist",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        }
+          "name": "Launch dev release",
+          "request": "launch",
+          "type": "dart",
+          "cwd": "wishlist",
+          "program": "lib/main.dart",
+          "flutterMode": "release",
+          "args": [
+            "--dart-define=APP_ENV=dev",
+            "--dart-define=APP_ID_SUFFIX=.dev",
+            "--dart-define=APP_NAME_PREFIX=[DEV]"
+          ]
+        },
+        {
+          "name": "Launch prod debug",
+          "request": "launch",
+          "type": "dart",
+          "cwd": "wishlist",
+          "program": "lib/main.dart",
+          "args": [
+            "--dart-define=APP_ENV=prod",
+            "--dart-define=APP_ID_SUFFIX=",
+            "--dart-define=APP_NAME_PREFIX="
+          ]
+        },
+        {
+          "name": "Launch prod profile",
+          "request": "launch",
+          "type": "dart",
+          "cwd": "wishlist",
+          "program": "lib/main.dart",
+          "flutterMode": "profile",
+          "args": [
+            "--dart-define=APP_ENV=prod",
+            "--dart-define=APP_ID_SUFFIX=",
+            "--dart-define=APP_NAME_PREFIX="
+          ]
+        },
+        {
+          "name": "Launch prod release",
+          "request": "launch",
+          "type": "dart",
+          "cwd": "wishlist",
+          "program": "lib/main.dart",
+          "flutterMode": "release",
+          "args": [
+            "--dart-define=APP_ENV=prod",
+            "--dart-define=APP_ID_SUFFIX=",
+            "--dart-define=APP_NAME_PREFIX="
+          ]
+        },
     ]
 }
