@@ -2,7 +2,8 @@
   "@@locale": "fr",
   "no_wishlist": "Aucune wishlist",
   "create_button": "Créer",
-  "create_new_wishlist": "Créer une nouvelle wishlist",
-  "wishlist_name": "Nom de la wishlist",
-  "cancel_button": "Annuler"
+  "create_wishlist": "Créer une wishlist",
+  "name": "Nom",
+  "cancel_button": "Annuler",
+  "close_dialog": "Fermer la fenêtre contextuelle"
 }

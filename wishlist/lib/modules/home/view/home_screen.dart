@@ -37,8 +37,9 @@ class HomeScreen extends StatelessWidget {
               PrimaryButton(
                 text: l10n.create_button,
                 onPressed: () {
-                  _showCreateDialog(context);
+                  showCreateDialog(context);
                 },
+                style: PrimaryButtonStyle.large,
               ),
             ],
           ),
@@ -46,33 +47,10 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: NavBarAddButton(
         onPressed: () {
-          _showCreateDialog(context);
+          showCreateDialog(context);
         },
       ),
       bottomNavigationBar: const FloatingNavBar(),
-    );
-  }
-
-  Future<void> _showCreateDialog(BuildContext context) async {
-    return showGeneralDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel:
-          '', // Combinaison barrierDismissible: true et barrierLabel != null pour pouvoir fermer le dialog en cliquant ailleurs
-      transitionDuration: const Duration(milliseconds: 300),
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        final curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeInOut,
-        );
-        return ScaleTransition(
-          scale: curvedAnimation,
-          child: child,
-        );
-      },
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return CreateDialog(animation: animation);
-      },
     );
   }
 }
