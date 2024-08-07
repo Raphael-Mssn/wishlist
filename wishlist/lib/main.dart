@@ -20,8 +20,6 @@ void main() async {
     anonKey: config.supabaseConfig.anonKey,
   );
 
-  await Supabase.instance.client.auth.signOut();
-
   runApp(
     ProviderScope(
       overrides: [
