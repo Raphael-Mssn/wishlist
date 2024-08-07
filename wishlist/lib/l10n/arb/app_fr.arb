@@ -1,5 +1,9 @@
 {
   "@@locale": "fr",
-  "no_wishlist": "Aucune wishlist",
-  "create_button": "Créer"
+  "noWishlist": "Aucune wishlist",
+  "createButton": "Créer",
+  "createWishlist": "Créer une wishlist",
+  "name": "Nom",
+  "cancelButton": "Annuler",
+  "closeDialog": "Fermer la fenêtre contextuelle"
 }
