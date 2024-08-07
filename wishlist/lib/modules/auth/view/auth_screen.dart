@@ -1,0 +1,203 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_auth_ui/supabase_auth_ui.dart';
+import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/shared/infra/auth_api.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
+import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+
+class AuthScreen extends ConsumerStatefulWidget {
+  const AuthScreen({super.key});
+
+  @override
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends ConsumerState<AuthScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  bool _isLoading = false;
+
+  /// Whether the user is signing in or signing up
+  bool _isSigningIn = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void onSuccess() {
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.of(context).pushReplacementNamed(AppRoutes.home.name);
+    }
+  }
+
+  void onError({AuthException? authException}) {
+    final l10n = context.l10n;
+
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (authException != null) {
+        if (authException.message == 'User already registered') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                l10n.userAlreadyRegistered,
+              ),
+            ),
+          );
+        }
+        if (authException.message == 'Invalid login credentials') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                l10n.invalidLoginCredentials,
+              ),
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              l10n.genericError,
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> onPressed() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      if (_isSigningIn) {
+        await ref.read(authApiProvider).signIn(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
+            );
+      } else {
+        await ref.read(authApiProvider).signUp(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
+            );
+      }
+
+      if (mounted) {
+        onSuccess();
+      }
+    } on AuthException catch (authException) {
+      onError(authException: authException);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return Scaffold(
+      body: AutofillGroup(
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Gap(48),
+                  Text(
+                    l10n.appTitle,
+                    style: GoogleFonts.truculenta(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const Gap(16),
+                  TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    autofillHints: const [AutofillHints.email],
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          !EmailValidator.validate(_emailController.text)) {
+                        return l10n.validEmailError;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.email),
+                      label: Text(l10n.emailField),
+                    ),
+                    controller: _emailController,
+                  ),
+                  const Gap(16),
+                  TextFormField(
+                    autofillHints: _isSigningIn
+                        ? [AutofillHints.password]
+                        : [AutofillHints.newPassword],
+                    textInputAction: TextInputAction.done,
+                    validator: (value) {
+                      if (value == null || value.isEmpty || value.length < 6) {
+                        return l10n.passwordLengthError;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock),
+                      label: Text(l10n.passwordField),
+                    ),
+                    obscureText: true,
+                    controller: _passwordController,
+                  ),
+                  const Gap(32),
+                  PrimaryButton(
+                    text: _isSigningIn ? l10n.signIn : l10n.signUp,
+                    onPressed: onPressed,
+                    isLoading: _isLoading,
+                    style: PrimaryButtonStyle.large,
+                  ),
+                  const Gap(16),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _isSigningIn = !_isSigningIn;
+                      });
+                    },
+                    child: Text(
+                      _isSigningIn ? l10n.dontHaveAccount : l10n.haveAccount,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

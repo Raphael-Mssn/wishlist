@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wishlist/shared/theme/colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
@@ -7,17 +8,19 @@ class PrimaryButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     required this.style,
+    this.isLoading = false,
   });
 
   final String text;
   final void Function() onPressed;
   final PrimaryButtonStyle style;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: AppColors.primary,
         padding: style.padding,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -25,10 +28,19 @@ class PrimaryButton extends StatelessWidget {
         elevation: 2,
       ),
       onPressed: onPressed,
-      child: Text(
-        text,
-        style: style.textStyle,
-      ),
+      child: isLoading
+          ? Container(
+              padding: const EdgeInsets.all(4),
+              height: 40,
+              width: 40,
+              child: const CircularProgressIndicator(
+                color: Colors.black,
+              ),
+            )
+          : Text(
+              text,
+              style: style.textStyle,
+            ),
     );
   }
 }
