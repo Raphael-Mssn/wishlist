@@ -24,11 +24,15 @@ class AppScaffold extends ConsumerWidget {
         children: <Widget>[
           // TODO: Remove this button when we have a proper logout flow
           if (ref.watch(environmentProvider) == Environment.dev)
-            ElevatedButton(
-              onPressed: () {
-                ref.read(authApiProvider).signOut(context);
-              },
-              child: const Text('Logout'),
+            Positioned(
+              top: 50,
+              left: 20,
+              child: ElevatedButton(
+                onPressed: () {
+                  ref.read(authApiProvider).signOut(context);
+                },
+                child: const Text('Logout'),
+              ),
             ),
           body,
           Positioned(
