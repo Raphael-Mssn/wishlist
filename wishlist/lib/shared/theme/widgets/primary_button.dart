@@ -66,6 +66,18 @@ class PrimaryButtonStyle {
     ),
   );
 
+  static final medium = PrimaryButtonStyle(
+    textStyle: GoogleFonts.truculenta(
+      fontSize: 24,
+      fontWeight: FontWeight.normal,
+      color: Colors.black,
+    ),
+    padding: const EdgeInsets.symmetric(
+      horizontal: 16,
+      vertical: 8,
+    ),
+  );
+
   static final large = PrimaryButtonStyle(
     textStyle: GoogleFonts.truculenta(
       fontSize: 28,
