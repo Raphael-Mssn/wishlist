@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/create_dialog.dart';
 
@@ -24,10 +24,7 @@ class HomeScreen extends StatelessWidget {
             const Gap(32),
             Text(
               l10n.noWishlist,
-              style: GoogleFonts.truculenta(
-                fontSize: 36,
-                fontWeight: FontWeight.w500,
-              ),
+              style: AppTextStyles.title,
             ),
             const Gap(16),
             PrimaryButton(
