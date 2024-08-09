@@ -11,7 +11,7 @@ class AuthApi {
   Future<void> signOut(BuildContext context) async {
     await supabase.auth.signOut();
     if (context.mounted) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.auth.name);
+      await Navigator.of(context).pushReplacementNamed(AppRoutes.auth.name);
     }
   }
 
