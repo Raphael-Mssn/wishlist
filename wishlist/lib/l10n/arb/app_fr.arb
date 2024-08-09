@@ -18,6 +18,7 @@
   "settingsScreenDisconnect": "Se déconnecter",
   "settingsScreenPasswordModify": "Modifier mon mot de passe",
   "settingsScreenDeleteAccount": "Supprimer mon compte",
+  "confirmDialogConfirmButtonLabel": "OK",
   "noWishlist": "Aucune wishlist",
   "createButton": "Créer",
   "createWishlist": "Créer une wishlist",
