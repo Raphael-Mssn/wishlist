@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/auth_api.dart';
+import 'package:wishlist/shared/infra/user_api.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
@@ -14,6 +15,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final currentUser = ref.read(userApiProvider).getUser(context);
 
     return PageLayout(
       title: l10n.settingsScreenTitle,
@@ -34,8 +36,7 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      // TODO: Replace with user email
-                      'fake@email.com',
+                      currentUser.email,
                       style: AppTextStyles.smaller.copyWith(
                         overflow: TextOverflow.ellipsis,
                       ),
