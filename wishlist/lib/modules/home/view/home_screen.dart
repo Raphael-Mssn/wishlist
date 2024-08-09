@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
-import 'package:wishlist/shared/widgets/create_dialog.dart';
+import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
