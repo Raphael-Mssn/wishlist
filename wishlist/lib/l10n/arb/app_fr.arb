@@ -16,6 +16,8 @@
   "settingsScreenEmail": "Email",
   "settingsScreenEmailModify": "Modifier",
   "settingsScreenDisconnect": "Se déconnecter",
+  "settingsScreenDisconnectDialogTitle": "Se déconnecter",
+  "settingsScreenDisconnectDialogExplanation": "Êtes-vous sûr de vouloir vous déconnecter ?",
   "settingsScreenPasswordModify": "Modifier mon mot de passe",
   "settingsScreenDeleteAccount": "Supprimer mon compte",
   "confirmDialogConfirmButtonLabel": "OK",
