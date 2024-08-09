@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/main.dart';
 import 'package:wishlist/modules/auth/view/auth_screen.dart';
-import 'package:wishlist/modules/home/view/home_screen.dart';
+import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 
 MaterialPageRoute<void> onGenerateRoute(RouteSettings settings) =>
@@ -18,7 +18,7 @@ MaterialPageRoute<void> onGenerateRoute(RouteSettings settings) =>
         final routeName = settings.name;
 
         if (routeName == AppRoutes.home.name) {
-          return const HomeScreen();
+          return const FloatingNavBarNavigator();
         }
 
         if (routeName == AppRoutes.auth.name) {

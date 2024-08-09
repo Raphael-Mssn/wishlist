@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 
 class FloatingNavBar extends StatelessWidget {
-  const FloatingNavBar({super.key});
+  const FloatingNavBar({super.key, required this.onTabChanged});
+
+  final void Function(FloatingNavBarTab) onTabChanged;
 
   @override
   Widget build(BuildContext context) {
+    void onTabTapped(TabController tabController) {
+      if (tabController.indexIsChanging) {
+        return;
+      }
+      return onTabChanged(FloatingNavBarTab.values[tabController.index]);
+    }
+
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.darkGrey,
@@ -17,14 +27,22 @@ class FloatingNavBar extends StatelessWidget {
         horizontal: 16,
         vertical: 8,
       ),
-      child: const DefaultTabController(
+      child: DefaultTabController(
         length: 3,
-        child: TabBar(
-          tabs: [
-            _TabIcon(icon: Icons.home),
-            _TabIcon(icon: Icons.person),
-            _TabIcon(icon: Icons.settings),
-          ],
+        child: Builder(
+          builder: (context) {
+            final controller = DefaultTabController.of(context);
+            controller.addListener(() {
+              onTabTapped(controller);
+            });
+            return const TabBar(
+              tabs: [
+                _TabIcon(icon: Icons.home),
+                _TabIcon(icon: Icons.person),
+                _TabIcon(icon: Icons.settings),
+              ],
+            );
+          },
         ),
       ),
     );
