@@ -22,17 +22,52 @@ class FloatingNavBarNavigator extends StatefulWidget {
       _FloatingNavBarNavigatorState();
 }
 
-class _FloatingNavBarNavigatorState extends State<FloatingNavBarNavigator> {
-  late FloatingNavBarTab _currentTab = widget.currentTab;
+class _FloatingNavBarNavigatorState extends State<FloatingNavBarNavigator>
+    with SingleTickerProviderStateMixin {
+  late PageController _pageController;
+  late TabController _tabController;
 
-  Widget _buildBody() {
-    switch (_currentTab) {
-      case FloatingNavBarTab.home:
-        return const HomeScreen();
-      case FloatingNavBarTab.friends:
-        return const FriendsScreen();
-      case FloatingNavBarTab.settings:
-        return const SettingsScreen();
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(
+      initialPage: FloatingNavBarTab.values.indexOf(widget.currentTab),
+    );
+    _tabController = TabController(
+      length: FloatingNavBarTab.values.length,
+      vsync: this,
+      initialIndex: FloatingNavBarTab.values.indexOf(widget.currentTab),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _onPageChanged(int index) {
+    _tabController.animateTo(index);
+  }
+
+  void _onTabChanged(FloatingNavBarTab tab) {
+    final pageIndex = FloatingNavBarTab.values.indexOf(tab);
+    final pageControllerPage = _pageController.page;
+    // pageControllerPage should never be null
+    if (pageControllerPage == null) {
+      return;
+    }
+
+    if ((pageControllerPage - pageIndex).abs() >= 2) {
+      // si différence de + de 2 pages, on ne fait pas l'animation
+      _pageController.jumpToPage(pageIndex);
+    } else {
+      _pageController.animateToPage(
+        pageIndex,
+        duration: kThemeChangeDuration,
+        curve: Curves.easeInOut,
+      );
     }
   }
 
@@ -45,14 +80,19 @@ class _FloatingNavBarNavigatorState extends State<FloatingNavBarNavigator> {
         },
       ),
       bottomNavigationBar: FloatingNavBar(
-        onTabChanged: (tab) {
-          print('Tab changed to $tab');
-          setState(() {
-            _currentTab = tab;
-          });
-        },
+        onTabChanged: _onTabChanged,
+        currentTab: FloatingNavBarTab.values[_tabController.index],
+        tabController: _tabController,
       ),
-      body: _buildBody(),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: _onPageChanged,
+        children: const [
+          HomeScreen(),
+          FriendsScreen(),
+          SettingsScreen(),
+        ],
+      ),
     );
   }
 }
