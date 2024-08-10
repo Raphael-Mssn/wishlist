@@ -42,15 +42,16 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     }
   }
 
-  void onError({AuthException? authException}) {
+  void onError(AuthException authException) {
     final l10n = context.l10n;
 
     if (mounted) {
       setState(() {
         _isLoading = false;
       });
-      if (authException != null) {
-        if (authException.message == 'User already registered') {
+      final statusCode = authException.statusCode;
+      if (statusCode != null) {
+        if (int.parse(statusCode) == 422) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -59,14 +60,16 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             ),
           );
         }
-        if (authException.message == 'Invalid login credentials') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                l10n.invalidLoginCredentials,
+        if (int.parse(statusCode) == 400) {
+          {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  l10n.invalidLoginCredentials,
+                ),
               ),
-            ),
-          );
+            );
+          }
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -104,7 +107,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         onSuccess();
       }
     } on AuthException catch (authException) {
-      onError(authException: authException);
+      onError(authException);
     }
   }
 
