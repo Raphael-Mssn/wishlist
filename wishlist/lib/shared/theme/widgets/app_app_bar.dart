@@ -9,15 +9,21 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final canPop = Navigator.of(context).canPop();
+    // We allow "!" usage here because we know that the fontSize is not null
+    final titleSize = canPop
+        ? AppTextStyles.title.fontSize! - 4
+        : AppTextStyles.title.fontSize;
+
     return AppBar(
-      centerTitle: false,
+      centerTitle: canPop,
       titleSpacing: 0,
       backgroundColor: AppColors.background,
       title: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Text(
           title,
-          style: AppTextStyles.title,
+          style: AppTextStyles.title.copyWith(fontSize: titleSize),
         ),
       ),
     );

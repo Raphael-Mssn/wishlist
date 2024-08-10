@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/auth_api.dart';
 import 'package:wishlist/shared/infra/user_api.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
@@ -70,7 +71,9 @@ class SettingsScreen extends ConsumerWidget {
           const Gap(24),
           PrimaryButton(
             text: l10n.settingsScreenPasswordModify,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(AppRoutes.changePassword.name);
+            },
             style: PrimaryButtonStyle.medium,
           ),
           const Gap(24),
