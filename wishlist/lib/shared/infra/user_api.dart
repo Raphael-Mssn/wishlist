@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/main.dart';
+import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 
 class UserApi {
@@ -11,11 +12,18 @@ class UserApi {
   AppUser getUser(BuildContext context) {
     final user = supabase.auth.currentUser;
     if (user == null) {
-      throw Exception('User not found');
+      throw AppException(
+        statusCode: 401,
+        message: 'User is not authenticated',
+      );
     }
     final email = user.email;
     if (email == null) {
-      throw Exception('Email empty');
+      // This should never happen
+      throw AppException(
+        statusCode: 400,
+        message: 'User email is null',
+      );
     }
     return AppUser(email: email);
   }
