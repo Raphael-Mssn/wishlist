@@ -113,6 +113,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    const gapBetweenFields = Gap(16);
 
     return Scaffold(
       body: AutofillGroup(
@@ -130,9 +131,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     style: AppTextStyles.title,
                     textAlign: TextAlign.center,
                   ),
-                  const Gap(16),
+                  gapBetweenFields,
                   InputEmail(controller: _emailController),
-                  const Gap(16),
+                  gapBetweenFields,
                   InputPassword(
                     autofillHints: _isSigningIn
                         ? AutofillHints.password
