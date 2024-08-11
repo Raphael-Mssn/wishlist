@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:wishlist/app/config/environment.dart';
-import 'package:wishlist/app/config/environment_provider.dart';
-import 'package:wishlist/shared/infra/auth_api.dart';
 
 class AppScaffold extends ConsumerWidget {
   const AppScaffold({
@@ -22,18 +19,6 @@ class AppScaffold extends ConsumerWidget {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          // TODO: Remove this button when we have a proper logout flow
-          if (ref.watch(environmentProvider) == Environment.dev)
-            Positioned(
-              top: 50,
-              left: 20,
-              child: ElevatedButton(
-                onPressed: () {
-                  ref.read(authApiProvider).signOut(context);
-                },
-                child: const Text('Logout'),
-              ),
-            ),
           body,
           Positioned(
             bottom: 24,
