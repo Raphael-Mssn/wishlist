@@ -51,17 +51,16 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       });
       final statusCode = authException.statusCode;
       if (statusCode != null) {
-        if (int.parse(statusCode) == 422) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                l10n.userAlreadyRegistered,
+        switch (int.parse(statusCode)) {
+          case 422:
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  l10n.userAlreadyRegistered,
+                ),
               ),
-            ),
-          );
-        }
-        if (int.parse(statusCode) == 400) {
-          {
+            );
+          case 400:
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
@@ -69,7 +68,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 ),
               ),
             );
-          }
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
