@@ -8,6 +8,7 @@ import 'package:wishlist/shared/infra/auth_api.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/widgets/text_form_fields/input_password.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -149,23 +150,13 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     controller: _emailController,
                   ),
                   const Gap(16),
-                  TextFormField(
+                  InputPassword(
                     autofillHints: _isSigningIn
-                        ? [AutofillHints.password]
-                        : [AutofillHints.newPassword],
-                    textInputAction: TextInputAction.done,
-                    validator: (value) {
-                      if (value == null || value.isEmpty || value.length < 6) {
-                        return l10n.passwordLengthError;
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.lock),
-                      label: Text(l10n.passwordField),
-                    ),
-                    obscureText: true,
+                        ? AutofillHints.password
+                        : AutofillHints.newPassword,
                     controller: _passwordController,
+                    label: l10n.passwordField,
+                    textInputAction: TextInputAction.done,
                   ),
                   const Gap(32),
                   PrimaryButton(

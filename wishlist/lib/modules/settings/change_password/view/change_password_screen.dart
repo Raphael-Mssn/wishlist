@@ -7,6 +7,7 @@ import 'package:wishlist/shared/infra/auth_api.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
+import 'package:wishlist/shared/widgets/text_form_fields/input_password.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -117,58 +118,31 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 gapBetweenFields,
-                TextFormField(
-                  autofillHints: const [AutofillHints.password],
-                  textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    if (value == null || value.isEmpty || value.length < 6) {
-                      return l10n.passwordLengthError;
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.lock),
-                    label: Text(l10n.oldPasswordField),
-                  ),
-                  obscureText: true,
+                InputPassword(
+                  autofillHints: AutofillHints.password,
                   controller: _oldPasswordController,
-                ),
-                gapBetweenFields,
-                TextFormField(
-                  autofillHints: const [AutofillHints.newPassword],
+                  label: l10n.oldPasswordField,
                   textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    if (value == null || value.isEmpty || value.length < 6) {
-                      return l10n.passwordLengthError;
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.lock),
-                    label: Text(l10n.newPasswordField),
-                  ),
-                  obscureText: true,
-                  controller: _newPasswordController,
                 ),
                 gapBetweenFields,
-                TextFormField(
-                  autofillHints: const [AutofillHints.newPassword],
+                InputPassword(
+                  autofillHints: AutofillHints.newPassword,
+                  controller: _newPasswordController,
+                  label: l10n.newPasswordField,
+                  textInputAction: TextInputAction.next,
+                ),
+                gapBetweenFields,
+                InputPassword(
+                  autofillHints: AutofillHints.newPassword,
+                  controller: _confirmNewPasswordController,
+                  label: l10n.confirmNewPasswordField,
                   textInputAction: TextInputAction.done,
-                  validator: (value) {
-                    if (value == null || value.isEmpty || value.length < 6) {
-                      return l10n.passwordLengthError;
-                    }
+                  additionalValidator: (value) {
                     if (value != _newPasswordController.text) {
                       return l10n.passwordsDoNotMatch;
                     }
                     return null;
                   },
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.lock),
-                    label: Text(l10n.confirmNewPasswordField),
-                  ),
-                  obscureText: true,
-                  controller: _confirmNewPasswordController,
                 ),
                 const Gap(32),
                 PrimaryButton(
