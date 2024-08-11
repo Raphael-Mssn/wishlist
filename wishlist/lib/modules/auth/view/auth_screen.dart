@@ -39,7 +39,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pushReplacementNamed(AppRoutes.home.name);
+      final nextScreen =
+          _isSigningIn ? AppRoutes.home.name : AppRoutes.pseudo.name;
+      Navigator.of(context).pushReplacementNamed(nextScreen);
     }
   }
 
