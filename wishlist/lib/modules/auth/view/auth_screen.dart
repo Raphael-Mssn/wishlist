@@ -1,4 +1,3 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -8,6 +7,7 @@ import 'package:wishlist/shared/infra/auth_api.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/widgets/text_form_fields/input_email.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_password.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
@@ -131,24 +131,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const Gap(16),
-                  TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    autofillHints: const [AutofillHints.email],
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          !EmailValidator.validate(_emailController.text)) {
-                        return l10n.validEmailError;
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.email),
-                      label: Text(l10n.emailField),
-                    ),
-                    controller: _emailController,
-                  ),
+                  InputEmail(controller: _emailController),
                   const Gap(16),
                   InputPassword(
                     autofillHints: _isSigningIn
