@@ -115,7 +115,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    const gapBetweenFields = Gap(16);
 
     return AuthLayout(
       formKey: _formKey,
@@ -123,7 +122,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           InputEmail(controller: _emailController),
-          gapBetweenFields,
+          const Gap(16),
           InputPassword(
             autofillHints: _isSigningIn
                 ? AutofillHints.password
