@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/shared/infra/auth_api.dart';
+import 'package:wishlist/shared/infra/auth_service.dart';
 import 'package:wishlist/shared/infra/user_api.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -62,7 +62,7 @@ class SettingsScreen extends ConsumerWidget {
                 title: l10n.settingsScreenDisconnectDialogTitle,
                 explanation: l10n.settingsScreenDisconnectDialogExplanation,
                 onConfirm: () {
-                  ref.read(authApiProvider).signOut(context);
+                  ref.read(authServiceProvider).signOut(context);
                 },
               );
             },
