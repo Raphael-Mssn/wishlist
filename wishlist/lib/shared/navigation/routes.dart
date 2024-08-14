@@ -17,5 +17,7 @@ class AppRoutes {
 
   static AppRoute get auth => const AppRoute('auth');
 
+  static AppRoute get pseudo => const AppRoute('pseudo');
+
   static AppRoute get changePassword => const AppRoute('changePassword');
 }

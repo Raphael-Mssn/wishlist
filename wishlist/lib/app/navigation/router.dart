@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/main.dart';
 import 'package:wishlist/modules/auth/view/auth_screen.dart';
+import 'package:wishlist/modules/auth/view/pseudo_screen.dart';
 import 'package:wishlist/modules/settings/change_password/view/change_password_screen.dart';
 import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
@@ -16,7 +17,20 @@ MaterialPageRoute<void> onGenerateRoute(RouteSettings settings) =>
           return const AuthScreen();
         }
 
+        // Protect the app from showing any screen if the user has not set a
+        // pseudo = has a profile
+        final hasPseudo =
+            activeSession.user.userMetadata?.containsKey('pseudo');
+
+        if (hasPseudo == null || hasPseudo == false) {
+          return const PseudoScreen();
+        }
+
         final routeName = settings.name;
+
+        if (routeName == AppRoutes.pseudo.name) {
+          return const PseudoScreen();
+        }
 
         if (routeName == AppRoutes.home.name) {
           return const FloatingNavBarNavigator();

@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/modules/auth/view/auth_layout.dart';
 import 'package:wishlist/shared/infra/auth_api.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
-import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_email.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_password.dart';
@@ -39,7 +39,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pushReplacementNamed(AppRoutes.home.name);
+      final nextScreen =
+          _isSigningIn ? AppRoutes.home.name : AppRoutes.pseudo.name;
+      Navigator.of(context).pushReplacementNamed(nextScreen);
     }
   }
 
@@ -113,63 +115,46 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    const gapBetweenFields = Gap(16);
 
-    return Scaffold(
-      body: AutofillGroup(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Gap(48),
-                  Text(
-                    l10n.appTitle,
-                    style: AppTextStyles.title,
-                    textAlign: TextAlign.center,
-                  ),
-                  gapBetweenFields,
-                  InputEmail(controller: _emailController),
-                  gapBetweenFields,
-                  InputPassword(
-                    autofillHints: _isSigningIn
-                        ? AutofillHints.password
-                        : AutofillHints.newPassword,
-                    controller: _passwordController,
-                    label: l10n.passwordField,
-                    textInputAction: TextInputAction.done,
-                  ),
-                  const Gap(32),
-                  PrimaryButton(
-                    text: _isSigningIn ? l10n.signIn : l10n.signUp,
-                    onPressed: onPressed,
-                    isLoading: _isLoading,
-                    style: PrimaryButtonStyle.large,
-                  ),
-                  const Gap(16),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isSigningIn = !_isSigningIn;
-                      });
-                    },
-                    child: Text(
-                      _isSigningIn ? l10n.dontHaveAccount : l10n.haveAccount,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontStyle: FontStyle.italic,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
+    return AuthLayout(
+      formKey: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          InputEmail(controller: _emailController),
+          const Gap(16),
+          InputPassword(
+            autofillHints: _isSigningIn
+                ? AutofillHints.password
+                : AutofillHints.newPassword,
+            controller: _passwordController,
+            label: l10n.passwordField,
+            textInputAction: TextInputAction.done,
+          ),
+          const Gap(32),
+          PrimaryButton(
+            text: _isSigningIn ? l10n.signIn : l10n.signUp,
+            onPressed: onPressed,
+            isLoading: _isLoading,
+            style: PrimaryButtonStyle.large,
+          ),
+          const Gap(16),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _isSigningIn = !_isSigningIn;
+              });
+            },
+            child: Text(
+              _isSigningIn ? l10n.dontHaveAccount : l10n.haveAccount,
+              style: const TextStyle(
+                color: Colors.black,
+                fontStyle: FontStyle.italic,
               ),
+              textAlign: TextAlign.center,
             ),
           ),
-        ),
+        ],
       ),
     );
   }
