@@ -16,7 +16,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final currentUser = ref.read(userApiProvider).getUser();
+    final currentUserEmail = ref.read(userApiProvider).getCurrentUserEmail();
 
     return PageLayout(
       title: l10n.settingsScreenTitle,
@@ -37,7 +37,7 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      currentUser.email,
+                      currentUserEmail,
                       style: AppTextStyles.smaller.copyWith(
                         overflow: TextOverflow.ellipsis,
                       ),
