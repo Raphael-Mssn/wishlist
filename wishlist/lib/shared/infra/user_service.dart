@@ -3,8 +3,8 @@ import 'package:wishlist/shared/infra/repositories/user/user_repository.dart';
 import 'package:wishlist/shared/infra/repositories/user/user_repository_provider.dart';
 import 'package:wishlist/shared/models/profile.dart';
 
-class UserApi {
-  UserApi(this._userRepository);
+class UserService {
+  UserService(this._userRepository);
   final UserRepository _userRepository;
 
   String getCurrentUserEmail() {
@@ -17,4 +17,4 @@ class UserApi {
 }
 
 final userApiProvider =
-    Provider((ref) => UserApi(ref.watch(userRepositoryProvider)));
+    Provider((ref) => UserService(ref.watch(userRepositoryProvider)));

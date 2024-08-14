@@ -5,7 +5,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/auth/view/auth_layout.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
-import 'package:wishlist/shared/infra/user_api.dart';
+import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/models/profile.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
