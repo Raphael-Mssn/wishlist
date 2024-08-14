@@ -1,13 +1,14 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/auth_api.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
+import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/widgets/text_form_fields/input_email.dart';
+import 'package:wishlist/shared/widgets/text_form_fields/input_password.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -42,31 +43,32 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     }
   }
 
-  void onError({AuthException? authException}) {
+  void onError(AuthException authException) {
     final l10n = context.l10n;
 
     if (mounted) {
       setState(() {
         _isLoading = false;
       });
-      if (authException != null) {
-        if (authException.message == 'User already registered') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                l10n.userAlreadyRegistered,
+      final statusCode = authException.statusCode;
+      if (statusCode != null) {
+        switch (int.parse(statusCode)) {
+          case 422:
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  l10n.userAlreadyRegistered,
+                ),
               ),
-            ),
-          );
-        }
-        if (authException.message == 'Invalid login credentials') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                l10n.invalidLoginCredentials,
+            );
+          case 400:
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  l10n.invalidLoginCredentials,
+                ),
               ),
-            ),
-          );
+            );
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -104,13 +106,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         onSuccess();
       }
     } on AuthException catch (authException) {
-      onError(authException: authException);
+      onError(authException);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    const gapBetweenFields = Gap(16);
 
     return Scaffold(
       body: AutofillGroup(
@@ -125,49 +128,19 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   const Gap(48),
                   Text(
                     l10n.appTitle,
-                    style: GoogleFonts.truculenta(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: AppTextStyles.title,
                     textAlign: TextAlign.center,
                   ),
-                  const Gap(16),
-                  TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    autofillHints: const [AutofillHints.email],
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          !EmailValidator.validate(_emailController.text)) {
-                        return l10n.validEmailError;
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.email),
-                      label: Text(l10n.emailField),
-                    ),
-                    controller: _emailController,
-                  ),
-                  const Gap(16),
-                  TextFormField(
+                  gapBetweenFields,
+                  InputEmail(controller: _emailController),
+                  gapBetweenFields,
+                  InputPassword(
                     autofillHints: _isSigningIn
-                        ? [AutofillHints.password]
-                        : [AutofillHints.newPassword],
-                    textInputAction: TextInputAction.done,
-                    validator: (value) {
-                      if (value == null || value.isEmpty || value.length < 6) {
-                        return l10n.passwordLengthError;
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.lock),
-                      label: Text(l10n.passwordField),
-                    ),
-                    obscureText: true,
+                        ? AutofillHints.password
+                        : AutofillHints.newPassword,
                     controller: _passwordController,
+                    label: l10n.passwordField,
+                    textInputAction: TextInputAction.done,
                   ),
                   const Gap(32),
                   PrimaryButton(

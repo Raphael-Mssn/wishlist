@@ -5,70 +5,71 @@ import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/cancel_button.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 
-class _CreateDialog extends StatelessWidget {
-  const _CreateDialog();
+class _DialogLayout extends StatelessWidget {
+  const _DialogLayout({
+    required this.title,
+    required this.content,
+    required this.confirmLabel,
+    this.onCancel,
+    this.onConfirm,
+  });
+
+  final String title;
+  final Widget content;
+  final String confirmLabel;
+  final void Function()? onCancel;
+  final void Function()? onConfirm;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    const labelFontSize = 20.0;
+    final onCancel = this.onCancel;
+    final onConfirm = this.onConfirm;
 
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
       title: Text(
-        l10n.createWishlist,
+        title,
         style: GoogleFonts.truculenta(
           fontSize: 28,
           fontWeight: FontWeight.w500,
         ),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListBody(
-            children: <Widget>[
-              TextField(
-                style: GoogleFonts.truculenta(fontSize: labelFontSize),
-                cursorColor: AppColors.primary,
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: l10n.name,
-                  hintStyle: GoogleFonts.truculenta(
-                    fontSize: labelFontSize,
-                    fontStyle: FontStyle.italic,
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.primary),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      content: content,
       actions: <Widget>[
-        CancelButton(
-          text: l10n.cancelButton,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        PrimaryButton(
-          text: l10n.createButton,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          style: PrimaryButtonStyle.small,
-        ),
+        if (onCancel != null)
+          CancelButton(
+            text: l10n.cancelButton,
+            onPressed: () {
+              Navigator.of(context).pop();
+              onCancel();
+            },
+          ),
+        if (onConfirm != null)
+          PrimaryButton(
+            text: confirmLabel,
+            onPressed: () {
+              Navigator.of(context).pop();
+              onConfirm();
+            },
+            style: PrimaryButtonStyle.small,
+          ),
       ],
       backgroundColor: AppColors.background,
     );
   }
 }
 
-Future<void> showCreateDialog(BuildContext context) async {
+Future<void> showAppDialog(
+  BuildContext context, {
+  required String title,
+  required Widget content,
+  required String confirmButtonLabel,
+  void Function()? onConfirm,
+  void Function()? onCancel,
+}) async {
   final l10n = context.l10n;
 
   return showGeneralDialog<void>(
@@ -90,7 +91,13 @@ Future<void> showCreateDialog(BuildContext context) async {
       return AnimatedBuilder(
         animation: animation,
         builder: (context, child) {
-          return const _CreateDialog();
+          return _DialogLayout(
+            title: title,
+            content: content,
+            confirmLabel: confirmButtonLabel,
+            onConfirm: onConfirm,
+            onCancel: onCancel,
+          );
         },
       );
     },
