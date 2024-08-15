@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/main.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
+import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 
 class AuthService {
@@ -48,13 +49,7 @@ class AuthService {
   }
 
   Future<bool> confirmPasswordIsCorrect(String password) async {
-    final user = supabase.auth.currentUser;
-    if (user == null) {
-      throw AppException(
-        statusCode: 401,
-        message: 'User is not authenticated',
-      );
-    }
+    final user = supabase.auth.currentUserNonNull;
     try {
       await supabase.auth
           .signInWithPassword(email: user.email, password: password);
