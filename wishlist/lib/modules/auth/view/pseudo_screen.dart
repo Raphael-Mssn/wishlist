@@ -70,7 +70,7 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
       });
 
       try {
-        await ref.read(userApiProvider).createUserProfile(
+        await ref.read(userServiceProvider).createUserProfile(
               Profile(
                 // TODO: wrap currentUser to avoid null and handle null error
                 id: ref.read(supabaseClientProvider).auth.currentUser!.id,

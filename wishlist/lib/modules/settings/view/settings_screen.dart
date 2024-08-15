@@ -16,7 +16,8 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final currentUserEmail = ref.read(userApiProvider).getCurrentUserEmail();
+    final currentUserEmail =
+        ref.read(userServiceProvider).getCurrentUserEmail();
 
     return PageLayout(
       title: l10n.settingsScreenTitle,

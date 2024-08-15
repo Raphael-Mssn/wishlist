@@ -16,5 +16,5 @@ class UserService {
   }
 }
 
-final userApiProvider =
+final userServiceProvider =
     Provider((ref) => UserService(ref.watch(userRepositoryProvider)));
