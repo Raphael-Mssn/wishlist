@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/auth/view/auth_layout.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
+import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/models/profile.dart';
@@ -72,8 +73,7 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
       try {
         await ref.read(userServiceProvider).createUserProfile(
               Profile(
-                // TODO: wrap currentUser to avoid null and handle null error
-                id: ref.read(supabaseClientProvider).auth.currentUser!.id,
+                id: ref.read(supabaseClientProvider).auth.currentUserNonNull.id,
                 pseudo: _pseudoController.text,
               ),
             );
