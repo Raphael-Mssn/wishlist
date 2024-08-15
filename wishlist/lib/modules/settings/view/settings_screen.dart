@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/shared/infra/auth_api.dart';
-import 'package:wishlist/shared/infra/user_api.dart';
+import 'package:wishlist/shared/infra/auth_service.dart';
+import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
@@ -16,7 +16,8 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final currentUser = ref.read(userApiProvider).getUser();
+    final currentUserEmail =
+        ref.read(userServiceProvider).getCurrentUserEmail();
 
     return PageLayout(
       title: l10n.settingsScreenTitle,
@@ -37,7 +38,7 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      currentUser.email,
+                      currentUserEmail,
                       style: AppTextStyles.smaller.copyWith(
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -62,7 +63,7 @@ class SettingsScreen extends ConsumerWidget {
                 title: l10n.settingsScreenDisconnectDialogTitle,
                 explanation: l10n.settingsScreenDisconnectDialogExplanation,
                 onConfirm: () {
-                  ref.read(authApiProvider).signOut(context);
+                  ref.read(authServiceProvider).signOut(context);
                 },
               );
             },

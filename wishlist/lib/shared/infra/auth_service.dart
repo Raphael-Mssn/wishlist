@@ -5,10 +5,10 @@ import 'package:wishlist/main.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 
-class AuthApi {
-  static final AuthApi _instance = AuthApi();
+class AuthService {
+  static final AuthService _instance = AuthService();
 
-  static AuthApi get instance => _instance;
+  static AuthService get instance => _instance;
 
   Future<void> signOut(BuildContext context) async {
     await supabase.auth.signOut();
@@ -65,4 +65,4 @@ class AuthApi {
   }
 }
 
-final authApiProvider = Provider((ref) => AuthApi.instance);
+final authServiceProvider = Provider((ref) => AuthService.instance);

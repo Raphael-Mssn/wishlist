@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/auth/view/auth_layout.dart';
-import 'package:wishlist/shared/infra/auth_api.dart';
+import 'package:wishlist/shared/infra/auth_service.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_email.dart';
@@ -93,12 +93,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     });
     try {
       if (_isSigningIn) {
-        await ref.read(authApiProvider).signIn(
+        await ref.read(authServiceProvider).signIn(
               email: _emailController.text.trim(),
               password: _passwordController.text.trim(),
             );
       } else {
-        await ref.read(authApiProvider).signUp(
+        await ref.read(authServiceProvider).signUp(
               email: _emailController.text.trim(),
               password: _passwordController.text.trim(),
             );
