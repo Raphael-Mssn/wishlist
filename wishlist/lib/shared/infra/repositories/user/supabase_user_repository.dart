@@ -40,6 +40,12 @@ class SupabaseUserRepository implements UserRepository {
     try {
       await _client.from('profiles').insert(profile.toJson());
       await _client.auth.refreshSession();
+    } on PostgrestException catch (e) {
+      final statusCode = e.code;
+      throw AppException(
+        statusCode: statusCode != null ? int.parse(statusCode) : 500,
+        message: e.message,
+      );
     } catch (e) {
       throw AppException(
         statusCode: 500,
