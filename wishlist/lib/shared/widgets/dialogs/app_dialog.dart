@@ -18,13 +18,15 @@ class _DialogLayout extends StatelessWidget {
   final Widget content;
   final String confirmLabel;
   final void Function()? onCancel;
-  final void Function()? onConfirm;
+  final Future<void> Function()? onConfirm;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final onCancel = this.onCancel;
     final onConfirm = this.onConfirm;
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
 
     return AlertDialog(
       shape: RoundedRectangleBorder(
@@ -43,16 +45,24 @@ class _DialogLayout extends StatelessWidget {
           CancelButton(
             text: l10n.cancelButton,
             onPressed: () {
-              Navigator.of(context).pop();
+              navigator.pop();
               onCancel();
             },
           ),
         if (onConfirm != null)
           PrimaryButton(
             text: confirmLabel,
-            onPressed: () {
-              Navigator.of(context).pop();
-              onConfirm();
+            onPressed: () async {
+              try {
+                await onConfirm();
+                navigator.pop();
+              } catch (e) {
+                scaffoldMessenger.showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.genericError),
+                  ),
+                );
+              }
             },
             style: PrimaryButtonStyle.small,
           ),
@@ -67,7 +77,7 @@ Future<void> showAppDialog(
   required String title,
   required Widget content,
   required String confirmButtonLabel,
-  void Function()? onConfirm,
+  Future<void> Function()? onConfirm,
   void Function()? onCancel,
 }) async {
   final l10n = context.l10n;
@@ -88,17 +98,26 @@ Future<void> showAppDialog(
       );
     },
     pageBuilder: (context, animation, secondaryAnimation) {
-      return AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          return _DialogLayout(
-            title: title,
-            content: content,
-            confirmLabel: confirmButtonLabel,
-            onConfirm: onConfirm,
-            onCancel: onCancel,
-          );
-        },
+      return ScaffoldMessenger(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Builder(
+            builder: (context) {
+              return AnimatedBuilder(
+                animation: animation,
+                builder: (context, child) {
+                  return _DialogLayout(
+                    title: title,
+                    content: content,
+                    confirmLabel: confirmButtonLabel,
+                    onConfirm: onConfirm,
+                    onCancel: onCancel,
+                  );
+                },
+              );
+            },
+          ),
+        ),
       );
     },
   );
