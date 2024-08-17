@@ -20,7 +20,7 @@ class SupabaseWishlistRepository implements WishlistRepository {
     } catch (e) {
       throw AppException(
         statusCode: 500,
-        message: 'Failed to create user profile',
+        message: 'Failed to create wishlist',
       );
     }
   }
