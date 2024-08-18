@@ -99,23 +99,31 @@ Future<void> showAppDialog(
     },
     pageBuilder: (context, animation, secondaryAnimation) {
       return ScaffoldMessenger(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Builder(
-            builder: (context) {
-              return AnimatedBuilder(
-                animation: animation,
-                builder: (context, child) {
-                  return _DialogLayout(
-                    title: title,
-                    content: content,
-                    confirmLabel: confirmButtonLabel,
-                    onConfirm: onConfirm,
-                    onCancel: onCancel,
-                  );
-                },
-              );
-            },
+        child: Builder(
+          builder: (context) => Scaffold(
+            backgroundColor: Colors.transparent,
+            body: GestureDetector(
+              // Enable dialog closing on outside click
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Center(
+                  child: GestureDetector(
+                    // Disable dialog closing on dialog click
+                    onTap: () {},
+                    child: _DialogLayout(
+                      title: title,
+                      content: content,
+                      confirmLabel: confirmButtonLabel,
+                      onConfirm: onConfirm,
+                      onCancel: onCancel,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       );
