@@ -28,6 +28,7 @@ class _FloatingNavBarNavigatorState
     with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late TabController _tabController;
+  IconData floatingActionButtonIcon = Icons.add;
 
   @override
   void initState() {
@@ -49,8 +50,19 @@ class _FloatingNavBarNavigatorState
     super.dispose();
   }
 
+  void updateFloatingActionButtonIcon() {
+    setState(() {
+      floatingActionButtonIcon = const [
+        Icons.add,
+        Icons.person_add_alt_1,
+        Icons.add,
+      ][_tabController.index];
+    });
+  }
+
   void _onPageChanged(int index) {
     _tabController.animateTo(index);
+    updateFloatingActionButtonIcon();
   }
 
   void _onTabChanged(FloatingNavBarTab tab) {
@@ -71,12 +83,14 @@ class _FloatingNavBarNavigatorState
         curve: Curves.easeInOut,
       );
     }
+    updateFloatingActionButtonIcon();
   }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
       floatingActionButton: NavBarAddButton(
+        icon: floatingActionButtonIcon,
         onPressed: () {
           showCreateDialog(context, ref);
         },
