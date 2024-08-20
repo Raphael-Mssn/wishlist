@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/shared/theme/text_styles.dart';
-import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
+import 'package:wishlist/shared/widgets/page_layout_empty.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -14,30 +11,13 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
 
-    return SafeArea(
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            const Gap(64),
-            SvgPicture.asset(
-              'assets/svg/no_wishlist.svg',
-            ),
-            const Gap(32),
-            Text(
-              l10n.noWishlist,
-              style: AppTextStyles.title,
-            ),
-            const Gap(16),
-            PrimaryButton(
-              text: l10n.createButton,
-              onPressed: () {
-                showCreateDialog(context, ref);
-              },
-              style: PrimaryButtonStyle.large,
-            ),
-          ],
-        ),
-      ),
+    return PageLayoutEmpty(
+      illustrationUrl: 'assets/svg/no_wishlist.svg',
+      title: l10n.noWishlist,
+      callToAction: l10n.createButton,
+      onCallToAction: () {
+        showCreateDialog(context, ref);
+      },
     );
   }
 }
