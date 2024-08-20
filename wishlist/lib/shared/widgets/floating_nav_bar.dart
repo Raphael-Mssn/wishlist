@@ -37,7 +37,7 @@ class FloatingNavBar extends StatelessWidget {
         controller: tabController,
         tabs: const [
           _TabIcon(icon: Icons.home),
-          _TabIcon(icon: Icons.person),
+          _TabIcon(icon: Icons.group),
           _TabIcon(icon: Icons.settings),
         ],
       ),
@@ -55,7 +55,7 @@ class _TabIcon extends StatelessWidget {
     return Tab(
       child: Icon(
         icon,
-        size: 32,
+        size: 36,
       ),
     );
   }
