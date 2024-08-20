@@ -5,7 +5,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
-import 'package:wishlist/shared/models/wishlist.dart';
+import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 

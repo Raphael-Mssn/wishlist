@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository_provider.dart';
-import 'package:wishlist/shared/models/wishlist.dart';
+import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 
 class WishlistService {
   WishlistService(this._wishlistRepository);

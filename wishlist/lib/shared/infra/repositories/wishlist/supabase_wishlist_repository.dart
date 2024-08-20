@@ -1,7 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository.dart';
-import 'package:wishlist/shared/models/wishlist.dart';
+import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 
 class SupabaseWishlistRepository implements WishlistRepository {
   SupabaseWishlistRepository(this._client);
