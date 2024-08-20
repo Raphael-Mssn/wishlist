@@ -29,6 +29,8 @@ class _FloatingNavBarNavigatorState
   late PageController _pageController;
   late TabController _tabController;
   IconData floatingActionButtonIcon = Icons.add;
+  late VoidCallback onFloatingActionButtonPressed =
+      () => showCreateDialog(context, ref);
 
   @override
   void initState() {
@@ -50,19 +52,25 @@ class _FloatingNavBarNavigatorState
     super.dispose();
   }
 
-  void updateFloatingActionButtonIcon() {
+  void updateFloatingAction() {
     setState(() {
       floatingActionButtonIcon = const [
         Icons.add,
         Icons.person_add_alt_1,
         Icons.add,
       ][_tabController.index];
+
+      onFloatingActionButtonPressed = [
+        () => showCreateDialog(context, ref),
+        () {},
+        () => showCreateDialog(context, ref),
+      ][_tabController.index];
     });
   }
 
   void _onPageChanged(int index) {
     _tabController.animateTo(index);
-    updateFloatingActionButtonIcon();
+    updateFloatingAction();
   }
 
   void _onTabChanged(FloatingNavBarTab tab) {
@@ -83,7 +91,7 @@ class _FloatingNavBarNavigatorState
         curve: Curves.easeInOut,
       );
     }
-    updateFloatingActionButtonIcon();
+    updateFloatingAction();
   }
 
   @override
@@ -91,9 +99,7 @@ class _FloatingNavBarNavigatorState
     return AppScaffold(
       floatingActionButton: NavBarAddButton(
         icon: floatingActionButtonIcon,
-        onPressed: () {
-          showCreateDialog(context, ref);
-        },
+        onPressed: onFloatingActionButtonPressed,
       ),
       bottomNavigationBar: FloatingNavBar(
         onTabChanged: _onTabChanged,
