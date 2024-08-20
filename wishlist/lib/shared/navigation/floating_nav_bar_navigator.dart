@@ -31,6 +31,21 @@ class _FloatingNavBarNavigatorState
   late IconData _floatingActionButtonIcon;
   late VoidCallback _onFloatingActionButtonPressed;
 
+  late List<_FloatingActionButtonBehaviour> floatingActionButtonBehaviours = [
+    _FloatingActionButtonBehaviour(
+      icon: Icons.add,
+      onPressed: () => showCreateDialog(context, ref),
+    ),
+    _FloatingActionButtonBehaviour(
+      icon: Icons.person_add_alt_1,
+      onPressed: () {},
+    ),
+    _FloatingActionButtonBehaviour(
+      icon: Icons.add,
+      onPressed: () => showCreateDialog(context, ref),
+    ),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -55,17 +70,9 @@ class _FloatingNavBarNavigatorState
 
   void updateFloatingActionButton(int index) {
     setState(() {
-      _floatingActionButtonIcon = const [
-        Icons.add,
-        Icons.person_add_alt_1,
-        Icons.add,
-      ][index];
-
-      _onFloatingActionButtonPressed = [
-        () => showCreateDialog(context, ref),
-        () {},
-        () => showCreateDialog(context, ref),
-      ][index];
+      _floatingActionButtonIcon = floatingActionButtonBehaviours[index].icon;
+      _onFloatingActionButtonPressed =
+          floatingActionButtonBehaviours[index].onPressed;
     });
   }
 
@@ -118,4 +125,11 @@ class _FloatingNavBarNavigatorState
       ),
     );
   }
+}
+
+class _FloatingActionButtonBehaviour {
+  _FloatingActionButtonBehaviour({required this.icon, required this.onPressed});
+
+  final IconData icon;
+  final VoidCallback onPressed;
 }
