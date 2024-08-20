@@ -66,7 +66,7 @@ Future<void> showCreateDialog(BuildContext context, WidgetRef ref) async {
               name: nameController.text,
               idOwner:
                   ref.read(supabaseClientProvider).auth.currentUserNonNull.id,
-              color: AppColors.primary.toString(),
+              color: AppColors.getRandomColor().toString(),
               updatedBy:
                   ref.read(supabaseClientProvider).auth.currentUserNonNull.id,
             ),
