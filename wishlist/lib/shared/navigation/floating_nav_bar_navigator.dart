@@ -28,21 +28,22 @@ class _FloatingNavBarNavigatorState
     with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late TabController _tabController;
-  IconData floatingActionButtonIcon = Icons.add;
-  late VoidCallback onFloatingActionButtonPressed =
-      () => showCreateDialog(context, ref);
+  late IconData _floatingActionButtonIcon;
+  late VoidCallback _onFloatingActionButtonPressed;
 
   @override
   void initState() {
     super.initState();
+    final index = FloatingNavBarTab.values.indexOf(widget.currentTab);
     _pageController = PageController(
-      initialPage: FloatingNavBarTab.values.indexOf(widget.currentTab),
+      initialPage: index,
     );
     _tabController = TabController(
       length: FloatingNavBarTab.values.length,
       vsync: this,
-      initialIndex: FloatingNavBarTab.values.indexOf(widget.currentTab),
+      initialIndex: index,
     );
+    updateFloatingActionButton(index);
   }
 
   @override
@@ -52,25 +53,25 @@ class _FloatingNavBarNavigatorState
     super.dispose();
   }
 
-  void updateFloatingAction() {
+  void updateFloatingActionButton(int index) {
     setState(() {
-      floatingActionButtonIcon = const [
+      _floatingActionButtonIcon = const [
         Icons.add,
         Icons.person_add_alt_1,
         Icons.add,
-      ][_tabController.index];
+      ][index];
 
-      onFloatingActionButtonPressed = [
+      _onFloatingActionButtonPressed = [
         () => showCreateDialog(context, ref),
         () {},
         () => showCreateDialog(context, ref),
-      ][_tabController.index];
+      ][index];
     });
   }
 
   void _onPageChanged(int index) {
     _tabController.animateTo(index);
-    updateFloatingAction();
+    updateFloatingActionButton(index);
   }
 
   void _onTabChanged(FloatingNavBarTab tab) {
@@ -91,15 +92,15 @@ class _FloatingNavBarNavigatorState
         curve: Curves.easeInOut,
       );
     }
-    updateFloatingAction();
+    updateFloatingActionButton(pageIndex);
   }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
       floatingActionButton: NavBarAddButton(
-        icon: floatingActionButtonIcon,
-        onPressed: onFloatingActionButtonPressed,
+        icon: _floatingActionButtonIcon,
+        onPressed: _onFloatingActionButtonPressed,
       ),
       bottomNavigationBar: FloatingNavBar(
         onTabChanged: _onTabChanged,
