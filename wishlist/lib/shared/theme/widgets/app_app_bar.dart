@@ -18,6 +18,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: canPop,
       titleSpacing: 0,
+      scrolledUnderElevation: 0,
       backgroundColor: AppColors.background,
       title: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
