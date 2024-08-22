@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/modules/friends/view/friends_screen.dart';
 import 'package:wishlist/modules/home/view/home_screen.dart';
 import 'package:wishlist/modules/settings/view/settings_screen.dart';
@@ -9,7 +10,7 @@ import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
 enum FloatingNavBarTab { home, friends, settings }
 
-class FloatingNavBarNavigator extends StatefulWidget {
+class FloatingNavBarNavigator extends ConsumerStatefulWidget {
   const FloatingNavBarNavigator({
     super.key,
     this.currentTab = FloatingNavBarTab.home,
@@ -18,11 +19,12 @@ class FloatingNavBarNavigator extends StatefulWidget {
   final FloatingNavBarTab currentTab;
 
   @override
-  State<FloatingNavBarNavigator> createState() =>
+  ConsumerState<FloatingNavBarNavigator> createState() =>
       _FloatingNavBarNavigatorState();
 }
 
-class _FloatingNavBarNavigatorState extends State<FloatingNavBarNavigator>
+class _FloatingNavBarNavigatorState
+    extends ConsumerState<FloatingNavBarNavigator>
     with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late TabController _tabController;
@@ -76,7 +78,7 @@ class _FloatingNavBarNavigatorState extends State<FloatingNavBarNavigator>
     return AppScaffold(
       floatingActionButton: NavBarAddButton(
         onPressed: () {
-          showCreateDialog(context);
+          showCreateDialog(context, ref);
         },
       ),
       bottomNavigationBar: FloatingNavBar(

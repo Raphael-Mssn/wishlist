@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
@@ -6,11 +7,11 @@ import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
 
     return SafeArea(
@@ -30,7 +31,7 @@ class HomeScreen extends StatelessWidget {
             PrimaryButton(
               text: l10n.createButton,
               onPressed: () {
-                showCreateDialog(context);
+                showCreateDialog(context, ref);
               },
               style: PrimaryButtonStyle.large,
             ),

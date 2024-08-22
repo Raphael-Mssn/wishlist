@@ -19,7 +19,7 @@ Future<void> showConfirmDialog(
   BuildContext context, {
   required String title,
   required String explanation,
-  required void Function() onConfirm,
+  required Future<void> Function()? onConfirm,
 }) async {
   final l10n = context.l10n;
 
