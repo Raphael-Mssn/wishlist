@@ -25,4 +25,8 @@ abstract final class AppColors {
     final index = random.nextInt(colorPalette.length);
     return colorPalette[index];
   }
+
+  static String getHexValue(Color color) {
+    return '#${color.value.toRadixString(16).substring(2)}';
+  }
 }
