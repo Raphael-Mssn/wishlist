@@ -10,6 +10,10 @@ class WishlistService {
   Future<void> createWishlist(Wishlist wishlist) async {
     return _wishlistRepository.createWishlist(wishlist);
   }
+
+  Future<List<Wishlist>> getWishlistsByUser(String userId) async {
+    return _wishlistRepository.getWishlistsByUser(userId);
+  }
 }
 
 final wishlistServiceProvider =

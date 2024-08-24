@@ -24,4 +24,25 @@ class SupabaseWishlistRepository implements WishlistRepository {
       );
     }
   }
+
+  @override
+  Future<List<Wishlist>> getWishlistsByUser(String userId) async {
+    try {
+      final response =
+          await _client.from('wishlists').select().eq('id_owner', userId);
+
+      return response.map(Wishlist.fromJson).toList();
+    } on PostgrestException catch (e) {
+      final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
+      throw AppException(
+        statusCode: statusCode ?? 500,
+        message: e.message,
+      );
+    } catch (e) {
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to get wishlists',
+      );
+    }
+  }
 }
