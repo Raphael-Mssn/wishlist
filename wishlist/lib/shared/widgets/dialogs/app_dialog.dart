@@ -55,7 +55,10 @@ class _DialogLayout extends StatelessWidget {
             onPressed: () async {
               try {
                 await onConfirm();
-                navigator.pop();
+
+                if (navigator.canPop()) {
+                  navigator.pop();
+                }
               } catch (e) {
                 scaffoldMessenger.showSnackBar(
                   SnackBar(

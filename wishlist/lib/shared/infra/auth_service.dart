@@ -14,7 +14,11 @@ class AuthService {
   Future<void> signOut(BuildContext context) async {
     await supabase.auth.signOut();
     if (context.mounted) {
-      await Navigator.of(context).pushReplacementNamed(AppRoutes.auth.name);
+      // reset the history and go to the auth screen
+      await Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoutes.auth.name,
+        (route) => false,
+      );
     }
   }
 
