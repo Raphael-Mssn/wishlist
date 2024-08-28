@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/modules/friends/view/friends_screen.dart';
+import 'package:wishlist/modules/friends/view/widgets/add_friend_bottom_sheet.dart';
 import 'package:wishlist/modules/home/view/home_screen.dart';
 import 'package:wishlist/modules/settings/view/settings_screen.dart';
 import 'package:wishlist/shared/theme/widgets/app_scaffold.dart';
@@ -38,7 +39,7 @@ class _FloatingNavBarNavigatorState
     ),
     _FloatingActionButtonBehaviour(
       icon: Icons.person_add_alt_1,
-      onPressed: () {},
+      onPressed: () => showAddFriendBottomSheet(context),
     ),
     _FloatingActionButtonBehaviour(
       icon: Icons.add,
