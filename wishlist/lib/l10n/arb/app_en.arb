@@ -37,6 +37,10 @@
   "createWishlist": "Create a wishlist",
   "name": "Name",
   "cancelButton": "Cancel",
+  "closeDialog": "Dismiss the contextual window",
+  "fiendsScreenTitle": "Friends",
+  "noFriend": "No friend",
+  "addButton": "Add",
   "emailOrPseudoHint": "Email or pseudo",
   "noUserFound": "No user found"
 }
