@@ -63,7 +63,7 @@ class SettingsScreen extends ConsumerWidget {
                 title: l10n.settingsScreenDisconnectDialogTitle,
                 explanation: l10n.settingsScreenDisconnectDialogExplanation,
                 onConfirm: () async {
-                  await ref.read(authServiceProvider).signOut(context);
+                  await ref.read(authServiceProvider).signOut(context, ref);
                 },
               );
             },
