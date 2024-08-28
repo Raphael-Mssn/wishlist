@@ -18,6 +18,11 @@ class AppTextStyles {
     fontWeight: FontWeight.w500,
   );
 
+  static TextStyle small = GoogleFonts.truculenta(
+    fontSize: 26,
+    fontWeight: FontWeight.w400,
+  );
+
   static TextStyle smaller = GoogleFonts.truculenta(
     fontSize: 22,
     fontWeight: FontWeight.w400,
