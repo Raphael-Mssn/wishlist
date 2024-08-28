@@ -37,5 +37,6 @@
   "createWishlist": "Create a wishlist",
   "name": "Name",
   "cancelButton": "Cancel",
-  "closeDialog": "Dismiss the contextual window"
+  "emailOrPseudoHint": "Email or pseudo",
+  "noUserFound": "No user found"
 }
