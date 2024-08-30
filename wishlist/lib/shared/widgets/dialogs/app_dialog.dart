@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:wishlist/gen/fonts.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/cancel_button.dart';
@@ -34,7 +34,8 @@ class _DialogLayout extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: GoogleFonts.truculenta(
+        style: const TextStyle(
+          fontFamily: FontFamily.truculenta,
           fontSize: 28,
           fontWeight: FontWeight.w500,
         ),

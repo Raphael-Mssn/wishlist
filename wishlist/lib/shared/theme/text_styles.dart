@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:wishlist/gen/fonts.gen.dart';
 
 // Flutter	        Figma
 // FontWeight.w100	Thin
@@ -13,17 +13,20 @@ import 'package:google_fonts/google_fonts.dart';
 // FontWeight.w900	Black
 
 class AppTextStyles {
-  static TextStyle title = GoogleFonts.truculenta(
+  static TextStyle title = const TextStyle(
+    fontFamily: FontFamily.truculenta,
     fontSize: 36,
     fontWeight: FontWeight.w500,
   );
 
-  static TextStyle small = GoogleFonts.truculenta(
+  static TextStyle small = const TextStyle(
+    fontFamily: FontFamily.truculenta,
     fontSize: 26,
     fontWeight: FontWeight.w400,
   );
 
-  static TextStyle smaller = GoogleFonts.truculenta(
+  static TextStyle smaller = const TextStyle(
+    fontFamily: FontFamily.truculenta,
     fontSize: 22,
     fontWeight: FontWeight.w400,
   );

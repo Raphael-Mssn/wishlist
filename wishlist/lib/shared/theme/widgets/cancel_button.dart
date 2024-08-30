@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:wishlist/gen/fonts.gen.dart';
 
 class CancelButton extends StatelessWidget {
   const CancelButton({super.key, required this.text, required this.onPressed});
@@ -12,7 +12,8 @@ class CancelButton extends StatelessWidget {
     return TextButton(
       child: Text(
         text,
-        style: GoogleFonts.truculenta(
+        style: const TextStyle(
+          fontFamily: FontFamily.truculenta,
           fontSize: 20,
           fontWeight: FontWeight.w500,
           color: Colors.black,

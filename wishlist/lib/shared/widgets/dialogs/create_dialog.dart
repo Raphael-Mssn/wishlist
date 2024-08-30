@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:wishlist/gen/fonts.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
@@ -30,12 +30,16 @@ class _CreateDialogContentState extends State<_CreateDialogContent> {
           children: <Widget>[
             TextField(
               controller: widget.nameController,
-              style: GoogleFonts.truculenta(fontSize: labelFontSize),
+              style: const TextStyle(
+                fontFamily: FontFamily.truculenta,
+                fontSize: labelFontSize,
+              ),
               cursorColor: AppColors.primary,
               autofocus: true,
               decoration: InputDecoration(
                 hintText: l10n.name,
-                hintStyle: GoogleFonts.truculenta(
+                hintStyle: const TextStyle(
+                  fontFamily: FontFamily.truculenta,
                   fontSize: labelFontSize,
                   fontStyle: FontStyle.italic,
                 ),

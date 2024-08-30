@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:wishlist/gen/fonts.gen.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -54,37 +54,40 @@ class PrimaryButtonStyle {
   final TextStyle textStyle;
   final EdgeInsets padding;
 
-  static final small = PrimaryButtonStyle(
-    textStyle: GoogleFonts.truculenta(
+  static const small = PrimaryButtonStyle(
+    textStyle: TextStyle(
+      fontFamily: FontFamily.truculenta,
       fontSize: 20,
       fontWeight: FontWeight.normal,
       color: Colors.black,
     ),
-    padding: const EdgeInsets.symmetric(
+    padding: EdgeInsets.symmetric(
       horizontal: 8,
       vertical: 6,
     ),
   );
 
-  static final medium = PrimaryButtonStyle(
-    textStyle: GoogleFonts.truculenta(
+  static const medium = PrimaryButtonStyle(
+    textStyle: TextStyle(
+      fontFamily: FontFamily.truculenta,
       fontSize: 24,
       fontWeight: FontWeight.normal,
       color: Colors.black,
     ),
-    padding: const EdgeInsets.symmetric(
+    padding: EdgeInsets.symmetric(
       horizontal: 16,
       vertical: 8,
     ),
   );
 
-  static final large = PrimaryButtonStyle(
-    textStyle: GoogleFonts.truculenta(
+  static const large = PrimaryButtonStyle(
+    textStyle: TextStyle(
+      fontFamily: FontFamily.truculenta,
       fontSize: 28,
       fontWeight: FontWeight.normal,
       color: Colors.black,
     ),
-    padding: const EdgeInsets.symmetric(
+    padding: EdgeInsets.symmetric(
       horizontal: 32,
       vertical: 8,
     ),
