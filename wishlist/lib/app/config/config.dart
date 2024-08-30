@@ -15,7 +15,7 @@ class Config extends Equatable {
     required DotEnv dotEnvConfig,
   }) async {
     await dotEnvConfig.load(
-      fileName: '.env.${environment.name}',
+      fileName: 'env/.env.${environment.name}',
     );
   }
 

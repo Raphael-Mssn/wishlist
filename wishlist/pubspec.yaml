@@ -101,8 +101,7 @@ flutter:
     # Add assets from the images directory to the application.
     - assets/svg/
     # Environment files
-    - .env.dev
-    - .env.prod
+    - env/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
