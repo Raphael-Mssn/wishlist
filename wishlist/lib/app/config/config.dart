@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wishlist/app/config/environment.dart';
+import 'package:wishlist/gen/assets.gen.dart';
 
 class Config extends Equatable {
   const Config({
@@ -15,7 +16,10 @@ class Config extends Equatable {
     required DotEnv dotEnvConfig,
   }) async {
     await dotEnvConfig.load(
-      fileName: 'env/.env.${environment.name}',
+      fileName: Assets.env.values.map((e) => e).firstWhere(
+            (element) =>
+                element.contains(environment.toString().split('.').last),
+          ),
     );
   }
 

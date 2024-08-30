@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/friends/view/widgets/add_friend_bottom_sheet.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_pill.dart';
@@ -71,7 +72,7 @@ class FriendsScreen extends ConsumerWidget {
       },
       data: (data) => data.isEmpty
           ? PageLayoutEmpty(
-              illustrationUrl: 'assets/svg/no_friend.svg',
+              illustrationUrl: Assets.svg.noFriend,
               title: l10n.noFriend,
               callToAction: l10n.addButton,
               onCallToAction: () => showAddFriendBottomSheet(context),
