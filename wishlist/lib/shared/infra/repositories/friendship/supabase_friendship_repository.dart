@@ -254,6 +254,7 @@ class SupabaseFriendshipRepository implements FriendshipRepository {
 
   @override
   Future<void> removeFriendshipWith(String userId) {
+    // TODO: implement removeFriendshipWith
     throw UnimplementedError();
   }
 }
