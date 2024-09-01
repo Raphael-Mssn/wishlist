@@ -14,6 +14,9 @@ ThemeData get theme => ThemeData(
         dividerColor: Colors.transparent,
         indicatorColor: AppColors.primary,
       ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: AppColors.primary,
+      ),
       cupertinoOverrideTheme: const CupertinoThemeData(
         // Necessary for setting the selectionHandleColor
         primaryColor: AppColors.primary,

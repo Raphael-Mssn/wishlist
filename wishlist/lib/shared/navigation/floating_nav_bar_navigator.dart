@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/modules/friends/view/friends_screen.dart';
+import 'package:wishlist/modules/friends/view/widgets/add_friend_bottom_sheet.dart';
 import 'package:wishlist/modules/home/view/home_screen.dart';
 import 'package:wishlist/modules/settings/view/settings_screen.dart';
 import 'package:wishlist/shared/theme/widgets/app_scaffold.dart';
@@ -28,18 +29,37 @@ class _FloatingNavBarNavigatorState
     with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late TabController _tabController;
+  late IconData _floatingActionButtonIcon;
+  late VoidCallback _onFloatingActionButtonPressed;
+
+  late List<_FloatingActionButtonBehaviour> floatingActionButtonBehaviours = [
+    _FloatingActionButtonBehaviour(
+      icon: Icons.add,
+      onPressed: () => showCreateDialog(context, ref),
+    ),
+    _FloatingActionButtonBehaviour(
+      icon: Icons.person_add_alt_1,
+      onPressed: () => showAddFriendBottomSheet(context),
+    ),
+    _FloatingActionButtonBehaviour(
+      icon: Icons.add,
+      onPressed: () => showCreateDialog(context, ref),
+    ),
+  ];
 
   @override
   void initState() {
     super.initState();
+    final index = FloatingNavBarTab.values.indexOf(widget.currentTab);
     _pageController = PageController(
-      initialPage: FloatingNavBarTab.values.indexOf(widget.currentTab),
+      initialPage: index,
     );
     _tabController = TabController(
       length: FloatingNavBarTab.values.length,
       vsync: this,
-      initialIndex: FloatingNavBarTab.values.indexOf(widget.currentTab),
+      initialIndex: index,
     );
+    updateFloatingActionButton(index);
   }
 
   @override
@@ -49,8 +69,17 @@ class _FloatingNavBarNavigatorState
     super.dispose();
   }
 
+  void updateFloatingActionButton(int index) {
+    setState(() {
+      _floatingActionButtonIcon = floatingActionButtonBehaviours[index].icon;
+      _onFloatingActionButtonPressed =
+          floatingActionButtonBehaviours[index].onPressed;
+    });
+  }
+
   void _onPageChanged(int index) {
     _tabController.animateTo(index);
+    updateFloatingActionButton(index);
   }
 
   void _onTabChanged(FloatingNavBarTab tab) {
@@ -71,15 +100,15 @@ class _FloatingNavBarNavigatorState
         curve: Curves.easeInOut,
       );
     }
+    updateFloatingActionButton(pageIndex);
   }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
       floatingActionButton: NavBarAddButton(
-        onPressed: () {
-          showCreateDialog(context, ref);
-        },
+        icon: _floatingActionButtonIcon,
+        onPressed: _onFloatingActionButtonPressed,
       ),
       bottomNavigationBar: FloatingNavBar(
         onTabChanged: _onTabChanged,
@@ -97,4 +126,11 @@ class _FloatingNavBarNavigatorState
       ),
     );
   }
+}
+
+class _FloatingActionButtonBehaviour {
+  _FloatingActionButtonBehaviour({required this.icon, required this.onPressed});
+
+  final IconData icon;
+  final VoidCallback onPressed;
 }

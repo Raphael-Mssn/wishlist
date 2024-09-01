@@ -18,6 +18,12 @@ abstract final class AppColors {
 
   static const Color green = Color(0xFF57BD87);
 
+  static const Color gainsboro = Color(0xFFE8E4DA);
+
+  static const Color pastelGray = Color(0xFFD3CBC1);
+
+  static const Color makara = Color(0xFF887A6B);
+
   static final List<Color> colorPalette = [blue, purple, yellow, green];
 
   static Color getRandomColor() {
