@@ -34,7 +34,6 @@ class FriendPill extends StatelessWidget {
           vertical: 6,
         ).copyWith(right: 12),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               appUser.profile.pseudo,
