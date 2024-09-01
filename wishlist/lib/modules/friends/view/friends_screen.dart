@@ -88,11 +88,8 @@ class FriendsScreen extends ConsumerWidget {
                     final isLastItem = index == combinedList.length - 1;
 
                     return Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        0,
-                        8,
-                        0,
-                        isLastItem ? 48 : 8,
+                      padding: EdgeInsets.only(
+                        bottom: isLastItem ? 48 : 8,
                       ),
                       child: Builder(
                         builder: (context) {
