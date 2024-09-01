@@ -40,24 +40,10 @@ class SupabaseUserRepository implements UserRepository {
     try {
       final response = await _client
           .from('users_profiles')
-          .select('user->>id')
+          .select()
           .or('profile->>pseudo.ilike.%$query%,user->>email.ilike.%$query%');
 
-      final usersId = response.map((e) => e['id'] as String).toIList();
-
-      final users = await Future.wait(
-        usersId.map((userId) async {
-          final response = await _client
-              .from('users_profiles')
-              .select()
-              .eq('id', userId)
-              .single();
-
-          return AppUser.fromJson(response);
-        }),
-      );
-
-      return users.toIList();
+      return response.map(AppUser.fromJson).toIList();
     } on PostgrestException catch (e) {
       final statusCode = e.code;
       throw AppException(
