@@ -55,7 +55,6 @@ class _AddFriendBottomSheetState extends ConsumerState<AddFriendBottomSheet> {
               children: [
                 UserSearchBar(
                   controller: _searchBarController,
-                  isFocusedOnStart: true,
                 ),
                 const Gap(20),
                 searchState.when(

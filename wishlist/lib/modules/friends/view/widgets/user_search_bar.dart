@@ -7,38 +7,15 @@ class UserSearchBar extends StatefulWidget {
   const UserSearchBar({
     super.key,
     required this.controller,
-    this.isFocusedOnStart = false,
   });
 
   final TextEditingController controller;
-  final bool isFocusedOnStart;
 
   @override
   State<UserSearchBar> createState() => _UserSearchBarState();
 }
 
 class _UserSearchBarState extends State<UserSearchBar> {
-  late FocusNode _focusNode;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode = FocusNode();
-
-    // Demander le focus une seule fois lors de la première construction
-    if (widget.isFocusedOnStart) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _focusNode.requestFocus();
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,7 +34,7 @@ class _UserSearchBarState extends State<UserSearchBar> {
       ),
       child: TextField(
         controller: widget.controller,
-        focusNode: _focusNode,
+        autofocus: true,
         style: AppTextStyles.smaller.copyWith(
           color: AppColors.darkGrey,
         ),
