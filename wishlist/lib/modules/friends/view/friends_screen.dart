@@ -76,6 +76,7 @@ class FriendsScreen extends ConsumerWidget {
               title: l10n.noFriend,
               callToAction: l10n.addButton,
               onCallToAction: () => showAddFriendBottomSheet(context),
+              onRefresh: refreshFriends,
             )
           : PageLayout(
               title: l10n.fiendsScreenTitle,
