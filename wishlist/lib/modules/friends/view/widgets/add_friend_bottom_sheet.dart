@@ -60,7 +60,17 @@ class _AddFriendBottomSheetState extends ConsumerState<AddFriendBottomSheet> {
                 searchState.when(
                   loading: () => const CircularProgressIndicator(),
                   error: (error, stackTrace) {
-                    // TODO: Show error message
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              context.l10n.genericError,
+                            ),
+                          ),
+                        );
+                      },
+                    );
                     return const SizedBox.shrink();
                   },
                   data: (users) {
@@ -110,7 +120,7 @@ void showAddFriendBottomSheet(BuildContext context) {
       ),
     ),
     builder: (context) {
-      return const AddFriendBottomSheet();
+      return const Scaffold(body: AddFriendBottomSheet());
     },
   );
 }
