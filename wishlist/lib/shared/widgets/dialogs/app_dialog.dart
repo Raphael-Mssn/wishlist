@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/gen/fonts.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/cancel_button.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
@@ -61,11 +62,11 @@ class _DialogLayout extends StatelessWidget {
                   navigator.pop();
                 }
               } catch (e) {
-                scaffoldMessenger.showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.genericError),
-                  ),
-                );
+                if (context.mounted) {
+                  scaffoldMessenger.showGenericError(
+                    context,
+                  );
+                }
               }
             },
             style: PrimaryButtonStyle.small,

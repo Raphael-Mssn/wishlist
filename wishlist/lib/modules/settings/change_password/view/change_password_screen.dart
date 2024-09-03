@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
+import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
@@ -52,13 +53,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       final statusCode = appException.statusCode;
       switch (statusCode) {
         case 401:
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                l10n.genericError,
-              ),
-            ),
-          );
+          ScaffoldMessenger.of(context).showGenericError(context);
         case 403:
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
