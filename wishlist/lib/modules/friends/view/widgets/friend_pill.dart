@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:wishlist/modules/friends/view/widgets/base_avatar_pill.dart';
 import 'package:wishlist/shared/models/app_user.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 
@@ -12,6 +12,13 @@ class FriendPill extends StatelessWidget {
   });
 
   final AppUser appUser;
+
+  void _onTap(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      AppRoutes.friendDetails.name,
+      arguments: appUser.user.id,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +31,7 @@ class FriendPill extends StatelessWidget {
     const textColor = AppColors.background;
 
     return BaseAvatarPill(
+      onTap: _onTap,
       backgroundColor: AppColors.primary,
       avatarBorderColor: AppColors.darkOrange,
       child: Text(
