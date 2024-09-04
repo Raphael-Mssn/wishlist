@@ -19,6 +19,13 @@ class AppUser {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'profile': profile.toJson(),
+      'user': user.toJson(),
+    };
+  }
+
   final Profile profile;
   final User user;
 }
