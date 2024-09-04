@@ -2,6 +2,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:wishlist/shared/models/friendship/friendship.dart';
 
 abstract class FriendshipRepository {
+  Future<ISet<String>> getFriendsIds(String userId);
+
   Future<ISet<String>> getCurrentUserFriendsIds();
 
   Future<ISet<String>> getCurrentUserPendingFriendsIds();
