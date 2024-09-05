@@ -46,11 +46,14 @@ class UserPill extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            appUser.profile.pseudo,
-            style: AppTextStyles.small.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppColors.darkGrey,
+          Flexible(
+            child: Text(
+              appUser.profile.pseudo,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.small.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.darkGrey,
+              ),
             ),
           ),
           ...buttons,
