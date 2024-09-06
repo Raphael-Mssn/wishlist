@@ -17,8 +17,6 @@ class FriendsScreen extends ConsumerWidget {
   static const requestedType = 'requested';
   static const pendingType = 'pending';
   static const friendType = 'friend';
-  static const userKey = 'user';
-  static const typeKey = 'type';
 
   List<_FriendItem> _buildCombinedList(FriendsData data) {
     final combinedList = <_FriendItem>[];
@@ -59,7 +57,7 @@ class FriendsScreen extends ConsumerWidget {
     final friendsData = ref.watch(friendshipsProvider);
 
     Future<void> refreshFriends() async {
-      ref.invalidate(friendshipsProvider);
+      await ref.read(friendshipsProvider.notifier).loadFriends();
     }
 
     return friendsData.when(
