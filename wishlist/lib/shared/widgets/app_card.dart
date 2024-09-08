@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:wishlist/shared/theme/text_styles.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -26,8 +26,7 @@ class AppCard extends StatelessWidget {
                 alignment: Alignment.bottomLeft,
                 child: Text(
                   text,
-                  style: GoogleFonts.truculenta(
-                    fontSize: 32,
+                  style: AppTextStyles.medium.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                     height: 1,

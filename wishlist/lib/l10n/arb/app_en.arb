@@ -43,5 +43,6 @@
   "noFriend": "No friend",
   "addButton": "Add",
   "emailOrPseudoHint": "Email or pseudo",
-  "noUserFound": "No user found"
+  "noUserFound": "No user found",
+  "myWishlists": "My wishlists"
 }
