@@ -7,6 +7,7 @@ import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
+import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/models/profile.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
@@ -34,8 +35,6 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
   }
 
   void onError(AppException appException) {
-    final l10n = context.l10n;
-
     if (mounted) {
       setState(() {
         _isLoading = false;
@@ -45,21 +44,8 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
 
       switch (statusCode) {
         case 401:
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                l10n.genericError,
-              ),
-            ),
-          );
         default:
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                l10n.genericError,
-              ),
-            ),
-          );
+          ScaffoldMessenger.of(context).showGenericError(context);
       }
     }
   }

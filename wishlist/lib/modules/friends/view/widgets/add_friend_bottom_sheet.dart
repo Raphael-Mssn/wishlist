@@ -7,6 +7,7 @@ import 'package:wishlist/modules/friends/view/infra/search_notifier.dart';
 import 'package:wishlist/modules/friends/view/widgets/user_pill.dart';
 import 'package:wishlist/modules/friends/view/widgets/user_search_bar.dart';
 import 'package:wishlist/shared/infra/utils/debouncer.dart';
+import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 
 class AddFriendBottomSheet extends ConsumerStatefulWidget {
@@ -60,7 +61,7 @@ class _AddFriendBottomSheetState extends ConsumerState<AddFriendBottomSheet> {
                 searchState.when(
                   loading: () => const CircularProgressIndicator(),
                   error: (error, stackTrace) {
-                    // TODO: Show error message
+                    ScaffoldMessenger.of(context).showGenericError(context);
                     return const SizedBox.shrink();
                   },
                   data: (users) {
@@ -110,7 +111,7 @@ void showAddFriendBottomSheet(BuildContext context) {
       ),
     ),
     builder: (context) {
-      return const AddFriendBottomSheet();
+      return const Scaffold(body: AddFriendBottomSheet());
     },
   );
 }
