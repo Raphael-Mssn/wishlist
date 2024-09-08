@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -14,10 +15,27 @@ class AppCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: color,
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(fontSize: 18),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  text,
+                  style: GoogleFonts.truculenta(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    height: 1,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
