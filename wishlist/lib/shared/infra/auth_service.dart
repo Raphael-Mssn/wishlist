@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -24,8 +25,32 @@ class AuthService {
     }
   }
 
-  Future<void> signIn({required String email, required String password}) async {
-    await supabase.auth.signInWithPassword(email: email, password: password);
+  Future<void> signIn({
+    required String identifier,
+    required String password,
+  }) async {
+    final isEmail = EmailValidator.validate(identifier);
+
+    if (!isEmail) {
+      // Si ce n'est pas un email, on récupère l'email correspondant au pseudo
+      final response = await supabase
+          .from('users_profiles')
+          .select('user->>email')
+          .eq('profile->>pseudo', identifier)
+          .maybeSingle();
+
+      if (response == null || response['email'] == null) {
+        throw AppException(
+          statusCode: 404,
+          message: 'User not found',
+        );
+      }
+
+      identifier = response['email'];
+    }
+
+    await supabase.auth
+        .signInWithPassword(email: identifier, password: password);
   }
 
   Future<void> signUp({required String email, required String password}) async {

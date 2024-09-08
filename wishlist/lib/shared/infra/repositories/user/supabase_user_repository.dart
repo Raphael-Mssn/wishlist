@@ -23,6 +23,12 @@ class SupabaseUserRepository implements UserRepository {
       await _client.auth.refreshSession();
     } on PostgrestException catch (e) {
       final statusCode = e.code;
+      if (statusCode == '23505') {
+        throw AppException(
+          statusCode: 409,
+          message: 'User profile already exists',
+        );
+      }
       throw AppException(
         statusCode: statusCode != null ? int.parse(statusCode) : 500,
         message: e.message,

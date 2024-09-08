@@ -14,6 +14,7 @@
   "genericError": "An error occurred, please try again",
   "pseudoField": "Pseudo",
   "validPseudoError": "Pseudo cannot be empty",
+  "pseudoAlreadyExists": "This pseudo is already used",
   "savePseudo": "Save",
   "settingsScreenTitle": "Settings",
   "settingsScreenEmail": "Email",

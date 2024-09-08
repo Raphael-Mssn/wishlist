@@ -11,6 +11,7 @@ import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/models/profile.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/widgets/text_form_fields/validators/pseudo_validator.dart';
 
 class PseudoScreen extends ConsumerStatefulWidget {
   const PseudoScreen({super.key});
@@ -43,6 +44,12 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
       final statusCode = appException.statusCode;
 
       switch (statusCode) {
+        case 409:
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(context.l10n.pseudoAlreadyExists),
+            ),
+          );
         case 401:
         default:
           ScaffoldMessenger.of(context).showGenericError(context);
@@ -86,12 +93,7 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
               decoration: InputDecoration(
                 labelText: l10n.pseudoField,
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return l10n.validPseudoError;
-                }
-                return null;
-              },
+              validator: (value) => pseudoValidator(value, l10n),
             ),
             const Gap(32),
             PrimaryButton(

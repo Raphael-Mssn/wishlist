@@ -10,6 +10,7 @@ import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_email.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_password.dart';
+import 'package:wishlist/shared/widgets/text_form_fields/input_pseudo_or_email.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -20,7 +21,7 @@ class AuthScreen extends ConsumerStatefulWidget {
 
 class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _pseudoOrEmailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   bool _isLoading = false;
@@ -30,7 +31,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _pseudoOrEmailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -89,12 +90,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     try {
       if (_isSigningIn) {
         await ref.read(authServiceProvider).signIn(
-              email: _emailController.text.trim(),
+              identifier: _pseudoOrEmailController.text.trim(),
               password: _passwordController.text.trim(),
             );
       } else {
         await ref.read(authServiceProvider).signUp(
-              email: _emailController.text.trim(),
+              email: _pseudoOrEmailController.text.trim(),
               password: _passwordController.text.trim(),
             );
       }
@@ -111,12 +112,18 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    final emailOrPseudoInput = _isSigningIn
+        ? InputPseudoOrEmail(
+            controller: _pseudoOrEmailController,
+          )
+        : InputEmail(controller: _pseudoOrEmailController);
+
     return AuthLayout(
       formKey: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          InputEmail(controller: _emailController),
+          emailOrPseudoInput,
           const Gap(16),
           InputPassword(
             autofillHints: _isSigningIn
