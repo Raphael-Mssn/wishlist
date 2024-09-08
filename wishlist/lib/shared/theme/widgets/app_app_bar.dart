@@ -9,14 +9,14 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final canPop = Navigator.of(context).canPop();
+    final isFirstRoute = ModalRoute.of(context)?.isFirst ?? false;
     // We allow "!" usage here because we know that the fontSize is not null
-    final titleSize = canPop
-        ? AppTextStyles.title.fontSize! - 4
-        : AppTextStyles.title.fontSize;
+    final titleSize = isFirstRoute
+        ? AppTextStyles.title.fontSize
+        : AppTextStyles.title.fontSize! - 4;
 
     return AppBar(
-      centerTitle: canPop,
+      centerTitle: !isFirstRoute,
       titleSpacing: 0,
       scrolledUnderElevation: 0,
       backgroundColor: AppColors.background,
