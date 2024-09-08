@@ -8,11 +8,13 @@ class PageLayout extends StatelessWidget {
     required this.title,
     required this.child,
     this.onRefresh,
+    this.padding = const EdgeInsets.all(20),
   });
 
   final String title;
   final Widget child;
   final Future<void> Function()? onRefresh;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {

@@ -1,15 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'wishlist.dart';
+part of 'wishlist_create_request.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$WishlistImpl _$$WishlistImplFromJson(Map<String, dynamic> json) =>
-    _$WishlistImpl(
-      id: (json['id'] as num).toInt(),
-      createdAt: DateTime.parse(json['created_at'] as String),
+_$WishlistCreateRequestImpl _$$WishlistCreateRequestImplFromJson(
+        Map<String, dynamic> json) =>
+    _$WishlistCreateRequestImpl(
       name: json['name'] as String,
       idOwner: json['id_owner'] as String,
       color: json['color'] as String,
@@ -24,13 +23,11 @@ _$WishlistImpl _$$WishlistImplFromJson(Map<String, dynamic> json) =>
           WishlistVisibility.private,
       order: (json['order'] as num).toInt(),
       updatedBy: json['updated_by'] as String,
-      updatedAt: DateTime.parse(json['updated_at'] as String),
     );
 
-Map<String, dynamic> _$$WishlistImplToJson(_$WishlistImpl instance) =>
+Map<String, dynamic> _$$WishlistCreateRequestImplToJson(
+        _$WishlistCreateRequestImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'created_at': instance.createdAt.toIso8601String(),
       'name': instance.name,
       'id_owner': instance.idOwner,
       'color': instance.color,
@@ -41,7 +38,6 @@ Map<String, dynamic> _$$WishlistImplToJson(_$WishlistImpl instance) =>
       'visibility': _$WishlistVisibilityEnumMap[instance.visibility]!,
       'order': instance.order,
       'updated_by': instance.updatedBy,
-      'updated_at': instance.updatedAt.toIso8601String(),
     };
 
 const _$WishlistVisibilityEnumMap = {

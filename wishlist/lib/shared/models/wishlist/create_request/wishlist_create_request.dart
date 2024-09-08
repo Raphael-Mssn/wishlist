@@ -1,13 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'wishlist.freezed.dart';
-part 'wishlist.g.dart';
+part 'wishlist_create_request.freezed.dart';
+part 'wishlist_create_request.g.dart';
 
 @freezed
-class Wishlist with _$Wishlist {
-  const factory Wishlist({
-    @JsonKey(name: 'id') required int id,
-    @JsonKey(name: 'created_at') required DateTime createdAt,
+class WishlistCreateRequest with _$WishlistCreateRequest {
+  const factory WishlistCreateRequest({
     @JsonKey(name: 'name') required String name,
     @JsonKey(name: 'id_owner') required String idOwner,
     @JsonKey(name: 'color') required String color,
@@ -22,13 +20,12 @@ class Wishlist with _$Wishlist {
     WishlistVisibility visibility,
     @JsonKey(name: 'order') required int order,
     @JsonKey(name: 'updated_by') required String updatedBy,
-    @JsonKey(name: 'updated_at') required DateTime updatedAt,
-  }) = _Wishlist;
+  }) = _WishlistCreateRequest;
 
-  const Wishlist._();
+  const WishlistCreateRequest._();
 
-  factory Wishlist.fromJson(Map<String, dynamic> json) =>
-      _$WishlistFromJson(json);
+  factory WishlistCreateRequest.fromJson(Map<String, dynamic> json) =>
+      _$WishlistCreateRequestFromJson(json);
 }
 
 enum WishlistVisibility {

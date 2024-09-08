@@ -35,4 +35,8 @@ abstract final class AppColors {
   static String getHexValue(Color color) {
     return '#${color.value.toRadixString(16).substring(2)}';
   }
+
+  static Color getColorFromHexValue(String hexColor) {
+    return Color(int.parse(hexColor.substring(1, 7), radix: 16) + 0xFF000000);
+  }
 }

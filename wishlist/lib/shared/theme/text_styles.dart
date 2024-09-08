@@ -19,6 +19,12 @@ class AppTextStyles {
     fontWeight: FontWeight.w500,
   );
 
+  static TextStyle medium = const TextStyle(
+    fontFamily: FontFamily.truculenta,
+    fontSize: 32,
+    fontWeight: FontWeight.w400,
+  );
+
   static TextStyle small = const TextStyle(
     fontFamily: FontFamily.truculenta,
     fontSize: 26,
