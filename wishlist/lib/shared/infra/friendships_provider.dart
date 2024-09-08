@@ -6,11 +6,11 @@ import 'package:wishlist/shared/models/friendship/friendship.dart';
 
 class FriendsNotifier extends StateNotifier<AsyncValue<FriendsData>> {
   FriendsNotifier(this._service) : super(const AsyncValue.loading()) {
-    _loadFriends();
+    loadFriends();
   }
   final FriendshipService _service;
 
-  Future<void> _loadFriends() async {
+  Future<void> loadFriends() async {
     try {
       final friends = await _service.getCurrentUserFriends();
       final pendingFriends = await _service.getCurrentUserPendingFriends();
