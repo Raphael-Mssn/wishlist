@@ -70,6 +70,7 @@ class _AddFriendBottomSheetState extends ConsumerState<AddFriendBottomSheet> {
                       );
                     }
                     return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: users.length,
                       itemBuilder: (context, index) {

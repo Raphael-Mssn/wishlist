@@ -7,7 +7,6 @@ import 'package:wishlist/modules/friends/view/widgets/friend_pill.dart';
 import 'package:wishlist/modules/friends/view/widgets/user_pill.dart';
 import 'package:wishlist/shared/infra/friendships_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
-import 'package:wishlist/shared/theme/widgets/app_refresh_indicator.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 import 'package:wishlist/shared/widgets/page_layout_empty.dart';
 
@@ -76,45 +75,44 @@ class FriendsScreen extends ConsumerWidget {
               title: l10n.noFriend,
               callToAction: l10n.addButton,
               onCallToAction: () => showAddFriendBottomSheet(context),
+              onRefresh: refreshFriends,
             )
           : PageLayout(
               title: l10n.fiendsScreenTitle,
-              child: AppRefreshIndicator(
-                onRefresh: refreshFriends,
-                child: ListView.builder(
-                  itemCount: data.totalCount,
-                  itemBuilder: (context, index) {
-                    final combinedList = _buildCombinedList(data);
-                    final item = combinedList[index];
-                    final isLastItem = index == combinedList.length - 1;
+              onRefresh: refreshFriends,
+              child: ListView.builder(
+                itemCount: data.totalCount,
+                itemBuilder: (context, index) {
+                  final combinedList = _buildCombinedList(data);
+                  final item = combinedList[index];
+                  final isLastItem = index == combinedList.length - 1;
 
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        bottom: isLastItem ? 48 : 8,
-                      ),
-                      child: Builder(
-                        builder: (context) {
-                          switch (item.type) {
-                            case requestedType:
-                              return UserPill(
-                                appUser: item.user,
-                                isRequest: true,
-                              );
-                            case pendingType:
-                              return UserPill(
-                                appUser: item.user,
-                              );
-                            case friendType:
-                              return FriendPill(appUser: item.user);
-                            default:
-                              return const SizedBox
-                                  .shrink(); // Should never happen
-                          }
-                        },
-                      ),
-                    );
-                  },
-                ),
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      bottom: isLastItem ? 48 : 8,
+                    ),
+                    child: Builder(
+                      builder: (context) {
+                        switch (item.type) {
+                          case requestedType:
+                            return UserPill(
+                              appUser: item.user,
+                              isRequest: true,
+                            );
+                          case pendingType:
+                            return UserPill(
+                              appUser: item.user,
+                            );
+                          case friendType:
+                            return FriendPill(appUser: item.user);
+                          default:
+                            return const SizedBox
+                                .shrink(); // Should never happen
+                        }
+                      },
+                    ),
+                  );
+                },
               ),
             ),
     );
