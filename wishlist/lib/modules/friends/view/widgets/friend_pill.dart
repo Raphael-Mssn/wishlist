@@ -26,26 +26,15 @@ class FriendPill extends StatelessWidget {
     return BaseAvatarPill(
       backgroundColor: AppColors.primary,
       avatarBorderColor: AppColors.darkOrange,
-      child: Padding(
-        // This padding is necessary to avoid having text too close to the end
-        // of the pill
-        padding: const EdgeInsets.symmetric(
-          horizontal: 2,
-          vertical: 6,
-        ).copyWith(right: 12),
-        child: Row(
-          children: [
-            Text(
-              appUser.profile.pseudo,
-              style: AppTextStyles.small.copyWith(
-                fontWeight: FontWeight.bold,
-                color: textColor,
-                fontSize: AppTextStyles.small.fontSize,
-                shadows: [
-                  textShadow,
-                ],
-              ),
-            ),
+      child: Text(
+        appUser.profile.pseudo,
+        overflow: TextOverflow.ellipsis,
+        style: AppTextStyles.small.copyWith(
+          fontWeight: FontWeight.bold,
+          color: textColor,
+          fontSize: AppTextStyles.small.fontSize,
+          shadows: [
+            textShadow,
           ],
         ),
       ),

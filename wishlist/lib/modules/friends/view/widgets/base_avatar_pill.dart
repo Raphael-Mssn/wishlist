@@ -15,6 +15,8 @@ class BaseAvatarPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const avatarSize = 64.0;
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: backgroundColor,
@@ -22,37 +24,34 @@ class BaseAvatarPill extends StatelessWidget {
           Radius.circular(50),
         ),
       ),
-      child: IntrinsicHeight(
-        child: Row(
-          children: <Widget>[
-            AspectRatio(
-              aspectRatio: 1,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  shape: BoxShape.circle,
-                  border: Border.fromBorderSide(
-                    BorderSide(
-                      color: avatarBorderColor,
-                      width: 6,
-                    ),
-                  ),
+      child: Row(
+        children: <Widget>[
+          Container(
+            height: avatarSize,
+            width: avatarSize,
+            decoration: BoxDecoration(
+              color: AppColors.background,
+              shape: BoxShape.circle,
+              border: Border.fromBorderSide(
+                BorderSide(
+                  color: avatarBorderColor,
+                  width: 6,
                 ),
-                child: // TODO: Add avatar
-                    const SizedBox.shrink(),
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                child: child,
+            child: // TODO: Add avatar
+                const SizedBox.shrink(),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 8,
               ),
+              child: child,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
