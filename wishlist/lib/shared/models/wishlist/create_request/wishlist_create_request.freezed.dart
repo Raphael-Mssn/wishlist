@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'wishlist.dart';
+part of 'wishlist_create_request.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,16 +14,13 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-Wishlist _$WishlistFromJson(Map<String, dynamic> json) {
-  return _Wishlist.fromJson(json);
+WishlistCreateRequest _$WishlistCreateRequestFromJson(
+    Map<String, dynamic> json) {
+  return _WishlistCreateRequest.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Wishlist {
-  @JsonKey(name: 'id')
-  int get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'created_at')
-  DateTime get createdAt => throw _privateConstructorUsedError;
+mixin _$WishlistCreateRequest {
   @JsonKey(name: 'name')
   String get name => throw _privateConstructorUsedError;
   @JsonKey(name: 'id_owner')
@@ -44,28 +41,25 @@ mixin _$Wishlist {
   int get order => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_by')
   String get updatedBy => throw _privateConstructorUsedError;
-  @JsonKey(name: 'updated_at')
-  DateTime get updatedAt => throw _privateConstructorUsedError;
 
-  /// Serializes this Wishlist to a JSON map.
+  /// Serializes this WishlistCreateRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of Wishlist
+  /// Create a copy of WishlistCreateRequest
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $WishlistCopyWith<Wishlist> get copyWith =>
+  $WishlistCreateRequestCopyWith<WishlistCreateRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $WishlistCopyWith<$Res> {
-  factory $WishlistCopyWith(Wishlist value, $Res Function(Wishlist) then) =
-      _$WishlistCopyWithImpl<$Res, Wishlist>;
+abstract class $WishlistCreateRequestCopyWith<$Res> {
+  factory $WishlistCreateRequestCopyWith(WishlistCreateRequest value,
+          $Res Function(WishlistCreateRequest) then) =
+      _$WishlistCreateRequestCopyWithImpl<$Res, WishlistCreateRequest>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'id') int id,
-      @JsonKey(name: 'created_at') DateTime createdAt,
-      @JsonKey(name: 'name') String name,
+      {@JsonKey(name: 'name') String name,
       @JsonKey(name: 'id_owner') String idOwner,
       @JsonKey(name: 'color') String color,
       @JsonKey(name: 'icon_url') String? iconUrl,
@@ -74,27 +68,25 @@ abstract class $WishlistCopyWith<$Res> {
       @JsonKey(name: 'can_owner_see_taken_wish') bool canOwnerSeeTakenWish,
       @JsonKey(name: 'visibility') WishlistVisibility visibility,
       @JsonKey(name: 'order') int order,
-      @JsonKey(name: 'updated_by') String updatedBy,
-      @JsonKey(name: 'updated_at') DateTime updatedAt});
+      @JsonKey(name: 'updated_by') String updatedBy});
 }
 
 /// @nodoc
-class _$WishlistCopyWithImpl<$Res, $Val extends Wishlist>
-    implements $WishlistCopyWith<$Res> {
-  _$WishlistCopyWithImpl(this._value, this._then);
+class _$WishlistCreateRequestCopyWithImpl<$Res,
+        $Val extends WishlistCreateRequest>
+    implements $WishlistCreateRequestCopyWith<$Res> {
+  _$WishlistCreateRequestCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of Wishlist
+  /// Create a copy of WishlistCreateRequest
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? createdAt = null,
     Object? name = null,
     Object? idOwner = null,
     Object? color = null,
@@ -105,17 +97,8 @@ class _$WishlistCopyWithImpl<$Res, $Val extends Wishlist>
     Object? visibility = null,
     Object? order = null,
     Object? updatedBy = null,
-    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -156,26 +139,21 @@ class _$WishlistCopyWithImpl<$Res, $Val extends Wishlist>
           ? _value.updatedBy
           : updatedBy // ignore: cast_nullable_to_non_nullable
               as String,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$WishlistImplCopyWith<$Res>
-    implements $WishlistCopyWith<$Res> {
-  factory _$$WishlistImplCopyWith(
-          _$WishlistImpl value, $Res Function(_$WishlistImpl) then) =
-      __$$WishlistImplCopyWithImpl<$Res>;
+abstract class _$$WishlistCreateRequestImplCopyWith<$Res>
+    implements $WishlistCreateRequestCopyWith<$Res> {
+  factory _$$WishlistCreateRequestImplCopyWith(
+          _$WishlistCreateRequestImpl value,
+          $Res Function(_$WishlistCreateRequestImpl) then) =
+      __$$WishlistCreateRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'id') int id,
-      @JsonKey(name: 'created_at') DateTime createdAt,
-      @JsonKey(name: 'name') String name,
+      {@JsonKey(name: 'name') String name,
       @JsonKey(name: 'id_owner') String idOwner,
       @JsonKey(name: 'color') String color,
       @JsonKey(name: 'icon_url') String? iconUrl,
@@ -184,25 +162,23 @@ abstract class _$$WishlistImplCopyWith<$Res>
       @JsonKey(name: 'can_owner_see_taken_wish') bool canOwnerSeeTakenWish,
       @JsonKey(name: 'visibility') WishlistVisibility visibility,
       @JsonKey(name: 'order') int order,
-      @JsonKey(name: 'updated_by') String updatedBy,
-      @JsonKey(name: 'updated_at') DateTime updatedAt});
+      @JsonKey(name: 'updated_by') String updatedBy});
 }
 
 /// @nodoc
-class __$$WishlistImplCopyWithImpl<$Res>
-    extends _$WishlistCopyWithImpl<$Res, _$WishlistImpl>
-    implements _$$WishlistImplCopyWith<$Res> {
-  __$$WishlistImplCopyWithImpl(
-      _$WishlistImpl _value, $Res Function(_$WishlistImpl) _then)
+class __$$WishlistCreateRequestImplCopyWithImpl<$Res>
+    extends _$WishlistCreateRequestCopyWithImpl<$Res,
+        _$WishlistCreateRequestImpl>
+    implements _$$WishlistCreateRequestImplCopyWith<$Res> {
+  __$$WishlistCreateRequestImplCopyWithImpl(_$WishlistCreateRequestImpl _value,
+      $Res Function(_$WishlistCreateRequestImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of Wishlist
+  /// Create a copy of WishlistCreateRequest
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? createdAt = null,
     Object? name = null,
     Object? idOwner = null,
     Object? color = null,
@@ -213,17 +189,8 @@ class __$$WishlistImplCopyWithImpl<$Res>
     Object? visibility = null,
     Object? order = null,
     Object? updatedBy = null,
-    Object? updatedAt = null,
   }) {
-    return _then(_$WishlistImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+    return _then(_$WishlistCreateRequestImpl(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -264,21 +231,15 @@ class __$$WishlistImplCopyWithImpl<$Res>
           ? _value.updatedBy
           : updatedBy // ignore: cast_nullable_to_non_nullable
               as String,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$WishlistImpl extends _Wishlist {
-  const _$WishlistImpl(
-      {@JsonKey(name: 'id') required this.id,
-      @JsonKey(name: 'created_at') required this.createdAt,
-      @JsonKey(name: 'name') required this.name,
+class _$WishlistCreateRequestImpl extends _WishlistCreateRequest {
+  const _$WishlistCreateRequestImpl(
+      {@JsonKey(name: 'name') required this.name,
       @JsonKey(name: 'id_owner') required this.idOwner,
       @JsonKey(name: 'color') required this.color,
       @JsonKey(name: 'icon_url') this.iconUrl,
@@ -288,19 +249,12 @@ class _$WishlistImpl extends _Wishlist {
       this.canOwnerSeeTakenWish = false,
       @JsonKey(name: 'visibility') this.visibility = WishlistVisibility.private,
       @JsonKey(name: 'order') required this.order,
-      @JsonKey(name: 'updated_by') required this.updatedBy,
-      @JsonKey(name: 'updated_at') required this.updatedAt})
+      @JsonKey(name: 'updated_by') required this.updatedBy})
       : super._();
 
-  factory _$WishlistImpl.fromJson(Map<String, dynamic> json) =>
-      _$$WishlistImplFromJson(json);
+  factory _$WishlistCreateRequestImpl.fromJson(Map<String, dynamic> json) =>
+      _$$WishlistCreateRequestImplFromJson(json);
 
-  @override
-  @JsonKey(name: 'id')
-  final int id;
-  @override
-  @JsonKey(name: 'created_at')
-  final DateTime createdAt;
   @override
   @JsonKey(name: 'name')
   final String name;
@@ -331,23 +285,17 @@ class _$WishlistImpl extends _Wishlist {
   @override
   @JsonKey(name: 'updated_by')
   final String updatedBy;
-  @override
-  @JsonKey(name: 'updated_at')
-  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'Wishlist(id: $id, createdAt: $createdAt, name: $name, idOwner: $idOwner, color: $color, iconUrl: $iconUrl, isClosed: $isClosed, endDate: $endDate, canOwnerSeeTakenWish: $canOwnerSeeTakenWish, visibility: $visibility, order: $order, updatedBy: $updatedBy, updatedAt: $updatedAt)';
+    return 'WishlistCreateRequest(name: $name, idOwner: $idOwner, color: $color, iconUrl: $iconUrl, isClosed: $isClosed, endDate: $endDate, canOwnerSeeTakenWish: $canOwnerSeeTakenWish, visibility: $visibility, order: $order, updatedBy: $updatedBy)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$WishlistImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
+            other is _$WishlistCreateRequestImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.idOwner, idOwner) || other.idOwner == idOwner) &&
             (identical(other.color, color) || other.color == color) &&
@@ -361,50 +309,34 @@ class _$WishlistImpl extends _Wishlist {
                 other.visibility == visibility) &&
             (identical(other.order, order) || other.order == order) &&
             (identical(other.updatedBy, updatedBy) ||
-                other.updatedBy == updatedBy) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedBy == updatedBy));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      createdAt,
-      name,
-      idOwner,
-      color,
-      iconUrl,
-      isClosed,
-      endDate,
-      canOwnerSeeTakenWish,
-      visibility,
-      order,
-      updatedBy,
-      updatedAt);
+  int get hashCode => Object.hash(runtimeType, name, idOwner, color, iconUrl,
+      isClosed, endDate, canOwnerSeeTakenWish, visibility, order, updatedBy);
 
-  /// Create a copy of Wishlist
+  /// Create a copy of WishlistCreateRequest
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$WishlistImplCopyWith<_$WishlistImpl> get copyWith =>
-      __$$WishlistImplCopyWithImpl<_$WishlistImpl>(this, _$identity);
+  _$$WishlistCreateRequestImplCopyWith<_$WishlistCreateRequestImpl>
+      get copyWith => __$$WishlistCreateRequestImplCopyWithImpl<
+          _$WishlistCreateRequestImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$WishlistImplToJson(
+    return _$$WishlistCreateRequestImplToJson(
       this,
     );
   }
 }
 
-abstract class _Wishlist extends Wishlist {
-  const factory _Wishlist(
-          {@JsonKey(name: 'id') required final int id,
-          @JsonKey(name: 'created_at') required final DateTime createdAt,
-          @JsonKey(name: 'name') required final String name,
+abstract class _WishlistCreateRequest extends WishlistCreateRequest {
+  const factory _WishlistCreateRequest(
+          {@JsonKey(name: 'name') required final String name,
           @JsonKey(name: 'id_owner') required final String idOwner,
           @JsonKey(name: 'color') required final String color,
           @JsonKey(name: 'icon_url') final String? iconUrl,
@@ -414,20 +346,13 @@ abstract class _Wishlist extends Wishlist {
           final bool canOwnerSeeTakenWish,
           @JsonKey(name: 'visibility') final WishlistVisibility visibility,
           @JsonKey(name: 'order') required final int order,
-          @JsonKey(name: 'updated_by') required final String updatedBy,
-          @JsonKey(name: 'updated_at') required final DateTime updatedAt}) =
-      _$WishlistImpl;
-  const _Wishlist._() : super._();
+          @JsonKey(name: 'updated_by') required final String updatedBy}) =
+      _$WishlistCreateRequestImpl;
+  const _WishlistCreateRequest._() : super._();
 
-  factory _Wishlist.fromJson(Map<String, dynamic> json) =
-      _$WishlistImpl.fromJson;
+  factory _WishlistCreateRequest.fromJson(Map<String, dynamic> json) =
+      _$WishlistCreateRequestImpl.fromJson;
 
-  @override
-  @JsonKey(name: 'id')
-  int get id;
-  @override
-  @JsonKey(name: 'created_at')
-  DateTime get createdAt;
   @override
   @JsonKey(name: 'name')
   String get name;
@@ -458,14 +383,11 @@ abstract class _Wishlist extends Wishlist {
   @override
   @JsonKey(name: 'updated_by')
   String get updatedBy;
-  @override
-  @JsonKey(name: 'updated_at')
-  DateTime get updatedAt;
 
-  /// Create a copy of Wishlist
+  /// Create a copy of WishlistCreateRequest
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$WishlistImplCopyWith<_$WishlistImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$WishlistCreateRequestImplCopyWith<_$WishlistCreateRequestImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
