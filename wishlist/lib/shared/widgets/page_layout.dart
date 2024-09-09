@@ -23,7 +23,7 @@ class PageLayout extends StatelessWidget {
     return Scaffold(
       appBar: AppAppBar(title: title),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: padding,
         child: onRefresh != null
             ? AppRefreshIndicator(
                 onRefresh: onRefresh,
