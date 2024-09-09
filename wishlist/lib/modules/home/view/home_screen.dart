@@ -92,6 +92,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   gridView: GridView.builder(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
+                    ).copyWith(
+                      top: 16,
                     ),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
