@@ -108,7 +108,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: ScaleAnimation(
                           child: FadeInAnimation(
                             child: WishlistCard(
-                              text: wishlist.name,
+                              wishlist: wishlist,
                               color: AppColors.getColorFromHexValue(
                                 wishlist.color,
                               ),
