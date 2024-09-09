@@ -9,10 +9,10 @@ import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/theme/colors.dart';
-import 'package:wishlist/shared/widgets/app_card.dart';
 import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 import 'package:wishlist/shared/widgets/page_layout_empty.dart';
+import 'package:wishlist/shared/widgets/wishlist_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -107,7 +107,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         position: index,
                         child: ScaleAnimation(
                           child: FadeInAnimation(
-                            child: AppCard(
+                            child: WishlistCard(
                               text: wishlist.name,
                               color: AppColors.getColorFromHexValue(
                                 wishlist.color,

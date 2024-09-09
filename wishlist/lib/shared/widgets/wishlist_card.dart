@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 
-class AppCard extends StatelessWidget {
-  const AppCard({
+class WishlistCard extends StatelessWidget {
+  const WishlistCard({
     super.key,
     required this.text,
     required this.color,
