@@ -13,6 +13,8 @@ class AppRoute extends Equatable {
 class AppRoutes {
   static AppRoute get home => const AppRoute('home');
 
+  static AppRoute get wishlist => const AppRoute('wishlist');
+
   static AppRoute get settings => const AppRoute('settings');
 
   static AppRoute get auth => const AppRoute('auth');
