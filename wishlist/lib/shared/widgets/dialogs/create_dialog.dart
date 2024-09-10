@@ -5,6 +5,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
+import 'package:wishlist/shared/infra/wishlists_provider.dart';
 import 'package:wishlist/shared/models/wishlist/create_request/wishlist_create_request.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
@@ -66,7 +67,7 @@ Future<void> showCreateDialog(BuildContext context, WidgetRef ref) async {
     content: _CreateDialogContent(nameController: nameController),
     confirmButtonLabel: l10n.createButton,
     onConfirm: () async {
-      await ref.read(wishlistServiceProvider).createWishlist(
+      await ref.read(wishlistsProvider.notifier).createWishlist(
             WishlistCreateRequest(
               name: nameController.text,
               idOwner: userId,
