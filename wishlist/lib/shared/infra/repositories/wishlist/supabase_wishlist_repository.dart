@@ -10,9 +10,19 @@ class SupabaseWishlistRepository implements WishlistRepository {
   static const _wishlistsTableName = 'wishlists';
 
   @override
-  Future<void> createWishlist(WishlistCreateRequest wishlist) async {
+  Future<Wishlist> createWishlist(
+    WishlistCreateRequest wishlistCreateRequest,
+  ) async {
     try {
-      await _client.from(_wishlistsTableName).insert(wishlist.toJson());
+      final wishlistJson = await _client
+          .from(_wishlistsTableName)
+          .insert(wishlistCreateRequest.toJson())
+          .select()
+          .single();
+
+      final wishlist = Wishlist.fromJson(wishlistJson);
+
+      return wishlist;
     } on PostgrestException catch (e) {
       final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
       throw AppException(
