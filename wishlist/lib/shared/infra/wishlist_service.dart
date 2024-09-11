@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository_provider.dart';
@@ -13,11 +14,11 @@ class WishlistService {
     return _wishlistRepository.createWishlist(wishlist);
   }
 
-  Future<List<Wishlist>> getWishlistsByUser(String userId) async {
+  Future<IList<Wishlist>> getWishlistsByUser(String userId) async {
     return _wishlistRepository.getWishlistsByUser(userId);
   }
 
-  Future<void> updateWishlistsOrder(List<Wishlist> wishlists) async {
+  Future<void> updateWishlistsOrder(IList<Wishlist> wishlists) async {
     return _wishlistRepository.updateWishlistsOrder(wishlists);
   }
 
