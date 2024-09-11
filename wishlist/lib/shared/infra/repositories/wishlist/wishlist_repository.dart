@@ -2,7 +2,7 @@ import 'package:wishlist/shared/models/wishlist/create_request/wishlist_create_r
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 
 abstract class WishlistRepository {
-  Future<void> createWishlist(WishlistCreateRequest wishlist);
+  Future<Wishlist> createWishlist(WishlistCreateRequest wishlist);
 
   Future<List<Wishlist>> getWishlistsByUser(String userId);
 

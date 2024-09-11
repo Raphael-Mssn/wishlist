@@ -1,4 +1,4 @@
-import 'package:animated_reorderable/animated_reorderable.dart';
+import 'package:animated_reorderable_list/animated_reorderable_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -6,78 +6,57 @@ import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
+import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
-import 'package:wishlist/shared/models/wishlist/wishlist.dart';
+import 'package:wishlist/shared/infra/wishlists_provider.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 import 'package:wishlist/shared/widgets/page_layout_empty.dart';
 import 'package:wishlist/shared/widgets/wishlist_card.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends ConsumerState<HomeScreen> {
-  late Future<List<Wishlist>> _wishlistsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _wishlistsFuture = ref.read(wishlistServiceProvider).getWishlistsByUser(
-          ref.read(supabaseClientProvider).auth.currentUserNonNull.id,
-        );
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final wishlists = ref.watch(wishlistsProvider);
 
-    return FutureBuilder<List<Wishlist>>(
-      future: _wishlistsFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(AppColors.primary),
-            ),
+    Future<void> refreshWishlists() async {
+      await ref.read(wishlistsProvider.notifier).loadWishlists(
+            ref.read(supabaseClientProvider).auth.currentUserNonNull.id,
           );
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else if (snapshot.hasData) {
-          final wishlists = snapshot.data!;
-          if (wishlists.isEmpty) {
-            return PageLayoutEmpty(
+    }
+
+    return wishlists.when(
+      loading: () => const Center(
+        child: CircularProgressIndicator(),
+      ),
+      error: (error, stackTrace) {
+        ScaffoldMessenger.of(context)
+            .showGenericError(context, isTopSnackBar: true);
+        return const SizedBox.shrink();
+      },
+      data: (data) => data.isEmpty
+          ? PageLayoutEmpty(
               illustrationUrl: Assets.svg.noWishlist,
               title: l10n.noWishlist,
               callToAction: l10n.createButton,
               onCallToAction: () {
                 showCreateDialog(context, ref);
               },
-            );
-          } else {
-            return PageLayout(
+              onRefresh: refreshWishlists,
+            )
+          : PageLayout(
               padding: EdgeInsets.zero,
               title: l10n.myWishlists,
+              onRefresh: refreshWishlists,
               child: AnimationLimiter(
-                child: AnimatedReorderable.grid(
-                  keyGetter: (index) => Key(wishlists[index].id.toString()),
-                  motionAnimationDuration: const Duration(milliseconds: 200),
-                  draggedItemDecorationAnimationDuration: const Duration(
-                    milliseconds: 200,
-                  ),
-                  onReorder: (permutations) {
-                    setState(() {
-                      permutations.apply(wishlists);
-                      ref
-                          .read(wishlistServiceProvider)
-                          .updateWishlistsOrder(wishlists);
-                    });
-                  },
-                  draggedItemDecorator: (
+                child: AnimatedReorderableGridView(
+                  padding: const EdgeInsets.all(16),
+                  items: data,
+                  proxyDecorator: (
                     child,
                     index,
                     animation,
@@ -89,43 +68,50 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ).drive(Tween(begin: 1, end: 1.2)),
                     child: child,
                   ),
-                  gridView: GridView.builder(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                    ).copyWith(
-                      top: 16,
+                  onReorder: (oldIndex, newIndex) {
+                    final wishlist = data.removeAt(oldIndex);
+                    data.insert(newIndex, wishlist);
+
+                    ref
+                        .read(wishlistServiceProvider)
+                        .updateWishlistsOrder(data);
+                  },
+                  sliverGridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                  ),
+                  isSameItem: (a, b) => a.id == b.id,
+                  enterTransition: [
+                    FadeIn(
+                      curve: Curves.easeInOut,
+                      duration: const Duration(milliseconds: 500),
                     ),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                    ScaleIn(
+                      curve: Curves.easeInOut,
+                      duration: const Duration(milliseconds: 500),
                     ),
-                    itemCount: wishlists.length,
-                    itemBuilder: (context, index) {
-                      final wishlist = wishlists[index];
-                      return AnimationConfiguration.staggeredList(
-                        duration: const Duration(milliseconds: 500),
-                        position: index,
-                        child: ScaleAnimation(
-                          child: FadeInAnimation(
-                            child: WishlistCard(
-                              wishlist: wishlist,
-                              color: AppColors.getColorFromHexValue(
-                                wishlist.color,
-                              ),
+                  ],
+                  itemBuilder: (context, index) {
+                    final wishlist = data[index];
+                    return AnimationConfiguration.staggeredList(
+                      key: Key(wishlist.id.toString()),
+                      duration: const Duration(milliseconds: 500),
+                      position: index,
+                      child: ScaleAnimation(
+                        child: FadeInAnimation(
+                          child: WishlistCard(
+                            wishlist: wishlist,
+                            color: AppColors.getColorFromHexValue(
+                              wishlist.color,
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
-            );
-          }
-        } else {
-          return Text(l10n.genericError);
-        }
-      },
+            ),
     );
   }
 }

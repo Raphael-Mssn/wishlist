@@ -9,7 +9,7 @@ class WishlistService {
   WishlistService(this._wishlistRepository);
   final WishlistRepository _wishlistRepository;
 
-  Future<void> createWishlist(WishlistCreateRequest wishlist) async {
+  Future<Wishlist> createWishlist(WishlistCreateRequest wishlist) async {
     return _wishlistRepository.createWishlist(wishlist);
   }
 
