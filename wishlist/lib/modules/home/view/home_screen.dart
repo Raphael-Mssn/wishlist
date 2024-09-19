@@ -1,4 +1,5 @@
 import 'package:animated_reorderable_list/animated_reorderable_list.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -74,7 +75,7 @@ class HomeScreen extends ConsumerWidget {
 
                     ref
                         .read(wishlistServiceProvider)
-                        .updateWishlistsOrder(data);
+                        .updateWishlistsOrder(data.toIList());
                   },
                   sliverGridDelegate:
                       const SliverGridDelegateWithFixedCrossAxisCount(

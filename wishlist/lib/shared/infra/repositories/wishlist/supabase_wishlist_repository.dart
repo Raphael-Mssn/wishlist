@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository.dart';
@@ -38,7 +39,7 @@ class SupabaseWishlistRepository implements WishlistRepository {
   }
 
   @override
-  Future<List<Wishlist>> getWishlistsByUser(String userId) async {
+  Future<IList<Wishlist>> getWishlistsByUser(String userId) async {
     try {
       final response = await _client
           .from(_wishlistsTableName)
@@ -46,7 +47,7 @@ class SupabaseWishlistRepository implements WishlistRepository {
           .eq('id_owner', userId)
           .order('order', ascending: true);
 
-      return response.map(Wishlist.fromJson).toList();
+      return response.map(Wishlist.fromJson).toIList();
     } on PostgrestException catch (e) {
       final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
       throw AppException(
@@ -62,7 +63,7 @@ class SupabaseWishlistRepository implements WishlistRepository {
   }
 
   @override
-  Future<void> updateWishlistsOrder(List<Wishlist> wishlists) async {
+  Future<void> updateWishlistsOrder(IList<Wishlist> wishlists) async {
     try {
       for (final wishlist in wishlists) {
         final update = {
