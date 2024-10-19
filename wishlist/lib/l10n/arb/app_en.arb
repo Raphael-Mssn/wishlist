@@ -44,5 +44,9 @@
   "addButton": "Add",
   "emailOrPseudoHint": "Email or pseudo",
   "noUserFound": "No user found",
-  "myWishlists": "My wishlists"
+  "myWishlists": "My wishlists",
+  "wishlistStatusPending": "Pending",
+  "wishlistStatusBooked": "Booked",
+  "wishlistNoWish": "No wish",
+  "wishlistAddWish": "Add a wish"
 }
