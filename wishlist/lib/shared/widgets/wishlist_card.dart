@@ -19,7 +19,7 @@ class WishlistCard extends StatelessWidget {
 
     void onTap() {
       Navigator.of(context)
-          .pushNamed(AppRoutes.wishlist.name, arguments: wishlist.id);
+          .pushNamed(AppRoutes.wishlist.name, arguments: wishlist);
     }
 
     return Card(
