@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
-import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/page_layout_empty/page_layout_empty_content.dart';
 import 'package:wishlist/shared/theme/widgets/app_refresh_indicator.dart';
-import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 
 class PageLayoutEmpty extends StatelessWidget {
   const PageLayoutEmpty({
     super.key,
     required this.illustrationUrl,
+    this.illustrationHeight,
     required this.title,
     required this.callToAction,
     required this.onCallToAction,
@@ -16,6 +14,7 @@ class PageLayoutEmpty extends StatelessWidget {
   });
 
   final String illustrationUrl;
+  final double? illustrationHeight;
   final String title;
   final String callToAction;
   final Function() onCallToAction;
@@ -24,28 +23,20 @@ class PageLayoutEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onRefresh = this.onRefresh;
+    final illustrationHeight =
+        this.illustrationHeight ?? MediaQuery.of(context).size.height / 2.5;
 
-    final content = Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const Gap(64),
-        SvgPicture.asset(
-          illustrationUrl,
-          height: MediaQuery.of(context).size.height / 2.5,
+    final content = Center(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 64),
+        child: PageLayoutEmptyContent(
+          illustrationUrl: illustrationUrl,
+          illustrationHeight: illustrationHeight,
+          title: title,
+          callToAction: callToAction,
+          onCallToAction: onCallToAction,
         ),
-        const Gap(32),
-        Text(
-          title,
-          style: AppTextStyles.title,
-        ),
-        const Gap(16),
-        PrimaryButton(
-          text: callToAction,
-          onPressed: onCallToAction,
-          style: PrimaryButtonStyle.large,
-        ),
-        const Spacer(),
-      ],
+      ),
     );
 
     return SafeArea(
@@ -66,7 +57,7 @@ class PageLayoutEmpty extends StatelessWidget {
                 ),
               ),
             )
-          : Center(child: content),
+          : content,
     );
   }
 }
