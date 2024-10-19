@@ -32,6 +32,14 @@ abstract final class AppColors {
     return colorPalette[index];
   }
 
+  static Color darken(Color color, [double factor = 0.8]) {
+    final red = (color.red * 0.8).round();
+    final green = (color.green * 0.8).round();
+    final blue = (color.blue * 0.8).round();
+
+    return Color.fromARGB(color.alpha, red, green, blue);
+  }
+
   static String getHexValue(Color color) {
     return '#${color.value.toRadixString(16).substring(2)}';
   }
