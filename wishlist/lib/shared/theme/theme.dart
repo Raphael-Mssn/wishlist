@@ -6,6 +6,7 @@ import 'package:wishlist/shared/theme/colors.dart';
 ThemeData get theme => ThemeData(
       scaffoldBackgroundColor: AppColors.background,
       primaryColor: AppColors.primary,
+      primaryColorDark: AppColors.darkOrange,
       tabBarTheme: const TabBarTheme(
         labelColor: AppColors.primary,
         unselectedLabelColor: AppColors.background,
