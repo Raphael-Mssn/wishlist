@@ -1,4 +1,3 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
