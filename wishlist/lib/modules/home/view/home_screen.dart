@@ -10,10 +10,10 @@ import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
 import 'package:wishlist/shared/infra/wishlists_provider.dart';
+import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
-import 'package:wishlist/shared/widgets/page_layout_empty.dart';
 import 'package:wishlist/shared/widgets/wishlist_card.dart';
 
 class HomeScreen extends ConsumerWidget {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/gen/fonts.gen.dart';
-import 'package:wishlist/shared/theme/colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
@@ -18,9 +17,11 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
+        backgroundColor: theme.primaryColor,
         padding: style.padding,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),

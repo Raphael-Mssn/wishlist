@@ -4,6 +4,7 @@ import 'package:wishlist/modules/auth/view/auth_screen.dart';
 import 'package:wishlist/modules/auth/view/pseudo_screen.dart';
 import 'package:wishlist/modules/settings/change_password/view/change_password_screen.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
+import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 
@@ -38,9 +39,9 @@ MaterialPageRoute<void> onGenerateRoute(RouteSettings settings) =>
         }
 
         if (routeName == AppRoutes.wishlist.name) {
-          final wishlistId = settings.arguments;
-          if (wishlistId != null) {
-            return WishlistScreen(wishlistId: wishlistId.toString());
+          final wishlist = settings.arguments;
+          if (wishlist != null) {
+            return WishlistScreen(wishlist: wishlist as Wishlist);
           }
         }
 

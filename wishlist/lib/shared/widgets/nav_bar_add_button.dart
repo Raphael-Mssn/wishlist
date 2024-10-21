@@ -19,6 +19,8 @@ class NavBarAddButton extends StatelessWidget {
       _ => 46.0,
     };
 
+    final theme = Theme.of(context);
+
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -44,14 +46,14 @@ class NavBarAddButton extends StatelessWidget {
             onTap: onPressed,
             borderRadius: BorderRadius.circular(50),
             child: Ink(
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
+              decoration: BoxDecoration(
+                color: theme.primaryColor,
                 shape: BoxShape.circle,
               ),
               padding: const EdgeInsets.all(10),
               child: Ink(
-                decoration: const BoxDecoration(
-                  color: AppColors.darkOrange,
+                decoration: BoxDecoration(
+                  color: theme.primaryColorDark,
                   shape: BoxShape.circle,
                 ),
                 child: SizedBox(

@@ -18,6 +18,10 @@ class WishlistService {
     return _wishlistRepository.getWishlistsByUser(userId);
   }
 
+  Future<Wishlist> getWishlistById(String wishlistId) async {
+    return _wishlistRepository.getWishlistById(wishlistId);
+  }
+
   Future<void> updateWishlistsOrder(IList<Wishlist> wishlists) async {
     return _wishlistRepository.updateWishlistsOrder(wishlists);
   }

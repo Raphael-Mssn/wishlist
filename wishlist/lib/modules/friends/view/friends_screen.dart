@@ -8,8 +8,8 @@ import 'package:wishlist/modules/friends/view/widgets/user_pill.dart';
 import 'package:wishlist/shared/infra/friendships_provider.dart';
 import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/models/app_user.dart';
+import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
-import 'package:wishlist/shared/widgets/page_layout_empty.dart';
 
 class FriendsScreen extends ConsumerWidget {
   const FriendsScreen({super.key});
