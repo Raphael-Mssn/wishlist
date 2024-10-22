@@ -60,6 +60,10 @@ class FriendshipService {
     return _friendshipRepository.cancelFriendshipRequest(userId);
   }
 
+  Future<void> removeFriendshipWith(String userId) async {
+    return _friendshipRepository.removeFriendshipWith(userId);
+  }
+
   Future<ISet<AppUser>> _getFriendsByFriendsIds(ISet<String> friendsIds) async {
     final friends = await Future.wait(
       friendsIds.map((id) => ref.read(userServiceProvider).getAppUserById(id)),

@@ -76,6 +76,15 @@ class FriendsNotifier extends StateNotifier<AsyncValue<FriendsData>> {
       ),
     );
   }
+
+  Future<void> removeFriendshipWith(AppUser appUser) async {
+    await _service.removeFriendshipWith(appUser.user.id);
+    state = state.whenData(
+      (data) => data.copyWith(
+        friends: data.friends.remove(appUser),
+      ),
+    );
+  }
 }
 
 final friendshipsProvider =

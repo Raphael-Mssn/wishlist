@@ -268,7 +268,27 @@ class SupabaseFriendshipRepository implements FriendshipRepository {
 
   @override
   Future<void> removeFriendshipWith(String userId) {
-    // TODO: implement removeFriendshipWith
-    throw UnimplementedError();
+    try {
+      return _client
+          .from(_friendshipsTableName)
+          .delete()
+          .or(
+            'requester_id.eq.$currentUserId,receiver_id.eq.$currentUserId',
+          )
+          .or(
+            'requester_id.eq.$userId,receiver_id.eq.$userId',
+          );
+    } on PostgrestException catch (e) {
+      final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
+      throw AppException(
+        statusCode: statusCode ?? 500,
+        message: e.message,
+      );
+    } catch (e) {
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to remove friendship',
+      );
+    }
   }
 }
