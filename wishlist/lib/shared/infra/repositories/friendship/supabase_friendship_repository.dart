@@ -113,6 +113,14 @@ class SupabaseFriendshipRepository implements FriendshipRepository {
   }
 
   @override
+  Future<ISet<String>> getMutualFriendsIds(String userId) async {
+    final currentUserFriendsIds = await getCurrentUserFriendsIds();
+    final userFriendsIds = await getFriendsIds(userId);
+
+    return currentUserFriendsIds.intersection(userFriendsIds);
+  }
+
+  @override
   Future<FriendshipStatus> currentUserFriendshipStatusWith(
     String userId,
   ) async {

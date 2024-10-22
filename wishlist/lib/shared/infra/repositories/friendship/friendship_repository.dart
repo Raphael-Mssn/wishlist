@@ -10,6 +10,8 @@ abstract class FriendshipRepository {
 
   Future<ISet<String>> getCurrentUserRequestedFriendsIds();
 
+  Future<ISet<String>> getMutualFriendsIds(String userId);
+
   Future<FriendshipStatus> currentUserFriendshipStatusWith(String userId);
 
   Future<void> askFriendshipTo(String userId);
