@@ -83,14 +83,14 @@ class FriendshipService {
     final wishlists =
         await ref.read(wishlistServiceProvider).getWishlistsByUser(userId);
 
-    // TODO: Get nbOfWishs
-    const nbOfWishs = 0;
+    // TODO: Get nbWishs
+    const nbWishs = 0;
 
     return FriendDetails(
       appUser: appUser,
       mutualFriends: mutualFriends,
       wishlists: wishlists,
-      nbOfWishs: nbOfWishs,
+      nbWishs: nbWishs,
     );
   }
 }

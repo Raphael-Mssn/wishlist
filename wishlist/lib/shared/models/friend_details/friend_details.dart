@@ -12,7 +12,7 @@ class FriendDetails with _$FriendDetails {
     @JsonKey(name: 'app_user') required AppUser appUser,
     @JsonKey(name: 'mutual_friends') required ISet<AppUser> mutualFriends,
     @JsonKey(name: 'wishlists') required IList<Wishlist> wishlists,
-    @JsonKey(name: 'nb_of_wishs') required int nbOfWishs,
+    @JsonKey(name: 'nb_wishs') required int nbWishs,
   }) = _FriendDetails;
 
   const FriendDetails._();

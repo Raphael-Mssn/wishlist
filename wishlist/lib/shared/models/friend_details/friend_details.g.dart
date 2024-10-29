@@ -13,7 +13,7 @@ _$FriendDetailsImpl _$$FriendDetailsImplFromJson(Map<String, dynamic> json) =>
           (value) => AppUser.fromJson(value as Map<String, dynamic>)),
       wishlists: IList<Wishlist>.fromJson(json['wishlists'],
           (value) => Wishlist.fromJson(value as Map<String, dynamic>)),
-      nbOfWishs: (json['nb_of_wishs'] as num).toInt(),
+      nbWishs: (json['nb_wishs'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$FriendDetailsImplToJson(_$FriendDetailsImpl instance) =>
@@ -25,5 +25,5 @@ Map<String, dynamic> _$$FriendDetailsImplToJson(_$FriendDetailsImpl instance) =>
       'wishlists': instance.wishlists.toJson(
         (value) => value,
       ),
-      'nb_of_wishs': instance.nbOfWishs,
+      'nb_wishs': instance.nbWishs,
     };

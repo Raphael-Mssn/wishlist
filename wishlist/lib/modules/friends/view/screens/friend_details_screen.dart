@@ -97,10 +97,9 @@ class _FriendStatsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final nbOfWishlists =
-        l10n.numberOfWishlists(friendDetails.wishlists.length);
-    final nbOfWishs = l10n.numberOfWishs(friendDetails.nbOfWishs);
-    final personalStats = '$nbOfWishlists | $nbOfWishs';
+    final nbWishlists = l10n.numberOfWishlists(friendDetails.wishlists.length);
+    final nbWishs = l10n.numberOfWishs(friendDetails.nbWishs);
+    final personalStats = '$nbWishlists | $nbWishs';
 
     return Row(
       children: [
