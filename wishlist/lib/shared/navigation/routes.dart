@@ -22,4 +22,6 @@ class AppRoutes {
   static AppRoute get pseudo => const AppRoute('pseudo');
 
   static AppRoute get changePassword => const AppRoute('changePassword');
+
+  static AppRoute get friendDetails => const AppRoute('friendDetails');
 }

@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/repositories/friendship/friendship_repository.dart';
 import 'package:wishlist/shared/infra/repositories/friendship/friendship_repository_provider.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
+import 'package:wishlist/shared/infra/wishlist_service.dart';
 import 'package:wishlist/shared/models/app_user.dart';
+import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 import 'package:wishlist/shared/models/friendship/friendship.dart';
 
 class FriendshipService {
@@ -13,10 +15,7 @@ class FriendshipService {
 
   Future<ISet<AppUser>> getCurrentUserFriends() async {
     final friendsIds = await _friendshipRepository.getCurrentUserFriendsIds();
-    final friends = await Future.wait(
-      friendsIds.map((id) => ref.read(userServiceProvider).getAppUserById(id)),
-    );
-    return friends.toISet();
+    return _getFriendsByFriendsIds(friendsIds);
   }
 
   Future<ISet<AppUser>> getCurrentUserPendingFriends() async {
@@ -59,6 +58,40 @@ class FriendshipService {
 
   Future<void> cancelFriendshipRequest(String userId) async {
     return _friendshipRepository.cancelFriendshipRequest(userId);
+  }
+
+  Future<void> removeFriendshipWith(String userId) async {
+    return _friendshipRepository.removeFriendshipWith(userId);
+  }
+
+  Future<ISet<AppUser>> _getFriendsByFriendsIds(ISet<String> friendsIds) async {
+    final friends = await Future.wait(
+      friendsIds.map((id) => ref.read(userServiceProvider).getAppUserById(id)),
+    );
+    return friends.toISet();
+  }
+
+  Future<ISet<AppUser>> _getMutualFriends(String userId) async {
+    final mutualFriendsIds =
+        await _friendshipRepository.getMutualFriendsIds(userId);
+    return _getFriendsByFriendsIds(mutualFriendsIds);
+  }
+
+  Future<FriendDetails> getFriendDetails(String userId) async {
+    final appUser = await ref.read(userServiceProvider).getAppUserById(userId);
+    final mutualFriends = await _getMutualFriends(userId);
+    final wishlists =
+        await ref.read(wishlistServiceProvider).getWishlistsByUser(userId);
+
+    // TODO: Get nbOfWishs
+    const nbOfWishs = 0;
+
+    return FriendDetails(
+      appUser: appUser,
+      mutualFriends: mutualFriends,
+      wishlists: wishlists,
+      nbOfWishs: nbOfWishs,
+    );
   }
 }
 

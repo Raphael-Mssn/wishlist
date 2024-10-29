@@ -41,6 +41,7 @@ class UserPill extends ConsumerWidget {
           ];
 
     return BaseAvatarPill(
+      onTap: (context) {},
       backgroundColor: AppColors.gainsboro,
       avatarBorderColor: AppColors.pastelGray,
       child: Row(

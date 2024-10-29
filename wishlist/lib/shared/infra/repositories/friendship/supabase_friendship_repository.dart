@@ -12,24 +12,23 @@ class SupabaseFriendshipRepository implements FriendshipRepository {
   late String currentUserId = _client.auth.currentUserNonNull.id;
 
   @override
-  Future<ISet<String>> getCurrentUserFriendsIds() async {
-    final currentUserId = _client.auth.currentUserNonNull.id;
+  Future<ISet<String>> getFriendsIds(String userId) async {
     try {
       final response = await _client
           .from(_friendshipsTableName)
           .select()
           .eq('status', FriendshipStatus.accepted.toString())
-          .or('requester_id.eq.$currentUserId,receiver_id.eq.$currentUserId');
+          .or('requester_id.eq.$userId,receiver_id.eq.$userId');
 
       final friendships = response.map(Friendship.fromJson).toIList();
 
       return friendships
-          .where((friendship) => friendship.requesterId == currentUserId)
+          .where((friendship) => friendship.requesterId == userId)
           .map((friendship) => friendship.receiverId)
           .toISet()
           .addAll(
             friendships
-                .where((friendship) => friendship.receiverId == currentUserId)
+                .where((friendship) => friendship.receiverId == userId)
                 .map((friendship) => friendship.requesterId),
           );
     } on PostgrestException catch (e) {
@@ -44,6 +43,13 @@ class SupabaseFriendshipRepository implements FriendshipRepository {
         message: 'Failed to get friendships',
       );
     }
+  }
+
+  @override
+  Future<ISet<String>> getCurrentUserFriendsIds() async {
+    final currentUserId = _client.auth.currentUserNonNull.id;
+
+    return getFriendsIds(currentUserId);
   }
 
   @override
@@ -104,6 +110,14 @@ class SupabaseFriendshipRepository implements FriendshipRepository {
         message: 'Failed to get friendships',
       );
     }
+  }
+
+  @override
+  Future<ISet<String>> getMutualFriendsIds(String userId) async {
+    final currentUserFriendsIds = await getCurrentUserFriendsIds();
+    final userFriendsIds = await getFriendsIds(userId);
+
+    return currentUserFriendsIds.intersection(userFriendsIds);
   }
 
   @override
@@ -254,7 +268,27 @@ class SupabaseFriendshipRepository implements FriendshipRepository {
 
   @override
   Future<void> removeFriendshipWith(String userId) {
-    // TODO: implement removeFriendshipWith
-    throw UnimplementedError();
+    try {
+      return _client
+          .from(_friendshipsTableName)
+          .delete()
+          .or(
+            'requester_id.eq.$currentUserId,receiver_id.eq.$currentUserId',
+          )
+          .or(
+            'requester_id.eq.$userId,receiver_id.eq.$userId',
+          );
+    } on PostgrestException catch (e) {
+      final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
+      throw AppException(
+        statusCode: statusCode ?? 500,
+        message: e.message,
+      );
+    } catch (e) {
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to remove friendship',
+      );
+    }
   }
 }

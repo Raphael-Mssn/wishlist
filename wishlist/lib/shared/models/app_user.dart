@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/shared/models/profile.dart';
 
+@immutable
 class AppUser {
-  AppUser({
+  const AppUser({
     required this.profile,
     required this.user,
   });
@@ -19,6 +21,25 @@ class AppUser {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'profile': profile.toJson(),
+      'user': user.toJson(),
+    };
+  }
+
   final Profile profile;
   final User user;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+
+    return other is AppUser && other.user.id == user.id;
+  }
+
+  @override
+  int get hashCode => user.id.hashCode;
 }
