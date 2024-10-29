@@ -160,7 +160,7 @@ class WishlistScreen extends ConsumerWidget {
           bottom: 24,
           right: 24,
           child: SizedBox(
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery.sizeOf(context).width,
             child: Align(
               alignment: Alignment.centerRight,
               child: NavBarAddButton(

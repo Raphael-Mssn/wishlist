@@ -24,7 +24,7 @@ class PageLayoutEmpty extends StatelessWidget {
   Widget build(BuildContext context) {
     final onRefresh = this.onRefresh;
     final illustrationHeight =
-        this.illustrationHeight ?? MediaQuery.of(context).size.height / 2.5;
+        this.illustrationHeight ?? MediaQuery.sizeOf(context).height / 2.5;
 
     final content = Center(
       child: Padding(

@@ -9,8 +9,8 @@ extension ScaffoldMessengerExtension on ScaffoldMessengerState {
       content: content,
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.only(
-        bottom: MediaQuery.of(context).size.height -
-            MediaQuery.of(context).viewPadding.top -
+        bottom: MediaQuery.sizeOf(context).height -
+            MediaQuery.viewPaddingOf(context).top -
             130,
         left: 10,
         right: 10,

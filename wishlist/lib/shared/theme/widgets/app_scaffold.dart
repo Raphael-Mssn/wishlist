@@ -26,7 +26,7 @@ class AppScaffold extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(
                 horizontal: 24,
               ),
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery.sizeOf(context).width,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
