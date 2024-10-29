@@ -100,12 +100,13 @@ class _FriendStatsSection extends StatelessWidget {
     final nbWishlists = l10n.numberOfWishlists(friendDetails.wishlists.length);
     final nbWishs = l10n.numberOfWishs(friendDetails.nbWishs);
     final personalStats = '$nbWishlists | $nbWishs';
+    const avatarSize = 64.0;
 
     return Row(
       children: [
         Container(
-          width: 64,
-          height: 64,
+          width: avatarSize,
+          height: avatarSize,
           decoration: const BoxDecoration(
             color: AppColors.makara,
             shape: BoxShape.circle,
