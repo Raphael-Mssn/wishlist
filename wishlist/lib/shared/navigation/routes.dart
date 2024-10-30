@@ -1,27 +1,96 @@
-import 'package:equatable/equatable.dart';
+import 'dart:convert';
 
-class AppRoute extends Equatable {
-  const AppRoute(this.name);
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wishlist/modules/auth/view/auth_screen.dart';
+import 'package:wishlist/modules/auth/view/pseudo_screen.dart';
+import 'package:wishlist/modules/friends/view/screens/friend_details_screen.dart';
+import 'package:wishlist/modules/settings/change_password/view/change_password_screen.dart';
+import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
+import 'package:wishlist/shared/models/wishlist/wishlist.dart';
+import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 
-  /// Name for this [AppRoute]
-  final String name;
+part 'routes.g.dart';
 
+@TypedGoRoute<HomeRoute>(
+  path: '/',
+)
+class HomeRoute extends GoRouteData {
   @override
-  List<Object?> get props => [name];
+  Widget build(BuildContext context, GoRouterState state) =>
+      const FloatingNavBarNavigator();
 }
 
-class AppRoutes {
-  static AppRoute get home => const AppRoute('home');
+@TypedGoRoute<PseudoRoute>(
+  path: '/pseudo',
+)
+class PseudoRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const PseudoScreen();
+}
 
-  static AppRoute get wishlist => const AppRoute('wishlist');
+@TypedGoRoute<WishlistRoute>(
+  path: '/wishlist',
+)
+class WishlistRoute extends GoRouteData {
+  WishlistRoute({
+    required int this.wishlistId,
+  })  : wishlist = null,
+        wishlistJson = null;
 
-  static AppRoute get settings => const AppRoute('settings');
+  WishlistRoute.fromObject({required Wishlist this.wishlist})
+      : wishlistId = null,
+        wishlistJson = jsonEncode(wishlist.toJson());
 
-  static AppRoute get auth => const AppRoute('auth');
+  final int? wishlistId;
+  final String? wishlistJson;
+  final Wishlist? wishlist;
 
-  static AppRoute get pseudo => const AppRoute('pseudo');
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return WishlistScreen(
+      wishlistId: wishlistId,
+      wishlist: wishlist,
+    );
+  }
+}
 
-  static AppRoute get changePassword => const AppRoute('changePassword');
+@TypedGoRoute<SettingsRoute>(
+  path: '/settings',
+)
+class SettingsRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const FloatingNavBarNavigator(currentTab: FloatingNavBarTab.settings);
+}
 
-  static AppRoute get friendDetails => const AppRoute('friendDetails');
+@TypedGoRoute<ChangePasswordRoute>(
+  path: '/change-password',
+)
+class ChangePasswordRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ChangePasswordScreen();
+}
+
+@TypedGoRoute<AuthRoute>(
+  path: '/auth',
+)
+class AuthRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const AuthScreen();
+}
+
+@TypedGoRoute<FriendDetailsRoute>(
+  path: '/friend/:friendId',
+)
+class FriendDetailsRoute extends GoRouteData {
+  FriendDetailsRoute(this.friendId);
+  final String friendId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return FriendDetailsScreen(friendId: friendId);
+  }
 }

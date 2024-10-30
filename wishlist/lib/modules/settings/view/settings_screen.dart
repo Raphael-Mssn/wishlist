@@ -73,7 +73,7 @@ class SettingsScreen extends ConsumerWidget {
           PrimaryButton(
             text: l10n.settingsScreenPasswordModify,
             onPressed: () {
-              Navigator.of(context).pushNamed(AppRoutes.changePassword.name);
+              ChangePasswordRoute().push(context);
             },
             style: PrimaryButtonStyle.medium,
           ),

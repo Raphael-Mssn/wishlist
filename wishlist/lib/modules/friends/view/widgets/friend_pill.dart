@@ -14,10 +14,7 @@ class FriendPill extends StatelessWidget {
   final AppUser appUser;
 
   void _onTap(BuildContext context) {
-    Navigator.of(context).pushNamed(
-      AppRoutes.friendDetails.name,
-      arguments: appUser.user.id,
-    );
+    FriendDetailsRoute(appUser.user.id).push(context);
   }
 
   @override

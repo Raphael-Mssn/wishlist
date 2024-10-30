@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/friendships_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
@@ -26,7 +27,7 @@ class FriendDetailsAppBar extends ConsumerWidget
       await ref.read(friendshipsProvider.notifier).removeFriendshipWith(friend);
 
       if (context.mounted) {
-        Navigator.of(context).pop();
+        context.pop();
       }
     }
 

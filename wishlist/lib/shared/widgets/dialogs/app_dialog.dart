@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wishlist/gen/fonts.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
@@ -27,7 +28,6 @@ class _DialogLayout extends StatelessWidget {
     final onCancel = this.onCancel;
     final onConfirm = this.onConfirm;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
-    final navigator = Navigator.of(context);
 
     return AlertDialog(
       shape: RoundedRectangleBorder(
@@ -47,7 +47,7 @@ class _DialogLayout extends StatelessWidget {
           CancelButton(
             text: l10n.cancelButton,
             onPressed: () {
-              navigator.pop();
+              context.pop();
               onCancel();
             },
           ),
@@ -58,8 +58,8 @@ class _DialogLayout extends StatelessWidget {
               try {
                 await onConfirm();
 
-                if (navigator.canPop()) {
-                  navigator.pop();
+                if (context.mounted && context.canPop()) {
+                  context.pop();
                 }
               } catch (e) {
                 if (context.mounted) {
@@ -110,7 +110,7 @@ Future<void> showAppDialog(
             body: GestureDetector(
               // Enable dialog closing on outside click
               onTap: () {
-                Navigator.of(context).pop();
+                context.pop();
               },
               child: Scaffold(
                 backgroundColor: Colors.transparent,

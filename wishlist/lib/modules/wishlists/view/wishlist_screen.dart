@@ -23,7 +23,7 @@ class WishlistScreen extends ConsumerWidget {
           _argumentError,
         );
 
-  final String? wishlistId;
+  final int? wishlistId;
   final Wishlist? wishlist;
 
   void onAddWish() {}
