@@ -49,7 +49,7 @@ class HomeScreen extends ConsumerWidget {
               title: l10n.myWishlists,
               onRefresh: refreshWishlists,
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16).copyWith(bottom: 96),
                 child: WishlistsGrid(
                   wishlists: data,
                   isReorderable: true,
