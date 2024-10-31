@@ -11,7 +11,7 @@ import 'package:wishlist/shared/models/friendship/friendship.dart';
 class FriendshipService {
   FriendshipService(this._friendshipRepository, this.ref);
   final FriendshipRepository _friendshipRepository;
-  final ProviderRef<Object?> ref;
+  final Ref<Object?> ref;
 
   Future<ISet<AppUser>> getCurrentUserFriends() async {
     final friendsIds = await _friendshipRepository.getCurrentUserFriendsIds();

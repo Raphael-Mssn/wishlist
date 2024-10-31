@@ -31,4 +31,5 @@ void main() async {
   );
 }
 
+// ignore: unreachable_from_main
 final supabase = Supabase.instance.client;

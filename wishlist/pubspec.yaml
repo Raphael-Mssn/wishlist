@@ -34,7 +34,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   email_validator: ^2.1.17
   equatable: ^2.0.5
-  fast_immutable_collections: ^10.2.4
+  fast_immutable_collections: ^11.0.0
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.1.0
@@ -52,16 +52,16 @@ dependencies:
   supabase_flutter: ^2.5.11
 
 dev_dependencies:
-  adaptive_test: ^0.5.0
+  adaptive_test: ^0.8.0
   build_runner: ^2.4.12
   flutter_gen_runner: ^5.7.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.1
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   flutter_native_splash: ^2.4.1
   flutter_test:
     sdk: flutter
