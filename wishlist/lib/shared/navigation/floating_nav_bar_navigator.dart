@@ -90,13 +90,18 @@ class _FloatingNavBarNavigatorState
       return;
     }
 
+    // check if if we are already animating to go to the same page
+    if (pageControllerPage.round() == pageIndex) {
+      return;
+    }
+
     if ((pageControllerPage - pageIndex).abs() >= 2) {
       // si différence de + de 2 pages, on ne fait pas l'animation
       _pageController.jumpToPage(pageIndex);
     } else {
       _pageController.animateToPage(
         pageIndex,
-        duration: kThemeChangeDuration,
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
