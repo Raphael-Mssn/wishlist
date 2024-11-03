@@ -55,5 +55,15 @@
   "wishlistStatusPending": "En attente",
   "wishlistStatusBooked": "Réservés",
   "wishlistNoWish": "Aucun wish",
-  "wishlistAddWish": "Ajouter un wish"
+  "wishlistAddWish": "Ajouter un wish",
+  "wishlistVisibility": "Visibilité de la wishlist",
+  "private": "Privée",
+  "public": "Publique",
+  "seeTakenWishs": "Voir les wishs réservés",
+  "yes": "Oui",
+  "no": "Non",
+  "shareEditionWith": "Partager l'édition avec",
+  "addCollaborator": "Ajouter un collaborateur",
+  "save": "Enregistrer",
+  "updateSuccess": "Mise à jour effectuée avec succès"
 }
