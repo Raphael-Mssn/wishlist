@@ -6,18 +6,16 @@ class NavBarAddButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.icon,
+    this.size = NavBarButtonSize.large,
   });
 
   final VoidCallback onPressed;
   final IconData icon;
+  final NavBarButtonSize size;
 
   @override
   Widget build(BuildContext context) {
-    final iconSize = switch (icon) {
-      Icons.add => 46.0,
-      Icons.person_add_alt_1 => 36.0,
-      _ => 46.0,
-    };
+    final dimensions = _getDimensions(size, icon);
 
     final theme = Theme.of(context);
 
@@ -26,8 +24,8 @@ class NavBarAddButton extends StatelessWidget {
       children: [
         // Ombre en dessous de tout
         Container(
-          width: 70,
-          height: 70,
+          width: dimensions.containerSize,
+          height: dimensions.containerSize,
           decoration: BoxDecoration(
             color: Colors.transparent,
             shape: BoxShape.circle,
@@ -44,21 +42,21 @@ class NavBarAddButton extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: onPressed,
-            borderRadius: BorderRadius.circular(50),
+            borderRadius: BorderRadius.circular(dimensions.containerSize / 2),
             child: Ink(
               decoration: BoxDecoration(
                 color: theme.primaryColor,
                 shape: BoxShape.circle,
               ),
-              padding: const EdgeInsets.all(10),
+              padding: EdgeInsets.all(dimensions.paddingSize),
               child: Ink(
                 decoration: BoxDecoration(
                   color: theme.primaryColorDark,
                   shape: BoxShape.circle,
                 ),
                 child: SizedBox(
-                  width: 50,
-                  height: 50,
+                  width: dimensions.innerContainerSize,
+                  height: dimensions.innerContainerSize,
                   child: AnimatedSwitcher(
                     duration: kThemeAnimationDuration,
                     transitionBuilder: (child, animation) {
@@ -70,7 +68,7 @@ class NavBarAddButton extends StatelessWidget {
                     child: Icon(
                       icon,
                       key: ValueKey<IconData>(icon),
-                      size: iconSize,
+                      size: dimensions.iconSize,
                       color: AppColors.background,
                     ),
                   ),
@@ -82,4 +80,37 @@ class NavBarAddButton extends StatelessWidget {
       ],
     );
   }
+
+  _Dimensions _getDimensions(NavBarButtonSize size, IconData icon) {
+    switch (size) {
+      case NavBarButtonSize.large:
+        return switch (icon) {
+          Icons.add => _Dimensions(46, 70, 50, 10),
+          Icons.person_add_alt_1 => _Dimensions(36, 70, 50, 10),
+          _ => _Dimensions(46, 70, 50, 10),
+        };
+      case NavBarButtonSize.small:
+        return switch (icon) {
+          Icons.add => _Dimensions(36, 40, 40, 5),
+          Icons.person_add_alt_1 => _Dimensions(26, 40, 40, 5),
+          _ => _Dimensions(36, 40, 40, 5),
+        };
+    }
+  }
+}
+
+enum NavBarButtonSize { small, large }
+
+class _Dimensions {
+  _Dimensions(
+    this.iconSize,
+    this.containerSize,
+    this.innerContainerSize,
+    this.paddingSize,
+  );
+
+  final double iconSize;
+  final double containerSize;
+  final double innerContainerSize;
+  final double paddingSize;
 }
