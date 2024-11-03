@@ -63,7 +63,7 @@ class SupabaseWishlistRepository implements WishlistRepository {
   }
 
   @override
-  Future<Wishlist> getWishlistById(String wishlistId) async {
+  Future<Wishlist> getWishlistById(int wishlistId) async {
     try {
       final response = await _client
           .from(_wishlistsTableName)

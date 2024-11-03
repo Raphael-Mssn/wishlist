@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wishlist/gen/fonts.gen.dart';
 
 class CancelButton extends StatelessWidget {
@@ -20,7 +21,7 @@ class CancelButton extends StatelessWidget {
         ),
       ),
       onPressed: () {
-        Navigator.of(context).pop();
+        context.pop();
       },
     );
   }

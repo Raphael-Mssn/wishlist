@@ -18,7 +18,7 @@ class WishlistService {
     return _wishlistRepository.getWishlistsByUser(userId);
   }
 
-  Future<Wishlist> getWishlistById(String wishlistId) async {
+  Future<Wishlist> getWishlistById(int wishlistId) async {
     return _wishlistRepository.getWishlistById(wishlistId);
   }
 

@@ -31,7 +31,7 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
         _isLoading = false;
       });
 
-      Navigator.of(context).pushReplacementNamed(AppRoutes.home.name);
+      HomeRoute().go(context);
     }
   }
 

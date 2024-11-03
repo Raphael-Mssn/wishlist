@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
 import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
-import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_password.dart';
@@ -39,7 +39,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pop(AppRoutes.settings.name);
+      context.pop();
     }
   }
 

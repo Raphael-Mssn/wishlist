@@ -17,11 +17,7 @@ class AuthService {
     await supabase.auth.signOut();
     invalidateAllProviders(ref);
     if (context.mounted) {
-      // reset the history and go to the auth screen
-      await Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoutes.auth.name,
-        (route) => false,
-      );
+      AuthRoute().go(context);
     }
   }
 
