@@ -31,6 +31,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   animated_reorderable_list: ^1.1.1
+  animated_toggle_switch: ^0.8.3
   cupertino_icons: ^1.0.6
   email_validator: ^2.1.17
   equatable: ^2.0.5
