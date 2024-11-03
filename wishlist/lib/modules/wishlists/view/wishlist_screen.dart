@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_by_id_provider.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wishlist_params_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty_content.dart';
@@ -27,8 +28,6 @@ class WishlistScreen extends ConsumerWidget {
   final Wishlist? wishlist;
 
   void onAddWish() {}
-
-  void onSettingsPressed() {}
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -69,7 +68,8 @@ class WishlistScreen extends ConsumerWidget {
                           Icons.settings,
                           size: 32,
                         ),
-                        onPressed: onSettingsPressed,
+                        onPressed: () =>
+                            showWishlistParamsBottomSheet(context, wishlist),
                       ),
                     ),
                   ],
