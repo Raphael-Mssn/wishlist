@@ -111,4 +111,30 @@ class SupabaseWishlistRepository implements WishlistRepository {
       );
     }
   }
+
+  @override
+  Future<void> updateWishlistParams(Wishlist wishlist) async {
+    try {
+      final update = {
+        'color': wishlist.color,
+        'can_owner_see_taken_wish': wishlist.canOwnerSeeTakenWish,
+        'visibility': wishlist.visibility.name,
+      };
+      await _client
+          .from(_wishlistsTableName)
+          .update(update)
+          .eq('id', wishlist.id);
+    } on PostgrestException catch (e) {
+      final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
+      throw AppException(
+        statusCode: statusCode ?? 500,
+        message: e.message,
+      );
+    } catch (e) {
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to update wishlists',
+      );
+    }
+  }
 }
