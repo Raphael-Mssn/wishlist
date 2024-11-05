@@ -23,31 +23,26 @@ class WishlistToggleSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      child: AnimatedToggleSwitch<bool>.dual(
-        current: current,
-        first: false,
-        second: true,
-        spacing: 50,
-        style: const ToggleStyle(
-          borderColor: AppColors.gainsboro,
-          backgroundColor: AppColors.gainsboro,
-        ),
-        borderWidth: 5,
-        onChanged: onChanged,
-        styleBuilder: (value) => const ToggleStyle(
-          indicatorColor: AppColors.makara,
-        ),
-        iconBuilder: (value) => value ? trueIcon : falseIcon,
-        textBuilder: (value) => Center(
-          child: Text(
-            value ? trueLabel : falseLabel,
-            style: AppTextStyles.smaller.copyWith(
-              fontWeight: FontWeight.bold,
-              color: AppColors.makara,
-            ),
-          ),
+    return AnimatedToggleSwitch<bool>.dual(
+      current: current,
+      first: false,
+      second: true,
+      spacing: 80,
+      style: const ToggleStyle(
+        borderColor: AppColors.gainsboro,
+        backgroundColor: AppColors.gainsboro,
+      ),
+      borderWidth: 5,
+      onChanged: onChanged,
+      styleBuilder: (value) => const ToggleStyle(
+        indicatorColor: AppColors.makara,
+      ),
+      iconBuilder: (value) => value ? trueIcon : falseIcon,
+      textBuilder: (value) => Text(
+        value ? trueLabel : falseLabel,
+        style: AppTextStyles.smaller.copyWith(
+          fontWeight: FontWeight.bold,
+          color: AppColors.makara,
         ),
       ),
     );

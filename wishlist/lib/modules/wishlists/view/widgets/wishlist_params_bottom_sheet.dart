@@ -73,8 +73,8 @@ class _WishlistParamsBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-    const smallGap = 10.0;
-    const largeGap = 32.0;
+    const smallGap = 8.0;
+    const largeGap = 24.0;
 
     final l10n = context.l10n;
     final wishlist = widget.wishlist;
@@ -91,7 +91,7 @@ class _WishlistParamsBottomSheetState
         ),
       ),
       child: Column(
-        children: <Widget>[
+        children: [
           AppBar(
             centerTitle: true,
             toolbarHeight: 80,
@@ -114,113 +114,101 @@ class _WishlistParamsBottomSheetState
                 fontWeight: FontWeight.bold,
               ),
             ),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            ),
             backgroundColor: wishlistColor,
           ),
-          Padding(
-            padding: const EdgeInsets.all(25),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      l10n.wishlistVisibility,
-                      style: AppTextStyles.small.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.makara,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.wishlistVisibility,
+                    style: AppTextStyles.small.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.makara,
+                    ),
+                  ),
+                  const Gap(smallGap),
+                  WishlistToggleSwitch(
+                    current: isPrivate,
+                    onChanged: (value) => setState(() => isPrivate = value),
+                    trueLabel: l10n.private,
+                    falseLabel: l10n.public,
+                    trueIcon: const Icon(
+                      Icons.lock,
+                      color: AppColors.gainsboro,
+                    ),
+                    falseIcon: const Icon(
+                      Icons.lock_open,
+                      color: AppColors.gainsboro,
+                    ),
+                  ),
+                  const Gap(largeGap),
+                  Text(
+                    l10n.seeTakenWishs,
+                    style: AppTextStyles.small.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.makara,
+                    ),
+                  ),
+                  const Gap(smallGap),
+                  WishlistToggleSwitch(
+                    current: canOwnerSeeTakenWish,
+                    onChanged: (value) =>
+                        setState(() => canOwnerSeeTakenWish = value),
+                    trueLabel: l10n.yes,
+                    falseLabel: l10n.no,
+                    trueIcon: const Icon(
+                      Icons.visibility_rounded,
+                      color: AppColors.gainsboro,
+                    ),
+                    falseIcon: const Icon(
+                      Icons.visibility_off_rounded,
+                      color: AppColors.gainsboro,
+                    ),
+                  ),
+                  const Gap(largeGap),
+                  Text(
+                    l10n.shareEditionWith,
+                    style: AppTextStyles.small.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.makara,
+                    ),
+                  ),
+                  const Gap(smallGap),
+                  Row(
+                    children: [
+                      NavBarAddButton(
+                        icon: Icons.person_add_alt_1,
+                        onPressed: onAddCollaborator,
+                        size: NavBarButtonSize.small,
+                      ),
+                      const Gap(smallGap),
+                      Text(
+                        l10n.addCollaborator,
+                        style: AppTextStyles.smaller.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: wishlistColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: PrimaryButton(
+                          text: l10n.save,
+                          onPressed: onSaveParams,
+                          style: PrimaryButtonStyle.large,
+                        ),
                       ),
                     ),
-                  ],
-                ),
-                const Gap(smallGap),
-                WishlistToggleSwitch(
-                  current: isPrivate,
-                  onChanged: (value) => setState(() => isPrivate = value),
-                  trueLabel: l10n.private,
-                  falseLabel: l10n.public,
-                  trueIcon: const Icon(
-                    Icons.lock,
-                    color: AppColors.gainsboro,
                   ),
-                  falseIcon: const Icon(
-                    Icons.lock_open,
-                    color: AppColors.gainsboro,
-                  ),
-                ),
-                const Gap(smallGap),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      l10n.seeTakenWishs,
-                      style: AppTextStyles.small.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.makara,
-                      ),
-                    ),
-                  ],
-                ),
-                const Gap(smallGap),
-                WishlistToggleSwitch(
-                  current: canOwnerSeeTakenWish,
-                  onChanged: (value) =>
-                      setState(() => canOwnerSeeTakenWish = value),
-                  trueLabel: l10n.yes,
-                  falseLabel: l10n.no,
-                  trueIcon: const Icon(
-                    Icons.visibility_rounded,
-                    color: AppColors.gainsboro,
-                  ),
-                  falseIcon: const Icon(
-                    Icons.visibility_off_rounded,
-                    color: AppColors.gainsboro,
-                  ),
-                ),
-                const Gap(smallGap),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      l10n.shareEditionWith,
-                      style: AppTextStyles.small.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.makara,
-                      ),
-                    ),
-                  ],
-                ),
-                const Gap(smallGap),
-                Row(
-                  children: <Widget>[
-                    NavBarAddButton(
-                      icon: Icons.person_add_alt_1,
-                      onPressed: onAddCollaborator,
-                      size: NavBarButtonSize.small,
-                    ),
-                    const Gap(smallGap),
-                    Text(
-                      l10n.addCollaborator,
-                      style: AppTextStyles.smaller.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: wishlistColor,
-                      ),
-                    ),
-                  ],
-                ),
-                const Gap(largeGap),
-                SizedBox(
-                  width: double.infinity,
-                  child: PrimaryButton(
-                    text: l10n.save,
-                    onPressed: onSaveParams,
-                    style: PrimaryButtonStyle.large,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
