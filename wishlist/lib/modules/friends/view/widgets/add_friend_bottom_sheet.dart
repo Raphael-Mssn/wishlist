@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/friends/view/infra/search_notifier.dart';
 import 'package:wishlist/modules/friends/view/widgets/user_pill.dart';
 import 'package:wishlist/modules/friends/view/widgets/user_search_bar.dart';
 import 'package:wishlist/shared/infra/utils/debouncer.dart';
 import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
-import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 
 class AddFriendBottomSheet extends ConsumerStatefulWidget {
   const AddFriendBottomSheet({super.key});
@@ -98,20 +97,8 @@ class _AddFriendBottomSheetState extends ConsumerState<AddFriendBottomSheet> {
 }
 
 void showAddFriendBottomSheet(BuildContext context) {
-  const radius = Radius.circular(20);
-
-  showBarModalBottomSheet<void>(
-    context: context,
-    backgroundColor: AppColors.background,
-    expand: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: radius,
-        topRight: radius,
-      ),
-    ),
-    builder: (context) {
-      return const Scaffold(body: AddFriendBottomSheet());
-    },
+  showAppBottomSheet(
+    context,
+    body: const AddFriendBottomSheet(),
   );
 }

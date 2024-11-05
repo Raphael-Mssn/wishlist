@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_toggle_switch.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
@@ -9,6 +8,7 @@ import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
 class WishlistParamsBottomSheet extends ConsumerStatefulWidget {
@@ -218,20 +218,8 @@ class _WishlistParamsBottomSheetState
 }
 
 void showWishlistParamsBottomSheet(BuildContext context, Wishlist wishlist) {
-  const radius = Radius.circular(25);
-
-  showBarModalBottomSheet<void>(
-    context: context,
-    backgroundColor: AppColors.background,
-    expand: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: radius,
-        topRight: radius,
-      ),
-    ),
-    builder: (context) {
-      return Scaffold(body: WishlistParamsBottomSheet(wishlist: wishlist));
-    },
+  showAppBottomSheet(
+    context,
+    body: WishlistParamsBottomSheet(wishlist: wishlist),
   );
 }
