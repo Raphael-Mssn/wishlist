@@ -86,6 +86,9 @@ Future<void> showAppDialog(
   void Function()? onCancel,
 }) async {
   final l10n = context.l10n;
+  // Needed to have the actual theme of passed context
+  // and not the one from the builder
+  final theme = Theme.of(context);
 
   return showGeneralDialog<void>(
     context: context,
@@ -112,18 +115,21 @@ Future<void> showAppDialog(
               onTap: () {
                 context.pop();
               },
-              child: Scaffold(
-                backgroundColor: Colors.transparent,
-                body: Center(
-                  child: GestureDetector(
-                    // Disable dialog closing on dialog click
-                    onTap: () {},
-                    child: _DialogLayout(
-                      title: title,
-                      content: content,
-                      confirmLabel: confirmButtonLabel,
-                      onConfirm: onConfirm,
-                      onCancel: onCancel,
+              child: AnimatedTheme(
+                data: theme,
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: Center(
+                    child: GestureDetector(
+                      // Disable dialog closing on dialog click
+                      onTap: () {},
+                      child: _DialogLayout(
+                        title: title,
+                        content: content,
+                        confirmLabel: confirmButtonLabel,
+                        onConfirm: onConfirm,
+                        onCancel: onCancel,
+                      ),
                     ),
                   ),
                 ),

@@ -137,4 +137,22 @@ class SupabaseWishlistRepository implements WishlistRepository {
       );
     }
   }
+
+  @override
+  Future<void> deleteWishlist(int wishlistId) async {
+    try {
+      await _client.from(_wishlistsTableName).delete().eq('id', wishlistId);
+    } on PostgrestException catch (e) {
+      final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
+      throw AppException(
+        statusCode: statusCode ?? 500,
+        message: e.message,
+      );
+    } catch (e) {
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to delete wishlist',
+      );
+    }
+  }
 }

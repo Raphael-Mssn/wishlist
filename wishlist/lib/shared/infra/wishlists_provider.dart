@@ -37,6 +37,18 @@ class WishlistsNotifier extends StateNotifier<AsyncValue<List<Wishlist>>> {
       state = AsyncValue.error(e, stack);
     }
   }
+
+  Future<void> deleteWishlist(int wishlistId) async {
+    try {
+      await _service.deleteWishlist(wishlistId);
+
+      state = state.whenData(
+        (data) => data.where((wishlist) => wishlist.id != wishlistId).toList(),
+      );
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+    }
+  }
 }
 
 final wishlistsProvider =

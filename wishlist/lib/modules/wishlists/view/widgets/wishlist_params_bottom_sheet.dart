@@ -3,12 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_toggle_switch.dart';
+import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
+import 'package:wishlist/shared/infra/wishlists_provider.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
+import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
 class WishlistParamsBottomSheet extends ConsumerStatefulWidget {
@@ -28,6 +32,39 @@ class _WishlistParamsBottomSheetState
 
   void onChangeColor() {}
   void onAddCollaborator() {}
+
+  void onDeleteWishlist(BuildContext context) {
+    final l10n = context.l10n;
+
+    showAppDialog(
+      context,
+      title: l10n.deleteWishlist,
+      content: const SizedBox.shrink(),
+      confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
+      onConfirm: () async {
+        try {
+          await ref
+              .read(wishlistsProvider.notifier)
+              .deleteWishlist(widget.wishlist.id);
+          if (context.mounted) {
+            HomeRoute().go(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.deleteWishlistSuccess),
+              ),
+            );
+          }
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showGenericError(
+              context,
+            );
+          }
+        }
+      },
+      onCancel: () {},
+    );
+  }
 
   Future<void> onSaveParams() async {
     final l10n = context.l10n;
@@ -81,15 +118,16 @@ class _WishlistParamsBottomSheetState
     final wishlistColor = AppColors.getColorFromHexValue(wishlist.color);
     final wishlistDarkColor = AppColors.darken(wishlistColor);
     final currentTheme = Theme.of(context);
+    final wishlistTheme = currentTheme.copyWith(
+      primaryColor: wishlistColor,
+      primaryColorDark: wishlistDarkColor,
+      appBarTheme: currentTheme.appBarTheme.copyWith(
+        backgroundColor: wishlistColor,
+      ),
+    );
 
     return AnimatedTheme(
-      data: currentTheme.copyWith(
-        primaryColor: wishlistColor,
-        primaryColorDark: wishlistDarkColor,
-        appBarTheme: currentTheme.appBarTheme.copyWith(
-          backgroundColor: wishlistColor,
-        ),
-      ),
+      data: wishlistTheme,
       child: Column(
         children: [
           AppBar(
@@ -195,17 +233,28 @@ class _WishlistParamsBottomSheetState
                     ],
                   ),
                   Expanded(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: PrimaryButton(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Builder(
+                          // Needed to have the context with wishlist theme
+                          builder: (context) {
+                            return SecondaryButton(
+                              text: l10n.deleteWishlist,
+                              onPressed: () => onDeleteWishlist(context),
+                              style: BaseButtonStyle.large,
+                              isStretched: true,
+                            );
+                          },
+                        ),
+                        const Gap(12),
+                        PrimaryButton(
                           text: l10n.save,
                           onPressed: onSaveParams,
                           style: BaseButtonStyle.large,
                           isStretched: true,
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],

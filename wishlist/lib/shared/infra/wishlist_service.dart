@@ -40,6 +40,10 @@ class WishlistService {
     }
     return wishlists.map((wishlist) => wishlist.order).reduce(max) + 1;
   }
+
+  Future<void> deleteWishlist(int wishlistId) async {
+    await _wishlistRepository.deleteWishlist(wishlistId);
+  }
 }
 
 final wishlistServiceProvider = Provider(

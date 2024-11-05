@@ -65,5 +65,7 @@
   "shareEditionWith": "Partager l'édition avec",
   "addCollaborator": "Ajouter un collaborateur",
   "save": "Enregistrer",
-  "updateSuccess": "Mise à jour effectuée avec succès"
+  "updateSuccess": "Mise à jour effectuée avec succès",
+  "deleteWishlist": "Supprimer ma wishlist",
+  "deleteWishlistSuccess": "Wishlist supprimée avec succès"
 }
