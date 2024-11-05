@@ -1,14 +1,16 @@
 import 'dart:math';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wishlist/modules/wishlists/infra/wishlist_by_id_provider.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository_provider.dart';
 import 'package:wishlist/shared/models/wishlist/create_request/wishlist_create_request.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 
 class WishlistService {
-  WishlistService(this._wishlistRepository);
+  WishlistService(this._wishlistRepository, this.ref);
   final WishlistRepository _wishlistRepository;
+  final Ref ref;
 
   Future<Wishlist> createWishlist(WishlistCreateRequest wishlist) async {
     return _wishlistRepository.createWishlist(wishlist);
@@ -27,7 +29,8 @@ class WishlistService {
   }
 
   Future<void> updateWishlistParams(Wishlist wishlist) async {
-    return _wishlistRepository.updateWishlistParams(wishlist);
+    await _wishlistRepository.updateWishlistParams(wishlist);
+    ref.invalidate(wishlistByIdProvider(wishlist.id));
   }
 
   Future<int> getNextWishlistOrderByUser(String userId) async {
@@ -39,5 +42,6 @@ class WishlistService {
   }
 }
 
-final wishlistServiceProvider =
-    Provider((ref) => WishlistService(ref.watch(wishlistRepositoryProvider)));
+final wishlistServiceProvider = Provider(
+  (ref) => WishlistService(ref.watch(wishlistRepositoryProvider), ref),
+);

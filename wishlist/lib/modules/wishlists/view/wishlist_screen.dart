@@ -12,37 +12,22 @@ import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
-const _argumentError = 'Provide either wishlistId or wishlist';
-
 class WishlistScreen extends ConsumerWidget {
   const WishlistScreen({
     super.key,
-    this.wishlistId,
-    this.wishlist,
-  }) : assert(
-          wishlistId != null || wishlist != null,
-          _argumentError,
-        );
+    required this.wishlistId,
+  });
 
-  final int? wishlistId;
-  final Wishlist? wishlist;
+  final int wishlistId;
 
   void onAddWish() {}
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final wishlist = this.wishlist;
-    final wishlistId = this.wishlistId;
-
-    // Si wishlist est déjà fourni, pas besoin de faire l'appel API
-    final wishlistAsyncValue = wishlist != null
-        ? AsyncValue.data(wishlist)
-        : (wishlistId != null
-            ? ref.watch(wishlistByIdProvider(wishlistId))
-            : throw ArgumentError(_argumentError));
+    final wishlist = ref.watch(wishlistByIdProvider(wishlistId));
 
     return Scaffold(
-      body: wishlistAsyncValue.when(
+      body: wishlist.when(
         data: (wishlist) {
           final wishlistColor = AppColors.getColorFromHexValue(wishlist.color);
           final wishlistDarkColor = AppColors.darken(wishlistColor);

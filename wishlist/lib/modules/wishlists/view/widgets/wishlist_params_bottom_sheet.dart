@@ -30,7 +30,6 @@ class _WishlistParamsBottomSheetState
   void onAddCollaborator() {}
 
   Future<void> onSaveParams() async {
-    final wishlistService = ref.read(wishlistServiceProvider);
     final l10n = context.l10n;
 
     final visibilityUpdated =
@@ -42,7 +41,9 @@ class _WishlistParamsBottomSheetState
     );
 
     try {
-      await wishlistService.updateWishlistParams(wishlistUpdated);
+      await ref.read(wishlistServiceProvider).updateWishlistParams(
+            wishlistUpdated,
+          );
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

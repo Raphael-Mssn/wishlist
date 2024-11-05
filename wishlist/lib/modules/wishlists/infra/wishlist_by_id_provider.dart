@@ -4,6 +4,6 @@ import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 
 final wishlistByIdProvider =
     FutureProvider.family<Wishlist, int>((ref, wishlistId) async {
-  final wishlistService = ref.watch(wishlistServiceProvider);
+  final wishlistService = ref.read(wishlistServiceProvider);
   return wishlistService.getWishlistById(wishlistId);
 });

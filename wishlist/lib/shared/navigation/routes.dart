@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/modules/auth/view/auth_screen.dart';
@@ -7,7 +5,6 @@ import 'package:wishlist/modules/auth/view/pseudo_screen.dart';
 import 'package:wishlist/modules/friends/view/screens/friend_details_screen.dart';
 import 'package:wishlist/modules/settings/change_password/view/change_password_screen.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
-import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 
 part 'routes.g.dart';
@@ -35,23 +32,15 @@ class PseudoRoute extends GoRouteData {
 )
 class WishlistRoute extends GoRouteData {
   WishlistRoute({
-    required int this.wishlistId,
-  })  : wishlist = null,
-        wishlistJson = null;
+    required this.wishlistId,
+  });
 
-  WishlistRoute.fromObject({required Wishlist this.wishlist})
-      : wishlistId = null,
-        wishlistJson = jsonEncode(wishlist.toJson());
-
-  final int? wishlistId;
-  final String? wishlistJson;
-  final Wishlist? wishlist;
+  final int wishlistId;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return WishlistScreen(
       wishlistId: wishlistId,
-      wishlist: wishlist,
     );
   }
 }
