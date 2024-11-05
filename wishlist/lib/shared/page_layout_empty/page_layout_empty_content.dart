@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
-import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/theme/widgets/buttons.dart';
 
 class PageLayoutEmptyContent extends StatelessWidget {
   const PageLayoutEmptyContent({
@@ -37,7 +37,7 @@ class PageLayoutEmptyContent extends StatelessWidget {
         PrimaryButton(
           text: callToAction,
           onPressed: onCallToAction,
-          style: PrimaryButtonStyle.large,
+          style: BaseButtonStyle.large,
         ),
       ],
     );

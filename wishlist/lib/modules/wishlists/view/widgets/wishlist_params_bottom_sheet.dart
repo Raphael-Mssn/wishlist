@@ -7,7 +7,7 @@ import 'package:wishlist/shared/infra/wishlist_service.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
-import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
@@ -202,7 +202,8 @@ class _WishlistParamsBottomSheetState
                         child: PrimaryButton(
                           text: l10n.save,
                           onPressed: onSaveParams,
-                          style: PrimaryButtonStyle.large,
+                          style: BaseButtonStyle.large,
+                          isStretched: true,
                         ),
                       ),
                     ),

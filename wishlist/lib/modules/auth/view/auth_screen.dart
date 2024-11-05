@@ -7,7 +7,7 @@ import 'package:wishlist/modules/auth/view/auth_layout.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
 import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
-import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_email.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_password.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_pseudo_or_email.dart';
@@ -140,7 +140,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             text: _isSigningIn ? l10n.signIn : l10n.signUp,
             onPressed: onPressed,
             isLoading: _isLoading,
-            style: PrimaryButtonStyle.large,
+            style: BaseButtonStyle.large,
           ),
           const Gap(16),
           TextButton(

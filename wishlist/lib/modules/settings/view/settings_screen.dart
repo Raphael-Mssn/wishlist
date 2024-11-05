@@ -6,7 +6,7 @@ import 'package:wishlist/shared/infra/auth_service.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
-import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 
@@ -50,7 +50,7 @@ class SettingsScreen extends ConsumerWidget {
               PrimaryButton(
                 text: l10n.settingsScreenEmailModify,
                 onPressed: () {},
-                style: PrimaryButtonStyle.medium,
+                style: BaseButtonStyle.medium,
               ),
             ],
           ),
@@ -67,7 +67,7 @@ class SettingsScreen extends ConsumerWidget {
                 },
               );
             },
-            style: PrimaryButtonStyle.medium,
+            style: BaseButtonStyle.medium,
           ),
           const Gap(24),
           PrimaryButton(
@@ -75,13 +75,13 @@ class SettingsScreen extends ConsumerWidget {
             onPressed: () {
               ChangePasswordRoute().push(context);
             },
-            style: PrimaryButtonStyle.medium,
+            style: BaseButtonStyle.medium,
           ),
           const Gap(24),
           PrimaryButton(
             text: l10n.settingsScreenDeleteAccount,
             onPressed: () {},
-            style: PrimaryButtonStyle.medium,
+            style: BaseButtonStyle.medium,
           ),
         ],
       ),
