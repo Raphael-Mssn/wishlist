@@ -13,6 +13,10 @@ class UserService {
     return _userRepository.getCurrentUserEmail();
   }
 
+  String getCurrentUserId() {
+    return _userRepository.getCurrentUserId();
+  }
+
   Future<void> createUserProfile(Profile profile) async {
     return _userRepository.createUserProfile(profile);
   }

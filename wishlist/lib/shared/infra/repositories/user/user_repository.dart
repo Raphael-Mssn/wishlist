@@ -4,6 +4,7 @@ import 'package:wishlist/shared/models/profile.dart';
 
 abstract class UserRepository {
   String getCurrentUserEmail();
+  String getCurrentUserId();
   Future<void> createUserProfile(Profile profile);
   Future<IList<AppUser>> searchUsersByEmailOrPseudo(String query);
   Future<AppUser> getAppUserById(String userId);
