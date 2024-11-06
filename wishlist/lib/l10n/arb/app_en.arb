@@ -62,6 +62,8 @@
   "wishQuantityLabel": "Quantity",
   "wishLinkLabel": "Link",
   "wishDescriptionLabel": "Description",
+  "wishNameError": "Wish name is required",
+  "notNullError": "This field is required",
   "wishlistVisibility": "Wishlist visibility",
   "private": "Private",
   "public": "Public",

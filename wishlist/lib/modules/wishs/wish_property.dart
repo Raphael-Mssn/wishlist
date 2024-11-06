@@ -9,6 +9,7 @@ class WishProperty extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.inputController,
+    this.validator,
     this.focusNode,
     this.inputTextAlign = TextAlign.start,
     this.isInputBellow = false,
@@ -18,6 +19,7 @@ class WishProperty extends StatelessWidget {
   final IconData icon;
   final String label;
   final TextEditingController inputController;
+  final String? Function(String?)? validator;
   final FocusNode? focusNode;
   final TextAlign inputTextAlign;
   final bool isInputBellow;
@@ -32,15 +34,29 @@ class WishProperty extends StatelessWidget {
       ),
       borderRadius: BorderRadius.all(Radius.circular(20)),
     );
+    final errorBorderStyle = borderStyle.copyWith(
+      borderSide: borderStyle.borderSide.copyWith(
+        // TODO: Use error color from theme
+        color: Colors.red,
+      ),
+    );
 
     final input = TextFormField(
       textAlign: inputTextAlign,
       controller: inputController,
       focusNode: focusNode,
-      decoration: const InputDecoration(
+      validator: validator,
+      cursorErrorColor: Colors.red,
+      decoration: InputDecoration(
         enabledBorder: borderStyle,
         focusedBorder: borderStyle,
         disabledBorder: borderStyle,
+        errorBorder: errorBorderStyle,
+        focusedErrorBorder: errorBorderStyle,
+        // Hide error text
+        errorStyle: const TextStyle(
+          fontSize: 0,
+        ),
       ),
       maxLines: isMultilineInput ? null : 1,
       textInputAction:

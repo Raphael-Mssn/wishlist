@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/wish_property.dart';
+import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
+import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
+import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
+import 'package:wishlist/shared/widgets/text_form_fields/validators/not_null_validator.dart';
 
-class _CreateWishBottomSheet extends StatefulWidget {
+class _CreateWishBottomSheet extends ConsumerStatefulWidget {
   const _CreateWishBottomSheet({
     required this.wishlist,
   });
@@ -15,15 +21,20 @@ class _CreateWishBottomSheet extends StatefulWidget {
   final Wishlist wishlist;
 
   @override
-  State<_CreateWishBottomSheet> createState() => _CreateWishBottomSheetState();
+  ConsumerState<_CreateWishBottomSheet> createState() =>
+      _CreateWishBottomSheetState();
 }
 
-class _CreateWishBottomSheetState extends State<_CreateWishBottomSheet> {
+class _CreateWishBottomSheetState
+    extends ConsumerState<_CreateWishBottomSheet> {
+  final _formKey = GlobalKey<FormState>();
+
   final _scrollController = ScrollController();
   final _focusNodes = List.generate(5, (_) => FocusNode());
+
   final _nameInputController = TextEditingController();
   final _priceInputController = TextEditingController();
-  final _quantityInputController = TextEditingController();
+  final _quantityInputController = TextEditingController(text: '1');
   final _linkInputController = TextEditingController();
   final _descriptionInputController = TextEditingController();
 
@@ -53,7 +64,55 @@ class _CreateWishBottomSheetState extends State<_CreateWishBottomSheet> {
   }
 
   void onFavorite() {}
-  void onCreateWish() {}
+
+  Future<void> onCreateWish() async {
+    final name = _nameInputController.text;
+    final price = _priceInputController.text;
+    final quantity = _quantityInputController.text;
+    final link = _linkInputController.text;
+    final description = _descriptionInputController.text;
+
+    if (!_formKey.currentState!.validate()) {
+      // Focus name node
+      _focusNodes[0].requestFocus();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.l10n.wishNameError,
+          ),
+        ),
+      );
+
+      return;
+    }
+
+    final wish = WishCreateRequest(
+      name: name,
+      price: double.tryParse(price),
+      quantity: int.parse(quantity),
+      description: description,
+      wishlistId: widget.wishlist.id,
+      updatedBy: widget.wishlist.idOwner,
+      linkUrl: link,
+    );
+
+    try {
+      await ref
+          .read(wishsFromWishlistProvider(widget.wishlist.id).notifier)
+          .createWish(
+            wish,
+          );
+
+      if (mounted) {
+        context.pop();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showGenericError(context);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -87,48 +146,52 @@ class _CreateWishBottomSheetState extends State<_CreateWishBottomSheet> {
           Expanded(
             child: SingleChildScrollView(
               controller: _scrollController,
-              child: Column(
-                children: [
-                  WishProperty(
-                    icon: Icons.sell_outlined,
-                    label: l10n.wishNameLabel,
-                    inputController: _nameInputController,
-                    focusNode: _focusNodes[0],
-                  ),
-                  const Gap(16),
-                  WishProperty(
-                    icon: Icons.attach_money,
-                    label: l10n.wishPriceLabel,
-                    inputController: _priceInputController,
-                    inputTextAlign: TextAlign.center,
-                    focusNode: _focusNodes[1],
-                  ),
-                  const Gap(16),
-                  WishProperty(
-                    icon: Icons.one_x_mobiledata,
-                    label: l10n.wishQuantityLabel,
-                    inputController: _quantityInputController,
-                    inputTextAlign: TextAlign.center,
-                    focusNode: _focusNodes[2],
-                  ),
-                  const Gap(16),
-                  WishProperty(
-                    icon: Icons.link,
-                    label: l10n.wishLinkLabel,
-                    inputController: _linkInputController,
-                    focusNode: _focusNodes[3],
-                  ),
-                  const Gap(16),
-                  WishProperty(
-                    icon: Icons.description_outlined,
-                    label: l10n.wishDescriptionLabel,
-                    inputController: _descriptionInputController,
-                    isInputBellow: true,
-                    isMultilineInput: true,
-                    focusNode: _focusNodes[4],
-                  ),
-                  const Gap(16),
-                ],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    WishProperty(
+                      icon: Icons.sell_outlined,
+                      label: l10n.wishNameLabel,
+                      inputController: _nameInputController,
+                      validator: (value) => notNullValidator(value, l10n),
+                      focusNode: _focusNodes[0],
+                    ),
+                    const Gap(16),
+                    WishProperty(
+                      icon: Icons.attach_money,
+                      label: l10n.wishPriceLabel,
+                      inputController: _priceInputController,
+                      inputTextAlign: TextAlign.center,
+                      focusNode: _focusNodes[1],
+                    ),
+                    const Gap(16),
+                    WishProperty(
+                      icon: Icons.one_x_mobiledata,
+                      label: l10n.wishQuantityLabel,
+                      inputController: _quantityInputController,
+                      inputTextAlign: TextAlign.center,
+                      focusNode: _focusNodes[2],
+                    ),
+                    const Gap(16),
+                    WishProperty(
+                      icon: Icons.link,
+                      label: l10n.wishLinkLabel,
+                      inputController: _linkInputController,
+                      focusNode: _focusNodes[3],
+                    ),
+                    const Gap(16),
+                    WishProperty(
+                      icon: Icons.description_outlined,
+                      label: l10n.wishDescriptionLabel,
+                      inputController: _descriptionInputController,
+                      isInputBellow: true,
+                      isMultilineInput: true,
+                      focusNode: _focusNodes[4],
+                    ),
+                    const Gap(16),
+                  ],
+                ),
               ),
             ),
           ),
