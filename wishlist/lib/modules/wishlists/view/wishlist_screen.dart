@@ -11,6 +11,7 @@ import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty_content.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
 class WishlistScreen extends ConsumerWidget {
@@ -30,20 +31,12 @@ class WishlistScreen extends ConsumerWidget {
     return Scaffold(
       body: wishlist.when(
         data: (wishlist) {
-          final wishlistColor = AppColors.getColorFromHexValue(wishlist.color);
-          final wishlistDarkColor = AppColors.darken(wishlistColor);
-          final currentTheme = Theme.of(context);
+          final wishlistTheme = getWishlistTheme(context, wishlist);
           final isMyWishlist = wishlist.idOwner ==
               ref.read(userServiceProvider).getCurrentUserId();
 
           return AnimatedTheme(
-            data: currentTheme.copyWith(
-              primaryColor: wishlistColor,
-              primaryColorDark: wishlistDarkColor,
-              appBarTheme: currentTheme.appBarTheme.copyWith(
-                backgroundColor: wishlistColor,
-              ),
-            ),
+            data: wishlistTheme,
             child: Scaffold(
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(70),

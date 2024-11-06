@@ -10,6 +10,7 @@ import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
@@ -115,16 +116,7 @@ class _WishlistParamsBottomSheetState
 
     final l10n = context.l10n;
     final wishlist = widget.wishlist;
-    final wishlistColor = AppColors.getColorFromHexValue(wishlist.color);
-    final wishlistDarkColor = AppColors.darken(wishlistColor);
-    final currentTheme = Theme.of(context);
-    final wishlistTheme = currentTheme.copyWith(
-      primaryColor: wishlistColor,
-      primaryColorDark: wishlistDarkColor,
-      appBarTheme: currentTheme.appBarTheme.copyWith(
-        backgroundColor: wishlistColor,
-      ),
-    );
+    final wishlistTheme = getWishlistTheme(context, wishlist);
 
     return AppBottomSheetWithThemeAndAppBarLayout(
       theme: wishlistTheme,
@@ -203,7 +195,7 @@ class _WishlistParamsBottomSheetState
                 l10n.addCollaborator,
                 style: AppTextStyles.smaller.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: wishlistColor,
+                  color: wishlistTheme.primaryColor,
                 ),
               ),
             ],
