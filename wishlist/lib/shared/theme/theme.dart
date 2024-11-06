@@ -18,7 +18,7 @@ ThemeData get theme => ThemeData(
       ),
       cupertinoOverrideTheme: const CupertinoThemeData(
         // Necessary for setting the selectionHandleColor
-        primaryColor: AppColors.primary,
+        primaryColor: AppColors.makara,
       ),
       snackBarTheme: SnackBarThemeData(
         showCloseIcon: true,
