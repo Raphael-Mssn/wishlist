@@ -6,6 +6,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_by_id_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_params_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
+import 'package:wishlist/modules/wishs/create_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty_content.dart';
@@ -22,7 +23,9 @@ class WishlistScreen extends ConsumerWidget {
 
   final int wishlistId;
 
-  void onAddWish() {}
+  void onAddWish(BuildContext context, Wishlist wishlist) {
+    showCreateWishBottomSheet(context, wishlist);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -138,7 +141,9 @@ class WishlistScreen extends ConsumerWidget {
                         title: l10n.wishlistNoWish,
                         callToAction:
                             isMyWishlist ? l10n.wishlistAddWish : null,
-                        onCallToAction: isMyWishlist ? onAddWish : null,
+                        onCallToAction: isMyWishlist
+                            ? () => onAddWish(context, wishlist)
+                            : null,
                       ),
                     );
                   },
@@ -157,7 +162,7 @@ class WishlistScreen extends ConsumerWidget {
                 alignment: Alignment.centerRight,
                 child: NavBarAddButton(
                   icon: Icons.add,
-                  onPressed: onAddWish,
+                  onPressed: () => onAddWish(context, wishlist),
                 ),
               ),
             ),
