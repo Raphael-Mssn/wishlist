@@ -90,7 +90,7 @@ class _CreateWishBottomSheetState
     final wish = WishCreateRequest(
       name: name,
       price: double.tryParse(price),
-      quantity: int.parse(quantity),
+      quantity: int.tryParse(quantity),
       description: description,
       wishlistId: widget.wishlist.id,
       updatedBy: widget.wishlist.idOwner,

@@ -33,7 +33,7 @@ mixin _$WishCreateRequest {
   @JsonKey(name: 'is_favourite')
   bool get isFavourite => throw _privateConstructorUsedError;
   @JsonKey(name: 'quantity')
-  int get quantity => throw _privateConstructorUsedError;
+  int? get quantity => throw _privateConstructorUsedError;
   @JsonKey(name: 'wishlist_id')
   int get wishlistId => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_by')
@@ -62,7 +62,7 @@ abstract class $WishCreateRequestCopyWith<$Res> {
       @JsonKey(name: 'link_url') String? linkUrl,
       @JsonKey(name: 'icon_url') String? iconUrl,
       @JsonKey(name: 'is_favourite') bool isFavourite,
-      @JsonKey(name: 'quantity') int quantity,
+      @JsonKey(name: 'quantity') int? quantity,
       @JsonKey(name: 'wishlist_id') int wishlistId,
       @JsonKey(name: 'updated_by') String updatedBy});
 }
@@ -88,7 +88,7 @@ class _$WishCreateRequestCopyWithImpl<$Res, $Val extends WishCreateRequest>
     Object? linkUrl = freezed,
     Object? iconUrl = freezed,
     Object? isFavourite = null,
-    Object? quantity = null,
+    Object? quantity = freezed,
     Object? wishlistId = null,
     Object? updatedBy = null,
   }) {
@@ -117,10 +117,10 @@ class _$WishCreateRequestCopyWithImpl<$Res, $Val extends WishCreateRequest>
           ? _value.isFavourite
           : isFavourite // ignore: cast_nullable_to_non_nullable
               as bool,
-      quantity: null == quantity
+      quantity: freezed == quantity
           ? _value.quantity
           : quantity // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       wishlistId: null == wishlistId
           ? _value.wishlistId
           : wishlistId // ignore: cast_nullable_to_non_nullable
@@ -148,7 +148,7 @@ abstract class _$$WishCreateRequestImplCopyWith<$Res>
       @JsonKey(name: 'link_url') String? linkUrl,
       @JsonKey(name: 'icon_url') String? iconUrl,
       @JsonKey(name: 'is_favourite') bool isFavourite,
-      @JsonKey(name: 'quantity') int quantity,
+      @JsonKey(name: 'quantity') int? quantity,
       @JsonKey(name: 'wishlist_id') int wishlistId,
       @JsonKey(name: 'updated_by') String updatedBy});
 }
@@ -172,7 +172,7 @@ class __$$WishCreateRequestImplCopyWithImpl<$Res>
     Object? linkUrl = freezed,
     Object? iconUrl = freezed,
     Object? isFavourite = null,
-    Object? quantity = null,
+    Object? quantity = freezed,
     Object? wishlistId = null,
     Object? updatedBy = null,
   }) {
@@ -201,10 +201,10 @@ class __$$WishCreateRequestImplCopyWithImpl<$Res>
           ? _value.isFavourite
           : isFavourite // ignore: cast_nullable_to_non_nullable
               as bool,
-      quantity: null == quantity
+      quantity: freezed == quantity
           ? _value.quantity
           : quantity // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       wishlistId: null == wishlistId
           ? _value.wishlistId
           : wishlistId // ignore: cast_nullable_to_non_nullable
@@ -227,7 +227,7 @@ class _$WishCreateRequestImpl extends _WishCreateRequest {
       @JsonKey(name: 'link_url') this.linkUrl,
       @JsonKey(name: 'icon_url') this.iconUrl,
       @JsonKey(name: 'is_favourite') this.isFavourite = false,
-      @JsonKey(name: 'quantity') required this.quantity,
+      @JsonKey(name: 'quantity') this.quantity,
       @JsonKey(name: 'wishlist_id') required this.wishlistId,
       @JsonKey(name: 'updated_by') required this.updatedBy})
       : super._();
@@ -255,7 +255,7 @@ class _$WishCreateRequestImpl extends _WishCreateRequest {
   final bool isFavourite;
   @override
   @JsonKey(name: 'quantity')
-  final int quantity;
+  final int? quantity;
   @override
   @JsonKey(name: 'wishlist_id')
   final int wishlistId;
@@ -319,7 +319,7 @@ abstract class _WishCreateRequest extends WishCreateRequest {
           @JsonKey(name: 'link_url') final String? linkUrl,
           @JsonKey(name: 'icon_url') final String? iconUrl,
           @JsonKey(name: 'is_favourite') final bool isFavourite,
-          @JsonKey(name: 'quantity') required final int quantity,
+          @JsonKey(name: 'quantity') final int? quantity,
           @JsonKey(name: 'wishlist_id') required final int wishlistId,
           @JsonKey(name: 'updated_by') required final String updatedBy}) =
       _$WishCreateRequestImpl;
@@ -348,7 +348,7 @@ abstract class _WishCreateRequest extends WishCreateRequest {
   bool get isFavourite;
   @override
   @JsonKey(name: 'quantity')
-  int get quantity;
+  int? get quantity;
   @override
   @JsonKey(name: 'wishlist_id')
   int get wishlistId;

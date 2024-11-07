@@ -15,7 +15,7 @@ _$WishCreateRequestImpl _$$WishCreateRequestImplFromJson(
       linkUrl: json['link_url'] as String?,
       iconUrl: json['icon_url'] as String?,
       isFavourite: json['is_favourite'] as bool? ?? false,
-      quantity: (json['quantity'] as num).toInt(),
+      quantity: (json['quantity'] as num?)?.toInt(),
       wishlistId: (json['wishlist_id'] as num).toInt(),
       updatedBy: json['updated_by'] as String,
     );
