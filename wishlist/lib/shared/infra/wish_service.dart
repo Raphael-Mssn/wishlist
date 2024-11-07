@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/repositories/wish/wish_repository.dart';
 import 'package:wishlist/shared/infra/repositories/wish/wish_repository_provider.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
+import 'package:wishlist/shared/models/wish/update_request/wish_update_request.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 
 class WishService {
@@ -15,6 +16,13 @@ class WishService {
 
   Future<Wish> createWish(WishCreateRequest wishCreateRequest) async {
     return _wishRepository.createWish(wishCreateRequest);
+  }
+
+  Future<Wish> updateWish(
+    int wishId,
+    WishUpdateRequest wishUpdateRequest,
+  ) async {
+    return _wishRepository.updateWish(wishId, wishUpdateRequest);
   }
 }
 

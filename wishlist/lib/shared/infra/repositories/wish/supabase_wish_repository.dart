@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/repositories/wish/wish_repository.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
+import 'package:wishlist/shared/models/wish/update_request/wish_update_request.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 
 class SupabaseWishRepository implements WishRepository {
@@ -57,6 +58,36 @@ class SupabaseWishRepository implements WishRepository {
       throw AppException(
         statusCode: 500,
         message: 'Failed to create wish',
+      );
+    }
+  }
+
+  @override
+  Future<Wish> updateWish(
+    int wishId,
+    WishUpdateRequest wishUpdateRequest,
+  ) async {
+    try {
+      final wishJson = await _client
+          .from(_wishsTableName)
+          .update(wishUpdateRequest.toJson())
+          .eq('id', wishId)
+          .select()
+          .single();
+
+      final wish = Wish.fromJson(wishJson);
+
+      return wish;
+    } on PostgrestException catch (e) {
+      final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
+      throw AppException(
+        statusCode: statusCode ?? 500,
+        message: e.message,
+      );
+    } catch (e) {
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to update wish',
       );
     }
   }
