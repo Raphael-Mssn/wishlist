@@ -71,6 +71,7 @@ class WishlistScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
+                  centerTitle: true,
                   shape: const RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.vertical(bottom: Radius.circular(32)),
