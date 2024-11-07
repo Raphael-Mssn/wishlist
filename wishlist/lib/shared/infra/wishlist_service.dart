@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wishlist/modules/wishlists/infra/wishlist_by_id_provider.dart';
+import 'package:wishlist/shared/infra/wishlist_by_id_provider.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository_provider.dart';
 import 'package:wishlist/shared/models/wishlist/create_request/wishlist_create_request.dart';
