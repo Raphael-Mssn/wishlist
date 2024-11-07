@@ -28,7 +28,7 @@ class PseudoRoute extends GoRouteData {
 }
 
 @TypedGoRoute<WishlistRoute>(
-  path: '/wishlist',
+  path: '/wishlist/:wishlistId',
 )
 class WishlistRoute extends GoRouteData {
   WishlistRoute({

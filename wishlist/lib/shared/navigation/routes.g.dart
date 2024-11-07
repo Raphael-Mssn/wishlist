@@ -61,20 +61,17 @@ extension $PseudoRouteExtension on PseudoRoute {
 }
 
 RouteBase get $wishlistRoute => GoRouteData.$route(
-      path: '/wishlist',
+      path: '/wishlist/:wishlistId',
       factory: $WishlistRouteExtension._fromState,
     );
 
 extension $WishlistRouteExtension on WishlistRoute {
   static WishlistRoute _fromState(GoRouterState state) => WishlistRoute(
-        wishlistId: int.parse(state.uri.queryParameters['wishlist-id']!),
+        wishlistId: int.parse(state.pathParameters['wishlistId']!),
       );
 
   String get location => GoRouteData.$location(
-        '/wishlist',
-        queryParams: {
-          'wishlist-id': wishlistId.toString(),
-        },
+        '/wishlist/${Uri.encodeComponent(wishlistId.toString())}',
       );
 
   void go(BuildContext context) => context.go(location);
