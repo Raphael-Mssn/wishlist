@@ -57,6 +57,8 @@
   "wishlistNoWish": "Aucun wish",
   "wishlistAddWish": "Ajouter un wish",
   "createWishBottomSheetTitle": "Créer un wish",
+  "editWishBottomSheetTitle": "Modifier un wish",
+  "editButton": "Modifier",
   "wishNameLabel": "Nom",
   "wishPriceLabel": "Prix",
   "wishQuantityLabel": "Quantité",
