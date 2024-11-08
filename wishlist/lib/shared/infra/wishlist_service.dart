@@ -26,6 +26,10 @@ class WishlistService {
     return _wishlistRepository.updateWishlistsOrder(wishlists);
   }
 
+  Future<void> updateWishlistParams(Wishlist wishlist) async {
+    return _wishlistRepository.updateWishlistParams(wishlist);
+  }
+
   Future<int> getNextWishlistOrderByUser(String userId) async {
     final wishlists = await getWishlistsByUser(userId);
     if (wishlists.isEmpty) {

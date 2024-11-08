@@ -55,5 +55,15 @@
   "wishlistStatusPending": "Pending",
   "wishlistStatusBooked": "Booked",
   "wishlistNoWish": "No wish",
-  "wishlistAddWish": "Add a wish"
+  "wishlistAddWish": "Add a wish",
+  "wishlistVisibility": "Wishlist visibility",
+  "private": "Private",
+  "public": "Public",
+  "seeTakenWishs": "See taken wishes",
+  "yes": "Yes",
+  "no": "No",
+  "shareEditionWith": "Share edition with",
+  "addCollaborator": "Add a collaborator",
+  "save": "Save",
+  "updateSuccess": "Update successfully completed"
 }
