@@ -119,10 +119,7 @@ class _WishlistParamsBottomSheetState
     return AppBottomSheetWithThemeAndAppBarLayout(
       theme: wishlistTheme,
       title: wishlist.name,
-      actionIcon: const Icon(
-        Icons.color_lens,
-        size: 32,
-      ),
+      actionIcon: Icons.color_lens,
       onActionTapped: onChangeColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
