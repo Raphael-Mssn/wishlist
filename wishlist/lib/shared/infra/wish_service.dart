@@ -24,6 +24,10 @@ class WishService {
   ) async {
     return _wishRepository.updateWish(wishId, wishUpdateRequest);
   }
+
+  Future<void> deleteWish(int wishId) async {
+    return _wishRepository.deleteWish(wishId);
+  }
 }
 
 final wishServiceProvider =

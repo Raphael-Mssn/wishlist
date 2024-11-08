@@ -91,4 +91,22 @@ class SupabaseWishRepository implements WishRepository {
       );
     }
   }
+
+  @override
+  Future<void> deleteWish(int wishId) async {
+    try {
+      await _client.from(_wishsTableName).delete().eq('id', wishId);
+    } on PostgrestException catch (e) {
+      final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
+      throw AppException(
+        statusCode: statusCode ?? 500,
+        message: e.message,
+      );
+    } catch (e) {
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to delete wish',
+      );
+    }
+  }
 }
