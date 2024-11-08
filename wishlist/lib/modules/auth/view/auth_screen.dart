@@ -77,7 +77,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             );
         }
       } else {
-        ScaffoldMessenger.of(context).showGenericError(context);
+        ScaffoldMessenger.of(context).showGenericError();
       }
     }
   }

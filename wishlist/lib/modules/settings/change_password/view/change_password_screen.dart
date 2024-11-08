@@ -53,7 +53,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       final statusCode = appException.statusCode;
       switch (statusCode) {
         case 401:
-          ScaffoldMessenger.of(context).showGenericError(context);
+          ScaffoldMessenger.of(context).showGenericError();
         case 403:
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

@@ -52,7 +52,7 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
           );
         case 401:
         default:
-          ScaffoldMessenger.of(context).showGenericError(context);
+          ScaffoldMessenger.of(context).showGenericError();
       }
     }
   }

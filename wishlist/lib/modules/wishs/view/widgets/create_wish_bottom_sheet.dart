@@ -61,7 +61,7 @@ class _CreateWishBottomSheetState
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showGenericError(context);
+        ScaffoldMessenger.of(context).showGenericError();
       }
     }
   }

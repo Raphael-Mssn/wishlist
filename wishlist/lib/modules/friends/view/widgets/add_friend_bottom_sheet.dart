@@ -60,7 +60,7 @@ class _AddFriendBottomSheetState extends ConsumerState<AddFriendBottomSheet> {
                 searchState.when(
                   loading: () => const CircularProgressIndicator(),
                   error: (error, stackTrace) {
-                    ScaffoldMessenger.of(context).showGenericError(context);
+                    ScaffoldMessenger.of(context).showGenericError();
                     return const SizedBox.shrink();
                   },
                   data: (users) {
