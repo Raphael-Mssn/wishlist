@@ -11,6 +11,7 @@ import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
+import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 
 class _EditWishBottomSheet extends ConsumerStatefulWidget {
   const _EditWishBottomSheet({
@@ -79,18 +80,53 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
           );
 
       if (mounted) {
+        context.pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(context.l10n.updateSuccess),
           ),
         );
-        context.pop();
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showGenericError(context);
       }
     }
+  }
+
+  void onDeleteWish() {
+    final l10n = context.l10n;
+
+    showAppDialog(
+      context,
+      title: l10n.deleteWish,
+      content: const SizedBox.shrink(),
+      confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
+      onConfirm: () async {
+        try {
+          await ref
+              .read(wishsFromWishlistProvider(widget.wishlist.id).notifier)
+              .deleteWish(
+                widget.wish.id,
+              );
+          if (mounted) {
+            context.pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.deleteWishlistSuccess),
+              ),
+            );
+          }
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showGenericError(
+              context,
+            );
+          }
+        }
+      },
+      onCancel: () {},
+    );
   }
 
   @override
@@ -121,6 +157,8 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
       linkInputController: _linkInputController,
       descriptionInputController: _descriptionInputController,
       onSubmit: onEditWish,
+      onSecondaryButtonTapped: onDeleteWish,
+      secondaryButtonLabel: l10n.deleteWish,
     );
   }
 }
