@@ -37,7 +37,7 @@ class AppBottomSheetWithThemeAndAppBarLayout extends StatelessWidget {
 
   final ThemeData theme;
   final String title;
-  final Icon actionIcon;
+  final IconData actionIcon;
   final Function() onActionTapped;
   final Widget body;
 
@@ -54,7 +54,10 @@ class AppBottomSheetWithThemeAndAppBarLayout extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: IconButton(
-                  icon: actionIcon,
+                  icon: Icon(
+                    actionIcon,
+                    size: 32,
+                  ),
                   onPressed: onActionTapped,
                 ),
               ),

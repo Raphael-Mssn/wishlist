@@ -116,7 +116,7 @@ class _WishFormState extends State<WishForm> {
       child: AppBottomSheetWithThemeAndAppBarLayout(
         title: widget.title,
         theme: widget.theme,
-        actionIcon: const Icon(Icons.favorite_border),
+        actionIcon: Icons.favorite_border,
         onActionTapped: () {},
         body: Column(
           children: [
