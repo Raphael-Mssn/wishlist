@@ -19,6 +19,8 @@ class WishForm extends StatefulWidget {
     required this.descriptionInputController,
     required this.formKey,
     required this.onSubmit,
+    this.onSecondaryButtonTapped,
+    this.secondaryButtonLabel,
   });
 
   final String title;
@@ -31,6 +33,8 @@ class WishForm extends StatefulWidget {
   final TextEditingController descriptionInputController;
   final GlobalKey<FormState> formKey;
   final VoidCallback onSubmit;
+  final VoidCallback? onSecondaryButtonTapped;
+  final String? secondaryButtonLabel;
 
   @override
   State<WishForm> createState() => _WishFormState();
@@ -39,6 +43,11 @@ class WishForm extends StatefulWidget {
 class _WishFormState extends State<WishForm> {
   final _scrollController = ScrollController();
   final _focusNodes = List.generate(5, (_) => FocusNode());
+  bool isKeyboardOpen = false;
+
+  bool hasAnyFocus() {
+    return _focusNodes.any((focusNode) => focusNode.hasFocus);
+  }
 
   @override
   void initState() {
@@ -48,6 +57,17 @@ class _WishFormState extends State<WishForm> {
       focusNode.addListener(() {
         if (focusNode.hasFocus) {
           _scrollToFocusedField(focusNode);
+          setState(() {
+            isKeyboardOpen = true;
+          });
+        }
+        if (!hasAnyFocus()) {
+          // Delay to wait for the keyboard to close
+          Future.delayed(const Duration(milliseconds: 200), () {
+            setState(() {
+              isKeyboardOpen = false;
+            });
+          });
         }
       });
     }
@@ -97,73 +117,107 @@ class _WishFormState extends State<WishForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final onSecondaryButtonTapped = widget.onSecondaryButtonTapped;
+    final secondaryButtonLabel = widget.secondaryButtonLabel;
+    final hasSecondaryButton =
+        onSecondaryButtonTapped != null && secondaryButtonLabel != null;
 
-    return AppBottomSheetWithThemeAndAppBarLayout(
-      title: widget.title,
-      theme: widget.theme,
-      actionIcon: const Icon(Icons.favorite_border),
-      onActionTapped: () {},
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Form(
-                key: widget.formKey,
-                child: Column(
-                  children: [
-                    WishProperty(
-                      icon: Icons.sell_outlined,
-                      label: l10n.wishNameLabel,
-                      inputController: widget.nameInputController,
-                      validator: (value) => notNullValidator(value, l10n),
-                      focusNode: _focusNodes[0],
-                    ),
-                    const Gap(16),
-                    WishProperty(
-                      icon: Icons.attach_money,
-                      label: l10n.wishPriceLabel,
-                      inputController: widget.priceInputController,
-                      inputTextAlign: TextAlign.center,
-                      focusNode: _focusNodes[1],
-                    ),
-                    const Gap(16),
-                    WishProperty(
-                      icon: Icons.one_x_mobiledata,
-                      label: l10n.wishQuantityLabel,
-                      inputController: widget.quantityInputController,
-                      inputTextAlign: TextAlign.center,
-                      focusNode: _focusNodes[2],
-                    ),
-                    const Gap(16),
-                    WishProperty(
-                      icon: Icons.link,
-                      label: l10n.wishLinkLabel,
-                      inputController: widget.linkInputController,
-                      focusNode: _focusNodes[3],
-                    ),
-                    const Gap(16),
-                    WishProperty(
-                      icon: Icons.description_outlined,
-                      label: l10n.wishDescriptionLabel,
-                      inputController: widget.descriptionInputController,
-                      isInputBellow: true,
-                      isMultilineInput: true,
-                      focusNode: _focusNodes[4],
-                    ),
-                    const Gap(16),
-                  ],
+    return GestureDetector(
+      onTap: () {
+        for (final focusNode in _focusNodes) {
+          focusNode.unfocus();
+        }
+      },
+      child: AppBottomSheetWithThemeAndAppBarLayout(
+        title: widget.title,
+        theme: widget.theme,
+        actionIcon: const Icon(Icons.favorite_border),
+        onActionTapped: () {},
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Form(
+                  key: widget.formKey,
+                  child: Column(
+                    children: [
+                      WishProperty(
+                        icon: Icons.sell_outlined,
+                        label: l10n.wishNameLabel,
+                        inputController: widget.nameInputController,
+                        validator: (value) => notNullValidator(value, l10n),
+                        focusNode: _focusNodes[0],
+                      ),
+                      const Gap(16),
+                      WishProperty(
+                        icon: Icons.attach_money,
+                        label: l10n.wishPriceLabel,
+                        inputController: widget.priceInputController,
+                        inputTextAlign: TextAlign.center,
+                        focusNode: _focusNodes[1],
+                      ),
+                      const Gap(16),
+                      WishProperty(
+                        icon: Icons.one_x_mobiledata,
+                        label: l10n.wishQuantityLabel,
+                        inputController: widget.quantityInputController,
+                        inputTextAlign: TextAlign.center,
+                        focusNode: _focusNodes[2],
+                      ),
+                      const Gap(16),
+                      WishProperty(
+                        icon: Icons.link,
+                        label: l10n.wishLinkLabel,
+                        inputController: widget.linkInputController,
+                        focusNode: _focusNodes[3],
+                      ),
+                      const Gap(16),
+                      WishProperty(
+                        icon: Icons.description_outlined,
+                        label: l10n.wishDescriptionLabel,
+                        inputController: widget.descriptionInputController,
+                        isInputBellow: true,
+                        isMultilineInput: true,
+                        focusNode: _focusNodes[4],
+                      ),
+                      const Gap(16),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          PrimaryButton(
-            text: widget.submitLabel,
-            onPressed: onSubmit,
-            style: BaseButtonStyle.large,
-            isStretched: true,
-          ),
-        ],
+            Column(
+              children: [
+                if (hasSecondaryButton) ...[
+                  AnimatedSwitcher(
+                    duration: kThemeAnimationDuration,
+                    child: isKeyboardOpen
+                        ? const SizedBox.shrink()
+                        : Builder(
+                            // Needed to have the context with wishlist theme
+                            builder: (context) {
+                              return SecondaryButton(
+                                text: secondaryButtonLabel,
+                                onPressed: onSecondaryButtonTapped,
+                                style: BaseButtonStyle.large,
+                                isStretched: true,
+                              );
+                            },
+                          ),
+                  ),
+                  const Gap(12),
+                ],
+                PrimaryButton(
+                  text: widget.submitLabel,
+                  onPressed: onSubmit,
+                  style: BaseButtonStyle.large,
+                  isStretched: true,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
