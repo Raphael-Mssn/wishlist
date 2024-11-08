@@ -41,7 +41,6 @@ class WishForm extends StatefulWidget {
 }
 
 class _WishFormState extends State<WishForm> {
-  final _scrollController = ScrollController();
   final _focusNodes = List.generate(5, (_) => FocusNode());
   bool isKeyboardOpen = false;
 
@@ -56,7 +55,6 @@ class _WishFormState extends State<WishForm> {
     for (final focusNode in _focusNodes) {
       focusNode.addListener(() {
         if (focusNode.hasFocus) {
-          _scrollToFocusedField(focusNode);
           setState(() {
             isKeyboardOpen = true;
           });
@@ -92,21 +90,8 @@ class _WishFormState extends State<WishForm> {
     widget.onSubmit();
   }
 
-  void _scrollToFocusedField(FocusNode focusNode) {
-    final context = focusNode.context;
-    if (context != null && _scrollController.hasClients) {
-      Scrollable.ensureVisible(
-        alignment: 0.2,
-        context,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
-
   @override
   void dispose() {
-    _scrollController.dispose();
     for (final focusNode in _focusNodes) {
       focusNode.dispose();
     }
@@ -137,7 +122,6 @@ class _WishFormState extends State<WishForm> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                controller: _scrollController,
                 child: Form(
                   key: widget.formKey,
                   child: Column(
@@ -148,6 +132,7 @@ class _WishFormState extends State<WishForm> {
                         inputController: widget.nameInputController,
                         validator: (value) => notNullValidator(value, l10n),
                         focusNode: _focusNodes[0],
+                        nextFocusNode: _focusNodes[1],
                       ),
                       const Gap(16),
                       WishProperty(
@@ -156,6 +141,7 @@ class _WishFormState extends State<WishForm> {
                         inputController: widget.priceInputController,
                         inputTextAlign: TextAlign.center,
                         focusNode: _focusNodes[1],
+                        nextFocusNode: _focusNodes[2],
                       ),
                       const Gap(16),
                       WishProperty(
@@ -164,6 +150,7 @@ class _WishFormState extends State<WishForm> {
                         inputController: widget.quantityInputController,
                         inputTextAlign: TextAlign.center,
                         focusNode: _focusNodes[2],
+                        nextFocusNode: _focusNodes[3],
                       ),
                       const Gap(16),
                       WishProperty(
@@ -171,6 +158,7 @@ class _WishFormState extends State<WishForm> {
                         label: l10n.wishLinkLabel,
                         inputController: widget.linkInputController,
                         focusNode: _focusNodes[3],
+                        nextFocusNode: _focusNodes[4],
                       ),
                       const Gap(16),
                       WishProperty(
@@ -180,6 +168,7 @@ class _WishFormState extends State<WishForm> {
                         isInputBellow: true,
                         isMultilineInput: true,
                         focusNode: _focusNodes[4],
+                        nextFocusNode: null,
                       ),
                       const Gap(16),
                     ],

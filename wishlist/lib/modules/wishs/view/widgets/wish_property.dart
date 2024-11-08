@@ -9,8 +9,9 @@ class WishProperty extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.inputController,
+    required this.focusNode,
+    required this.nextFocusNode,
     this.validator,
-    this.focusNode,
     this.inputTextAlign = TextAlign.start,
     this.isInputBellow = false,
     this.isMultilineInput = false,
@@ -20,7 +21,8 @@ class WishProperty extends StatelessWidget {
   final String label;
   final TextEditingController inputController;
   final String? Function(String?)? validator;
-  final FocusNode? focusNode;
+  final FocusNode focusNode;
+  final FocusNode? nextFocusNode;
   final TextAlign inputTextAlign;
   final bool isInputBellow;
   final bool isMultilineInput;
@@ -45,6 +47,11 @@ class WishProperty extends StatelessWidget {
       textAlign: inputTextAlign,
       controller: inputController,
       focusNode: focusNode,
+      onFieldSubmitted: (_) {
+        if (nextFocusNode != null) {
+          FocusScope.of(context).requestFocus(nextFocusNode);
+        }
+      },
       validator: validator,
       cursorErrorColor: Colors.red,
       decoration: InputDecoration(
