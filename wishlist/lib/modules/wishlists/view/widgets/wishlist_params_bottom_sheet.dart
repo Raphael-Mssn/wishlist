@@ -34,7 +34,7 @@ class _WishlistParamsBottomSheetState
   void onChangeColor() {}
   void onAddCollaborator() {}
 
-  void onDeleteWishlist(BuildContext context) {
+  void onDeleteWishlist() {
     final l10n = context.l10n;
 
     showAppDialog(
@@ -47,7 +47,7 @@ class _WishlistParamsBottomSheetState
           await ref
               .read(wishlistsProvider.notifier)
               .deleteWishlist(widget.wishlist.id);
-          if (context.mounted) {
+          if (mounted) {
             HomeRoute().go(context);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -56,7 +56,7 @@ class _WishlistParamsBottomSheetState
             );
           }
         } catch (e) {
-          if (context.mounted) {
+          if (mounted) {
             ScaffoldMessenger.of(context).showGenericError();
           }
         }
@@ -207,7 +207,7 @@ class _WishlistParamsBottomSheetState
                   builder: (context) {
                     return SecondaryButton(
                       text: l10n.deleteWishlist,
-                      onPressed: () => onDeleteWishlist(context),
+                      onPressed: onDeleteWishlist,
                       style: BaseButtonStyle.large,
                       isStretched: true,
                     );
