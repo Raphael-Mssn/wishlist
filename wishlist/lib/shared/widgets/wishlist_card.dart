@@ -18,7 +18,7 @@ class WishlistCard extends StatelessWidget {
     final borderRadius = BorderRadius.circular(36);
 
     void onTap() {
-      WishlistRoute.fromObject(wishlist: wishlist).push(context);
+      WishlistRoute(wishlistId: wishlist.id).push(context);
     }
 
     return Card(

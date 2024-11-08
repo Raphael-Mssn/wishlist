@@ -73,7 +73,7 @@ extension $WishlistRouteExtension on WishlistRoute {
   String get location => GoRouteData.$location(
         '/wishlist',
         queryParams: {
-          'wishlist-id': wishlistId!.toString(),
+          'wishlist-id': wishlistId.toString(),
         },
       );
 
