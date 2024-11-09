@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/modules/wishs/view/widgets/edit_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
-import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 
@@ -11,11 +10,9 @@ class WishCard extends StatelessWidget {
   const WishCard({
     super.key,
     required this.wish,
-    required this.wishlist,
   });
 
   final Wish wish;
-  final Wishlist wishlist;
 
   void onTap(BuildContext context) {
     showEditWishBottomSheet(context, wish);
