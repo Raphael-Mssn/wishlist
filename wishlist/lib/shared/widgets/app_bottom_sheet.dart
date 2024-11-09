@@ -8,6 +8,9 @@ Future<void> showAppBottomSheet(
   required Widget body,
 }) async {
   const radius = Radius.circular(25);
+  // Ensure the theme is the same as the one from the context passed,
+  // not the one from the builder of showBarModalBottomSheet
+  final theme = Theme.of(context);
 
   await showBarModalBottomSheet<void>(
     context: context,
@@ -20,7 +23,12 @@ Future<void> showAppBottomSheet(
       ),
     ),
     builder: (context) {
-      return Scaffold(body: body);
+      return Scaffold(
+        body: AnimatedTheme(
+          data: theme,
+          child: body,
+        ),
+      );
     },
   );
 }
