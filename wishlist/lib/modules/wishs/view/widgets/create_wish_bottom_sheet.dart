@@ -7,7 +7,6 @@ import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
-import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 
 class _CreateWishBottomSheet extends ConsumerStatefulWidget {
@@ -80,14 +79,11 @@ class _CreateWishBottomSheetState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final wishlist = widget.wishlist;
-    final wishlistTheme = getWishlistTheme(context, wishlist);
 
     return WishForm(
       formKey: _formKey,
       title: l10n.createWishBottomSheetTitle,
       submitLabel: l10n.createButton,
-      theme: wishlistTheme,
       nameInputController: _nameInputController,
       priceInputController: _priceInputController,
       quantityInputController: _quantityInputController,

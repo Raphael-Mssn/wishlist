@@ -11,7 +11,6 @@ class WishForm extends StatefulWidget {
     super.key,
     required this.title,
     required this.submitLabel,
-    required this.theme,
     required this.nameInputController,
     required this.priceInputController,
     required this.quantityInputController,
@@ -25,7 +24,6 @@ class WishForm extends StatefulWidget {
 
   final String title;
   final String submitLabel;
-  final ThemeData theme;
   final TextEditingController nameInputController;
   final TextEditingController priceInputController;
   final TextEditingController quantityInputController;
@@ -115,7 +113,7 @@ class _WishFormState extends State<WishForm> {
       },
       child: AppBottomSheetWithThemeAndAppBarLayout(
         title: widget.title,
-        theme: widget.theme,
+        theme: Theme.of(context),
         actionIcon: Icons.favorite_border,
         onActionTapped: () {},
         body: Column(
