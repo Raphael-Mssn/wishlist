@@ -23,14 +23,14 @@ class SettingsScreen extends ConsumerWidget {
       title: l10n.settingsScreenTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
+        children: [
           const Gap(8),
           Row(
-            children: <Widget>[
+            children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     Text(
                       l10n.settingsScreenEmail,
                       style: AppTextStyles.smaller.copyWith(
@@ -45,12 +45,6 @@ class SettingsScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-              ),
-              const Gap(16),
-              PrimaryButton(
-                text: l10n.settingsScreenEmailModify,
-                onPressed: () {},
-                style: BaseButtonStyle.medium,
               ),
             ],
           ),
@@ -75,12 +69,6 @@ class SettingsScreen extends ConsumerWidget {
             onPressed: () {
               ChangePasswordRoute().push(context);
             },
-            style: BaseButtonStyle.medium,
-          ),
-          const Gap(24),
-          PrimaryButton(
-            text: l10n.settingsScreenDeleteAccount,
-            onPressed: () {},
             style: BaseButtonStyle.medium,
           ),
         ],
