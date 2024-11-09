@@ -46,12 +46,6 @@ class SettingsScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              const Gap(16),
-              PrimaryButton(
-                text: l10n.settingsScreenEmailModify,
-                onPressed: () {},
-                style: BaseButtonStyle.medium,
-              ),
             ],
           ),
           const Gap(40),
@@ -75,12 +69,6 @@ class SettingsScreen extends ConsumerWidget {
             onPressed: () {
               ChangePasswordRoute().push(context);
             },
-            style: BaseButtonStyle.medium,
-          ),
-          const Gap(24),
-          PrimaryButton(
-            text: l10n.settingsScreenDeleteAccount,
-            onPressed: () {},
             style: BaseButtonStyle.medium,
           ),
         ],
