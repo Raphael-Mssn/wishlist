@@ -20,6 +20,10 @@ class WishlistService {
     return _wishlistRepository.getWishlistsByUser(userId);
   }
 
+  Future<IList<Wishlist>> getPublicWishlistsByUser(String userId) async {
+    return _wishlistRepository.getPublicWishlistsByUser(userId);
+  }
+
   Future<Wishlist> getWishlistById(int wishlistId) async {
     return _wishlistRepository.getWishlistById(wishlistId);
   }

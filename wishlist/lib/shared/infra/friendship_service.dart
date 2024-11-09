@@ -80,8 +80,9 @@ class FriendshipService {
   Future<FriendDetails> getFriendDetails(String userId) async {
     final appUser = await ref.read(userServiceProvider).getAppUserById(userId);
     final mutualFriends = await _getMutualFriends(userId);
-    final wishlists =
-        await ref.read(wishlistServiceProvider).getWishlistsByUser(userId);
+    final wishlists = await ref
+        .read(wishlistServiceProvider)
+        .getPublicWishlistsByUser(userId);
 
     // TODO: Get nbWishs
     const nbWishs = 0;

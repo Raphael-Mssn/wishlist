@@ -7,6 +7,8 @@ abstract class WishlistRepository {
 
   Future<IList<Wishlist>> getWishlistsByUser(String userId);
 
+  Future<IList<Wishlist>> getPublicWishlistsByUser(String userId);
+
   Future<Wishlist> getWishlistById(int wishlistId);
 
   Future<void> updateWishlistsOrder(IList<Wishlist> wishlists);

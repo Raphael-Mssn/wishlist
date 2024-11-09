@@ -50,7 +50,7 @@
   "numberOfWishs": "{count, plural, =0 {0 wish} =1 {1 wish} other {{count} wishs}}",
   "friendDetailsMutualFriendsTitle": "Mutual friends",
   "friendDetailsNoMutualFriends": "No mutual friends",
-  "friendDetailsWishlistsTitle": "Wishlists",
+  "friendDetailsWishlistsTitle": "Public wishlists",
   "myWishlists": "My wishlists",
   "wishlistStatusPending": "Pending",
   "wishlistStatusBooked": "Booked",
