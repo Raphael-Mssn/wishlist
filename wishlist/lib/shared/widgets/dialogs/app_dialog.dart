@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/gen/fonts.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/theme/widgets/cancel_button.dart';
+import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 
 class _DialogLayout extends StatelessWidget {
   const _DialogLayout({
