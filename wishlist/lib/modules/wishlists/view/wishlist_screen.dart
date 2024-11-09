@@ -169,7 +169,6 @@ class WishlistScreen extends ConsumerWidget {
                                 return WishCard(
                                   key: ValueKey(wish.id),
                                   wish: wish,
-                                  wishlist: wishlist,
                                 );
                               },
                             ),
