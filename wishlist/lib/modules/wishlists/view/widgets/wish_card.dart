@@ -18,7 +18,7 @@ class WishCard extends StatelessWidget {
   final Wishlist wishlist;
 
   void onTap(BuildContext context) {
-    showEditWishBottomSheet(context, wish, wishlist);
+    showEditWishBottomSheet(context, wish);
   }
 
   @override

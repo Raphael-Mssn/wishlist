@@ -3,24 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form.dart';
+import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/utils/double_extension.dart';
 import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
 import 'package:wishlist/shared/models/wish/update_request/wish_update_request.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
-import 'package:wishlist/shared/models/wishlist/wishlist.dart';
-import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 
 class _EditWishBottomSheet extends ConsumerStatefulWidget {
   const _EditWishBottomSheet({
     required this.wish,
-    required this.wishlist,
   });
 
   final Wish wish;
-  final Wishlist wishlist;
 
   @override
   ConsumerState<_EditWishBottomSheet> createState() =>
@@ -60,23 +57,26 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
     final link = _linkInputController.text;
     final description = _descriptionInputController.text;
 
-    final wish = WishUpdateRequest(
+    final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
+    final wish = widget.wish;
+
+    final updateWishRequest = WishUpdateRequest(
       name: name,
       price: double.tryParse(price),
       quantity: int.tryParse(quantity),
       description: description,
-      wishlistId: widget.wishlist.id,
-      updatedBy: widget.wishlist.idOwner,
+      wishlistId: wish.wishlistId,
+      updatedBy: currentUserId,
       updatedAt: DateTime.now(),
       linkUrl: link,
     );
 
     try {
       await ref
-          .read(wishsFromWishlistProvider(widget.wishlist.id).notifier)
+          .read(wishsFromWishlistProvider(wish.wishlistId).notifier)
           .updateWish(
-            widget.wish.id,
-            wish,
+            wish.id,
+            updateWishRequest,
           );
 
       if (mounted) {
@@ -105,7 +105,7 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
       onConfirm: () async {
         try {
           await ref
-              .read(wishsFromWishlistProvider(widget.wishlist.id).notifier)
+              .read(wishsFromWishlistProvider(widget.wish.wishlistId).notifier)
               .deleteWish(
                 widget.wish.id,
               );
@@ -161,13 +161,11 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
 Future<void> showEditWishBottomSheet(
   BuildContext context,
   Wish wish,
-  Wishlist wishlist,
 ) async {
   await showAppBottomSheet(
     context,
     body: _EditWishBottomSheet(
       wish: wish,
-      wishlist: wishlist,
     ),
   );
 }
