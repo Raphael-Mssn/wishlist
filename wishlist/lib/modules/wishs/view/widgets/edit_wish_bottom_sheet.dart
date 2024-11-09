@@ -141,14 +141,11 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final wishlist = widget.wishlist;
-    final wishlistTheme = getWishlistTheme(context, wishlist);
 
     return WishForm(
       formKey: _formKey,
       title: l10n.editWishBottomSheetTitle,
       submitLabel: l10n.editButton,
-      theme: wishlistTheme,
       nameInputController: _nameInputController,
       priceInputController: _priceInputController,
       quantityInputController: _quantityInputController,
