@@ -7,4 +7,5 @@ abstract class WishRepository {
   Future<IList<Wish>> getWishsFromWishlist(int wishlistId);
   Future<Wish> createWish(WishCreateRequest wishlist);
   Future<Wish> updateWish(int wishId, WishUpdateRequest wish);
+  Future<void> deleteWish(int wishId);
 }
