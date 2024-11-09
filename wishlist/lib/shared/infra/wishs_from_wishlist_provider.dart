@@ -1,19 +1,21 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/wish_service.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 
-class WishsFromWishlistNotifier extends StateNotifier<AsyncValue<List<Wish>>> {
+class WishsFromWishlistNotifier extends StateNotifier<AsyncValue<IList<Wish>>> {
   WishsFromWishlistNotifier(this._service, int wishlistId)
       : super(const AsyncValue.loading()) {
     loadWishs(wishlistId);
   }
+
   final WishService _service;
 
   Future<void> loadWishs(int wishlistId) async {
     try {
       final wishs = await _service.getWishsFromWishlist(wishlistId);
-      state = AsyncValue.data(wishs.toList());
+      state = AsyncValue.data(wishs);
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
     }
@@ -29,7 +31,7 @@ class WishsFromWishlistNotifier extends StateNotifier<AsyncValue<List<Wish>>> {
         (data) => [
           ...data,
           wish,
-        ],
+        ].toIList(),
       );
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
@@ -38,7 +40,7 @@ class WishsFromWishlistNotifier extends StateNotifier<AsyncValue<List<Wish>>> {
 }
 
 final wishsFromWishlistProvider = StateNotifierProvider.family<
-    WishsFromWishlistNotifier, AsyncValue<List<Wish>>, int>((ref, wishlistId) {
+    WishsFromWishlistNotifier, AsyncValue<IList<Wish>>, int>((ref, wishlistId) {
   final service = ref.read(wishServiceProvider);
   return WishsFromWishlistNotifier(service, wishlistId);
 });

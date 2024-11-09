@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/modules/wishlists/infra/wishlist_by_id_provider.dart';
+import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_provider.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wish_card.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_params_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishs/create_wish_bottom_sheet.dart';
@@ -29,11 +30,13 @@ class WishlistScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final wishlist = ref.watch(wishlistByIdProvider(wishlistId));
+    final wishlistScreenData =
+        ref.watch(wishlistScreenDataProvider(wishlistId));
 
     return Scaffold(
-      body: wishlist.when(
-        data: (wishlist) {
+      body: wishlistScreenData.when(
+        data: (wishlistScreenData) {
+          final wishlist = wishlistScreenData.wishlist;
           final wishlistTheme = getWishlistTheme(context, wishlist);
           final isMyWishlist = wishlist.idOwner ==
               ref.read(userServiceProvider).getCurrentUserId();
@@ -75,7 +78,7 @@ class WishlistScreen extends ConsumerWidget {
                 ),
               ),
               body: _buildWishlistDetail(
-                wishlist,
+                wishlistScreenData,
                 context,
                 isMyWishlist: isMyWishlist,
               ),
@@ -91,11 +94,14 @@ class WishlistScreen extends ConsumerWidget {
   }
 
   Widget _buildWishlistDetail(
-    Wishlist wishlist,
+    WishlistScreenData wishlistScreenData,
     BuildContext context, {
     required bool isMyWishlist,
   }) {
     final l10n = context.l10n;
+    final wishlist = wishlistScreenData.wishlist;
+    final wishs = wishlistScreenData.wishs;
+    final hasWishs = wishs.isNotEmpty;
 
     return Stack(
       children: [
@@ -133,19 +139,31 @@ class WishlistScreen extends ConsumerWidget {
                 ),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: PageLayoutEmptyContent(
-                        illustrationUrl: Assets.svg.noWishlist,
-                        illustrationHeight: constraints.maxHeight / 2,
-                        title: l10n.wishlistNoWish,
-                        callToAction:
-                            isMyWishlist ? l10n.wishlistAddWish : null,
-                        onCallToAction: isMyWishlist
-                            ? () => onAddWish(context, wishlist)
-                            : null,
-                      ),
-                    );
+                    return hasWishs
+                        ? ListView.separated(
+                            itemCount: wishs.length,
+                            separatorBuilder: (context, index) => const Gap(8),
+                            itemBuilder: (context, index) {
+                              final wish = wishs[index];
+                              return WishCard(
+                                key: ValueKey(wish.id),
+                                wish: wish,
+                              );
+                            },
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: PageLayoutEmptyContent(
+                              illustrationUrl: Assets.svg.noWishlist,
+                              illustrationHeight: constraints.maxHeight / 2,
+                              title: l10n.wishlistNoWish,
+                              callToAction:
+                                  isMyWishlist ? l10n.wishlistAddWish : null,
+                              onCallToAction: isMyWishlist
+                                  ? () => onAddWish(context, wishlist)
+                                  : null,
+                            ),
+                          );
                   },
                 ),
               ),

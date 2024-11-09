@@ -32,7 +32,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   animated_reorderable_list: ^1.1.1
   animated_toggle_switch: ^0.8.3
+  async_value_group: ^1.0.1
   cupertino_icons: ^1.0.6
+  currency_formatter: ^2.2.1
   email_validator: ^2.1.17
   equatable: ^2.0.5
   fast_immutable_collections: ^11.0.0
