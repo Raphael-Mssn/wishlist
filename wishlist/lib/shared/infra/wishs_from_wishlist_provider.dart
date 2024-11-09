@@ -6,14 +6,15 @@ import 'package:wishlist/shared/models/wish/update_request/wish_update_request.d
 import 'package:wishlist/shared/models/wish/wish.dart';
 
 class WishsFromWishlistNotifier extends StateNotifier<AsyncValue<IList<Wish>>> {
-  WishsFromWishlistNotifier(this._service, int wishlistId)
+  WishsFromWishlistNotifier(this._service, this.wishlistId)
       : super(const AsyncValue.loading()) {
-    loadWishs(wishlistId);
+    loadWishs();
   }
 
   final WishService _service;
+  final int wishlistId;
 
-  Future<void> loadWishs(int wishlistId) async {
+  Future<void> loadWishs() async {
     try {
       final wishs = await _service.getWishsFromWishlist(wishlistId);
       state = AsyncValue.data(wishs);
