@@ -11,8 +11,9 @@ _$FriendDetailsImpl _$$FriendDetailsImplFromJson(Map<String, dynamic> json) =>
       appUser: AppUser.fromJson(json['app_user'] as Map<String, dynamic>),
       mutualFriends: ISet<AppUser>.fromJson(json['mutual_friends'],
           (value) => AppUser.fromJson(value as Map<String, dynamic>)),
-      wishlists: IList<Wishlist>.fromJson(json['wishlists'],
+      publicWishlists: IList<Wishlist>.fromJson(json['public_wishlists'],
           (value) => Wishlist.fromJson(value as Map<String, dynamic>)),
+      nbWishlists: (json['nb_wishlists'] as num).toInt(),
       nbWishs: (json['nb_wishs'] as num).toInt(),
     );
 
@@ -22,8 +23,9 @@ Map<String, dynamic> _$$FriendDetailsImplToJson(_$FriendDetailsImpl instance) =>
       'mutual_friends': instance.mutualFriends.toJson(
         (value) => value,
       ),
-      'wishlists': instance.wishlists.toJson(
+      'public_wishlists': instance.publicWishlists.toJson(
         (value) => value,
       ),
+      'nb_wishlists': instance.nbWishlists,
       'nb_wishs': instance.nbWishs,
     };

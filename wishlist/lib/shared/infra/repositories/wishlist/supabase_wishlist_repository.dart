@@ -88,6 +88,30 @@ class SupabaseWishlistRepository implements WishlistRepository {
   }
 
   @override
+  Future<int> getNbWishlistsByUser(String userId) async {
+    try {
+      final response = await _client
+          .from(_wishlistsTableName)
+          .select('id')
+          .eq('id_owner', userId)
+          .count();
+
+      return response.count;
+    } on PostgrestException catch (e) {
+      final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
+      throw AppException(
+        statusCode: statusCode ?? 500,
+        message: e.message,
+      );
+    } catch (e) {
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to get number of wishlists',
+      );
+    }
+  }
+
+  @override
   Future<Wishlist> getWishlistById(int wishlistId) async {
     try {
       final response = await _client

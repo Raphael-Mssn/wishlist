@@ -14,6 +14,10 @@ class WishService {
     return _wishRepository.getWishsFromWishlist(wishlistId);
   }
 
+  Future<int> getNbWishsByUser(String userId) async {
+    return _wishRepository.getNbWishsByUser(userId);
+  }
+
   Future<Wish> createWish(WishCreateRequest wishCreateRequest) async {
     return _wishRepository.createWish(wishCreateRequest);
   }
