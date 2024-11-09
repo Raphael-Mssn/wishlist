@@ -10,7 +10,7 @@ import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/models/profile.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
-import 'package:wishlist/shared/theme/widgets/primary_button.dart';
+import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/validators/pseudo_validator.dart';
 
 class PseudoScreen extends ConsumerStatefulWidget {
@@ -99,7 +99,7 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
             PrimaryButton(
               onPressed: onPressed,
               text: l10n.savePseudo,
-              style: PrimaryButtonStyle.large,
+              style: BaseButtonStyle.large,
               isLoading: _isLoading,
             ),
           ],

@@ -12,4 +12,6 @@ abstract class WishlistRepository {
   Future<void> updateWishlistsOrder(IList<Wishlist> wishlists);
 
   Future<void> updateWishlistParams(Wishlist wishlist);
+
+  Future<void> deleteWishlist(int wishlistId);
 }

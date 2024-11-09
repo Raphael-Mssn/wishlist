@@ -4,8 +4,8 @@ import 'package:wishlist/gen/fonts.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/theme/widgets/cancel_button.dart';
-import 'package:wishlist/shared/theme/widgets/primary_button.dart';
 
 class _DialogLayout extends StatelessWidget {
   const _DialogLayout({
@@ -69,7 +69,7 @@ class _DialogLayout extends StatelessWidget {
                 }
               }
             },
-            style: PrimaryButtonStyle.small,
+            style: BaseButtonStyle.small,
           ),
       ],
       backgroundColor: AppColors.background,
@@ -86,6 +86,9 @@ Future<void> showAppDialog(
   void Function()? onCancel,
 }) async {
   final l10n = context.l10n;
+  // Needed to have the actual theme of passed context
+  // and not the one from the builder
+  final theme = Theme.of(context);
 
   return showGeneralDialog<void>(
     context: context,
@@ -112,18 +115,21 @@ Future<void> showAppDialog(
               onTap: () {
                 context.pop();
               },
-              child: Scaffold(
-                backgroundColor: Colors.transparent,
-                body: Center(
-                  child: GestureDetector(
-                    // Disable dialog closing on dialog click
-                    onTap: () {},
-                    child: _DialogLayout(
-                      title: title,
-                      content: content,
-                      confirmLabel: confirmButtonLabel,
-                      onConfirm: onConfirm,
-                      onCancel: onCancel,
+              child: AnimatedTheme(
+                data: theme,
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: Center(
+                    child: GestureDetector(
+                      // Disable dialog closing on dialog click
+                      onTap: () {},
+                      child: _DialogLayout(
+                        title: title,
+                        content: content,
+                        confirmLabel: confirmButtonLabel,
+                        onConfirm: onConfirm,
+                        onCancel: onCancel,
+                      ),
                     ),
                   ),
                 ),
