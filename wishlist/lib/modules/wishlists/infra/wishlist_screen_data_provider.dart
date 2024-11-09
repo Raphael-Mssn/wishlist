@@ -1,7 +1,7 @@
 import 'package:async_value_group/async_value_group.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wishlist/modules/wishlists/infra/wishlist_by_id_provider.dart';
+import 'package:wishlist/shared/infra/wishlist_by_id_provider.dart';
 import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';

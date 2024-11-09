@@ -7,7 +7,7 @@ import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_provider.d
 import 'package:wishlist/modules/wishlists/view/widgets/wish_card.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_params_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
-import 'package:wishlist/modules/wishs/create_wish_bottom_sheet.dart';
+import 'package:wishlist/modules/wishs/view/widgets/create_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty_content.dart';
@@ -71,6 +71,7 @@ class WishlistScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
+                  centerTitle: true,
                   shape: const RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.vertical(bottom: Radius.circular(32)),
@@ -148,6 +149,7 @@ class WishlistScreen extends ConsumerWidget {
                               return WishCard(
                                 key: ValueKey(wish.id),
                                 wish: wish,
+                                wishlist: wishlist,
                               );
                             },
                           )
