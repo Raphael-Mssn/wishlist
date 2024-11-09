@@ -10,6 +10,7 @@ import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
@@ -115,150 +116,113 @@ class _WishlistParamsBottomSheetState
 
     final l10n = context.l10n;
     final wishlist = widget.wishlist;
-    final wishlistColor = AppColors.getColorFromHexValue(wishlist.color);
-    final wishlistDarkColor = AppColors.darken(wishlistColor);
-    final currentTheme = Theme.of(context);
-    final wishlistTheme = currentTheme.copyWith(
-      primaryColor: wishlistColor,
-      primaryColorDark: wishlistDarkColor,
-      appBarTheme: currentTheme.appBarTheme.copyWith(
-        backgroundColor: wishlistColor,
-      ),
-    );
+    final wishlistTheme = getWishlistTheme(context, wishlist);
 
-    return AnimatedTheme(
-      data: wishlistTheme,
-      child: Column(
+    return AppBottomSheetWithThemeAndAppBarLayout(
+      theme: wishlistTheme,
+      title: wishlist.name,
+      actionIcon: const Icon(
+        Icons.color_lens,
+        size: 32,
+      ),
+      onActionTapped: onChangeColor,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppBar(
-            centerTitle: true,
-            toolbarHeight: 80,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.color_lens,
-                    size: 32,
-                  ),
-                  onPressed: onChangeColor,
+          Text(
+            l10n.wishlistVisibility,
+            style: AppTextStyles.small.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.makara,
+            ),
+          ),
+          const Gap(smallGap),
+          WishlistToggleSwitch(
+            current: isPrivate,
+            onChanged: (value) => setState(() => isPrivate = value),
+            trueLabel: l10n.private,
+            falseLabel: l10n.public,
+            trueIcon: const Icon(
+              Icons.lock,
+              color: AppColors.gainsboro,
+            ),
+            falseIcon: const Icon(
+              Icons.lock_open,
+              color: AppColors.gainsboro,
+            ),
+          ),
+          const Gap(largeGap),
+          Text(
+            l10n.seeTakenWishs,
+            style: AppTextStyles.small.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.makara,
+            ),
+          ),
+          const Gap(smallGap),
+          WishlistToggleSwitch(
+            current: canOwnerSeeTakenWish,
+            onChanged: (value) => setState(() => canOwnerSeeTakenWish = value),
+            trueLabel: l10n.yes,
+            falseLabel: l10n.no,
+            trueIcon: const Icon(
+              Icons.visibility_rounded,
+              color: AppColors.gainsboro,
+            ),
+            falseIcon: const Icon(
+              Icons.visibility_off_rounded,
+              color: AppColors.gainsboro,
+            ),
+          ),
+          const Gap(largeGap),
+          Text(
+            l10n.shareEditionWith,
+            style: AppTextStyles.small.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.makara,
+            ),
+          ),
+          const Gap(smallGap),
+          Row(
+            children: [
+              NavBarAddButton(
+                icon: Icons.person_add_alt_1,
+                onPressed: onAddCollaborator,
+                size: NavBarButtonSize.small,
+              ),
+              const Gap(smallGap),
+              Text(
+                l10n.addCollaborator,
+                style: AppTextStyles.smaller.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: wishlistTheme.primaryColor,
                 ),
               ),
             ],
-            foregroundColor: AppColors.background,
-            title: Text(
-              wishlist.name,
-              style: AppTextStyles.medium.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            backgroundColor: wishlistColor,
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.wishlistVisibility,
-                    style: AppTextStyles.small.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.makara,
-                    ),
-                  ),
-                  const Gap(smallGap),
-                  WishlistToggleSwitch(
-                    current: isPrivate,
-                    onChanged: (value) => setState(() => isPrivate = value),
-                    trueLabel: l10n.private,
-                    falseLabel: l10n.public,
-                    trueIcon: const Icon(
-                      Icons.lock,
-                      color: AppColors.gainsboro,
-                    ),
-                    falseIcon: const Icon(
-                      Icons.lock_open,
-                      color: AppColors.gainsboro,
-                    ),
-                  ),
-                  const Gap(largeGap),
-                  Text(
-                    l10n.seeTakenWishs,
-                    style: AppTextStyles.small.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.makara,
-                    ),
-                  ),
-                  const Gap(smallGap),
-                  WishlistToggleSwitch(
-                    current: canOwnerSeeTakenWish,
-                    onChanged: (value) =>
-                        setState(() => canOwnerSeeTakenWish = value),
-                    trueLabel: l10n.yes,
-                    falseLabel: l10n.no,
-                    trueIcon: const Icon(
-                      Icons.visibility_rounded,
-                      color: AppColors.gainsboro,
-                    ),
-                    falseIcon: const Icon(
-                      Icons.visibility_off_rounded,
-                      color: AppColors.gainsboro,
-                    ),
-                  ),
-                  const Gap(largeGap),
-                  Text(
-                    l10n.shareEditionWith,
-                    style: AppTextStyles.small.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.makara,
-                    ),
-                  ),
-                  const Gap(smallGap),
-                  Row(
-                    children: [
-                      NavBarAddButton(
-                        icon: Icons.person_add_alt_1,
-                        onPressed: onAddCollaborator,
-                        size: NavBarButtonSize.small,
-                      ),
-                      const Gap(smallGap),
-                      Text(
-                        l10n.addCollaborator,
-                        style: AppTextStyles.smaller.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: wishlistColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Builder(
-                          // Needed to have the context with wishlist theme
-                          builder: (context) {
-                            return SecondaryButton(
-                              text: l10n.deleteWishlist,
-                              onPressed: () => onDeleteWishlist(context),
-                              style: BaseButtonStyle.large,
-                              isStretched: true,
-                            );
-                          },
-                        ),
-                        const Gap(12),
-                        PrimaryButton(
-                          text: l10n.save,
-                          onPressed: onSaveParams,
-                          style: BaseButtonStyle.large,
-                          isStretched: true,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Builder(
+                  // Needed to have the context with wishlist theme
+                  builder: (context) {
+                    return SecondaryButton(
+                      text: l10n.deleteWishlist,
+                      onPressed: () => onDeleteWishlist(context),
+                      style: BaseButtonStyle.large,
+                      isStretched: true,
+                    );
+                  },
+                ),
+                const Gap(12),
+                PrimaryButton(
+                  text: l10n.save,
+                  onPressed: onSaveParams,
+                  style: BaseButtonStyle.large,
+                  isStretched: true,
+                ),
+              ],
             ),
           ),
         ],
