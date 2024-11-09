@@ -219,8 +219,11 @@ class _WishlistSettingsBottomSheetState
   }
 }
 
-void showWishlistSettingsBottomSheet(BuildContext context, Wishlist wishlist) {
-  showAppBottomSheet(
+Future<void> showWishlistSettingsBottomSheet(
+  BuildContext context,
+  Wishlist wishlist,
+) async {
+  await showAppBottomSheet(
     context,
     body: _WishlistSettingsBottomSheet(wishlist: wishlist),
   );
