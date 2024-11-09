@@ -3,7 +3,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/repositories/wish/wish_repository.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
-import 'package:wishlist/shared/models/wish/update_request/wish_update_request.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 
 class SupabaseWishRepository implements WishRepository {
@@ -64,14 +63,13 @@ class SupabaseWishRepository implements WishRepository {
 
   @override
   Future<Wish> updateWish(
-    int wishId,
-    WishUpdateRequest wishUpdateRequest,
+    Wish wishToUpdate,
   ) async {
     try {
       final wishJson = await _client
           .from(_wishsTableName)
-          .update(wishUpdateRequest.toJson())
-          .eq('id', wishId)
+          .update(wishToUpdate.toJson())
+          .eq('id', wishToUpdate.id)
           .select()
           .single();
 
