@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form.dart';
-import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/utils/double_extension.dart';
@@ -56,7 +55,6 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
     final link = _linkInputController.text;
     final description = _descriptionInputController.text;
 
-    final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
     final wish = widget.wish;
 
     final wishToUpdate = quantity == null
@@ -65,8 +63,6 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
             price: price,
             description: description,
             linkUrl: link,
-            updatedBy: currentUserId,
-            updatedAt: DateTime.now(),
           )
         : wish.copyWith(
             name: name,
@@ -74,8 +70,6 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
             quantity: quantity,
             description: description,
             linkUrl: link,
-            updatedBy: currentUserId,
-            updatedAt: DateTime.now(),
           );
 
     try {
