@@ -5,7 +5,7 @@ import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wish_card.dart';
-import 'package:wishlist/modules/wishlists/view/widgets/wishlist_params_bottom_sheet.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishs/view/widgets/create_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
@@ -56,8 +56,10 @@ class WishlistScreen extends ConsumerWidget {
                             Icons.settings,
                             size: 32,
                           ),
-                          onPressed: () =>
-                              showWishlistParamsBottomSheet(context, wishlist),
+                          onPressed: () => showWishlistSettingsBottomSheet(
+                            context,
+                            wishlist,
+                          ),
                         ),
                       ),
                   ],
