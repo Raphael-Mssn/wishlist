@@ -1,10 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wishlist/shared/infra/utils/update_entity.dart';
 
 part 'wish.freezed.dart';
 part 'wish.g.dart';
 
-@freezed
-class Wish with _$Wish {
+@Freezed(copyWith: false)
+class Wish with _$Wish implements Updatable {
   const factory Wish({
     @JsonKey(name: 'id') required int id,
     @JsonKey(name: 'created_at') required DateTime createdAt,
@@ -23,4 +24,33 @@ class Wish with _$Wish {
   const Wish._();
 
   factory Wish.fromJson(Map<String, dynamic> json) => _$WishFromJson(json);
+
+  @override
+  Wish copyWith({
+    String? name,
+    String? description,
+    double? price,
+    String? linkUrl,
+    String? iconUrl,
+    bool? isFavourite,
+    int? quantity,
+    int? wishlistId,
+    String? updatedBy,
+    DateTime? updatedAt,
+  }) {
+    return Wish(
+      id: id,
+      createdAt: createdAt,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      linkUrl: linkUrl ?? this.linkUrl,
+      iconUrl: iconUrl ?? this.iconUrl,
+      isFavourite: isFavourite ?? this.isFavourite,
+      quantity: quantity ?? this.quantity,
+      wishlistId: wishlistId ?? this.wishlistId,
+      updatedBy: updatedBy ?? this.updatedBy,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }
