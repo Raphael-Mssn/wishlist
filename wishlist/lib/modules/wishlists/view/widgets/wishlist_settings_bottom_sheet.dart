@@ -28,8 +28,8 @@ class _WishlistSettingsBottomSheet extends ConsumerStatefulWidget {
 
 class _WishlistSettingsBottomSheetState
     extends ConsumerState<_WishlistSettingsBottomSheet> {
-  late bool isPrivate;
-  late bool canOwnerSeeTakenWish;
+  late bool isPublic = widget.wishlist.visibility == WishlistVisibility.public;
+  late bool canOwnerSeeTakenWish = widget.wishlist.canOwnerSeeTakenWish;
 
   void onChangeColor() {}
   void onAddCollaborator() {}
@@ -69,7 +69,7 @@ class _WishlistSettingsBottomSheetState
     final l10n = context.l10n;
 
     final visibilityUpdated =
-        isPrivate ? WishlistVisibility.private : WishlistVisibility.public;
+        isPublic ? WishlistVisibility.public : WishlistVisibility.private;
 
     final wishlistUpdated = widget.wishlist.copyWith(
       canOwnerSeeTakenWish: canOwnerSeeTakenWish,
@@ -101,13 +101,6 @@ class _WishlistSettingsBottomSheetState
   }
 
   @override
-  void initState() {
-    super.initState();
-    isPrivate = widget.wishlist.visibility == WishlistVisibility.private;
-    canOwnerSeeTakenWish = widget.wishlist.canOwnerSeeTakenWish;
-  }
-
-  @override
   Widget build(BuildContext context) {
     const smallGap = 8.0;
     const largeGap = 24.0;
@@ -136,16 +129,16 @@ class _WishlistSettingsBottomSheetState
                 ),
                 const Gap(smallGap),
                 WishlistToggleSwitch(
-                  current: isPrivate,
-                  onChanged: (value) => setState(() => isPrivate = value),
-                  trueLabel: l10n.private,
-                  falseLabel: l10n.public,
+                  current: isPublic,
+                  onChanged: (value) => setState(() => isPublic = value),
+                  trueLabel: l10n.public,
+                  falseLabel: l10n.private,
                   trueIcon: const Icon(
-                    Icons.lock,
+                    Icons.lock_open,
                     color: AppColors.gainsboro,
                   ),
                   falseIcon: const Icon(
-                    Icons.lock_open,
+                    Icons.lock,
                     color: AppColors.gainsboro,
                   ),
                 ),
