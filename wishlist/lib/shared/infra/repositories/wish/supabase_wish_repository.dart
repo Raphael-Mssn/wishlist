@@ -36,14 +36,12 @@ class SupabaseWishRepository implements WishRepository {
   @override
   Future<int> getNbWishsByUser(String userId) async {
     try {
-      final response = await _client
-          .from('wishlists')
-          .select('wishs(id)')
-          .eq('id_owner', userId)
-          .not('wishs', 'is', null)
-          .count();
-
-      return response.count;
+      return await _client.rpc(
+        'nb_wishs_by_user',
+        params: {
+          'user_id': userId,
+        },
+      );
     } on PostgrestException catch (e) {
       final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
       throw AppException(
