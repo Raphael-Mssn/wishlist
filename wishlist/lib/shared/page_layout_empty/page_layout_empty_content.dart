@@ -17,11 +17,15 @@ class PageLayoutEmptyContent extends StatelessWidget {
   final String illustrationUrl;
   final double illustrationHeight;
   final String title;
-  final String callToAction;
-  final Function() onCallToAction;
+  final String? callToAction;
+  final Function()? onCallToAction;
 
   @override
   Widget build(BuildContext context) {
+    final callToAction = this.callToAction;
+    final onCallToAction = this.onCallToAction;
+    final hasCallToAction = callToAction != null && onCallToAction != null;
+
     return Column(
       children: <Widget>[
         SvgPicture.asset(
@@ -34,11 +38,12 @@ class PageLayoutEmptyContent extends StatelessWidget {
           style: AppTextStyles.title,
         ),
         const Gap(16),
-        PrimaryButton(
-          text: callToAction,
-          onPressed: onCallToAction,
-          style: BaseButtonStyle.large,
-        ),
+        if (hasCallToAction)
+          PrimaryButton(
+            text: callToAction,
+            onPressed: onCallToAction,
+            style: BaseButtonStyle.large,
+          ),
       ],
     );
   }

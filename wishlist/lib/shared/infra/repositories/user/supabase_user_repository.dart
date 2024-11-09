@@ -17,6 +17,11 @@ class SupabaseUserRepository implements UserRepository {
   }
 
   @override
+  String getCurrentUserId() {
+    return _client.auth.currentUserNonNull.id;
+  }
+
+  @override
   Future<void> createUserProfile(Profile profile) async {
     try {
       await _client.from('profiles').insert(profile.toJson());

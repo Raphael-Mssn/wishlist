@@ -6,6 +6,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_by_id_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_params_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
+import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty_content.dart';
 import 'package:wishlist/shared/theme/colors.dart';
@@ -32,6 +33,8 @@ class WishlistScreen extends ConsumerWidget {
           final wishlistColor = AppColors.getColorFromHexValue(wishlist.color);
           final wishlistDarkColor = AppColors.darken(wishlistColor);
           final currentTheme = Theme.of(context);
+          final isMyWishlist = wishlist.idOwner ==
+              ref.read(userServiceProvider).getCurrentUserId();
 
           return AnimatedTheme(
             data: currentTheme.copyWith(
@@ -46,17 +49,18 @@ class WishlistScreen extends ConsumerWidget {
                 preferredSize: const Size.fromHeight(70),
                 child: AppBar(
                   actions: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.settings,
-                          size: 32,
+                    if (isMyWishlist)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.settings,
+                            size: 32,
+                          ),
+                          onPressed: () =>
+                              showWishlistParamsBottomSheet(context, wishlist),
                         ),
-                        onPressed: () =>
-                            showWishlistParamsBottomSheet(context, wishlist),
                       ),
-                    ),
                   ],
                   foregroundColor: AppColors.background,
                   title: Padding(
@@ -74,7 +78,11 @@ class WishlistScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              body: _buildWishlistDetail(wishlist, context),
+              body: _buildWishlistDetail(
+                wishlist,
+                context,
+                isMyWishlist: isMyWishlist,
+              ),
             ),
           );
         },
@@ -86,7 +94,11 @@ class WishlistScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildWishlistDetail(Wishlist wishlist, BuildContext context) {
+  Widget _buildWishlistDetail(
+    Wishlist wishlist,
+    BuildContext context, {
+    required bool isMyWishlist,
+  }) {
     final l10n = context.l10n;
 
     return Stack(
@@ -131,8 +143,9 @@ class WishlistScreen extends ConsumerWidget {
                         illustrationUrl: Assets.svg.noWishlist,
                         illustrationHeight: constraints.maxHeight / 2,
                         title: l10n.wishlistNoWish,
-                        callToAction: l10n.wishlistAddWish,
-                        onCallToAction: onAddWish,
+                        callToAction:
+                            isMyWishlist ? l10n.wishlistAddWish : null,
+                        onCallToAction: isMyWishlist ? onAddWish : null,
                       ),
                     );
                   },
@@ -141,20 +154,21 @@ class WishlistScreen extends ConsumerWidget {
             ),
           ],
         ),
-        Positioned(
-          bottom: 24,
-          right: 24,
-          child: SizedBox(
-            width: MediaQuery.sizeOf(context).width,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: NavBarAddButton(
-                icon: Icons.add,
-                onPressed: onAddWish,
+        if (isMyWishlist)
+          Positioned(
+            bottom: 24,
+            right: 24,
+            child: SizedBox(
+              width: MediaQuery.sizeOf(context).width,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: NavBarAddButton(
+                  icon: Icons.add,
+                  onPressed: onAddWish,
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
