@@ -23,14 +23,14 @@ class SettingsScreen extends ConsumerWidget {
       title: l10n.settingsScreenTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
+        children: [
           const Gap(8),
           Row(
-            children: <Widget>[
+            children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     Text(
                       l10n.settingsScreenEmail,
                       style: AppTextStyles.smaller.copyWith(
