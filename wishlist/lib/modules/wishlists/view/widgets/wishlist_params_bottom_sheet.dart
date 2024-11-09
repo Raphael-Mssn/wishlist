@@ -57,9 +57,7 @@ class _WishlistParamsBottomSheetState
           }
         } catch (e) {
           if (context.mounted) {
-            ScaffoldMessenger.of(context).showGenericError(
-              context,
-            );
+            ScaffoldMessenger.of(context).showGenericError();
           }
         }
       },

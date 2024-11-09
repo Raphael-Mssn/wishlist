@@ -23,8 +23,7 @@ extension ScaffoldMessengerExtension on ScaffoldMessengerState {
     showSnackBar(snackBar);
   }
 
-  void showGenericError(
-    BuildContext context, {
+  void showGenericError({
     bool isTopSnackBar = false,
   }) {
     WidgetsBinding.instance.addPostFrameCallback((_) {

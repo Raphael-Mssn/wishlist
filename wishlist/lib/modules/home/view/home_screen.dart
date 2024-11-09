@@ -30,8 +30,7 @@ class HomeScreen extends ConsumerWidget {
         child: CircularProgressIndicator(),
       ),
       error: (error, stackTrace) {
-        ScaffoldMessenger.of(context)
-            .showGenericError(context, isTopSnackBar: true);
+        ScaffoldMessenger.of(context).showGenericError(isTopSnackBar: true);
         return const SizedBox.shrink();
       },
       data: (data) => data.isEmpty

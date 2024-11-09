@@ -89,7 +89,7 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showGenericError(context);
+        ScaffoldMessenger.of(context).showGenericError();
       }
     }
   }
@@ -119,9 +119,7 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
           }
         } catch (e) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showGenericError(
-              context,
-            );
+            ScaffoldMessenger.of(context).showGenericError();
           }
         }
       },

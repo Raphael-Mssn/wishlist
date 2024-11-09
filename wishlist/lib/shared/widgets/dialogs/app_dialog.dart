@@ -63,9 +63,7 @@ class _DialogLayout extends StatelessWidget {
                 }
               } catch (e) {
                 if (context.mounted) {
-                  scaffoldMessenger.showGenericError(
-                    context,
-                  );
+                  scaffoldMessenger.showGenericError();
                 }
               }
             },
