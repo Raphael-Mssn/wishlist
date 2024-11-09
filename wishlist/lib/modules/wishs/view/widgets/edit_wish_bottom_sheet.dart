@@ -57,20 +57,13 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
 
     final wish = widget.wish;
 
-    final wishToUpdate = quantity == null
-        ? wish.copyWith(
-            name: name,
-            price: price,
-            description: description,
-            linkUrl: link,
-          )
-        : wish.copyWith(
-            name: name,
-            price: price,
-            quantity: quantity,
-            description: description,
-            linkUrl: link,
-          );
+    final wishToUpdate = wish.copyWith(
+      name: name,
+      price: price,
+      quantity: quantity,
+      description: description,
+      linkUrl: link,
+    );
 
     try {
       await ref
