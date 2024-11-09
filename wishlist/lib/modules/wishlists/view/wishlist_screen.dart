@@ -9,11 +9,13 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishs/view/widgets/create_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
+import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty_content.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
+import 'package:wishlist/shared/theme/widgets/app_refresh_indicator.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
 class WishlistScreen extends ConsumerWidget {
@@ -83,6 +85,7 @@ class WishlistScreen extends ConsumerWidget {
               body: _buildWishlistDetail(
                 wishlistScreenData,
                 context,
+                ref,
                 isMyWishlist: isMyWishlist,
               ),
             ),
@@ -98,7 +101,8 @@ class WishlistScreen extends ConsumerWidget {
 
   Widget _buildWishlistDetail(
     WishlistScreenData wishlistScreenData,
-    BuildContext context, {
+    BuildContext context,
+    WidgetRef ref, {
     required bool isMyWishlist,
   }) {
     final l10n = context.l10n;
@@ -143,17 +147,27 @@ class WishlistScreen extends ConsumerWidget {
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     return hasWishs
-                        ? ListView.separated(
-                            itemCount: wishs.length,
-                            separatorBuilder: (context, index) => const Gap(8),
-                            itemBuilder: (context, index) {
-                              final wish = wishs[index];
-                              return WishCard(
-                                key: ValueKey(wish.id),
-                                wish: wish,
-                                wishlist: wishlist,
-                              );
-                            },
+                        ? AppRefreshIndicator(
+                            onRefresh: () => ref
+                                .read(
+                                  wishsFromWishlistProvider(
+                                    wishlist.id,
+                                  ).notifier,
+                                )
+                                .loadWishs(),
+                            child: ListView.separated(
+                              itemCount: wishs.length,
+                              separatorBuilder: (context, index) =>
+                                  const Gap(8),
+                              itemBuilder: (context, index) {
+                                final wish = wishs[index];
+                                return WishCard(
+                                  key: ValueKey(wish.id),
+                                  wish: wish,
+                                  wishlist: wishlist,
+                                );
+                              },
+                            ),
                           )
                         : Padding(
                             padding: const EdgeInsets.only(top: 16),
