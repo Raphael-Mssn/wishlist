@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository_provider.dart';
+import 'package:wishlist/shared/infra/utils/update_entity.dart';
 import 'package:wishlist/shared/infra/wishlist_by_id_provider.dart';
 import 'package:wishlist/shared/models/wishlist/create_request/wishlist_create_request.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
@@ -29,13 +30,23 @@ class WishlistService {
     return _wishlistRepository.getWishlistById(wishlistId);
   }
 
-  Future<void> updateWishlistsOrder(IList<Wishlist> wishlists) async {
-    return _wishlistRepository.updateWishlistsOrder(wishlists);
+  Future<Wishlist> updateWishlist(Wishlist wishlist) async {
+    final wishlistUpdated = await updateEntity(
+      wishlist,
+      ref,
+      _wishlistRepository.updateWishlist,
+    );
+    ref.invalidate(wishlistByIdProvider(wishlist.id));
+
+    return wishlistUpdated;
   }
 
-  Future<void> updateWishlistSettings(Wishlist wishlist) async {
-    await _wishlistRepository.updateWishlistSettings(wishlist);
-    ref.invalidate(wishlistByIdProvider(wishlist.id));
+  Future<void> updateWishlistsOrder(IList<Wishlist> wishlists) async {
+    for (final wishlist in wishlists) {
+      final wishlistUpdated =
+          wishlist.copyWith(order: wishlists.indexOf(wishlist));
+      await updateWishlist(wishlistUpdated);
+    }
   }
 
   Future<int> getNextWishlistOrderByUser(String userId) async {

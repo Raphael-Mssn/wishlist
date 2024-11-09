@@ -1,10 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wishlist/shared/infra/utils/update_entity.dart';
 
 part 'wishlist.freezed.dart';
 part 'wishlist.g.dart';
 
-@freezed
-class Wishlist with _$Wishlist {
+@Freezed(copyWith: false)
+class Wishlist with _$Wishlist implements Updatable {
   const factory Wishlist({
     @JsonKey(name: 'id') required int id,
     @JsonKey(name: 'created_at') required DateTime createdAt,
@@ -29,6 +30,36 @@ class Wishlist with _$Wishlist {
 
   factory Wishlist.fromJson(Map<String, dynamic> json) =>
       _$WishlistFromJson(json);
+
+  @override
+  Wishlist copyWith({
+    String? name,
+    String? color,
+    String? iconUrl,
+    bool? isClosed,
+    DateTime? endDate,
+    bool? canOwnerSeeTakenWish,
+    WishlistVisibility? visibility,
+    int? order,
+    String? updatedBy,
+    DateTime? updatedAt,
+  }) {
+    return Wishlist(
+      id: id,
+      createdAt: createdAt,
+      name: name ?? this.name,
+      idOwner: idOwner,
+      color: color ?? this.color,
+      iconUrl: iconUrl ?? this.iconUrl,
+      isClosed: isClosed ?? this.isClosed,
+      endDate: endDate ?? this.endDate,
+      canOwnerSeeTakenWish: canOwnerSeeTakenWish ?? this.canOwnerSeeTakenWish,
+      visibility: visibility ?? this.visibility,
+      order: order ?? this.order,
+      updatedBy: updatedBy ?? this.updatedBy,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }
 
 enum WishlistVisibility {

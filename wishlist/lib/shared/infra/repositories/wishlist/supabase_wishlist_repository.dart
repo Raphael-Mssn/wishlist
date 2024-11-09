@@ -112,43 +112,16 @@ class SupabaseWishlistRepository implements WishlistRepository {
   }
 
   @override
-  Future<void> updateWishlistsOrder(IList<Wishlist> wishlists) async {
+  Future<Wishlist> updateWishlist(Wishlist wishlist) async {
     try {
-      for (final wishlist in wishlists) {
-        final update = {
-          'order': wishlists.indexOf(wishlist),
-        };
-        await _client
-            .from(_wishlistsTableName)
-            .update(update)
-            .eq('id', wishlist.id);
-      }
-    } on PostgrestException catch (e) {
-      final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
-      throw AppException(
-        statusCode: statusCode ?? 500,
-        message: e.message,
-      );
-    } catch (e) {
-      throw AppException(
-        statusCode: 500,
-        message: 'Failed to update wishlists',
-      );
-    }
-  }
-
-  @override
-  Future<void> updateWishlistSettings(Wishlist wishlist) async {
-    try {
-      final update = {
-        'color': wishlist.color,
-        'can_owner_see_taken_wish': wishlist.canOwnerSeeTakenWish,
-        'visibility': wishlist.visibility.name,
-      };
-      await _client
+      final wishlistJson = await _client
           .from(_wishlistsTableName)
-          .update(update)
-          .eq('id', wishlist.id);
+          .update(wishlist.toJson())
+          .eq('id', wishlist.id)
+          .select()
+          .single();
+
+      return Wishlist.fromJson(wishlistJson);
     } on PostgrestException catch (e) {
       final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
       throw AppException(

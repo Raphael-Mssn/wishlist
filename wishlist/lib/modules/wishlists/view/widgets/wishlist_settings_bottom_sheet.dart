@@ -77,7 +77,7 @@ class _WishlistSettingsBottomSheetState
     );
 
     try {
-      await ref.read(wishlistServiceProvider).updateWishlistSettings(
+      await ref.read(wishlistServiceProvider).updateWishlist(
             wishlistUpdated,
           );
 
