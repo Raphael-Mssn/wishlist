@@ -84,8 +84,6 @@ Future<void> showAppDialog(
   void Function()? onCancel,
 }) async {
   final l10n = context.l10n;
-  // Needed to have the actual theme of passed context
-  // and not the one from the builder
   final theme = Theme.of(context);
 
   return showGeneralDialog<void>(
