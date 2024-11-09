@@ -16,18 +16,18 @@ import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
-class WishlistParamsBottomSheet extends ConsumerStatefulWidget {
-  const WishlistParamsBottomSheet({super.key, required this.wishlist});
+class _WishlistSettingsBottomSheet extends ConsumerStatefulWidget {
+  const _WishlistSettingsBottomSheet({required this.wishlist});
 
   final Wishlist wishlist;
 
   @override
-  ConsumerState<WishlistParamsBottomSheet> createState() =>
-      _WishlistParamsBottomSheetState();
+  ConsumerState<_WishlistSettingsBottomSheet> createState() =>
+      _WishlistSettingsBottomSheetState();
 }
 
-class _WishlistParamsBottomSheetState
-    extends ConsumerState<WishlistParamsBottomSheet> {
+class _WishlistSettingsBottomSheetState
+    extends ConsumerState<_WishlistSettingsBottomSheet> {
   late bool isPrivate;
   late bool canOwnerSeeTakenWish;
 
@@ -65,7 +65,7 @@ class _WishlistParamsBottomSheetState
     );
   }
 
-  Future<void> onSaveParams() async {
+  Future<void> onSaveSettings() async {
     final l10n = context.l10n;
 
     final visibilityUpdated =
@@ -77,7 +77,7 @@ class _WishlistParamsBottomSheetState
     );
 
     try {
-      await ref.read(wishlistServiceProvider).updateWishlistParams(
+      await ref.read(wishlistServiceProvider).updateWishlistSettings(
             wishlistUpdated,
           );
 
@@ -213,7 +213,7 @@ class _WishlistParamsBottomSheetState
                 const Gap(12),
                 PrimaryButton(
                   text: l10n.save,
-                  onPressed: onSaveParams,
+                  onPressed: onSaveSettings,
                   style: BaseButtonStyle.large,
                   isStretched: true,
                 ),
@@ -226,9 +226,9 @@ class _WishlistParamsBottomSheetState
   }
 }
 
-void showWishlistParamsBottomSheet(BuildContext context, Wishlist wishlist) {
+void showWishlistSettingsBottomSheet(BuildContext context, Wishlist wishlist) {
   showAppBottomSheet(
     context,
-    body: WishlistParamsBottomSheet(wishlist: wishlist),
+    body: _WishlistSettingsBottomSheet(wishlist: wishlist),
   );
 }

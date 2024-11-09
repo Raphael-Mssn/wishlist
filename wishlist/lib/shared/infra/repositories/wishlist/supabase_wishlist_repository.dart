@@ -113,7 +113,7 @@ class SupabaseWishlistRepository implements WishlistRepository {
   }
 
   @override
-  Future<void> updateWishlistParams(Wishlist wishlist) async {
+  Future<void> updateWishlistSettings(Wishlist wishlist) async {
     try {
       final update = {
         'color': wishlist.color,

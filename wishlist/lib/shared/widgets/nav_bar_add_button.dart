@@ -82,32 +82,42 @@ class NavBarAddButton extends StatelessWidget {
   }
 
   _Dimensions _getDimensions(NavBarButtonSize size, IconData icon) {
-    switch (size) {
-      case NavBarButtonSize.large:
-        return switch (icon) {
-          Icons.add => _Dimensions(46, 70, 50, 10),
-          Icons.person_add_alt_1 => _Dimensions(36, 70, 50, 10),
-          _ => _Dimensions(46, 70, 50, 10),
-        };
-      case NavBarButtonSize.small:
-        return switch (icon) {
-          Icons.add => _Dimensions(36, 40, 40, 5),
-          Icons.person_add_alt_1 => _Dimensions(26, 40, 40, 5),
-          _ => _Dimensions(36, 40, 40, 5),
-        };
+    late double iconSize;
+    late double containerSize;
+    late double innerContainerSize;
+    late double paddingSize;
+
+    switch (icon) {
+      case Icons.add:
+        iconSize = size == NavBarButtonSize.large ? 46.0 : 36.0;
+      case Icons.person_add_alt_1:
+        iconSize = size == NavBarButtonSize.large ? 36.0 : 26.0;
+      default:
+        iconSize = size == NavBarButtonSize.large ? 46.0 : 36.0;
     }
+
+    containerSize = size == NavBarButtonSize.large ? 70.0 : 40.0;
+    innerContainerSize = size == NavBarButtonSize.large ? 50.0 : 40.0;
+    paddingSize = size == NavBarButtonSize.large ? 10.0 : 5.0;
+
+    return _Dimensions(
+      iconSize: iconSize,
+      containerSize: containerSize,
+      innerContainerSize: innerContainerSize,
+      paddingSize: paddingSize,
+    );
   }
 }
 
 enum NavBarButtonSize { small, large }
 
 class _Dimensions {
-  _Dimensions(
-    this.iconSize,
-    this.containerSize,
-    this.innerContainerSize,
-    this.paddingSize,
-  );
+  _Dimensions({
+    required this.iconSize,
+    required this.containerSize,
+    required this.innerContainerSize,
+    required this.paddingSize,
+  });
 
   final double iconSize;
   final double containerSize;

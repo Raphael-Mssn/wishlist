@@ -28,8 +28,8 @@ class WishlistService {
     return _wishlistRepository.updateWishlistsOrder(wishlists);
   }
 
-  Future<void> updateWishlistParams(Wishlist wishlist) async {
-    await _wishlistRepository.updateWishlistParams(wishlist);
+  Future<void> updateWishlistSettings(Wishlist wishlist) async {
+    await _wishlistRepository.updateWishlistSettings(wishlist);
     ref.invalidate(wishlistByIdProvider(wishlist.id));
   }
 
