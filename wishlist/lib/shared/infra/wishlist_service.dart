@@ -26,6 +26,10 @@ class WishlistService {
     return _wishlistRepository.getPublicWishlistsByUser(userId);
   }
 
+  Future<int> getNbWishlistsByUser(String userId) async {
+    return _wishlistRepository.getNbWishlistsByUser(userId);
+  }
+
   Future<Wishlist> getWishlistById(int wishlistId) async {
     return _wishlistRepository.getWishlistById(wishlistId);
   }

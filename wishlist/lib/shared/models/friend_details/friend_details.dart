@@ -11,7 +11,8 @@ class FriendDetails with _$FriendDetails {
   const factory FriendDetails({
     @JsonKey(name: 'app_user') required AppUser appUser,
     @JsonKey(name: 'mutual_friends') required ISet<AppUser> mutualFriends,
-    @JsonKey(name: 'wishlists') required IList<Wishlist> wishlists,
+    @JsonKey(name: 'public_wishlists') required IList<Wishlist> publicWishlists,
+    @JsonKey(name: 'nb_wishlists') required int nbWishlists,
     @JsonKey(name: 'nb_wishs') required int nbWishs,
   }) = _FriendDetails;
 

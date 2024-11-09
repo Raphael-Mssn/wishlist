@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/repositories/friendship/friendship_repository.dart';
 import 'package:wishlist/shared/infra/repositories/friendship/friendship_repository_provider.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
+import 'package:wishlist/shared/infra/wish_service.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/models/friend_details/friend_details.dart';
@@ -80,17 +81,19 @@ class FriendshipService {
   Future<FriendDetails> getFriendDetails(String userId) async {
     final appUser = await ref.read(userServiceProvider).getAppUserById(userId);
     final mutualFriends = await _getMutualFriends(userId);
-    final wishlists = await ref
+    final publicWishlists = await ref
         .read(wishlistServiceProvider)
         .getPublicWishlistsByUser(userId);
-
-    // TODO: Get nbWishs
-    const nbWishs = 0;
+    final nbWishlists =
+        await ref.read(wishlistServiceProvider).getNbWishlistsByUser(userId);
+    final nbWishs =
+        await ref.read(wishServiceProvider).getNbWishsByUser(userId);
 
     return FriendDetails(
       appUser: appUser,
       mutualFriends: mutualFriends,
-      wishlists: wishlists,
+      publicWishlists: publicWishlists,
+      nbWishlists: nbWishlists,
       nbWishs: nbWishs,
     );
   }

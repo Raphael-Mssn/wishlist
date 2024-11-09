@@ -24,8 +24,10 @@ mixin _$FriendDetails {
   AppUser get appUser => throw _privateConstructorUsedError;
   @JsonKey(name: 'mutual_friends')
   ISet<AppUser> get mutualFriends => throw _privateConstructorUsedError;
-  @JsonKey(name: 'wishlists')
-  IList<Wishlist> get wishlists => throw _privateConstructorUsedError;
+  @JsonKey(name: 'public_wishlists')
+  IList<Wishlist> get publicWishlists => throw _privateConstructorUsedError;
+  @JsonKey(name: 'nb_wishlists')
+  int get nbWishlists => throw _privateConstructorUsedError;
   @JsonKey(name: 'nb_wishs')
   int get nbWishs => throw _privateConstructorUsedError;
 
@@ -48,7 +50,8 @@ abstract class $FriendDetailsCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'app_user') AppUser appUser,
       @JsonKey(name: 'mutual_friends') ISet<AppUser> mutualFriends,
-      @JsonKey(name: 'wishlists') IList<Wishlist> wishlists,
+      @JsonKey(name: 'public_wishlists') IList<Wishlist> publicWishlists,
+      @JsonKey(name: 'nb_wishlists') int nbWishlists,
       @JsonKey(name: 'nb_wishs') int nbWishs});
 }
 
@@ -69,7 +72,8 @@ class _$FriendDetailsCopyWithImpl<$Res, $Val extends FriendDetails>
   $Res call({
     Object? appUser = null,
     Object? mutualFriends = null,
-    Object? wishlists = null,
+    Object? publicWishlists = null,
+    Object? nbWishlists = null,
     Object? nbWishs = null,
   }) {
     return _then(_value.copyWith(
@@ -81,10 +85,14 @@ class _$FriendDetailsCopyWithImpl<$Res, $Val extends FriendDetails>
           ? _value.mutualFriends
           : mutualFriends // ignore: cast_nullable_to_non_nullable
               as ISet<AppUser>,
-      wishlists: null == wishlists
-          ? _value.wishlists
-          : wishlists // ignore: cast_nullable_to_non_nullable
+      publicWishlists: null == publicWishlists
+          ? _value.publicWishlists
+          : publicWishlists // ignore: cast_nullable_to_non_nullable
               as IList<Wishlist>,
+      nbWishlists: null == nbWishlists
+          ? _value.nbWishlists
+          : nbWishlists // ignore: cast_nullable_to_non_nullable
+              as int,
       nbWishs: null == nbWishs
           ? _value.nbWishs
           : nbWishs // ignore: cast_nullable_to_non_nullable
@@ -104,7 +112,8 @@ abstract class _$$FriendDetailsImplCopyWith<$Res>
   $Res call(
       {@JsonKey(name: 'app_user') AppUser appUser,
       @JsonKey(name: 'mutual_friends') ISet<AppUser> mutualFriends,
-      @JsonKey(name: 'wishlists') IList<Wishlist> wishlists,
+      @JsonKey(name: 'public_wishlists') IList<Wishlist> publicWishlists,
+      @JsonKey(name: 'nb_wishlists') int nbWishlists,
       @JsonKey(name: 'nb_wishs') int nbWishs});
 }
 
@@ -123,7 +132,8 @@ class __$$FriendDetailsImplCopyWithImpl<$Res>
   $Res call({
     Object? appUser = null,
     Object? mutualFriends = null,
-    Object? wishlists = null,
+    Object? publicWishlists = null,
+    Object? nbWishlists = null,
     Object? nbWishs = null,
   }) {
     return _then(_$FriendDetailsImpl(
@@ -135,10 +145,14 @@ class __$$FriendDetailsImplCopyWithImpl<$Res>
           ? _value.mutualFriends
           : mutualFriends // ignore: cast_nullable_to_non_nullable
               as ISet<AppUser>,
-      wishlists: null == wishlists
-          ? _value.wishlists
-          : wishlists // ignore: cast_nullable_to_non_nullable
+      publicWishlists: null == publicWishlists
+          ? _value.publicWishlists
+          : publicWishlists // ignore: cast_nullable_to_non_nullable
               as IList<Wishlist>,
+      nbWishlists: null == nbWishlists
+          ? _value.nbWishlists
+          : nbWishlists // ignore: cast_nullable_to_non_nullable
+              as int,
       nbWishs: null == nbWishs
           ? _value.nbWishs
           : nbWishs // ignore: cast_nullable_to_non_nullable
@@ -153,7 +167,8 @@ class _$FriendDetailsImpl extends _FriendDetails {
   const _$FriendDetailsImpl(
       {@JsonKey(name: 'app_user') required this.appUser,
       @JsonKey(name: 'mutual_friends') required this.mutualFriends,
-      @JsonKey(name: 'wishlists') required this.wishlists,
+      @JsonKey(name: 'public_wishlists') required this.publicWishlists,
+      @JsonKey(name: 'nb_wishlists') required this.nbWishlists,
       @JsonKey(name: 'nb_wishs') required this.nbWishs})
       : super._();
 
@@ -167,15 +182,18 @@ class _$FriendDetailsImpl extends _FriendDetails {
   @JsonKey(name: 'mutual_friends')
   final ISet<AppUser> mutualFriends;
   @override
-  @JsonKey(name: 'wishlists')
-  final IList<Wishlist> wishlists;
+  @JsonKey(name: 'public_wishlists')
+  final IList<Wishlist> publicWishlists;
+  @override
+  @JsonKey(name: 'nb_wishlists')
+  final int nbWishlists;
   @override
   @JsonKey(name: 'nb_wishs')
   final int nbWishs;
 
   @override
   String toString() {
-    return 'FriendDetails(appUser: $appUser, mutualFriends: $mutualFriends, wishlists: $wishlists, nbWishs: $nbWishs)';
+    return 'FriendDetails(appUser: $appUser, mutualFriends: $mutualFriends, publicWishlists: $publicWishlists, nbWishlists: $nbWishlists, nbWishs: $nbWishs)';
   }
 
   @override
@@ -186,7 +204,10 @@ class _$FriendDetailsImpl extends _FriendDetails {
             (identical(other.appUser, appUser) || other.appUser == appUser) &&
             const DeepCollectionEquality()
                 .equals(other.mutualFriends, mutualFriends) &&
-            const DeepCollectionEquality().equals(other.wishlists, wishlists) &&
+            const DeepCollectionEquality()
+                .equals(other.publicWishlists, publicWishlists) &&
+            (identical(other.nbWishlists, nbWishlists) ||
+                other.nbWishlists == nbWishlists) &&
             (identical(other.nbWishs, nbWishs) || other.nbWishs == nbWishs));
   }
 
@@ -196,7 +217,8 @@ class _$FriendDetailsImpl extends _FriendDetails {
       runtimeType,
       appUser,
       const DeepCollectionEquality().hash(mutualFriends),
-      const DeepCollectionEquality().hash(wishlists),
+      const DeepCollectionEquality().hash(publicWishlists),
+      nbWishlists,
       nbWishs);
 
   /// Create a copy of FriendDetails
@@ -220,7 +242,9 @@ abstract class _FriendDetails extends FriendDetails {
           {@JsonKey(name: 'app_user') required final AppUser appUser,
           @JsonKey(name: 'mutual_friends')
           required final ISet<AppUser> mutualFriends,
-          @JsonKey(name: 'wishlists') required final IList<Wishlist> wishlists,
+          @JsonKey(name: 'public_wishlists')
+          required final IList<Wishlist> publicWishlists,
+          @JsonKey(name: 'nb_wishlists') required final int nbWishlists,
           @JsonKey(name: 'nb_wishs') required final int nbWishs}) =
       _$FriendDetailsImpl;
   const _FriendDetails._() : super._();
@@ -235,8 +259,11 @@ abstract class _FriendDetails extends FriendDetails {
   @JsonKey(name: 'mutual_friends')
   ISet<AppUser> get mutualFriends;
   @override
-  @JsonKey(name: 'wishlists')
-  IList<Wishlist> get wishlists;
+  @JsonKey(name: 'public_wishlists')
+  IList<Wishlist> get publicWishlists;
+  @override
+  @JsonKey(name: 'nb_wishlists')
+  int get nbWishlists;
   @override
   @JsonKey(name: 'nb_wishs')
   int get nbWishs;

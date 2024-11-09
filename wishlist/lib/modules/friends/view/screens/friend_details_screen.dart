@@ -97,7 +97,7 @@ class _FriendStatsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final nbWishlists = l10n.numberOfWishlists(friendDetails.wishlists.length);
+    final nbWishlists = l10n.numberOfWishlists(friendDetails.nbWishlists);
     final nbWishs = l10n.numberOfWishs(friendDetails.nbWishs);
     final personalStats = '$nbWishlists | $nbWishs';
     const avatarSize = 64.0;
@@ -200,7 +200,7 @@ class _WishlistsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (friendDetails.wishlists.isEmpty) {
+    if (friendDetails.publicWishlists.isEmpty) {
       return SliverToBoxAdapter(
         child: Center(
           child: Text(
@@ -214,7 +214,7 @@ class _WishlistsSection extends StatelessWidget {
     }
 
     return WishlistsGrid(
-      wishlists: friendDetails.wishlists.toList(),
+      wishlists: friendDetails.publicWishlists.toList(),
       isReorderable: false,
     );
   }
