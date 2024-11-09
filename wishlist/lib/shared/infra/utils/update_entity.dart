@@ -8,10 +8,10 @@ abstract class Updatable {
   Updatable copyWith({String? updatedBy, DateTime? updatedAt});
 }
 
-Future<void> updateEntity<T extends Updatable>(
+Future<T> updateEntity<T extends Updatable>(
   T entity,
   Ref ref,
-  Future<void> Function(T updatedEntity) updateFunction,
+  Future<T> Function(T updatedEntity) updateFunction,
 ) async {
   final updatedBy = ref.read(userServiceProvider).getCurrentUserId();
   final updatedAt = DateTime.now();
@@ -21,5 +21,5 @@ Future<void> updateEntity<T extends Updatable>(
     updatedAt: updatedAt,
   ) as T;
 
-  await updateFunction(updatedEntity);
+  return updateFunction(updatedEntity);
 }
