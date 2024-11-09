@@ -105,6 +105,8 @@ class _WishFormState extends State<WishForm> {
     final hasSecondaryButton =
         onSecondaryButtonTapped != null && secondaryButtonLabel != null;
 
+    const gapWishProperty = 12.0;
+
     return GestureDetector(
       onTap: () {
         for (final focusNode in _focusNodes) {
@@ -132,7 +134,7 @@ class _WishFormState extends State<WishForm> {
                         focusNode: _focusNodes[0],
                         nextFocusNode: _focusNodes[1],
                       ),
-                      const Gap(16),
+                      const Gap(gapWishProperty),
                       WishProperty(
                         icon: Icons.attach_money,
                         label: l10n.wishPriceLabel,
@@ -141,7 +143,7 @@ class _WishFormState extends State<WishForm> {
                         focusNode: _focusNodes[1],
                         nextFocusNode: _focusNodes[2],
                       ),
-                      const Gap(16),
+                      const Gap(gapWishProperty),
                       WishProperty(
                         icon: Icons.one_x_mobiledata,
                         label: l10n.wishQuantityLabel,
@@ -150,7 +152,7 @@ class _WishFormState extends State<WishForm> {
                         focusNode: _focusNodes[2],
                         nextFocusNode: _focusNodes[3],
                       ),
-                      const Gap(16),
+                      const Gap(gapWishProperty),
                       WishProperty(
                         icon: Icons.link,
                         label: l10n.wishLinkLabel,
@@ -158,7 +160,7 @@ class _WishFormState extends State<WishForm> {
                         focusNode: _focusNodes[3],
                         nextFocusNode: _focusNodes[4],
                       ),
-                      const Gap(16),
+                      const Gap(gapWishProperty),
                       WishProperty(
                         icon: Icons.description_outlined,
                         label: l10n.wishDescriptionLabel,
@@ -168,7 +170,6 @@ class _WishFormState extends State<WishForm> {
                         focusNode: _focusNodes[4],
                         nextFocusNode: null,
                       ),
-                      const Gap(16),
                     ],
                   ),
                 ),
