@@ -67,6 +67,8 @@
   "wishDescriptionLabel": "Description",
   "wishNameError": "Le nom du wish est requis",
   "notNullError": "Ce champ est requis",
+  "openLink": "Ouvrir le lien",
+  "iWantToGiveIt": "Je veux l'offrir",
   "wishlistVisibility": "Visibilité de la wishlist",
   "private": "Privée",
   "public": "Publique",

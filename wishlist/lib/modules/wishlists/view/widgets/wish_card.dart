@@ -1,7 +1,6 @@
 import 'package:currency_formatter/currency_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:wishlist/modules/wishs/view/widgets/edit_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -10,13 +9,11 @@ class WishCard extends StatelessWidget {
   const WishCard({
     super.key,
     required this.wish,
+    required this.onTap,
   });
 
   final Wish wish;
-
-  void onTap(BuildContext context) {
-    showEditWishBottomSheet(context, wish);
-  }
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +27,7 @@ class WishCard extends StatelessWidget {
       borderRadius: borderRadius,
       child: InkWell(
         borderRadius: borderRadius,
-        onTap: () => onTap(context),
+        onTap: onTap,
         child: Ink(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
