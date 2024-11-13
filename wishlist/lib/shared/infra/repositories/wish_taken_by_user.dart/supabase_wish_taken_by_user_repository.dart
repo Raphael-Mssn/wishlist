@@ -1,0 +1,28 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wishlist/shared/infra/app_exception.dart';
+import 'package:wishlist/shared/infra/repositories/wish_taken_by_user.dart/wish_taken_by_user_repository.dart';
+import 'package:wishlist/shared/models/wish_taken_by_user/wish_taken_by_user.dart';
+
+class SupabaseWishTakenByUserRepository implements WishTakenByUserRepository {
+  SupabaseWishTakenByUserRepository(this._client);
+  final SupabaseClient _client;
+  static const _wishTakenByUser = 'wish_taken_by_user';
+
+  @override
+  Future<void> wishTakenByUser(WishTakenByUser wishTakenByUser) async {
+    try {
+      await _client.from(_wishTakenByUser).insert(wishTakenByUser.toJson());
+    } on PostgrestException catch (e) {
+      final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
+      throw AppException(
+        statusCode: statusCode ?? 500,
+        message: e.message,
+      );
+    } catch (e) {
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to user want to give wish',
+      );
+    }
+  }
+}
