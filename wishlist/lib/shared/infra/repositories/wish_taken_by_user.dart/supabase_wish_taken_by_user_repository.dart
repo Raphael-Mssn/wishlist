@@ -27,4 +27,22 @@ class SupabaseWishTakenByUserRepository implements WishTakenByUserRepository {
       );
     }
   }
+
+  @override
+  Future<void> cancelWishTaken(int wishId) async {
+    try {
+      await _client.from(_wishTakenByUser).delete().eq('wish_id', wishId);
+    } on PostgrestException catch (e) {
+      final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
+      throw AppException(
+        statusCode: statusCode ?? 500,
+        message: e.message,
+      );
+    } catch (e) {
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to user want to give wish',
+      );
+    }
+  }
 }

@@ -14,6 +14,12 @@ class WishTakenByUserService {
       wishTakenByUser,
     );
   }
+
+  Future<void> cancelWishTaken(int wishId) async {
+    return _wishTakenByUserRepository.cancelWishTaken(
+      wishId,
+    );
+  }
 }
 
 final wishTakenByUserServiceProvider = Provider(

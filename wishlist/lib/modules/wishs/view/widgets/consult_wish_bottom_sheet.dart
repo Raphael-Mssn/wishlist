@@ -45,6 +45,19 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
     }
   }
 
+  Future<void> onCancelGiveIt(BuildContext context, WidgetRef ref) async {
+    try {
+      await ref.read(wishTakenByUserServiceProvider).cancelWishTaken(wish.id);
+      if (context.mounted) {
+        context.pop();
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showGenericError();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
@@ -60,6 +73,12 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
         TextEditingController(text: wish.description);
 
     const gapWishProperty = 12.0;
+    final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
+
+    final isWishPending = wish.takenByUser.isEmpty;
+    final isWishTakenByMe = wish.takenByUser.any(
+      (element) => element.userId == currentUserId,
+    );
 
     return AppBottomSheetWithThemeAndAppBarLayout(
       title: wish.name,
@@ -102,20 +121,29 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
           ),
           Column(
             children: [
-              if (linkUrl != null && linkUrl.isNotEmpty)
+              if (linkUrl != null && linkUrl.isNotEmpty) ...[
                 SecondaryButton(
                   text: l10n.openLink,
                   style: BaseButtonStyle.large,
                   isStretched: true,
                   onPressed: onOpenLink,
                 ),
-              const Gap(12),
-              PrimaryButton(
-                text: l10n.iWantToGiveIt,
-                style: BaseButtonStyle.large,
-                isStretched: true,
-                onPressed: () => onGiveIt(context, ref),
-              ),
+                const Gap(12),
+              ],
+              if (isWishPending)
+                PrimaryButton(
+                  text: l10n.iWantToGiveIt,
+                  style: BaseButtonStyle.large,
+                  isStretched: true,
+                  onPressed: () => onGiveIt(context, ref),
+                )
+              else if (isWishTakenByMe)
+                PrimaryButton(
+                  text: l10n.cancelBooking,
+                  style: BaseButtonStyle.large,
+                  isStretched: true,
+                  onPressed: () => onCancelGiveIt(context, ref),
+                ),
             ],
           ),
         ],
