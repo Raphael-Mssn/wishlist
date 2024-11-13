@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -142,13 +143,19 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     final wishlist = wishlistScreenData.wishlist;
     final wishs = wishlistScreenData.wishs;
 
-    final nbWishsPending =
-        wishs.where((wish) => wish.takenByUser.isEmpty).length;
-    final nbWishsBooked =
-        wishs.where((wish) => wish.takenByUser.isNotEmpty).length;
+    final wishsPending =
+        wishs.where((wish) => wish.takenByUser.isEmpty).toIList();
+    final wishsBooked =
+        wishs.where((wish) => wish.takenByUser.isNotEmpty).toIList();
+    final wishsToDisplay = statCardSelected == WishlistStatsCardType.pending
+        ? wishsPending
+        : wishsBooked;
 
-    final hasWishsNotTaken = wishs.any((wish) => wish.takenByUser.isEmpty);
-    final hasWishsTaken = wishs.any((wish) => wish.takenByUser.isNotEmpty);
+    final nbWishsPending = wishsPending.length;
+    final nbWishsBooked = wishsBooked.length;
+
+    final hasWishsNotTaken = nbWishsPending > 0;
+    final hasWishsTaken = nbWishsBooked > 0;
 
     final shouldDisplayWishs =
         hasWishsNotTaken && statCardSelected == WishlistStatsCardType.pending ||
@@ -204,35 +211,20 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                                 )
                                 .loadWishs(),
                             child: ListView.separated(
-                              itemCount: wishs.length,
+                              itemCount: wishsToDisplay.length,
                               separatorBuilder: (context, index) =>
                                   const Gap(8),
                               itemBuilder: (context, index) {
-                                final wish = wishs[index];
-                                if (statCardSelected ==
-                                    WishlistStatsCardType.booked) {
-                                  return WishCard(
-                                    key: ValueKey(wish.id),
-                                    wish: wish,
-                                    onTap: () => onTapWish(
-                                      context,
-                                      wish,
-                                      isMyWishlist: isMyWishlist,
-                                    ),
-                                  );
-                                } else if (statCardSelected ==
-                                    WishlistStatsCardType.pending) {
-                                  return WishCard(
-                                    key: ValueKey(wish.id),
-                                    wish: wish,
-                                    onTap: () => onTapWish(
-                                      context,
-                                      wish,
-                                      isMyWishlist: isMyWishlist,
-                                    ),
-                                  );
-                                }
-                                return null;
+                                final wish = wishsToDisplay[index];
+                                return WishCard(
+                                  key: ValueKey(wish.id),
+                                  wish: wish,
+                                  onTap: () => onTapWish(
+                                    context,
+                                    wish,
+                                    isMyWishlist: isMyWishlist,
+                                  ),
+                                );
                               },
                             ),
                           )
