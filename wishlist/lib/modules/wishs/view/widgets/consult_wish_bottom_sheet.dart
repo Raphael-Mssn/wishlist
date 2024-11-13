@@ -7,7 +7,7 @@ import 'package:wishlist/modules/wishs/view/widgets/wish_property.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wish_taken_by_user_service.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
-import 'package:wishlist/shared/models/wish_taken_by_user/wish_taken_by_user.dart';
+import 'package:wishlist/shared/models/wish_taken_by_user/create_request/wish_taken_by_user_create_request.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/double_extension.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
@@ -24,7 +24,7 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
 
   Future<void> onGiveIt(BuildContext context, WidgetRef ref) async {
     final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
-    final wishTakenByUser = WishTakenByUser(
+    final wishTakenByUser = WishTakenByUserCreateRequest(
       wishId: wish.id,
       // TODO: Handle quantity
       quantity: 1,

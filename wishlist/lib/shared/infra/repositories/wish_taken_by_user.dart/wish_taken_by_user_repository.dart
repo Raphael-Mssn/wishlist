@@ -1,5 +1,5 @@
-import 'package:wishlist/shared/models/wish_taken_by_user/wish_taken_by_user.dart';
+import 'package:wishlist/shared/models/wish_taken_by_user/create_request/wish_taken_by_user_create_request.dart';
 
 abstract class WishTakenByUserRepository {
-  Future<void> wishTakenByUser(WishTakenByUser wishTakenByUser);
+  Future<void> wishTakenByUser(WishTakenByUserCreateRequest wishTakenByUser);
 }

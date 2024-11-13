@@ -1,7 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/repositories/wish_taken_by_user.dart/wish_taken_by_user_repository.dart';
-import 'package:wishlist/shared/models/wish_taken_by_user/wish_taken_by_user.dart';
+import 'package:wishlist/shared/models/wish_taken_by_user/create_request/wish_taken_by_user_create_request.dart';
 
 class SupabaseWishTakenByUserRepository implements WishTakenByUserRepository {
   SupabaseWishTakenByUserRepository(this._client);
@@ -9,7 +9,9 @@ class SupabaseWishTakenByUserRepository implements WishTakenByUserRepository {
   static const _wishTakenByUser = 'wish_taken_by_user';
 
   @override
-  Future<void> wishTakenByUser(WishTakenByUser wishTakenByUser) async {
+  Future<void> wishTakenByUser(
+    WishTakenByUserCreateRequest wishTakenByUser,
+  ) async {
     try {
       await _client.from(_wishTakenByUser).insert(wishTakenByUser.toJson());
     } on PostgrestException catch (e) {
