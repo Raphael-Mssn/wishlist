@@ -7,9 +7,12 @@ import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_provider.d
 import 'package:wishlist/modules/wishlists/view/widgets/wish_card.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
+import 'package:wishlist/modules/wishs/view/widgets/consult_wish_bottom_sheet.dart';
 import 'package:wishlist/modules/wishs/view/widgets/create_wish_bottom_sheet.dart';
+import 'package:wishlist/modules/wishs/view/widgets/edit_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
+import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty_content.dart';
 import 'package:wishlist/shared/theme/colors.dart';
@@ -28,6 +31,18 @@ class WishlistScreen extends ConsumerWidget {
 
   void onAddWish(BuildContext context, Wishlist wishlist) {
     showCreateWishBottomSheet(context, wishlist);
+  }
+
+  void onTapWish(
+    BuildContext context,
+    Wish wish, {
+    required bool isMyWishlist,
+  }) {
+    if (isMyWishlist) {
+      showEditWishBottomSheet(context, wish);
+    } else {
+      showConsultWishBottomSheet(context, wish);
+    }
   }
 
   @override
@@ -169,6 +184,11 @@ class WishlistScreen extends ConsumerWidget {
                                 return WishCard(
                                   key: ValueKey(wish.id),
                                   wish: wish,
+                                  onTap: () => onTapWish(
+                                    context,
+                                    wish,
+                                    isMyWishlist: isMyWishlist,
+                                  ),
                                 );
                               },
                             ),

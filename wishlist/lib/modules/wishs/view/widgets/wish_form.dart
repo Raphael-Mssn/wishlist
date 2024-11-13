@@ -168,7 +168,6 @@ class _WishFormState extends State<WishForm> {
                         isInputBellow: true,
                         isMultilineInput: true,
                         focusNode: _focusNodes[4],
-                        nextFocusNode: null,
                       ),
                     ],
                   ),

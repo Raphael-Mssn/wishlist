@@ -67,6 +67,8 @@
   "wishDescriptionLabel": "Description",
   "wishNameError": "Wish name is required",
   "notNullError": "This field is required",
+  "openLink": "Open link",
+  "iWantToGiveIt": "I want to give it",
   "wishlistVisibility": "Wishlist visibility",
   "private": "Private",
   "public": "Public",

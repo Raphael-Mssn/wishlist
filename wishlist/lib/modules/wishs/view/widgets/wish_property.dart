@@ -9,23 +9,25 @@ class WishProperty extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.inputController,
-    required this.focusNode,
-    required this.nextFocusNode,
+    this.focusNode,
+    this.nextFocusNode,
     this.validator,
     this.inputTextAlign = TextAlign.start,
     this.isInputBellow = false,
     this.isMultilineInput = false,
+    this.readOnly = false,
   });
 
   final IconData icon;
   final String label;
   final TextEditingController inputController;
   final String? Function(String?)? validator;
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
   final TextAlign inputTextAlign;
   final bool isInputBellow;
   final bool isMultilineInput;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class WishProperty extends StatelessWidget {
       textAlign: inputTextAlign,
       controller: inputController,
       focusNode: focusNode,
+      readOnly: readOnly,
       onFieldSubmitted: (_) {
         if (nextFocusNode != null) {
           FocusScope.of(context).requestFocus(nextFocusNode);
