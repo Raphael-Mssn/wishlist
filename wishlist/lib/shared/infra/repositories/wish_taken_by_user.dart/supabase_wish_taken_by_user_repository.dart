@@ -9,11 +9,11 @@ class SupabaseWishTakenByUserRepository implements WishTakenByUserRepository {
   static const _wishTakenByUser = 'wish_taken_by_user';
 
   @override
-  Future<void> wishTakenByUser(
-    WishTakenByUserCreateRequest wishTakenByUser,
+  Future<void> createWishTakenByUser(
+    WishTakenByUserCreateRequest wishTakenByUserCreateRequest,
   ) async {
     try {
-      await _client.from(_wishTakenByUser).insert(wishTakenByUser.toJson());
+      await _client.from(_wishTakenByUser).insert(wishTakenByUserCreateRequest);
     } on PostgrestException catch (e) {
       final statusCode = e.code != null ? int.tryParse(e.code.toString()) : 500;
       throw AppException(
