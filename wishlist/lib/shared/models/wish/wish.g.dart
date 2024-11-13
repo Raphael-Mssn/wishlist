@@ -19,6 +19,8 @@ _$WishImpl _$$WishImplFromJson(Map<String, dynamic> json) => _$WishImpl(
       wishlistId: (json['wishlist_id'] as num).toInt(),
       updatedBy: json['updated_by'] as String,
       updatedAt: DateTime.parse(json['updated_at'] as String),
+      takenByUser: IList<WishTakenByUser>.fromJson(json['taken_by_user'],
+          (value) => WishTakenByUser.fromJson(value as Map<String, dynamic>)),
     );
 
 Map<String, dynamic> _$$WishImplToJson(_$WishImpl instance) =>
@@ -35,4 +37,7 @@ Map<String, dynamic> _$$WishImplToJson(_$WishImpl instance) =>
       'wishlist_id': instance.wishlistId,
       'updated_by': instance.updatedBy,
       'updated_at': instance.updatedAt.toIso8601String(),
+      'taken_by_user': instance.takenByUser.toJson(
+        (value) => value,
+      ),
     };

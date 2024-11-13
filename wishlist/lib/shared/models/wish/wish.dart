@@ -1,5 +1,7 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wishlist/shared/infra/utils/update_entity.dart';
+import 'package:wishlist/shared/models/wish_taken_by_user/wish_taken_by_user.dart';
 
 part 'wish.freezed.dart';
 part 'wish.g.dart';
@@ -19,6 +21,7 @@ class Wish with _$Wish implements Updatable {
     @JsonKey(name: 'wishlist_id') required int wishlistId,
     @JsonKey(name: 'updated_by') required String updatedBy,
     @JsonKey(name: 'updated_at') required DateTime updatedAt,
+    @JsonKey(name: 'taken_by_user') required IList<WishTakenByUser> takenByUser,
   }) = _Wish;
 
   const Wish._();
@@ -37,6 +40,7 @@ class Wish with _$Wish implements Updatable {
     int? wishlistId,
     String? updatedBy,
     DateTime? updatedAt,
+    IList<WishTakenByUser>? takenByUser,
   }) {
     return Wish(
       id: id,
@@ -51,6 +55,7 @@ class Wish with _$Wish implements Updatable {
       wishlistId: wishlistId ?? this.wishlistId,
       updatedBy: updatedBy ?? this.updatedBy,
       updatedAt: updatedAt ?? this.updatedAt,
+      takenByUser: takenByUser ?? this.takenByUser,
     );
   }
 }
