@@ -67,7 +67,7 @@ class _$WishImpl extends _Wish {
       @JsonKey(name: 'wishlist_id') required this.wishlistId,
       @JsonKey(name: 'updated_by') required this.updatedBy,
       @JsonKey(name: 'updated_at') required this.updatedAt,
-      @JsonKey(name: 'taken_by_user') required this.takenByUser})
+      @JsonKey(name: 'taken_by_user') this.takenByUser = const IListConst([])})
       : super._();
 
   factory _$WishImpl.fromJson(Map<String, dynamic> json) =>
@@ -187,7 +187,7 @@ abstract class _Wish extends Wish {
       @JsonKey(name: 'updated_by') required final String updatedBy,
       @JsonKey(name: 'updated_at') required final DateTime updatedAt,
       @JsonKey(name: 'taken_by_user')
-      required final IList<WishTakenByUser> takenByUser}) = _$WishImpl;
+      final IList<WishTakenByUser> takenByUser}) = _$WishImpl;
   const _Wish._() : super._();
 
   factory _Wish.fromJson(Map<String, dynamic> json) = _$WishImpl.fromJson;

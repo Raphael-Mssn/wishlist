@@ -21,7 +21,9 @@ class Wish with _$Wish implements Updatable {
     @JsonKey(name: 'wishlist_id') required int wishlistId,
     @JsonKey(name: 'updated_by') required String updatedBy,
     @JsonKey(name: 'updated_at') required DateTime updatedAt,
-    @JsonKey(name: 'taken_by_user') required IList<WishTakenByUser> takenByUser,
+    @JsonKey(name: 'taken_by_user')
+    @Default(IListConst([]))
+    IList<WishTakenByUser> takenByUser,
   }) = _Wish;
 
   const Wish._();

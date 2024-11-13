@@ -19,8 +19,12 @@ _$WishImpl _$$WishImplFromJson(Map<String, dynamic> json) => _$WishImpl(
       wishlistId: (json['wishlist_id'] as num).toInt(),
       updatedBy: json['updated_by'] as String,
       updatedAt: DateTime.parse(json['updated_at'] as String),
-      takenByUser: IList<WishTakenByUser>.fromJson(json['taken_by_user'],
-          (value) => WishTakenByUser.fromJson(value as Map<String, dynamic>)),
+      takenByUser: json['taken_by_user'] == null
+          ? const IListConst([])
+          : IList<WishTakenByUser>.fromJson(
+              json['taken_by_user'],
+              (value) =>
+                  WishTakenByUser.fromJson(value as Map<String, dynamic>)),
     );
 
 Map<String, dynamic> _$$WishImplToJson(_$WishImpl instance) =>
