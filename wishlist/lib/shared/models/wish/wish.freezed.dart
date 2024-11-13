@@ -44,6 +44,8 @@ mixin _$Wish {
   String get updatedBy => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
   DateTime get updatedAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'taken_by_user')
+  IList<WishTakenByUser> get takenByUser => throw _privateConstructorUsedError;
 
   /// Serializes this Wish to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -64,7 +66,8 @@ class _$WishImpl extends _Wish {
       @JsonKey(name: 'quantity') required this.quantity,
       @JsonKey(name: 'wishlist_id') required this.wishlistId,
       @JsonKey(name: 'updated_by') required this.updatedBy,
-      @JsonKey(name: 'updated_at') required this.updatedAt})
+      @JsonKey(name: 'updated_at') required this.updatedAt,
+      @JsonKey(name: 'taken_by_user') required this.takenByUser})
       : super._();
 
   factory _$WishImpl.fromJson(Map<String, dynamic> json) =>
@@ -106,10 +109,13 @@ class _$WishImpl extends _Wish {
   @override
   @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
+  @override
+  @JsonKey(name: 'taken_by_user')
+  final IList<WishTakenByUser> takenByUser;
 
   @override
   String toString() {
-    return 'Wish(id: $id, createdAt: $createdAt, name: $name, description: $description, price: $price, linkUrl: $linkUrl, iconUrl: $iconUrl, isFavourite: $isFavourite, quantity: $quantity, wishlistId: $wishlistId, updatedBy: $updatedBy, updatedAt: $updatedAt)';
+    return 'Wish(id: $id, createdAt: $createdAt, name: $name, description: $description, price: $price, linkUrl: $linkUrl, iconUrl: $iconUrl, isFavourite: $isFavourite, quantity: $quantity, wishlistId: $wishlistId, updatedBy: $updatedBy, updatedAt: $updatedAt, takenByUser: $takenByUser)';
   }
 
   @override
@@ -135,7 +141,9 @@ class _$WishImpl extends _Wish {
             (identical(other.updatedBy, updatedBy) ||
                 other.updatedBy == updatedBy) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            const DeepCollectionEquality()
+                .equals(other.takenByUser, takenByUser));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -153,7 +161,8 @@ class _$WishImpl extends _Wish {
       quantity,
       wishlistId,
       updatedBy,
-      updatedAt);
+      updatedAt,
+      const DeepCollectionEquality().hash(takenByUser));
 
   @override
   Map<String, dynamic> toJson() {
@@ -165,19 +174,20 @@ class _$WishImpl extends _Wish {
 
 abstract class _Wish extends Wish {
   const factory _Wish(
-          {@JsonKey(name: 'id') required final int id,
-          @JsonKey(name: 'created_at') required final DateTime createdAt,
-          @JsonKey(name: 'name') required final String name,
-          @JsonKey(name: 'description') required final String description,
-          @JsonKey(name: 'price') final double? price,
-          @JsonKey(name: 'link_url') final String? linkUrl,
-          @JsonKey(name: 'icon_url') final String? iconUrl,
-          @JsonKey(name: 'is_favourite') final bool isFavourite,
-          @JsonKey(name: 'quantity') required final int quantity,
-          @JsonKey(name: 'wishlist_id') required final int wishlistId,
-          @JsonKey(name: 'updated_by') required final String updatedBy,
-          @JsonKey(name: 'updated_at') required final DateTime updatedAt}) =
-      _$WishImpl;
+      {@JsonKey(name: 'id') required final int id,
+      @JsonKey(name: 'created_at') required final DateTime createdAt,
+      @JsonKey(name: 'name') required final String name,
+      @JsonKey(name: 'description') required final String description,
+      @JsonKey(name: 'price') final double? price,
+      @JsonKey(name: 'link_url') final String? linkUrl,
+      @JsonKey(name: 'icon_url') final String? iconUrl,
+      @JsonKey(name: 'is_favourite') final bool isFavourite,
+      @JsonKey(name: 'quantity') required final int quantity,
+      @JsonKey(name: 'wishlist_id') required final int wishlistId,
+      @JsonKey(name: 'updated_by') required final String updatedBy,
+      @JsonKey(name: 'updated_at') required final DateTime updatedAt,
+      @JsonKey(name: 'taken_by_user')
+      required final IList<WishTakenByUser> takenByUser}) = _$WishImpl;
   const _Wish._() : super._();
 
   factory _Wish.fromJson(Map<String, dynamic> json) = _$WishImpl.fromJson;
@@ -218,4 +228,7 @@ abstract class _Wish extends Wish {
   @override
   @JsonKey(name: 'updated_at')
   DateTime get updatedAt;
+  @override
+  @JsonKey(name: 'taken_by_user')
+  IList<WishTakenByUser> get takenByUser;
 }

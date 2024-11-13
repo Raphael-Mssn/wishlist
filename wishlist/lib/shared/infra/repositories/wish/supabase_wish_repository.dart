@@ -9,13 +9,16 @@ class SupabaseWishRepository implements WishRepository {
   SupabaseWishRepository(this._client);
   final SupabaseClient _client;
   static const _wishsTableName = 'wishs';
+  static const _wishTakenByUserTableName = 'wish_taken_by_user';
 
   @override
   Future<IList<Wish>> getWishsFromWishlist(int wishlistId) async {
     try {
       final wishsJson = await _client
           .from(_wishsTableName)
-          .select()
+          .select(
+            '*, taken_by_user:$_wishTakenByUserTableName(*)',
+          )
           .eq('wishlist_id', wishlistId);
 
       return wishsJson.map(Wish.fromJson).toIList();
