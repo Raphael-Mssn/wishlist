@@ -55,6 +55,8 @@
   "wishlistStatusPending": "Pending",
   "wishlistStatusBooked": "Booked",
   "wishlistNoWish": "No wish",
+  "wishlistNoWishBooked": "No wish booked",
+  "wishlistNoWishBookedDisplayed": "You chose not to display booked wishes",
   "wishlistAddWish": "Add a wish",
   "createWishBottomSheetTitle": "Create a wish",
   "editWishBottomSheetTitle": "Edit a wish",

@@ -147,19 +147,38 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         wishs.where((wish) => wish.takenByUser.isEmpty).toIList();
     final wishsBooked =
         wishs.where((wish) => wish.takenByUser.isNotEmpty).toIList();
-    final wishsToDisplay = statCardSelected == WishlistStatsCardType.pending
-        ? wishsPending
-        : wishsBooked;
 
-    final nbWishsPending = wishsPending.length;
+    final isWishsBookedHidden = !wishlist.canOwnerSeeTakenWish && isMyWishlist;
+
+    final wishsToDisplay = isWishsBookedHidden
+        ? wishs
+        : statCardSelected == WishlistStatsCardType.pending
+            ? wishsPending
+            : wishsBooked;
+
+    final nbWishsPending =
+        isWishsBookedHidden ? wishs.length : wishsPending.length;
     final nbWishsBooked = wishsBooked.length;
 
-    final hasWishsNotTaken = nbWishsPending > 0;
-    final hasWishsTaken = nbWishsBooked > 0;
+    final hasWishsPending = nbWishsPending > 0;
+    final hasWishsBooked = nbWishsBooked > 0;
 
     final shouldDisplayWishs =
-        hasWishsNotTaken && statCardSelected == WishlistStatsCardType.pending ||
-            hasWishsTaken && statCardSelected == WishlistStatsCardType.booked;
+        hasWishsPending && statCardSelected == WishlistStatsCardType.pending ||
+            hasWishsBooked &&
+                !isWishsBookedHidden &&
+                statCardSelected == WishlistStatsCardType.booked;
+
+    final pageLayoutEmptyContentTitle =
+        statCardSelected == WishlistStatsCardType.pending
+            ? l10n.wishlistNoWish
+            : isWishsBookedHidden
+                ? l10n.wishlistNoWishBookedDisplayed
+                : l10n.wishlistNoWishBooked;
+
+    final shouldShowCallToAction = isMyWishlist &&
+        (!isWishsBookedHidden ||
+            statCardSelected == WishlistStatsCardType.pending);
 
     return Stack(
       children: [
@@ -175,6 +194,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                       isSelected:
                           statCardSelected == WishlistStatsCardType.pending,
                       count: nbWishsPending,
+                      countIsHidden: isWishsBookedHidden,
                       onTap: () => onTapStatCard(WishlistStatsCardType.pending),
                     ),
                   ),
@@ -185,6 +205,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                       isSelected:
                           statCardSelected == WishlistStatsCardType.booked,
                       count: nbWishsBooked,
+                      countIsHidden: isWishsBookedHidden,
                       onTap: () => onTapStatCard(WishlistStatsCardType.booked),
                     ),
                   ),
@@ -233,10 +254,12 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                             child: PageLayoutEmptyContent(
                               illustrationUrl: Assets.svg.noWishlist,
                               illustrationHeight: constraints.maxHeight / 2,
-                              title: l10n.wishlistNoWish,
-                              callToAction:
-                                  isMyWishlist ? l10n.wishlistAddWish : null,
-                              onCallToAction: isMyWishlist
+                              title: pageLayoutEmptyContentTitle,
+                              titleTextStyle: AppTextStyles.medium,
+                              callToAction: shouldShowCallToAction
+                                  ? l10n.wishlistAddWish
+                                  : null,
+                              onCallToAction: shouldShowCallToAction
                                   ? () => onAddWish(context, wishlist)
                                   : null,
                             ),
