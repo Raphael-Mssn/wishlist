@@ -69,6 +69,7 @@
   "notNullError": "This field is required",
   "openLink": "Open link",
   "iWantToGiveIt": "I want to give it",
+  "cancelBooking": "Cancel booking",
   "wishlistVisibility": "Wishlist visibility",
   "private": "Private",
   "public": "Public",

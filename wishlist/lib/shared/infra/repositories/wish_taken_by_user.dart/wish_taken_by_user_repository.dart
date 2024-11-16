@@ -2,4 +2,5 @@ import 'package:wishlist/shared/models/wish_taken_by_user/create_request/wish_ta
 
 abstract class WishTakenByUserRepository {
   Future<void> wishTakenByUser(WishTakenByUserCreateRequest wishTakenByUser);
+  Future<void> cancelWishTaken(int wishId);
 }
