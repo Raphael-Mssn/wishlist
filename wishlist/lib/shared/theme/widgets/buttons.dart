@@ -20,6 +20,8 @@ abstract class BaseButton extends StatelessWidget {
 
   Color backgroundColor(BuildContext context);
 
+  Color textColor(BuildContext context);
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -45,7 +47,10 @@ abstract class BaseButton extends StatelessWidget {
               )
             : Text(
                 text,
-                style: style.textStyle,
+                style: style.textStyle.copyWith(
+                  color: textColor(context),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
       ),
     );
@@ -66,6 +71,11 @@ class PrimaryButton extends BaseButton {
   Color backgroundColor(BuildContext context) {
     return Theme.of(context).primaryColor;
   }
+
+  @override
+  Color textColor(BuildContext context) {
+    return Theme.of(context).scaffoldBackgroundColor;
+  }
 }
 
 class SecondaryButton extends BaseButton {
@@ -81,6 +91,11 @@ class SecondaryButton extends BaseButton {
   @override
   Color backgroundColor(BuildContext context) {
     return AppColors.pastelGray;
+  }
+
+  @override
+  Color textColor(BuildContext context) {
+    return AppColors.makara;
   }
 }
 
