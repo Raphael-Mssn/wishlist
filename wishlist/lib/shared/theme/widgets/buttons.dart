@@ -111,7 +111,7 @@ class BaseButtonStyle {
   static const small = BaseButtonStyle(
     textStyle: TextStyle(
       fontFamily: FontFamily.truculenta,
-      fontSize: 20,
+      fontSize: 16,
       fontWeight: FontWeight.normal,
       color: Colors.black,
     ),
@@ -124,7 +124,7 @@ class BaseButtonStyle {
   static const medium = BaseButtonStyle(
     textStyle: TextStyle(
       fontFamily: FontFamily.truculenta,
-      fontSize: 24,
+      fontSize: 20,
       fontWeight: FontWeight.normal,
       color: Colors.black,
     ),
@@ -137,7 +137,7 @@ class BaseButtonStyle {
   static const large = BaseButtonStyle(
     textStyle: TextStyle(
       fontFamily: FontFamily.truculenta,
-      fontSize: 28,
+      fontSize: 24,
       fontWeight: FontWeight.normal,
       color: Colors.black,
     ),
