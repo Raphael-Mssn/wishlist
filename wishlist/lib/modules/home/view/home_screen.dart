@@ -44,15 +44,13 @@ class HomeScreen extends ConsumerWidget {
               onRefresh: refreshWishlists,
             )
           : PageLayout(
-              padding: EdgeInsets.zero,
+              padding: const EdgeInsets.all(20).copyWith(bottom: 0),
               title: l10n.myWishlists,
               onRefresh: refreshWishlists,
-              child: Padding(
-                padding: const EdgeInsets.all(16).copyWith(bottom: 96),
-                child: WishlistsGrid(
-                  wishlists: data,
-                  isReorderable: true,
-                ),
+              child: WishlistsGrid(
+                wishlists: data,
+                isReorderable: true,
+                padding: const EdgeInsets.only(bottom: 96),
               ),
             ),
     );

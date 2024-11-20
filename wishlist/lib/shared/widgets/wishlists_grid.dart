@@ -13,10 +13,12 @@ class WishlistsGrid extends ConsumerWidget {
     super.key,
     required this.wishlists,
     required this.isReorderable,
+    this.padding,
   });
 
   final List<Wishlist> wishlists;
   final bool isReorderable;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,6 +45,7 @@ class WishlistsGrid extends ConsumerWidget {
 
     Widget buildReorderable() {
       return AnimatedReorderableGridView(
+        padding: padding,
         items: wishlists,
         proxyDecorator: (
           child,
