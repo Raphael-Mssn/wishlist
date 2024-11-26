@@ -161,6 +161,7 @@ class _WishFormState extends State<WishForm> {
                         inputController: widget.linkInputController,
                         focusNode: _focusNodes[3],
                         nextFocusNode: _focusNodes[4],
+                        keyboardType: TextInputType.url,
                       ),
                       const Gap(gapWishProperty),
                       WishProperty(
