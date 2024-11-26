@@ -41,7 +41,4 @@ Map<String, dynamic> _$$WishImplToJson(_$WishImpl instance) =>
       'wishlist_id': instance.wishlistId,
       'updated_by': instance.updatedBy,
       'updated_at': instance.updatedAt.toIso8601String(),
-      'taken_by_user': instance.takenByUser.toJson(
-        (value) => value,
-      ),
     };

@@ -44,7 +44,7 @@ mixin _$Wish {
   String get updatedBy => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
   DateTime get updatedAt => throw _privateConstructorUsedError;
-  @JsonKey(name: 'taken_by_user')
+  @JsonKey(name: 'taken_by_user', includeToJson: false)
   IList<WishTakenByUser> get takenByUser => throw _privateConstructorUsedError;
 
   /// Serializes this Wish to a JSON map.
@@ -67,7 +67,8 @@ class _$WishImpl extends _Wish {
       @JsonKey(name: 'wishlist_id') required this.wishlistId,
       @JsonKey(name: 'updated_by') required this.updatedBy,
       @JsonKey(name: 'updated_at') required this.updatedAt,
-      @JsonKey(name: 'taken_by_user') this.takenByUser = const IListConst([])})
+      @JsonKey(name: 'taken_by_user', includeToJson: false)
+      this.takenByUser = const IListConst([])})
       : super._();
 
   factory _$WishImpl.fromJson(Map<String, dynamic> json) =>
@@ -110,7 +111,7 @@ class _$WishImpl extends _Wish {
   @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
   @override
-  @JsonKey(name: 'taken_by_user')
+  @JsonKey(name: 'taken_by_user', includeToJson: false)
   final IList<WishTakenByUser> takenByUser;
 
   @override
@@ -186,7 +187,7 @@ abstract class _Wish extends Wish {
       @JsonKey(name: 'wishlist_id') required final int wishlistId,
       @JsonKey(name: 'updated_by') required final String updatedBy,
       @JsonKey(name: 'updated_at') required final DateTime updatedAt,
-      @JsonKey(name: 'taken_by_user')
+      @JsonKey(name: 'taken_by_user', includeToJson: false)
       final IList<WishTakenByUser> takenByUser}) = _$WishImpl;
   const _Wish._() : super._();
 
@@ -229,6 +230,6 @@ abstract class _Wish extends Wish {
   @JsonKey(name: 'updated_at')
   DateTime get updatedAt;
   @override
-  @JsonKey(name: 'taken_by_user')
+  @JsonKey(name: 'taken_by_user', includeToJson: false)
   IList<WishTakenByUser> get takenByUser;
 }
