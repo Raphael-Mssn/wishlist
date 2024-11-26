@@ -38,6 +38,7 @@ class _UserSearchBarState extends State<UserSearchBar> {
         style: AppTextStyles.smaller.copyWith(
           color: AppColors.darkGrey,
         ),
+        textCapitalization: TextCapitalization.sentences,
         decoration: InputDecoration(
           focusedBorder: InputBorder.none,
           hintText: context.l10n.emailOrPseudoHint,

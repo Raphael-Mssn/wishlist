@@ -35,6 +35,7 @@ class _CreateDialogContentState extends State<_CreateDialogContent> {
                 fontFamily: FontFamily.truculenta,
                 fontSize: labelFontSize,
               ),
+              textCapitalization: TextCapitalization.sentences,
               cursorColor: AppColors.primary,
               autofocus: true,
               decoration: InputDecoration(
