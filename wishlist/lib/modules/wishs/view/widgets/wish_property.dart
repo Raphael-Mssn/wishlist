@@ -16,6 +16,7 @@ class WishProperty extends StatelessWidget {
     this.isInputBellow = false,
     this.isMultilineInput = false,
     this.readOnly = false,
+    this.keyboardType = TextInputType.text,
   });
 
   final IconData icon;
@@ -28,6 +29,7 @@ class WishProperty extends StatelessWidget {
   final bool isInputBellow;
   final bool isMultilineInput;
   final bool readOnly;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +73,7 @@ class WishProperty extends StatelessWidget {
       maxLines: isMultilineInput ? null : 1,
       textInputAction:
           isMultilineInput ? TextInputAction.unspecified : TextInputAction.next,
-      keyboardType:
-          isMultilineInput ? TextInputType.multiline : TextInputType.text,
+      keyboardType: isMultilineInput ? TextInputType.multiline : keyboardType,
     );
 
     return Column(

@@ -142,6 +142,7 @@ class _WishFormState extends State<WishForm> {
                         inputTextAlign: TextAlign.center,
                         focusNode: _focusNodes[1],
                         nextFocusNode: _focusNodes[2],
+                        keyboardType: TextInputType.number,
                       ),
                       const Gap(gapWishProperty),
                       WishProperty(
@@ -151,6 +152,7 @@ class _WishFormState extends State<WishForm> {
                         inputTextAlign: TextAlign.center,
                         focusNode: _focusNodes[2],
                         nextFocusNode: _focusNodes[3],
+                        keyboardType: TextInputType.number,
                       ),
                       const Gap(gapWishProperty),
                       WishProperty(
