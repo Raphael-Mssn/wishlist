@@ -70,6 +70,7 @@
   "wishNameError": "Le nom du wish est requis",
   "notNullError": "Ce champ est requis",
   "openLink": "Ouvrir le lien",
+  "linkNotValid": "Le lien n'est pas valide",
   "iWantToGiveIt": "Je veux l'offrir",
   "cancelBooking": "Annuler la réservation",
   "wishlistVisibility": "Visibilité de la wishlist",

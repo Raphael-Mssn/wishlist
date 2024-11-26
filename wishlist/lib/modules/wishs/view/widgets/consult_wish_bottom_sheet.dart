@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_property.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
@@ -19,7 +20,16 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
 
   final Wish wish;
 
-  void onOpenLink() {}
+  Future<void> onOpenLink(BuildContext context, String linkUrl) async {
+    final canLaunch = await launchUrl(Uri.parse(linkUrl));
+    if (context.mounted && !canLaunch) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.linkNotValid),
+        ),
+      );
+    }
+  }
 
   Future<void> onGiveIt(BuildContext context, WidgetRef ref) async {
     try {
@@ -117,7 +127,7 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
                   text: l10n.openLink,
                   style: BaseButtonStyle.large,
                   isStretched: true,
-                  onPressed: onOpenLink,
+                  onPressed: () => onOpenLink(context, linkUrl),
                 ),
                 const Gap(12),
               ],
