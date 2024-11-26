@@ -1,3 +1,4 @@
 #pattern  filter=crypt diff=crypt merge=crypt
 wishlist/.env.dev  filter=crypt diff=crypt merge=crypt
 wishlist/.env.prod  filter=crypt diff=crypt merge=crypt
+wishlist/android/key.properties  filter=crypt diff=crypt merge=crypt
