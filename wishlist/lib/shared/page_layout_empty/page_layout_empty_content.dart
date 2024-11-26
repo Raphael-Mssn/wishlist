@@ -10,6 +10,7 @@ class PageLayoutEmptyContent extends StatelessWidget {
     required this.illustrationUrl,
     required this.illustrationHeight,
     required this.title,
+    this.titleTextStyle = AppTextStyles.title,
     required this.callToAction,
     required this.onCallToAction,
   });
@@ -17,6 +18,7 @@ class PageLayoutEmptyContent extends StatelessWidget {
   final String illustrationUrl;
   final double illustrationHeight;
   final String title;
+  final TextStyle titleTextStyle;
   final String? callToAction;
   final Function()? onCallToAction;
 
@@ -35,7 +37,8 @@ class PageLayoutEmptyContent extends StatelessWidget {
         const Gap(32),
         Text(
           title,
-          style: AppTextStyles.title,
+          textAlign: TextAlign.center,
+          style: titleTextStyle,
         ),
         const Gap(16),
         if (hasCallToAction)

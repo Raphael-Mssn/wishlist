@@ -14,12 +14,14 @@ class WishlistStatsCard extends StatelessWidget {
     super.key,
     required this.type,
     required this.count,
+    this.countIsHidden = false,
     required this.isSelected,
     required this.onTap,
   });
 
   final WishlistStatsCardType type;
   final int count;
+  final bool countIsHidden;
   final bool isSelected;
   final void Function() onTap;
 
@@ -73,7 +75,7 @@ class WishlistStatsCard extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  count.toString(),
+                  countIsHidden ? '?' : count.toString(),
                   style: AppTextStyles.title.copyWith(
                     color: textColor,
                     fontWeight: FontWeight.bold,

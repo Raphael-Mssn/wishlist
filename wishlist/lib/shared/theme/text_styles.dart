@@ -13,25 +13,25 @@ import 'package:wishlist/gen/fonts.gen.dart';
 // FontWeight.w900	Black
 
 class AppTextStyles {
-  static TextStyle title = const TextStyle(
+  static const TextStyle title = TextStyle(
     fontFamily: FontFamily.truculenta,
     fontSize: 36,
     fontWeight: FontWeight.w500,
   );
 
-  static TextStyle medium = const TextStyle(
+  static const TextStyle medium = TextStyle(
     fontFamily: FontFamily.truculenta,
     fontSize: 32,
     fontWeight: FontWeight.w400,
   );
 
-  static TextStyle small = const TextStyle(
+  static const TextStyle small = TextStyle(
     fontFamily: FontFamily.truculenta,
     fontSize: 26,
     fontWeight: FontWeight.w400,
   );
 
-  static TextStyle smaller = const TextStyle(
+  static const TextStyle smaller = TextStyle(
     fontFamily: FontFamily.truculenta,
     fontSize: 22,
     fontWeight: FontWeight.w400,
