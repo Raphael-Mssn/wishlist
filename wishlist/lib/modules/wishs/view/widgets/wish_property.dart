@@ -57,6 +57,7 @@ class WishProperty extends StatelessWidget {
           FocusScope.of(context).requestFocus(nextFocusNode);
         }
       },
+      textCapitalization: TextCapitalization.sentences,
       validator: validator,
       cursorErrorColor: Colors.red,
       decoration: InputDecoration(

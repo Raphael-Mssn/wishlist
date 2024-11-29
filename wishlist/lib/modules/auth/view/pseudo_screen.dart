@@ -93,6 +93,7 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
               decoration: InputDecoration(
                 labelText: l10n.pseudoField,
               ),
+              textCapitalization: TextCapitalization.sentences,
               validator: (value) => pseudoValidator(value, l10n),
             ),
             const Gap(32),
