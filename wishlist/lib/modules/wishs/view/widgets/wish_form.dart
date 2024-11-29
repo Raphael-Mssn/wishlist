@@ -142,6 +142,7 @@ class _WishFormState extends State<WishForm> {
                         inputTextAlign: TextAlign.center,
                         focusNode: _focusNodes[1],
                         nextFocusNode: _focusNodes[2],
+                        keyboardType: TextInputType.number,
                       ),
                       const Gap(gapWishProperty),
                       WishProperty(
@@ -151,6 +152,7 @@ class _WishFormState extends State<WishForm> {
                         inputTextAlign: TextAlign.center,
                         focusNode: _focusNodes[2],
                         nextFocusNode: _focusNodes[3],
+                        keyboardType: TextInputType.number,
                       ),
                       const Gap(gapWishProperty),
                       WishProperty(
@@ -159,6 +161,7 @@ class _WishFormState extends State<WishForm> {
                         inputController: widget.linkInputController,
                         focusNode: _focusNodes[3],
                         nextFocusNode: _focusNodes[4],
+                        keyboardType: TextInputType.url,
                       ),
                       const Gap(gapWishProperty),
                       WishProperty(
