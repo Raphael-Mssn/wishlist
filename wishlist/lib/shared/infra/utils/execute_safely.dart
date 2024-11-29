@@ -4,7 +4,7 @@ import 'package:wishlist/shared/infra/app_exception.dart';
 Future<T> executeSafely<T>(
   Future<T> Function() operation, {
   required String errorMessage,
-  void Function(dynamic error)? customErrorHandler,
+  void Function(Exception error)? customErrorHandler,
 }) async {
   try {
     return await operation();
@@ -16,7 +16,7 @@ Future<T> executeSafely<T>(
       statusCode: statusCode ?? 500,
       message: e.message,
     );
-  } catch (e) {
+  } on Exception catch (e) {
     customErrorHandler?.call(e);
 
     throw AppException(
