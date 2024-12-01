@@ -1,3 +1,4 @@
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -31,7 +32,58 @@ class _WishlistSettingsBottomSheetState
   late bool isPublic = widget.wishlist.visibility == WishlistVisibility.public;
   late bool canOwnerSeeTakenWish = widget.wishlist.canOwnerSeeTakenWish;
 
-  void onChangeColor() {}
+  void onChangeColor() {
+    final l10n = context.l10n;
+    var tempColor = AppColors.getColorFromHexValue(widget.wishlist.color);
+
+    showAppDialog(
+      context,
+      title: l10n.wishlistColor,
+      content: Builder(
+        builder: (context) {
+          return IntrinsicHeight(
+            child: ColorPicker(
+              color: tempColor,
+              onColorChanged: (color) => tempColor = color,
+              pickersEnabled: const <ColorPickerType, bool>{
+                ColorPickerType.both: false,
+                ColorPickerType.accent: false,
+                ColorPickerType.custom: true,
+                ColorPickerType.primary: false,
+              },
+              customColorSwatchesAndNames: AppColors.colorSwatches,
+              enableShadesSelection: false,
+            ),
+          );
+        },
+      ),
+      confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
+      onConfirm: () async {
+        try {
+          final selectedColor = tempColor;
+          final wishlistUpdated = widget.wishlist
+              .copyWith(color: AppColors.getHexValue(selectedColor));
+
+          await ref
+              .read(wishlistServiceProvider)
+              .updateWishlist(wishlistUpdated);
+
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.updateSuccess)),
+            );
+            Navigator.pop(context);
+          }
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showGenericError();
+          }
+        }
+      },
+      onCancel: () {},
+    );
+  }
+
   void onAddCollaborator() {}
 
   void onDeleteWishlist() {
@@ -91,11 +143,7 @@ class _WishlistSettingsBottomSheetState
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.genericError),
-          ),
-        );
+        ScaffoldMessenger.of(context).showGenericError();
       }
     }
   }

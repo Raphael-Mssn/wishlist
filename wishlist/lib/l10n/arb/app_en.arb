@@ -84,5 +84,6 @@
   "save": "Save",
   "updateSuccess": "Update successfully completed",
   "deleteWishlist": "Delete my wishlist",
-  "deleteWishlistSuccess": "Wishlist successfully deleted"
+  "deleteWishlistSuccess": "Wishlist successfully deleted",
+  "wishlistColor": "Wishlist color"
 }
