@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 
 abstract final class AppColors {
@@ -24,12 +25,18 @@ abstract final class AppColors {
 
   static const Color makara = Color(0xFF887A6B);
 
-  static final List<Color> colorPalette = [blue, purple, yellow, green];
+  static final Map<Color, String> colorPalette = {
+    blue: 'blue',
+    purple: 'purple',
+    yellow: 'yellow',
+    green: 'green',
+  };
 
   static Color getRandomColor() {
     final random = Random();
-    final index = random.nextInt(colorPalette.length);
-    return colorPalette[index];
+    final colors = colorPalette.keys.toList();
+    final index = random.nextInt(colors.length);
+    return colors[index];
   }
 
   static Color darken(Color color, [double factor = 0.8]) {
@@ -47,4 +54,9 @@ abstract final class AppColors {
   static Color getColorFromHexValue(String hexColor) {
     return Color(int.parse(hexColor.substring(1, 7), radix: 16) + 0xFF000000);
   }
+
+  static final Map<ColorSwatch<Object>, String> colorSwatches = {
+    for (var entry in colorPalette.entries)
+      ColorTools.createPrimarySwatch(entry.key): entry.value,
+  };
 }
