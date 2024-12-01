@@ -67,7 +67,7 @@ class _DialogLayout extends StatelessWidget {
                 }
               }
             },
-            style: BaseButtonStyle.small,
+            style: BaseButtonStyle.medium,
           ),
       ],
       backgroundColor: AppColors.background,
