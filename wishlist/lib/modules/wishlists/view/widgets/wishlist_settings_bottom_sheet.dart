@@ -41,7 +41,7 @@ class _WishlistSettingsBottomSheetState
       title: l10n.wishlistColor,
       content: Builder(
         builder: (context) {
-          return IntrinsicHeight(
+          return FittedBox(
             child: ColorPicker(
               color: tempColor,
               onColorChanged: (color) => tempColor = color,
