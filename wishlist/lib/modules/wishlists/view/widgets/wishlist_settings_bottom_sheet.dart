@@ -106,6 +106,8 @@ class _WishlistSettingsBottomSheetState
   Widget build(BuildContext context) {
     const smallGap = 8.0;
     const largeGap = 16.0;
+    const borderRadiusContainer = 24.0;
+    const paddingContainer = 16.0;
 
     final l10n = context.l10n;
     final wishlist = widget.wishlist;
@@ -125,10 +127,10 @@ class _WishlistSettingsBottomSheetState
                 // First container
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(borderRadiusContainer),
                     color: AppColors.gainsboro,
                   ),
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(paddingContainer),
                   child: Column(
                     children: [
                       Row(
@@ -195,10 +197,11 @@ class _WishlistSettingsBottomSheetState
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius:
+                          BorderRadius.circular(borderRadiusContainer),
                       color: AppColors.gainsboro,
                     ),
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(paddingContainer),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
