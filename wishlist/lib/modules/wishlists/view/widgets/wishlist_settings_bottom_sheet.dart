@@ -44,6 +44,8 @@ class _WishlistSettingsBottomSheetState
           return FittedBox(
             child: ColorPicker(
               color: tempColor,
+              width: 60,
+              height: 60,
               onColorChanged: (color) => tempColor = color,
               pickersEnabled: const <ColorPickerType, bool>{
                 ColorPickerType.both: false,
