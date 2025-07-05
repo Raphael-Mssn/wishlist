@@ -6,6 +6,7 @@ import 'package:wishlist/shared/infra/friendships_provider.dart';
 import 'package:wishlist/shared/infra/repositories/friendship/friendship_repository_provider.dart';
 import 'package:wishlist/shared/infra/repositories/user/user_repository_provider.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
+import 'package:wishlist/shared/infra/wishlists_provider.dart';
 
 void invalidateAllProviders(WidgetRef ref) {
   ref.invalidate(searchProvider);
@@ -15,4 +16,5 @@ void invalidateAllProviders(WidgetRef ref) {
   ref.invalidate(friendshipStatusProvider);
   ref.invalidate(friendshipRepositoryProvider);
   ref.invalidate(userRepositoryProvider);
+  ref.invalidate(wishlistsProvider);
 }
