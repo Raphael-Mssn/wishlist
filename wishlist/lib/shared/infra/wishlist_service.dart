@@ -6,6 +6,7 @@ import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository.
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository_provider.dart';
 import 'package:wishlist/shared/infra/utils/update_entity.dart';
 import 'package:wishlist/shared/infra/wishlist_by_id_provider.dart';
+import 'package:wishlist/shared/infra/wishlists_provider.dart';
 import 'package:wishlist/shared/models/wishlist/create_request/wishlist_create_request.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 
@@ -41,6 +42,7 @@ class WishlistService {
       _wishlistRepository.updateWishlist,
     );
     ref.invalidate(wishlistByIdProvider(wishlist.id));
+    ref.invalidate(wishlistsProvider);
 
     return wishlistUpdated;
   }
