@@ -64,6 +64,14 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     final wishlistScreenData =
         ref.watch(wishlistScreenDataProvider(widget.wishlistId));
 
+    ref
+        .read(
+          wishsFromWishlistProvider(
+            widget.wishlistId,
+          ).notifier,
+        )
+        .loadWishs();
+
     return Scaffold(
       body: wishlistScreenData.when(
         data: (wishlistScreenData) {
