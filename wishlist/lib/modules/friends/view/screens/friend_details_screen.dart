@@ -108,8 +108,16 @@ class _FriendStatsSection extends StatelessWidget {
           width: avatarSize,
           height: avatarSize,
           decoration: const BoxDecoration(
-            color: AppColors.makara,
+            color: AppColors.background,
             shape: BoxShape.circle,
+          ),
+          child: const FittedBox(
+            fit: BoxFit.cover,
+            child: Icon(
+              Icons.account_circle,
+              color: AppColors.makara,
+              size: avatarSize,
+            ),
           ),
         ),
         const Gap(16),
