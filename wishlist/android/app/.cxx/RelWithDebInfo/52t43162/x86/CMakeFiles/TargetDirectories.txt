@@ -1,0 +1,2 @@
+/Users/tanguymossion/Devs/wishlist/wishlist/android/app/.cxx/RelWithDebInfo/52t43162/x86/CMakeFiles/edit_cache.dir
+/Users/tanguymossion/Devs/wishlist/wishlist/android/app/.cxx/RelWithDebInfo/52t43162/x86/CMakeFiles/rebuild_cache.dir
