@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wishlist/modules/friends/view/widgets/default_avatar_icon.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 
 class BaseAvatarPill extends StatelessWidget {
@@ -18,7 +19,6 @@ class BaseAvatarPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const avatarSize = 64.0;
-
     const borderRadius = BorderRadius.all(
       Radius.circular(50),
     );
@@ -33,21 +33,28 @@ class BaseAvatarPill extends StatelessWidget {
         ),
         child: Row(
           children: <Widget>[
-            Container(
-              height: avatarSize,
-              width: avatarSize,
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                shape: BoxShape.circle,
-                border: Border.fromBorderSide(
-                  BorderSide(
-                    color: avatarBorderColor,
-                    width: 6,
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height: avatarSize,
+                  width: avatarSize,
+                  decoration: BoxDecoration(
+                    color: AppColors.makara,
+                    shape: BoxShape.circle,
+                    border: Border.fromBorderSide(
+                      BorderSide(
+                        color: avatarBorderColor,
+                        width: 6,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              child: // TODO: Add avatar
-                  const SizedBox.shrink(),
+                // TODO: Add avatar
+                const DefaultAvatarIcon(
+                  color: AppColors.background,
+                ),
+              ],
             ),
             Expanded(
               child: Padding(
