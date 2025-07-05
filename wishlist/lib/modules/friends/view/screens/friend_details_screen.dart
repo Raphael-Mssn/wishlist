@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/modules/friends/view/widgets/default_avatar_icon.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_details_app_bar.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_pill.dart';
 import 'package:wishlist/shared/infra/friend_details_provider.dart';
@@ -113,10 +114,8 @@ class _FriendStatsSection extends StatelessWidget {
           ),
           child: const FittedBox(
             fit: BoxFit.cover,
-            child: Icon(
-              Icons.account_circle,
+            child: DefaultAvatarIcon(
               color: AppColors.makara,
-              size: avatarSize,
             ),
           ),
         ),

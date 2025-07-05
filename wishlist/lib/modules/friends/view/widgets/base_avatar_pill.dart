@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wishlist/modules/friends/view/widgets/default_avatar_icon.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 
 class BaseAvatarPill extends StatelessWidget {
@@ -50,10 +51,8 @@ class BaseAvatarPill extends StatelessWidget {
                   ),
                 ),
                 // TODO: Add avatar
-                const Icon(
-                  Icons.account_circle,
+                const DefaultAvatarIcon(
                   color: AppColors.background,
-                  size: avatarSize,
                 ),
               ],
             ),
