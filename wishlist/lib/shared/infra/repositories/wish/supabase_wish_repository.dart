@@ -20,7 +20,9 @@ class SupabaseWishRepository implements WishRepository {
             .select(
               '*, taken_by_user:$_wishTakenByUserTableName(*)',
             )
-            .eq('wishlist_id', wishlistId);
+            .eq('wishlist_id', wishlistId)
+            .order('is_favourite', ascending: false)
+            .order('created_at');
 
         return wishsJson.map(Wish.fromJson).toIList();
       },
