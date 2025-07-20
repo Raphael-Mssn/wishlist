@@ -38,15 +38,17 @@ class AppBottomSheetWithThemeAndAppBarLayout extends StatelessWidget {
     super.key,
     required this.theme,
     required this.title,
-    required this.actionIcon,
-    required this.onActionTapped,
+    this.actionIcon,
+    this.onActionTapped,
+    this.actionWidget,
     required this.body,
   });
 
   final ThemeData theme;
   final String title;
-  final IconData actionIcon;
-  final Function() onActionTapped;
+  final IconData? actionIcon;
+  final Function()? onActionTapped;
+  final Widget? actionWidget;
   final Widget body;
 
   @override
@@ -61,13 +63,14 @@ class AppBottomSheetWithThemeAndAppBarLayout extends StatelessWidget {
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: IconButton(
-                  icon: Icon(
-                    actionIcon,
-                    size: 32,
-                  ),
-                  onPressed: onActionTapped,
-                ),
+                child: actionWidget ??
+                    IconButton(
+                      icon: Icon(
+                        actionIcon ?? Icons.more_vert,
+                        size: 32,
+                      ),
+                      onPressed: onActionTapped ?? () {},
+                    ),
               ),
             ],
             foregroundColor: AppColors.background,

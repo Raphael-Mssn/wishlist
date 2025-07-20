@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:like_button/like_button.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_property.dart';
+import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/validators/not_null_validator.dart';
@@ -20,6 +22,8 @@ class WishForm extends StatefulWidget {
     required this.onSubmit,
     this.onSecondaryButtonTapped,
     this.secondaryButtonLabel,
+    this.isLiked = false,
+    this.onLikeChanged,
   });
 
   final String title;
@@ -33,6 +37,8 @@ class WishForm extends StatefulWidget {
   final VoidCallback onSubmit;
   final VoidCallback? onSecondaryButtonTapped;
   final String? secondaryButtonLabel;
+  final bool isLiked;
+  final void Function({required bool isLiked})? onLikeChanged;
 
   @override
   State<WishForm> createState() => _WishFormState();
@@ -106,6 +112,7 @@ class _WishFormState extends State<WishForm> {
         onSecondaryButtonTapped != null && secondaryButtonLabel != null;
 
     const gapWishProperty = 12.0;
+    const buttonSize = 32.0;
 
     return GestureDetector(
       onTap: () {
@@ -116,8 +123,27 @@ class _WishFormState extends State<WishForm> {
       child: AppBottomSheetWithThemeAndAppBarLayout(
         title: widget.title,
         theme: Theme.of(context),
-        actionIcon: Icons.favorite_border,
-        onActionTapped: () {},
+        actionWidget: LikeButton(
+          isLiked: widget.isLiked,
+          size: buttonSize,
+          likeBuilder: (isLiked) {
+            return isLiked
+                ? const Icon(
+                    Icons.favorite,
+                    color: AppColors.favorite,
+                    size: buttonSize,
+                  )
+                : const Icon(
+                    Icons.favorite_border,
+                    color: AppColors.background,
+                    size: buttonSize,
+                  );
+          },
+          onTap: (isLiked) async {
+            widget.onLikeChanged?.call(isLiked: !isLiked);
+            return !isLiked;
+          },
+        ),
         body: Column(
           children: [
             Expanded(
