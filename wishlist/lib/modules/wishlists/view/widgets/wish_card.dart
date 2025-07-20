@@ -28,77 +28,91 @@ class WishCard extends StatelessWidget {
       child: InkWell(
         borderRadius: borderRadius,
         onTap: onTap,
-        child: Ink(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: AppColors.background,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Row(
-            children: [
-              Stack(
+        child: Stack(
+          children: [
+            Ink(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Row(
                 children: [
-                  Container(
-                    width: iconDimension,
-                    height: iconDimension,
-                    decoration: BoxDecoration(
-                      color: AppColors.gainsboro,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Text(
-                      'x${wish.quantity}',
-                      style: AppTextStyles.small.copyWith(
-                        color: AppColors.makara,
-                        height: 1,
+                  Stack(
+                    children: [
+                      Container(
+                        width: iconDimension,
+                        height: iconDimension,
+                        decoration: BoxDecoration(
+                          color: AppColors.gainsboro,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                       ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Text(
+                          'x${wish.quantity}',
+                          style: AppTextStyles.small.copyWith(
+                            color: AppColors.makara,
+                            height: 1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Gap(16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          wish.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.small.copyWith(
+                            color: AppColors.darkGrey,
+                            height: 1,
+                          ),
+                        ),
+                        const Gap(8),
+                        if (price != null)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                CurrencyFormatter.format(
+                                  price,
+                                  CurrencyFormat.eur,
+                                  showThousandSeparator: false,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.small.copyWith(
+                                  color: AppColors.darkGrey,
+                                  height: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              const Gap(16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      wish.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.small.copyWith(
-                        color: AppColors.darkGrey,
-                        height: 1,
-                      ),
-                    ),
-                    const Gap(8),
-                    if (price != null)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            CurrencyFormatter.format(
-                              price,
-                              CurrencyFormat.eur,
-                              showThousandSeparator: false,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.small.copyWith(
-                              color: AppColors.darkGrey,
-                              height: 1,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
+            ),
+            if (wish.isFavourite)
+              const Positioned(
+                top: 8,
+                right: 8,
+                child: Icon(
+                  Icons.favorite,
+                  color: AppColors.favorite,
+                  size: 20,
                 ),
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );
