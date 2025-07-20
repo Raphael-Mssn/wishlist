@@ -33,6 +33,7 @@ class _WishlistSettingsBottomSheetState
     extends ConsumerState<_WishlistSettingsBottomSheet> {
   late bool isPublic = widget.wishlist.visibility == WishlistVisibility.public;
   late bool canOwnerSeeTakenWish = widget.wishlist.canOwnerSeeTakenWish;
+  late String wishlistName = widget.wishlist.name;
 
   void onChangeColor() {
     final l10n = context.l10n;
@@ -128,6 +129,7 @@ class _WishlistSettingsBottomSheetState
         isPublic ? WishlistVisibility.public : WishlistVisibility.private;
 
     final wishlistUpdated = widget.wishlist.copyWith(
+      name: wishlistName,
       canOwnerSeeTakenWish: canOwnerSeeTakenWish,
       visibility: visibilityUpdated,
     );
@@ -165,7 +167,13 @@ class _WishlistSettingsBottomSheetState
 
     return AppBottomSheetWithThemeAndAppBarLayout(
       theme: wishlistTheme,
-      title: wishlist.name,
+      title: wishlistName,
+      isEditable: true,
+      onTitleChanged: (newTitle) {
+        setState(() {
+          wishlistName = newTitle;
+        });
+      },
       actionIcon: Icons.color_lens,
       onActionTapped: onChangeColor,
       body: Column(
