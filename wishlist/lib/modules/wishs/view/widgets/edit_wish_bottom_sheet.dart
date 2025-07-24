@@ -77,6 +77,8 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
             wishToUpdate,
           );
 
+      ref.invalidate(wishsFromWishlistProvider(wish.wishlistId));
+
       if (mounted) {
         context.pop();
         ScaffoldMessenger.of(context).showSnackBar(
