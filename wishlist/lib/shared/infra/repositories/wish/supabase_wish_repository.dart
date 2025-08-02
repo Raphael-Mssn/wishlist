@@ -71,7 +71,9 @@ class SupabaseWishRepository implements WishRepository {
             .from(_wishsTableName)
             .update(wishToUpdate.toJson())
             .eq('id', wishToUpdate.id)
-            .select()
+            .select(
+              '*, taken_by_user:$_wishTakenByUserTableName(*)',
+            )
             .single();
 
         final wish = Wish.fromJson(wishJson);
