@@ -87,6 +87,8 @@ class WishlistContent extends ConsumerWidget {
           )
           .loadWishs(),
       child: ListView.separated(
+        // Espace pour le bouton flottant
+        padding: const EdgeInsets.only(bottom: 100),
         itemCount: wishsToDisplay.length,
         separatorBuilder: (context, index) => const Gap(_controlsSpacing),
         itemBuilder: (context, index) {
