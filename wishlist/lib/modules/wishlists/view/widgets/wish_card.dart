@@ -10,10 +10,12 @@ class WishCard extends StatelessWidget {
     super.key,
     required this.wish,
     required this.onTap,
+    required this.onFavoriteToggle,
   });
 
   final Wish wish;
   final void Function() onTap;
+  final void Function() onFavoriteToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -102,16 +104,31 @@ class WishCard extends StatelessWidget {
                 ],
               ),
             ),
-            if (wish.isFavourite)
-              const Positioned(
-                top: 8,
-                right: 8,
-                child: Icon(
-                  Icons.favorite,
-                  color: AppColors.favorite,
-                  size: 20,
+            Positioned(
+              top: 4,
+              right: 4,
+              child: Material(
+                color: Colors.transparent,
+                shape: const CircleBorder(),
+                clipBehavior: Clip.hardEdge,
+                child: InkWell(
+                  onTap: onFavoriteToggle,
+                  customBorder: const CircleBorder(),
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    alignment: Alignment.center,
+                    child: Icon(
+                      wish.isFavourite ? Icons.favorite : Icons.favorite_border,
+                      color: wish.isFavourite
+                          ? AppColors.favorite
+                          : AppColors.makara,
+                      size: 20,
+                    ),
+                  ),
                 ),
               ),
+            ),
           ],
         ),
       ),
