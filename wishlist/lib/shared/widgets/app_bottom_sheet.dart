@@ -6,6 +6,7 @@ import 'package:wishlist/shared/theme/text_styles.dart';
 Future<void> showAppBottomSheet(
   BuildContext context, {
   required Widget body,
+  bool expandToFillHeight = true,
 }) async {
   const radius = Radius.circular(25);
   // Ensure the theme is the same as the one from the context passed,
@@ -15,7 +16,7 @@ Future<void> showAppBottomSheet(
   await showBarModalBottomSheet<void>(
     context: context,
     backgroundColor: AppColors.background,
-    expand: true,
+    expand: expandToFillHeight,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: radius,
@@ -23,12 +24,12 @@ Future<void> showAppBottomSheet(
       ),
     ),
     builder: (context) {
-      return Scaffold(
-        body: AnimatedTheme(
-          data: theme,
-          child: body,
-        ),
+      final themedBody = AnimatedTheme(
+        data: theme,
+        child: body,
       );
+
+      return expandToFillHeight ? Scaffold(body: themedBody) : themedBody;
     },
   );
 }
