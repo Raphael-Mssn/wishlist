@@ -11,11 +11,13 @@ class WishCard extends StatelessWidget {
     required this.wish,
     required this.onTap,
     required this.onFavoriteToggle,
+    required this.isMyWishlist,
   });
 
   final Wish wish;
   final void Function() onTap;
   final void Function() onFavoriteToggle;
+  final bool isMyWishlist;
 
   @override
   Widget build(BuildContext context) {
@@ -104,31 +106,34 @@ class WishCard extends StatelessWidget {
                 ],
               ),
             ),
-            Positioned(
-              top: 4,
-              right: 4,
-              child: Material(
-                color: Colors.transparent,
-                shape: const CircleBorder(),
-                clipBehavior: Clip.hardEdge,
-                child: InkWell(
-                  onTap: onFavoriteToggle,
-                  customBorder: const CircleBorder(),
-                  child: Container(
-                    width: 32,
-                    height: 32,
-                    alignment: Alignment.center,
-                    child: Icon(
-                      wish.isFavourite ? Icons.favorite : Icons.favorite_border,
-                      color: wish.isFavourite
-                          ? AppColors.favorite
-                          : AppColors.makara,
-                      size: 20,
+            if (isMyWishlist || (!isMyWishlist && wish.isFavourite))
+              Positioned(
+                top: 4,
+                right: 4,
+                child: Material(
+                  color: Colors.transparent,
+                  shape: const CircleBorder(),
+                  clipBehavior: Clip.hardEdge,
+                  child: InkWell(
+                    onTap: isMyWishlist ? onFavoriteToggle : null,
+                    customBorder: const CircleBorder(),
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      alignment: Alignment.center,
+                      child: Icon(
+                        wish.isFavourite
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: wish.isFavourite
+                            ? AppColors.favorite
+                            : AppColors.makara,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

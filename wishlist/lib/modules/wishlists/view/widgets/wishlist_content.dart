@@ -128,6 +128,7 @@ class _WishList extends ConsumerWidget {
               isMyWishlist: isMyWishlist,
             ),
             onFavoriteToggle: () => onFavoriteToggle(wish),
+            isMyWishlist: isMyWishlist,
           );
         },
       ),
