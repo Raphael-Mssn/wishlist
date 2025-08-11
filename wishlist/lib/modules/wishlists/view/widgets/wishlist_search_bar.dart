@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wish_sort_bottom_sheet.dart';
@@ -96,7 +95,6 @@ class _SortButton extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () {
-            HapticFeedback.lightImpact();
             showWishSortBottomSheet(
               context,
               currentSort: wishSort,
@@ -154,7 +152,6 @@ class _OrderButton extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () {
-            HapticFeedback.lightImpact();
             final newOrder = wishSort.order == SortOrder.ascending
                 ? SortOrder.descending
                 : SortOrder.ascending;
