@@ -17,6 +17,7 @@ import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
+import 'package:wishlist/shared/widgets/editable_title.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
 class _WishlistSettingsBottomSheet extends ConsumerStatefulWidget {
@@ -33,6 +34,7 @@ class _WishlistSettingsBottomSheetState
     extends ConsumerState<_WishlistSettingsBottomSheet> {
   late bool isPublic = widget.wishlist.visibility == WishlistVisibility.public;
   late bool canOwnerSeeTakenWish = widget.wishlist.canOwnerSeeTakenWish;
+  late String wishlistName = widget.wishlist.name;
 
   void onChangeColor() {
     final l10n = context.l10n;
@@ -128,6 +130,7 @@ class _WishlistSettingsBottomSheetState
         isPublic ? WishlistVisibility.public : WishlistVisibility.private;
 
     final wishlistUpdated = widget.wishlist.copyWith(
+      name: wishlistName,
       canOwnerSeeTakenWish: canOwnerSeeTakenWish,
       visibility: visibilityUpdated,
     );
@@ -165,87 +168,25 @@ class _WishlistSettingsBottomSheetState
 
     return AppBottomSheetWithThemeAndAppBarLayout(
       theme: wishlistTheme,
-      title: wishlist.name,
+      appBarTitle: EditableTitle(
+        initialTitle: wishlistName,
+        onTitleChanged: (newTitle) {
+          setState(() {
+            wishlistName = newTitle;
+          });
+        },
+      ),
       actionIcon: Icons.color_lens,
       onActionTapped: onChangeColor,
       body: Column(
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // First container
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(borderRadiusContainer),
-                    color: AppColors.gainsboro,
-                  ),
-                  padding: const EdgeInsets.all(paddingContainer),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            l10n.wishlistVisibility,
-                            style: AppTextStyles.smaller.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.makara,
-                            ),
-                          ),
-                          WishlistToggleSwitch(
-                            current: isPublic,
-                            onChanged: (value) =>
-                                setState(() => isPublic = value),
-                            trueLabel: l10n.public,
-                            falseLabel: l10n.private,
-                            trueIcon: const Icon(
-                              Icons.lock_open,
-                              color: AppColors.makara,
-                            ),
-                            falseIcon: const Icon(
-                              Icons.lock,
-                              color: AppColors.makara,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Gap(largeGap),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            l10n.seeTakenWishs,
-                            style: AppTextStyles.smaller.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.makara,
-                            ),
-                          ),
-                          WishlistToggleSwitch(
-                            current: canOwnerSeeTakenWish,
-                            onChanged: (value) =>
-                                setState(() => canOwnerSeeTakenWish = value),
-                            trueLabel: l10n.yes,
-                            falseLabel: l10n.no,
-                            trueIcon: const Icon(
-                              Icons.visibility_rounded,
-                              color: AppColors.makara,
-                            ),
-                            falseIcon: const Icon(
-                              Icons.visibility_off_rounded,
-                              color: AppColors.makara,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(largeGap),
-
-                // Second container
-                Expanded(
-                  child: Container(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // First container
+                  Container(
                     decoration: BoxDecoration(
                       borderRadius:
                           BorderRadius.circular(borderRadiusContainer),
@@ -253,45 +194,120 @@ class _WishlistSettingsBottomSheetState
                     ),
                     padding: const EdgeInsets.all(paddingContainer),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          l10n.wishlistSharedWith,
-                          style: AppTextStyles.small.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.makara,
-                          ),
-                        ),
-                        const Gap(smallGap),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            NavBarAddButton(
-                              icon: Icons.person_add_alt_1,
-                              onPressed: onAddCollaborator,
-                              size: NavBarButtonSize.small,
-                            ),
-                            const Gap(smallGap),
                             Text(
-                              l10n.addCollaborator,
+                              l10n.wishlistVisibility,
                               style: AppTextStyles.smaller.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: wishlistTheme.primaryColor,
+                                color: AppColors.makara,
+                              ),
+                            ),
+                            WishlistToggleSwitch(
+                              current: isPublic,
+                              onChanged: (value) =>
+                                  setState(() => isPublic = value),
+                              trueLabel: l10n.public,
+                              falseLabel: l10n.private,
+                              trueIcon: const Icon(
+                                Icons.lock_open,
+                                color: AppColors.makara,
+                              ),
+                              falseIcon: const Icon(
+                                Icons.lock,
+                                color: AppColors.makara,
                               ),
                             ),
                           ],
                         ),
-                        Center(
-                          child: SvgPicture.asset(
-                            Assets.svg.noFriend,
-                            height: MediaQuery.sizeOf(context).height / 3.5,
-                          ),
+                        const Gap(largeGap),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              l10n.seeTakenWishs,
+                              style: AppTextStyles.smaller.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.makara,
+                              ),
+                            ),
+                            WishlistToggleSwitch(
+                              current: canOwnerSeeTakenWish,
+                              onChanged: (value) =>
+                                  setState(() => canOwnerSeeTakenWish = value),
+                              trueLabel: l10n.yes,
+                              falseLabel: l10n.no,
+                              trueIcon: const Icon(
+                                Icons.visibility_rounded,
+                                color: AppColors.makara,
+                              ),
+                              falseIcon: const Icon(
+                                Icons.visibility_off_rounded,
+                                color: AppColors.makara,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                ),
-                const Gap(largeGap),
-              ],
+                  const Gap(largeGap),
+
+                  // Second container
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.44,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(borderRadiusContainer),
+                        color: AppColors.gainsboro,
+                      ),
+                      padding: const EdgeInsets.all(paddingContainer),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.wishlistSharedWith,
+                            style: AppTextStyles.small.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.makara,
+                            ),
+                          ),
+                          const Gap(smallGap),
+                          Row(
+                            children: [
+                              NavBarAddButton(
+                                icon: Icons.person_add_alt_1,
+                                onPressed: onAddCollaborator,
+                                size: NavBarButtonSize.small,
+                              ),
+                              const Gap(smallGap),
+                              Text(
+                                l10n.addCollaborator,
+                                style: AppTextStyles.smaller.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: wishlistTheme.primaryColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Center(
+                              child: SvgPicture.asset(
+                                Assets.svg.noFriend,
+                                height: MediaQuery.sizeOf(context).height / 3.5,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Gap(largeGap),
+                ],
+              ),
             ),
           ),
           Builder(
