@@ -128,74 +128,61 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     final wishlistScreenData =
         ref.watch(wishlistScreenDataProvider(widget.wishlistId));
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: wishlistScreenData.when(
-          data: (data) {
-            final wishlist = data.wishlist;
-            final wishlistTheme = getWishlistTheme(context, wishlist);
-            final isMyWishlist = wishlist.idOwner ==
-                ref.read(userServiceProvider).getCurrentUserId();
+    return wishlistScreenData.when(
+      data: (data) {
+        final wishlist = data.wishlist;
+        final wishlistTheme = getWishlistTheme(context, wishlist);
+        final isMyWishlist = wishlist.idOwner ==
+            ref.read(userServiceProvider).getCurrentUserId();
 
-            return Theme(
-              data: wishlistTheme,
-              child: AppBar(
-                actions: [
-                  if (isMyWishlist)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.settings,
-                          size: 32,
+        // Appliquer le thème de la wishlist à tout l'écran
+        return AnimatedTheme(
+          data: wishlistTheme,
+          child: Builder(
+            builder: (context) {
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                appBar: PreferredSize(
+                  preferredSize: const Size.fromHeight(70),
+                  child: AppBar(
+                    actions: [
+                      if (isMyWishlist)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.settings,
+                              size: 32,
+                            ),
+                            onPressed: () => showWishlistSettingsBottomSheet(
+                              context,
+                              wishlist,
+                            ),
+                          ),
                         ),
-                        onPressed: () => showWishlistSettingsBottomSheet(
-                          context,
-                          wishlist,
+                    ],
+                    foregroundColor: AppColors.background,
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Text(
+                        wishlist.name,
+                        style: AppTextStyles.medium.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                ],
-                foregroundColor: AppColors.background,
-                title: Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Text(
-                    wishlist.name,
-                    style: AppTextStyles.medium.copyWith(
-                      fontWeight: FontWeight.bold,
+                    centerTitle: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        bottom: Radius.circular(_appBarBorderRadius),
+                      ),
                     ),
                   ),
                 ),
-                centerTitle: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(_appBarBorderRadius),
-                  ),
-                ),
-              ),
-            );
-          },
-          loading: AppBar.new,
-          error: (_, __) => AppBar(),
-        ),
-      ),
-      body: wishlistScreenData.when(
-        data: (wishlistScreenData) {
-          final wishlist = wishlistScreenData.wishlist;
-          final wishlistTheme = getWishlistTheme(context, wishlist);
-          final isMyWishlist = wishlist.idOwner ==
-              ref.read(userServiceProvider).getCurrentUserId();
-
-          return AnimatedTheme(
-            data: wishlistTheme,
-            child: Builder(
-              builder: (context) {
-                return Stack(
+                body: Stack(
                   children: [
                     _buildWishlistDetail(
-                      wishlistScreenData,
+                      data,
                       context,
                       ref,
                       isMyWishlist: isMyWishlist,
@@ -216,15 +203,21 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                         ),
                       ),
                   ],
-                );
-              },
-            ),
-          );
-        },
-        loading: () => const Center(
+                ),
+              );
+            },
+          ),
+        );
+      },
+      loading: () => Scaffold(
+        appBar: AppBar(),
+        body: const Center(
           child: CircularProgressIndicator(),
         ),
-        error: (error, stackTrace) => const SizedBox.shrink(),
+      ),
+      error: (error, stackTrace) => Scaffold(
+        appBar: AppBar(),
+        body: const SizedBox.shrink(),
       ),
     );
   }
