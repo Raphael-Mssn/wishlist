@@ -22,8 +22,8 @@ class WishForm extends StatefulWidget {
     required this.onSubmit,
     this.onSecondaryButtonTapped,
     this.secondaryButtonLabel,
-    this.isLiked = false,
-    this.onLikeChanged,
+    this.isFavourite = false,
+    this.onFavouriteChanged,
   });
 
   final String title;
@@ -37,8 +37,8 @@ class WishForm extends StatefulWidget {
   final VoidCallback onSubmit;
   final VoidCallback? onSecondaryButtonTapped;
   final String? secondaryButtonLabel;
-  final bool isLiked;
-  final void Function({required bool isLiked})? onLikeChanged;
+  final bool isFavourite;
+  final void Function({required bool isFavourite})? onFavouriteChanged;
 
   @override
   State<WishForm> createState() => _WishFormState();
@@ -124,7 +124,7 @@ class _WishFormState extends State<WishForm> {
         title: widget.title,
         theme: Theme.of(context),
         actionWidget: LikeButton(
-          isLiked: widget.isLiked,
+          isLiked: widget.isFavourite,
           size: buttonSize,
           likeBuilder: (isLiked) {
             return isLiked
@@ -140,7 +140,7 @@ class _WishFormState extends State<WishForm> {
                   );
           },
           onTap: (isLiked) async {
-            widget.onLikeChanged?.call(isLiked: !isLiked);
+            widget.onFavouriteChanged?.call(isFavourite: !isLiked);
             return !isLiked;
           },
         ),

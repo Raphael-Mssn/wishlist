@@ -31,7 +31,7 @@ class _CreateWishBottomSheetState
   final _linkInputController = TextEditingController();
   final _descriptionInputController = TextEditingController();
 
-  bool _isLiked = false;
+  bool _isFavourite = false;
 
   Future<void> onCreateWish() async {
     final name = _nameInputController.text;
@@ -48,7 +48,7 @@ class _CreateWishBottomSheetState
       wishlistId: widget.wishlist.id,
       updatedBy: widget.wishlist.idOwner,
       linkUrl: link,
-      isFavourite: _isLiked,
+      isFavourite: _isFavourite,
     );
 
     try {
@@ -93,10 +93,10 @@ class _CreateWishBottomSheetState
       linkInputController: _linkInputController,
       descriptionInputController: _descriptionInputController,
       onSubmit: onCreateWish,
-      isLiked: _isLiked,
-      onLikeChanged: ({required isLiked}) {
+      isFavourite: _isFavourite,
+      onFavouriteChanged: ({required isFavourite}) {
         setState(() {
-          _isLiked = isLiked;
+          _isFavourite = isFavourite;
         });
       },
     );

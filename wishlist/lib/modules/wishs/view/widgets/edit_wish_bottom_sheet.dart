@@ -31,7 +31,7 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
   late TextEditingController _linkInputController;
   late TextEditingController _descriptionInputController;
 
-  late bool _isLiked;
+  late bool _isFavourite;
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
     _linkInputController = TextEditingController(text: wish.linkUrl);
     _descriptionInputController = TextEditingController(text: wish.description);
 
-    _isLiked = wish.isFavourite;
+    _isFavourite = wish.isFavourite;
   }
 
   Future<void> onEditWish() async {
@@ -67,7 +67,7 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
       quantity: quantity,
       description: description,
       linkUrl: link,
-      isFavourite: _isLiked,
+      isFavourite: _isFavourite,
     );
 
     try {
@@ -154,10 +154,10 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
       onSubmit: onEditWish,
       onSecondaryButtonTapped: onDeleteWish,
       secondaryButtonLabel: l10n.deleteWish,
-      isLiked: _isLiked,
-      onLikeChanged: ({required isLiked}) {
+      isFavourite: _isFavourite,
+      onFavouriteChanged: ({required isFavourite}) {
         setState(() {
-          _isLiked = isLiked;
+          _isFavourite = isFavourite;
         });
       },
     );
