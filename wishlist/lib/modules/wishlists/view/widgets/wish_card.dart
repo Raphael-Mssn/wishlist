@@ -23,6 +23,8 @@ class WishCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final price = wish.price;
     const iconDimension = 64.0;
+    final shouldDisplayFavouriteIcon =
+        isMyWishlist || (!isMyWishlist && wish.isFavourite);
 
     final borderRadius = BorderRadius.circular(24);
 
@@ -106,7 +108,7 @@ class WishCard extends StatelessWidget {
                 ],
               ),
             ),
-            if (isMyWishlist || (!isMyWishlist && wish.isFavourite))
+            if (shouldDisplayFavouriteIcon)
               Positioned(
                 top: 4,
                 right: 4,
