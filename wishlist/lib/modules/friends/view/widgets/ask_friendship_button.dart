@@ -21,8 +21,6 @@ class AskFriendshipButton extends ConsumerStatefulWidget {
 
 class _AskFriendshipButtonState extends ConsumerState<AskFriendshipButton> {
   bool _isLoading = false;
-  static const size = 32.0;
-  static const iconColor = AppColors.background;
 
   Future<void> onPressed(FriendshipStatus status) async {
     if (_isLoading) {
@@ -55,19 +53,30 @@ class _AskFriendshipButtonState extends ConsumerState<AskFriendshipButton> {
         ref.watch(friendshipStatusProvider(widget.appUser.user.id));
 
     return asyncStatus.when(
-      loading: _buildLoadingButton,
+      loading: () => const _LoadingButton(),
       error: (error, stackTrace) {
         // TODO: Handle error
         return const SizedBox();
       },
       data: (status) {
-        return _buildButton(context, status);
+        return _StatusButton(
+          status: status,
+          isLoading: _isLoading,
+          onPressed: onPressed,
+        );
       },
     );
   }
+}
 
-  Widget _buildLoadingButton() {
-    return _buildButtonBase(
+class _LoadingButton extends StatelessWidget {
+  const _LoadingButton();
+
+  static const Color iconColor = AppColors.background;
+
+  @override
+  Widget build(BuildContext context) {
+    return _ButtonBase(
       onPressed: () {},
       child: const Padding(
         padding: EdgeInsets.all(4),
@@ -78,11 +87,26 @@ class _AskFriendshipButtonState extends ConsumerState<AskFriendshipButton> {
       ),
     );
   }
+}
 
-  Widget _buildButton(BuildContext context, FriendshipStatus status) {
-    return _buildButtonBase(
+class _StatusButton extends StatelessWidget {
+  const _StatusButton({
+    required this.status,
+    required this.isLoading,
+    required this.onPressed,
+  });
+
+  final FriendshipStatus status;
+  final bool isLoading;
+  final Function(FriendshipStatus) onPressed;
+
+  static const Color iconColor = AppColors.background;
+
+  @override
+  Widget build(BuildContext context) {
+    return _ButtonBase(
       onPressed: () => onPressed(status),
-      child: _isLoading
+      child: isLoading
           ? const CircularProgressIndicator(
               color: iconColor,
               strokeWidth: 3,
@@ -90,25 +114,8 @@ class _AskFriendshipButtonState extends ConsumerState<AskFriendshipButton> {
           : Icon(
               _getIconForStatus(status),
               color: iconColor,
-              size: size,
+              size: _ButtonBase.size,
             ),
-    );
-  }
-
-  Widget _buildButtonBase({
-    required VoidCallback onPressed,
-    required Widget child,
-  }) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        foregroundColor: iconColor,
-        backgroundColor: AppColors.makara,
-      ),
-      onPressed: onPressed,
-      child: SizedBox.square(
-        dimension: size,
-        child: Center(child: child),
-      ),
     );
   }
 
@@ -124,5 +131,33 @@ class _AskFriendshipButtonState extends ConsumerState<AskFriendshipButton> {
       case FriendshipStatus.blocked:
         return Icons.block;
     }
+  }
+}
+
+class _ButtonBase extends StatelessWidget {
+  const _ButtonBase({
+    required this.onPressed,
+    required this.child,
+  });
+
+  final VoidCallback onPressed;
+  final Widget child;
+
+  static const double size = 32;
+  static const Color iconColor = AppColors.background;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        foregroundColor: iconColor,
+        backgroundColor: AppColors.makara,
+      ),
+      onPressed: onPressed,
+      child: SizedBox.square(
+        dimension: size,
+        child: Center(child: child),
+      ),
+    );
   }
 }

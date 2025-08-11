@@ -24,7 +24,7 @@ class AcceptOrDeclineFriendshipButton extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildSideButton(
+          _SideButton(
             onTap: onDecline,
             color: AppColors.pastelGray,
             icon: Icons.delete,
@@ -33,7 +33,7 @@ class AcceptOrDeclineFriendshipButton extends StatelessWidget {
               bottomLeft: radius,
             ),
           ),
-          _buildSideButton(
+          _SideButton(
             onTap: onAccept,
             color: AppColors.primary,
             icon: Icons.person_add_alt_1,
@@ -46,13 +46,23 @@ class AcceptOrDeclineFriendshipButton extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildSideButton({
-    required VoidCallback onTap,
-    required Color color,
-    required IconData icon,
-    required BorderRadius borderRadius,
-  }) {
+class _SideButton extends StatelessWidget {
+  const _SideButton({
+    required this.onTap,
+    required this.color,
+    required this.icon,
+    required this.borderRadius,
+  });
+
+  final VoidCallback onTap;
+  final Color color;
+  final IconData icon;
+  final BorderRadius borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
       splashColor: AppColors.darkGrey.withOpacity(0.1),
       borderRadius: borderRadius,
