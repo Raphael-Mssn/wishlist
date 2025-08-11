@@ -257,7 +257,7 @@ class _WishlistSettingsBottomSheetState
 
                   // Second container
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.44,
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius:
