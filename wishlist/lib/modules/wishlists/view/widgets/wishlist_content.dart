@@ -29,7 +29,6 @@ class WishlistContent extends ConsumerWidget {
   });
 
   static const double _verticalPadding = 16;
-  static const double _controlsSpacing = 8;
 
   final Wishlist wishlist;
   final IList<Wish> wishsToDisplay;
@@ -66,20 +65,47 @@ class WishlistContent extends ConsumerWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return shouldDisplayWishs
-                ? _buildWishList(context, ref)
-                : _buildEmptyState(
-                    context,
-                    constraints,
-                    pageLayoutEmptyContentTitle,
-                    shouldShowCallToAction,
+                ? _WishList(
+                    wishlist: wishlist,
+                    wishsToDisplay: wishsToDisplay,
+                    isMyWishlist: isMyWishlist,
+                    onTapWish: onTapWish,
+                    onFavoriteToggle: onFavoriteToggle,
+                  )
+                : _EmptyState(
+                    constraints: constraints,
+                    title: pageLayoutEmptyContentTitle,
+                    shouldShowCallToAction: shouldShowCallToAction,
+                    wishlist: wishlist,
+                    onAddWish: onAddWish,
                   );
           },
         ),
       ),
     );
   }
+}
 
-  Widget _buildWishList(BuildContext context, WidgetRef ref) {
+class _WishList extends ConsumerWidget {
+  const _WishList({
+    required this.wishlist,
+    required this.wishsToDisplay,
+    required this.isMyWishlist,
+    required this.onTapWish,
+    required this.onFavoriteToggle,
+  });
+
+  static const double _bottomPadding = 100;
+  static const double _itemSpacing = 8;
+
+  final Wishlist wishlist;
+  final IList<Wish> wishsToDisplay;
+  final bool isMyWishlist;
+  final Function(BuildContext, Wish, {required bool isMyWishlist}) onTapWish;
+  final Function(Wish) onFavoriteToggle;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return AppRefreshIndicator(
       onRefresh: () => ref
           .read(
@@ -88,9 +114,9 @@ class WishlistContent extends ConsumerWidget {
           .loadWishs(),
       child: ListView.separated(
         // Espace pour le bouton flottant
-        padding: const EdgeInsets.only(bottom: 100),
+        padding: const EdgeInsets.only(bottom: _bottomPadding),
         itemCount: wishsToDisplay.length,
-        separatorBuilder: (context, index) => const Gap(_controlsSpacing),
+        separatorBuilder: (context, index) => const Gap(_itemSpacing),
         itemBuilder: (context, index) {
           final wish = wishsToDisplay[index];
           return WishCard(
@@ -107,20 +133,35 @@ class WishlistContent extends ConsumerWidget {
       ),
     );
   }
+}
 
-  Widget _buildEmptyState(
-    BuildContext context,
-    BoxConstraints constraints,
-    String title,
-    bool shouldShowCallToAction,
-  ) {
+class _EmptyState extends StatelessWidget {
+  const _EmptyState({
+    required this.constraints,
+    required this.title,
+    required this.shouldShowCallToAction,
+    required this.wishlist,
+    required this.onAddWish,
+  });
+
+  static const double _topPadding = 16;
+  static const double _illustrationHeightRatio = 0.5;
+
+  final BoxConstraints constraints;
+  final String title;
+  final bool shouldShowCallToAction;
+  final Wishlist wishlist;
+  final Function(BuildContext, Wishlist) onAddWish;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
 
     return Padding(
-      padding: const EdgeInsets.only(top: _verticalPadding),
+      padding: const EdgeInsets.only(top: _topPadding),
       child: PageLayoutEmptyContent(
         illustrationUrl: Assets.svg.noWishlist,
-        illustrationHeight: constraints.maxHeight / 2,
+        illustrationHeight: constraints.maxHeight * _illustrationHeightRatio,
         title: title,
         titleTextStyle: AppTextStyles.medium,
         callToAction: shouldShowCallToAction ? l10n.wishlistAddWish : null,
