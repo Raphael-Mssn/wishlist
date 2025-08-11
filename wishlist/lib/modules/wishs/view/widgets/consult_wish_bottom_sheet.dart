@@ -12,6 +12,7 @@ import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/double_extension.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
+import 'package:wishlist/shared/widgets/static_title.dart';
 
 class _ConsultWishBottomSheet extends ConsumerWidget {
   const _ConsultWishBottomSheet({
@@ -82,7 +83,7 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
     );
 
     return AppBottomSheetWithThemeAndAppBarLayout(
-      title: wish.name,
+      appBarTitle: StaticTitle(title: wish.name),
       theme: Theme.of(context),
       actionIcon: Icons.favorite_border,
       onActionTapped: () {},

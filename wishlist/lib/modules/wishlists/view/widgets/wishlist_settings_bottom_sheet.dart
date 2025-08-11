@@ -17,6 +17,7 @@ import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
+import 'package:wishlist/shared/widgets/editable_title.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
 class _WishlistSettingsBottomSheet extends ConsumerStatefulWidget {
@@ -167,13 +168,14 @@ class _WishlistSettingsBottomSheetState
 
     return AppBottomSheetWithThemeAndAppBarLayout(
       theme: wishlistTheme,
-      title: wishlistName,
-      isEditable: true,
-      onTitleChanged: (newTitle) {
-        setState(() {
-          wishlistName = newTitle;
-        });
-      },
+      appBarTitle: EditableTitle(
+        initialTitle: wishlistName,
+        onTitleChanged: (newTitle) {
+          setState(() {
+            wishlistName = newTitle;
+          });
+        },
+      ),
       actionIcon: Icons.color_lens,
       onActionTapped: onChangeColor,
       body: Column(
