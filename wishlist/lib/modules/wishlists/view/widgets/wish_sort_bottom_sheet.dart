@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
 import 'package:wishlist/shared/theme/colors.dart';
@@ -65,7 +66,7 @@ class _WishSortBottomSheet extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 16),
+        const Gap(16),
       ],
     );
   }
