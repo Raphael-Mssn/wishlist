@@ -33,6 +33,23 @@ class WishSort {
   }
 }
 
+extension WishSortExtension on WishSort {
+  WishSort toggleOrder() => copyWith(
+        order: order == SortOrder.ascending
+            ? SortOrder.descending
+            : SortOrder.ascending,
+      );
+
+  IconData get icon {
+    switch (order) {
+      case SortOrder.ascending:
+        return Icons.arrow_upward;
+      case SortOrder.descending:
+        return Icons.arrow_downward;
+    }
+  }
+}
+
 extension WishSortTypeExtension on WishSortType {
   String getLabel(AppLocalizations l10n) {
     switch (this) {

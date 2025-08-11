@@ -152,17 +152,12 @@ class _OrderButton extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () {
-            final newOrder = wishSort.order == SortOrder.ascending
-                ? SortOrder.descending
-                : SortOrder.ascending;
-            final newSort = wishSort.copyWith(order: newOrder);
+            final newSort = wishSort.toggleOrder();
             onSortChanged(newSort);
           },
           borderRadius: BorderRadius.circular(_searchBarBorderRadius),
           child: Icon(
-            wishSort.order == SortOrder.ascending
-                ? Icons.arrow_upward
-                : Icons.arrow_downward,
+            wishSort.icon,
             size: 20,
             color: AppColors.darkGrey,
           ),
