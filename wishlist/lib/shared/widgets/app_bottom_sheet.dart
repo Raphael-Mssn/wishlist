@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wishlist/shared/theme/colors.dart';
-import 'package:wishlist/shared/theme/text_styles.dart';
 
 Future<void> showAppBottomSheet(
   BuildContext context, {
@@ -38,7 +37,7 @@ class AppBottomSheetWithThemeAndAppBarLayout extends StatelessWidget {
   const AppBottomSheetWithThemeAndAppBarLayout({
     super.key,
     required this.theme,
-    required this.title,
+    required this.appBarTitle,
     this.actionIcon,
     this.onActionTapped,
     this.actionWidget,
@@ -46,7 +45,7 @@ class AppBottomSheetWithThemeAndAppBarLayout extends StatelessWidget {
   });
 
   final ThemeData theme;
-  final String title;
+  final Widget appBarTitle;
   final IconData? actionIcon;
   final Function()? onActionTapped;
   final Widget? actionWidget;
@@ -75,12 +74,7 @@ class AppBottomSheetWithThemeAndAppBarLayout extends StatelessWidget {
               ),
             ],
             foregroundColor: AppColors.background,
-            title: Text(
-              title,
-              style: AppTextStyles.medium.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            title: appBarTitle,
             backgroundColor: theme.primaryColor,
           ),
           Expanded(

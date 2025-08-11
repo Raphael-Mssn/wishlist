@@ -6,6 +6,7 @@ import 'package:wishlist/modules/wishs/view/widgets/wish_property.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
+import 'package:wishlist/shared/widgets/static_title.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/validators/not_null_validator.dart';
 
 class WishForm extends StatefulWidget {
@@ -121,7 +122,7 @@ class _WishFormState extends State<WishForm> {
         }
       },
       child: AppBottomSheetWithThemeAndAppBarLayout(
-        title: widget.title,
+        appBarTitle: StaticTitle(title: widget.title),
         theme: Theme.of(context),
         actionWidget: LikeButton(
           isLiked: widget.isFavourite,
