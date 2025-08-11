@@ -110,7 +110,6 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
 
   /// Nettoie l'historique de focus pour empêcher la restauration automatique
   void _clearFocusHistory() {
-    FocusScope.of(context).unfocus();
     // Forcer la perte de l'historique de focus
     FocusScope.of(context).requestFocus(FocusNode());
   }
