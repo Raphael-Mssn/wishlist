@@ -26,9 +26,6 @@ class WishlistSearchBar extends StatelessWidget {
   final VoidCallback onClearFocus;
 
   static const double _verticalPadding = 16;
-  static const double _searchBarBorderRadius = 6;
-  static const double _searchFontSize = 16;
-  static const double _sortButtonSize = 40;
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +46,153 @@ class WishlistSearchBar extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: _buildSearchField(context),
+            child: _SearchField(
+              searchController: searchController,
+              searchFocusNode: searchFocusNode,
+              searchQuery: searchQuery,
+              onClearFocus: onClearFocus,
+            ),
           ),
           const Gap(12),
-          _buildSortButton(context),
+          _SortButton(
+            wishSort: wishSort,
+            onSortChanged: onSortChanged,
+          ),
           if (wishSort.type != WishSortType.favorite) ...[
             const Gap(8),
-            _buildOrderButton(context),
+            _OrderButton(
+              wishSort: wishSort,
+              onSortChanged: onSortChanged,
+            ),
           ],
         ],
       ),
     );
   }
+}
 
-  Widget _buildSearchField(BuildContext context) {
+class _SortButton extends StatelessWidget {
+  const _SortButton({
+    required this.wishSort,
+    required this.onSortChanged,
+  });
+
+  final WishSort wishSort;
+  final Function(WishSort) onSortChanged;
+
+  static const double _searchBarBorderRadius = 6;
+  static const double _sortButtonSize = 40;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Ink(
+        width: _sortButtonSize,
+        height: _sortButtonSize,
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          borderRadius: BorderRadius.circular(_searchBarBorderRadius),
+        ),
+        child: InkWell(
+          onTap: () {
+            HapticFeedback.lightImpact();
+            showWishSortBottomSheet(
+              context,
+              currentSort: wishSort,
+              onSortChanged: onSortChanged,
+            );
+          },
+          borderRadius: BorderRadius.circular(_searchBarBorderRadius),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              const Icon(
+                Icons.sort,
+                size: 24,
+                color: AppColors.darkGrey,
+              ),
+              Positioned(
+                bottom: 4,
+                right: 4,
+                child: Icon(
+                  wishSort.type.icon,
+                  size: 16,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _OrderButton extends StatelessWidget {
+  const _OrderButton({
+    required this.wishSort,
+    required this.onSortChanged,
+  });
+
+  final WishSort wishSort;
+  final Function(WishSort) onSortChanged;
+
+  static const double _searchBarBorderRadius = 6;
+  static const double _sortButtonSize = 40;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Ink(
+        width: _sortButtonSize,
+        height: _sortButtonSize,
+        decoration: BoxDecoration(
+          color: AppColors.background,
+          borderRadius: BorderRadius.circular(_searchBarBorderRadius),
+        ),
+        child: InkWell(
+          onTap: () {
+            HapticFeedback.lightImpact();
+            final newOrder = wishSort.order == SortOrder.ascending
+                ? SortOrder.descending
+                : SortOrder.ascending;
+            final newSort = wishSort.copyWith(order: newOrder);
+            onSortChanged(newSort);
+          },
+          borderRadius: BorderRadius.circular(_searchBarBorderRadius),
+          child: Icon(
+            wishSort.order == SortOrder.ascending
+                ? Icons.arrow_upward
+                : Icons.arrow_downward,
+            size: 20,
+            color: AppColors.darkGrey,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SearchField extends StatelessWidget {
+  const _SearchField({
+    required this.searchController,
+    required this.searchFocusNode,
+    required this.searchQuery,
+    required this.onClearFocus,
+  });
+
+  final TextEditingController searchController;
+  final FocusNode searchFocusNode;
+  final String searchQuery;
+  final VoidCallback onClearFocus;
+
+  static const double _searchBarBorderRadius = 6;
+  static const double _searchFontSize = 16;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       height: 40,
       decoration: BoxDecoration(
@@ -121,82 +251,6 @@ class WishlistSearchBar extends StatelessWidget {
         ),
         cursorColor: Theme.of(context).primaryColor,
         onTapOutside: (event) => onClearFocus(),
-      ),
-    );
-  }
-
-  Widget _buildSortButton(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Ink(
-        width: _sortButtonSize,
-        height: _sortButtonSize,
-        decoration: BoxDecoration(
-          color: AppColors.background,
-          borderRadius: BorderRadius.circular(_searchBarBorderRadius),
-        ),
-        child: InkWell(
-          onTap: () {
-            HapticFeedback.lightImpact();
-            showWishSortBottomSheet(
-              context,
-              currentSort: wishSort,
-              onSortChanged: onSortChanged,
-            );
-          },
-          borderRadius: BorderRadius.circular(_searchBarBorderRadius),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              const Icon(
-                Icons.sort,
-                size: 24,
-                color: AppColors.darkGrey,
-              ),
-              Positioned(
-                bottom: 4,
-                right: 4,
-                child: Icon(
-                  wishSort.type.icon,
-                  size: 16,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildOrderButton(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Ink(
-        width: _sortButtonSize,
-        height: _sortButtonSize,
-        decoration: BoxDecoration(
-          color: AppColors.background,
-          borderRadius: BorderRadius.circular(_searchBarBorderRadius),
-        ),
-        child: InkWell(
-          onTap: () {
-            HapticFeedback.lightImpact();
-            final newOrder = wishSort.order == SortOrder.ascending
-                ? SortOrder.descending
-                : SortOrder.ascending;
-            final newSort = wishSort.copyWith(order: newOrder);
-            onSortChanged(newSort);
-          },
-          borderRadius: BorderRadius.circular(_searchBarBorderRadius),
-          child: Icon(
-            wishSort.order == SortOrder.ascending
-                ? Icons.arrow_upward
-                : Icons.arrow_downward,
-            size: 20,
-            color: AppColors.darkGrey,
-          ),
-        ),
       ),
     );
   }
