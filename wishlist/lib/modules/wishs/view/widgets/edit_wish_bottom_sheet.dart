@@ -52,12 +52,39 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
     _isFavourite = wish.isFavourite;
   }
 
+  bool _validateQuantity(int? quantity) {
+    if (quantity == null) {
+      return true;
+    }
+
+    // La quantité ne peut pas être inférieure à la quantité déjà réservée
+    if (quantity < widget.wish.totalBookedQuantity) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.l10n.quantityCannotBeLowerThanBooked(
+              widget.wish.totalBookedQuantity,
+            ),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+
+    return true;
+  }
+
   Future<void> onEditWish() async {
     final name = _nameInputController.text;
     final price = double.tryParse(_priceInputController.text);
     final quantity = int.tryParse(_quantityInputController.text);
     final link = _linkInputController.text;
     final description = _descriptionInputController.text;
+
+    if (!_validateQuantity(quantity)) {
+      return;
+    }
 
     final wish = widget.wish;
 

@@ -92,5 +92,6 @@
   "sortByAlphabetical": "Par ordre alphabétique",
   "sortByPrice": "Par prix",
   "sortByDate": "Par date de création",
-  "selectQuantityToGive": "Quelle quantité souhaitez-vous offrir ?"
+  "selectQuantityToGive": "Quelle quantité souhaitez-vous offrir ?",
+  "quantityCannotBeLowerThanBooked": "La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)"
 }

@@ -92,5 +92,6 @@
   "sortByAlphabetical": "By alphabetical order",
   "sortByPrice": "By price",
   "sortByDate": "By creation date",
-  "selectQuantityToGive": "How much would you like to offer?"
+  "selectQuantityToGive": "How much would you like to offer?",
+  "quantityCannotBeLowerThanBooked": "Quantity cannot be lower than {bookedQuantity} (already booked quantity)"
 }
