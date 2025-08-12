@@ -91,5 +91,6 @@
   "sortByFavorite": "Par favoris",
   "sortByAlphabetical": "Par ordre alphabétique",
   "sortByPrice": "Par prix",
-  "sortByDate": "Par date de création"
+  "sortByDate": "Par date de création",
+  "selectQuantityToGive": "Quelle quantité souhaitez-vous offrir ?"
 }

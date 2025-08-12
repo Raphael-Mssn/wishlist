@@ -91,5 +91,6 @@
   "sortByFavorite": "By favorites",
   "sortByAlphabetical": "By alphabetical order",
   "sortByPrice": "By price",
-  "sortByDate": "By creation date"
+  "sortByDate": "By creation date",
+  "selectQuantityToGive": "How much would you like to offer?"
 }
