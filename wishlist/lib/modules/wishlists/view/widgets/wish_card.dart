@@ -1,6 +1,7 @@
 import 'package:currency_formatter/currency_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -12,12 +13,14 @@ class WishCard extends StatelessWidget {
     required this.onTap,
     required this.onFavoriteToggle,
     required this.isMyWishlist,
+    required this.cardType,
   });
 
   final Wish wish;
   final void Function() onTap;
   final void Function() onFavoriteToggle;
   final bool isMyWishlist;
+  final WishlistStatsCardType cardType;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,9 @@ class WishCard extends StatelessWidget {
         isMyWishlist || (!isMyWishlist && wish.isFavourite);
 
     final borderRadius = BorderRadius.circular(24);
+
+    // Calculer la quantité à afficher selon le contexte
+    final quantityToDisplay = _getQuantityToDisplay();
 
     return Material(
       color: Colors.transparent,
@@ -58,7 +64,7 @@ class WishCard extends StatelessWidget {
                         bottom: 0,
                         right: 0,
                         child: Text(
-                          'x${wish.quantity}',
+                          'x$quantityToDisplay',
                           style: AppTextStyles.small.copyWith(
                             color: AppColors.makara,
                             height: 1,
@@ -140,5 +146,14 @@ class WishCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  int _getQuantityToDisplay() {
+    switch (cardType) {
+      case WishlistStatsCardType.pending:
+        return wish.availableQuantity;
+      case WishlistStatsCardType.booked:
+        return wish.totalBookedQuantity;
+    }
   }
 }
