@@ -13,6 +13,7 @@ import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/double_extension.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
+import 'package:wishlist/shared/widgets/dialogs/quantity_selection_dialog.dart';
 import 'package:wishlist/shared/widgets/static_title.dart';
 
 class _ConsultWishBottomSheet extends ConsumerWidget {
@@ -35,11 +36,22 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
 
   Future<void> onGiveIt(BuildContext context, WidgetRef ref) async {
     try {
-      await ref.read(wishTakenByUserServiceProvider).wishTakenByUser(
-            wish,
-          );
-      if (context.mounted) {
-        context.pop();
+      // Si quantité > 1, afficher le dialog de sélection
+      if (wish.quantity > 1) {
+        await showQuantitySelectionDialog(
+          context,
+          ref,
+          wish: wish,
+        );
+      } else {
+        // Si quantité = 1, réserver directement
+        await ref.read(wishTakenByUserServiceProvider).wishTakenByUser(
+              wish,
+              quantity: 1,
+            );
+        if (context.mounted) {
+          context.pop();
+        }
       }
     } catch (e) {
       if (context.mounted) {
