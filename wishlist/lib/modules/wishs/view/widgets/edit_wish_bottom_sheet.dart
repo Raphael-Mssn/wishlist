@@ -31,6 +31,8 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
   late TextEditingController _linkInputController;
   late TextEditingController _descriptionInputController;
 
+  late bool _isFavourite;
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +48,8 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
         TextEditingController(text: wish.quantity.toString());
     _linkInputController = TextEditingController(text: wish.linkUrl);
     _descriptionInputController = TextEditingController(text: wish.description);
+
+    _isFavourite = wish.isFavourite;
   }
 
   Future<void> onEditWish() async {
@@ -63,6 +67,7 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
       quantity: quantity,
       description: description,
       linkUrl: link,
+      isFavourite: _isFavourite,
     );
 
     try {
@@ -71,6 +76,8 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
           .updateWish(
             wishToUpdate,
           );
+
+      ref.invalidate(wishsFromWishlistProvider(wish.wishlistId));
 
       if (mounted) {
         context.pop();
@@ -147,6 +154,12 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
       onSubmit: onEditWish,
       onSecondaryButtonTapped: onDeleteWish,
       secondaryButtonLabel: l10n.deleteWish,
+      isFavourite: _isFavourite,
+      onFavouriteChanged: ({required isFavourite}) {
+        setState(() {
+          _isFavourite = isFavourite;
+        });
+      },
     );
   }
 }

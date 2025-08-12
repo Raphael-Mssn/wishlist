@@ -54,6 +54,7 @@
   "myWishlists": "My wishlists",
   "wishlistStatusPending": "Pending",
   "wishlistStatusBooked": "Booked",
+  "wishlistSearchHint": "Search for a wish...",
   "wishlistNoWish": "No wish",
   "wishlistNoWishBooked": "No wish booked",
   "wishlistNoWishBookedDisplayed": "You chose not to display booked wishes",
@@ -85,5 +86,10 @@
   "updateSuccess": "Update successfully completed",
   "deleteWishlist": "Delete my wishlist",
   "deleteWishlistSuccess": "Wishlist successfully deleted",
-  "wishlistColor": "Wishlist color"
+  "wishlistColor": "Wishlist color",
+  "sortWishs": "Sort wishes",
+  "sortByFavorite": "By favorites",
+  "sortByAlphabetical": "By alphabetical order",
+  "sortByPrice": "By price",
+  "sortByDate": "By creation date"
 }

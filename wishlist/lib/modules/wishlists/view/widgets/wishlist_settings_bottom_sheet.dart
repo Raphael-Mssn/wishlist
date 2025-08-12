@@ -12,7 +12,6 @@ import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
-import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
@@ -164,12 +163,12 @@ class _WishlistSettingsBottomSheetState
 
     final l10n = context.l10n;
     final wishlist = widget.wishlist;
-    final wishlistTheme = getWishlistTheme(context, wishlist);
+    final currentTheme = Theme.of(context);
 
     return AppBottomSheetWithThemeAndAppBarLayout(
-      theme: wishlistTheme,
+      theme: currentTheme,
       appBarTitle: EditableTitle(
-        initialTitle: wishlistName,
+        initialTitle: wishlist.name,
         onTitleChanged: (newTitle) {
           setState(() {
             wishlistName = newTitle;
@@ -288,7 +287,7 @@ class _WishlistSettingsBottomSheetState
                                 l10n.addCollaborator,
                                 style: AppTextStyles.smaller.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: wishlistTheme.primaryColor,
+                                  color: currentTheme.primaryColor,
                                 ),
                               ),
                             ],
@@ -310,16 +309,11 @@ class _WishlistSettingsBottomSheetState
               ),
             ),
           ),
-          Builder(
-            // Needed to have the context with wishlist theme
-            builder: (context) {
-              return SecondaryButton(
-                text: l10n.deleteWishlist,
-                onPressed: onDeleteWishlist,
-                style: BaseButtonStyle.large,
-                isStretched: true,
-              );
-            },
+          SecondaryButton(
+            text: l10n.deleteWishlist,
+            onPressed: onDeleteWishlist,
+            style: BaseButtonStyle.large,
+            isStretched: true,
           ),
           const Gap(12),
           PrimaryButton(

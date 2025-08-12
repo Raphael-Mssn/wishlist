@@ -25,6 +25,8 @@ abstract final class AppColors {
 
   static const Color makara = Color(0xFF887A6B);
 
+  static const Color favorite = Color(0xFFFF675C);
+
   static final Map<Color, String> colorPalette = {
     blue: 'blue',
     purple: 'purple',

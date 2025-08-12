@@ -47,50 +47,48 @@ class _AddFriendBottomSheetState extends ConsumerState<AddFriendBottomSheet> {
     final searchState = ref.watch(searchProvider);
 
     return SafeArea(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(30),
-            child: Column(
-              children: [
-                UserSearchBar(
-                  controller: _searchBarController,
-                ),
-                const Gap(20),
-                searchState.when(
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) {
-                    ScaffoldMessenger.of(context).showGenericError();
-                    return const SizedBox.shrink();
-                  },
-                  data: (users) {
-                    if (users.isEmpty) {
-                      return Text(
-                        context.l10n.noUserFound,
-                      );
-                    }
-                    return ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: users.length,
-                      itemBuilder: (context, index) {
-                        final isLast = index == users.length - 1;
-                        final appUser = users[index];
-
-                        return Padding(
-                          padding: isLast ? lastItemPadding : itemPadding,
-                          child: UserPill(
-                            appUser: appUser,
-                          ),
-                        );
-                      },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            children: [
+              UserSearchBar(
+                controller: _searchBarController,
+              ),
+              const Gap(20),
+              searchState.when(
+                loading: () => const CircularProgressIndicator(),
+                error: (error, stackTrace) {
+                  ScaffoldMessenger.of(context).showGenericError();
+                  return const SizedBox.shrink();
+                },
+                data: (users) {
+                  if (users.isEmpty) {
+                    return Text(
+                      context.l10n.noUserFound,
                     );
-                  },
-                ),
-              ],
-            ),
+                  }
+                  return ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: users.length,
+                    itemBuilder: (context, index) {
+                      final isLast = index == users.length - 1;
+                      final appUser = users[index];
+
+                      return Padding(
+                        padding: isLast ? lastItemPadding : itemPadding,
+                        child: UserPill(
+                          appUser: appUser,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

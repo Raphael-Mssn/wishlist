@@ -8,6 +8,7 @@ import 'package:wishlist/modules/wishs/view/widgets/wish_property.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wish_taken_by_user_service.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
+import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/double_extension.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
@@ -85,8 +86,11 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
     return AppBottomSheetWithThemeAndAppBarLayout(
       appBarTitle: StaticTitle(title: wish.name),
       theme: Theme.of(context),
-      actionIcon: Icons.favorite_border,
-      onActionTapped: () {},
+      actionWidget: Icon(
+        wish.isFavourite ? Icons.favorite : Icons.favorite_border,
+        color: wish.isFavourite ? AppColors.favorite : AppColors.background,
+        size: 32,
+      ),
       body: Column(
         children: [
           Expanded(

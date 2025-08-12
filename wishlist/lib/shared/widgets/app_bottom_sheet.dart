@@ -5,6 +5,7 @@ import 'package:wishlist/shared/theme/colors.dart';
 Future<void> showAppBottomSheet(
   BuildContext context, {
   required Widget body,
+  bool expandToFillHeight = true,
 }) async {
   const radius = Radius.circular(25);
   // Ensure the theme is the same as the one from the context passed,
@@ -14,7 +15,7 @@ Future<void> showAppBottomSheet(
   await showBarModalBottomSheet<void>(
     context: context,
     backgroundColor: AppColors.background,
-    expand: true,
+    expand: expandToFillHeight,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: radius,
@@ -22,12 +23,12 @@ Future<void> showAppBottomSheet(
       ),
     ),
     builder: (context) {
-      return Scaffold(
-        body: AnimatedTheme(
-          data: theme,
-          child: body,
-        ),
+      final themedBody = AnimatedTheme(
+        data: theme,
+        child: body,
       );
+
+      return expandToFillHeight ? Scaffold(body: themedBody) : themedBody;
     },
   );
 }
@@ -37,15 +38,17 @@ class AppBottomSheetWithThemeAndAppBarLayout extends StatelessWidget {
     super.key,
     required this.theme,
     required this.appBarTitle,
-    required this.actionIcon,
-    required this.onActionTapped,
+    this.actionIcon,
+    this.onActionTapped,
+    this.actionWidget,
     required this.body,
   });
 
   final ThemeData theme;
   final Widget appBarTitle;
-  final IconData actionIcon;
-  final Function() onActionTapped;
+  final IconData? actionIcon;
+  final Function()? onActionTapped;
+  final Widget? actionWidget;
   final Widget body;
 
   @override
@@ -60,13 +63,14 @@ class AppBottomSheetWithThemeAndAppBarLayout extends StatelessWidget {
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: IconButton(
-                  icon: Icon(
-                    actionIcon,
-                    size: 32,
-                  ),
-                  onPressed: onActionTapped,
-                ),
+                child: actionWidget ??
+                    IconButton(
+                      icon: Icon(
+                        actionIcon ?? Icons.more_vert,
+                        size: 32,
+                      ),
+                      onPressed: onActionTapped ?? () {},
+                    ),
               ),
             ],
             foregroundColor: AppColors.background,
