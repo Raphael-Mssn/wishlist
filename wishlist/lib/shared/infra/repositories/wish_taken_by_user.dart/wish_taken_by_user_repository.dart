@@ -4,5 +4,10 @@ abstract class WishTakenByUserRepository {
   Future<void> createWishTakenByUser(
     WishTakenByUserCreateRequest wishTakenByUser,
   );
+  Future<void> updateWishTakenByUser({
+    required int wishId,
+    required String userId,
+    required int newQuantity,
+  });
   Future<void> cancelWishTaken(int wishId);
 }

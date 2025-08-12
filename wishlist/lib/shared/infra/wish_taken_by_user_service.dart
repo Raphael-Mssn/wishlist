@@ -16,16 +16,35 @@ class WishTakenByUserService {
     int? quantity,
   }) async {
     final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
+    final quantityToReserve = quantity ?? 1;
 
-    final wishTakenByUserCreateRequest = WishTakenByUserCreateRequest(
-      wishId: wish.id,
-      userId: currentUserId,
-      quantity: quantity ?? 1,
-    );
+    // Vérifier si l'utilisateur a déjà une réservation pour ce wish
+    final existingReservation = wish.takenByUser
+        .where(
+          (reservation) => reservation.userId == currentUserId,
+        )
+        .firstOrNull;
 
-    await _wishTakenByUserRepository.createWishTakenByUser(
-      wishTakenByUserCreateRequest,
-    );
+    if (existingReservation != null) {
+      // Mettre à jour la réservation existante en additionnant les quantités
+      final newQuantity = existingReservation.quantity + quantityToReserve;
+      await _wishTakenByUserRepository.updateWishTakenByUser(
+        wishId: wish.id,
+        userId: currentUserId,
+        newQuantity: newQuantity,
+      );
+    } else {
+      // Créer une nouvelle réservation
+      final wishTakenByUserCreateRequest = WishTakenByUserCreateRequest(
+        wishId: wish.id,
+        userId: currentUserId,
+        quantity: quantityToReserve,
+      );
+
+      await _wishTakenByUserRepository.createWishTakenByUser(
+        wishTakenByUserCreateRequest,
+      );
+    }
 
     await ref
         .read(wishsFromWishlistProvider(wish.wishlistId).notifier)
