@@ -10,6 +10,13 @@ import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 
+const double _buttonSize = 40;
+const double _buttonSpacing = 20;
+const double _iconSize = 20;
+const Duration _animationDuration = Duration(milliseconds: 150);
+const Curve _animationCurve = Curves.easeInOut;
+const double _borderRadius = 8;
+
 class _QuantitySelectionDialogContent extends StatefulWidget {
   const _QuantitySelectionDialogContent({
     required this.maxQuantity,
@@ -83,33 +90,44 @@ class _QuantitySelectionDialogContentState
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Bouton moins
-            Material(
-              color: Colors.transparent,
-              shape: const CircleBorder(),
-              clipBehavior: Clip.hardEdge,
-              child: InkWell(
-                onTap: _selectedQuantity > 1
-                    ? () => _updateQuantity(_selectedQuantity - 1)
-                    : null,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _selectedQuantity > 1
-                        ? Theme.of(context).primaryColor
-                        : AppColors.gainsboro,
-                  ),
-                  child: Icon(
-                    Icons.remove,
-                    color:
-                        _selectedQuantity > 1 ? Colors.white : AppColors.makara,
-                    size: 20,
+            AnimatedContainer(
+              duration: _animationDuration,
+              curve: _animationCurve,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _selectedQuantity > 1
+                    ? Theme.of(context).primaryColor
+                    : AppColors.gainsboro,
+              ),
+              child: Material(
+                color: Colors.transparent,
+                shape: const CircleBorder(),
+                clipBehavior: Clip.hardEdge,
+                child: InkWell(
+                  onTap: _selectedQuantity > 1
+                      ? () => _updateQuantity(_selectedQuantity - 1)
+                      : null,
+                  onLongPress:
+                      _selectedQuantity > 1 ? () => _updateQuantity(1) : null,
+                  child: SizedBox(
+                    width: _buttonSize,
+                    height: _buttonSize,
+                    child: AnimatedSwitcher(
+                      duration: _animationDuration,
+                      child: Icon(
+                        Icons.remove,
+                        key: ValueKey(_selectedQuantity > 1),
+                        color: _selectedQuantity > 1
+                            ? Colors.white
+                            : AppColors.makara,
+                        size: _iconSize,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-            const Gap(20),
+            const Gap(_buttonSpacing),
             // Champ de saisie de quantité
             SizedBox(
               width: 80,
@@ -127,13 +145,13 @@ class _QuantitySelectionDialogContentState
                 ),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(_borderRadius),
                     borderSide: BorderSide(
                       color: _isValid ? AppColors.makara : Colors.red,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(_borderRadius),
                     borderSide: BorderSide(
                       color: _isValid
                           ? Theme.of(context).primaryColor
@@ -141,7 +159,7 @@ class _QuantitySelectionDialogContentState
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(_borderRadius),
                     borderSide: BorderSide(
                       color: _isValid ? AppColors.makara : Colors.red,
                     ),
@@ -154,31 +172,42 @@ class _QuantitySelectionDialogContentState
                 onChanged: _onTextChanged,
               ),
             ),
-            const Gap(20),
+            const Gap(_buttonSpacing),
             // Bouton plus
-            Material(
-              color: Colors.transparent,
-              shape: const CircleBorder(),
-              clipBehavior: Clip.hardEdge,
-              child: InkWell(
-                onTap: _selectedQuantity < widget.maxQuantity
-                    ? () => _updateQuantity(_selectedQuantity + 1)
-                    : null,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _selectedQuantity < widget.maxQuantity
-                        ? Theme.of(context).primaryColor
-                        : AppColors.gainsboro,
-                  ),
-                  child: Icon(
-                    Icons.add,
-                    color: _selectedQuantity < widget.maxQuantity
-                        ? Colors.white
-                        : AppColors.makara,
-                    size: 20,
+            AnimatedContainer(
+              duration: _animationDuration,
+              curve: _animationCurve,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _selectedQuantity < widget.maxQuantity
+                    ? Theme.of(context).primaryColor
+                    : AppColors.gainsboro,
+              ),
+              child: Material(
+                color: Colors.transparent,
+                shape: const CircleBorder(),
+                clipBehavior: Clip.hardEdge,
+                child: InkWell(
+                  onTap: _selectedQuantity < widget.maxQuantity
+                      ? () => _updateQuantity(_selectedQuantity + 1)
+                      : null,
+                  onLongPress: _selectedQuantity < widget.maxQuantity
+                      ? () => _updateQuantity(widget.maxQuantity)
+                      : null,
+                  child: SizedBox(
+                    width: _buttonSize,
+                    height: _buttonSize,
+                    child: AnimatedSwitcher(
+                      duration: _animationDuration,
+                      child: Icon(
+                        Icons.add,
+                        key: ValueKey(_selectedQuantity < widget.maxQuantity),
+                        color: _selectedQuantity < widget.maxQuantity
+                            ? Colors.white
+                            : AppColors.makara,
+                        size: _iconSize,
+                      ),
+                    ),
                   ),
                 ),
               ),
