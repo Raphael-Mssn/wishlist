@@ -231,9 +231,9 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     final wishs = _sortAndFilterWishs(wishlistScreenData.wishs);
 
     final wishsPending =
-        wishs.where((wish) => wish.takenByUser.isEmpty).toIList();
+        wishs.where((wish) => wish.availableQuantity > 0).toIList();
     final wishsBooked =
-        wishs.where((wish) => wish.takenByUser.isNotEmpty).toIList();
+        wishs.where((wish) => wish.totalBookedQuantity > 0).toIList();
     final isWishsBookedHidden = !wishlist.canOwnerSeeTakenWish && isMyWishlist;
 
     final wishsToDisplay = isWishsBookedHidden
