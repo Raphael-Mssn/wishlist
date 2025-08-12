@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/gen/fonts.gen.dart';
@@ -5,6 +6,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/theme/widgets/cancel_button.dart';
+import 'package:wishlist/shared/theme/widgets/conditional_button.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 
 class _DialogLayout extends StatelessWidget {
@@ -14,6 +16,7 @@ class _DialogLayout extends StatelessWidget {
     required this.confirmLabel,
     this.onCancel,
     this.onConfirm,
+    this.isConfirmEnabled,
   });
 
   final String title;
@@ -21,6 +24,7 @@ class _DialogLayout extends StatelessWidget {
   final String confirmLabel;
   final void Function()? onCancel;
   final Future<void> Function()? onConfirm;
+  final ValueListenable<bool>? isConfirmEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,7 @@ class _DialogLayout extends StatelessWidget {
           fontSize: 28,
           fontWeight: FontWeight.w500,
         ),
+        textAlign: TextAlign.center,
       ),
       content: content,
       actions: <Widget>[
@@ -52,23 +57,50 @@ class _DialogLayout extends StatelessWidget {
             },
           ),
         if (onConfirm != null)
-          PrimaryButton(
-            text: confirmLabel,
-            onPressed: () async {
-              try {
-                await onConfirm();
+          isConfirmEnabled != null
+              ? ValueListenableBuilder<bool>(
+                  valueListenable: isConfirmEnabled!,
+                  builder: (context, isEnabled, child) {
+                    return ConditionalButton(
+                      text: confirmLabel,
+                      isEnabled: isEnabled,
+                      onPressed: isEnabled
+                          ? () async {
+                              try {
+                                await onConfirm();
 
-                if (context.mounted && context.canPop()) {
-                  context.pop();
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  scaffoldMessenger.showGenericError();
-                }
-              }
-            },
-            style: BaseButtonStyle.medium,
-          ),
+                                if (context.mounted && context.canPop()) {
+                                  context.pop();
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  scaffoldMessenger.showGenericError();
+                                }
+                              }
+                            }
+                          : () {},
+                      style: BaseButtonStyle.medium,
+                    );
+                  },
+                )
+              : ConditionalButton(
+                  text: confirmLabel,
+                  isEnabled: true,
+                  onPressed: () async {
+                    try {
+                      await onConfirm();
+
+                      if (context.mounted && context.canPop()) {
+                        context.pop();
+                      }
+                    } catch (e) {
+                      if (context.mounted) {
+                        scaffoldMessenger.showGenericError();
+                      }
+                    }
+                  },
+                  style: BaseButtonStyle.medium,
+                ),
       ],
       backgroundColor: AppColors.background,
     );
@@ -82,9 +114,18 @@ Future<void> showAppDialog(
   required String confirmButtonLabel,
   Future<void> Function()? onConfirm,
   void Function()? onCancel,
+  dynamic isConfirmEnabled = true, // Accepte bool ou ValueListenable<bool>
 }) async {
   final l10n = context.l10n;
   final theme = Theme.of(context);
+
+  // Convertir bool en ValueNotifier si nécessaire
+  ValueListenable<bool>? enabledNotifier;
+  if (isConfirmEnabled is bool) {
+    enabledNotifier = ValueNotifier<bool>(isConfirmEnabled);
+  } else if (isConfirmEnabled is ValueListenable<bool>) {
+    enabledNotifier = isConfirmEnabled;
+  }
 
   return showGeneralDialog<void>(
     context: context,
@@ -125,6 +166,7 @@ Future<void> showAppDialog(
                         confirmLabel: confirmButtonLabel,
                         onConfirm: onConfirm,
                         onCancel: onCancel,
+                        isConfirmEnabled: enabledNotifier,
                       ),
                     ),
                   ),
