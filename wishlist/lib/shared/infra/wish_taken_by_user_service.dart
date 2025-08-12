@@ -12,15 +12,15 @@ class WishTakenByUserService {
   final Ref ref;
 
   Future<void> wishTakenByUser(
-    Wish wish,
-  ) async {
+    Wish wish, {
+    int? quantity,
+  }) async {
     final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
 
     final wishTakenByUserCreateRequest = WishTakenByUserCreateRequest(
       wishId: wish.id,
       userId: currentUserId,
-      // TODO: Handle quantity
-      quantity: 1,
+      quantity: quantity ?? 1,
     );
 
     await _wishTakenByUserRepository.createWishTakenByUser(
