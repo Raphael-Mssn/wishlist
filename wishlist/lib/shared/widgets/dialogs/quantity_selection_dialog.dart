@@ -205,7 +205,7 @@ Future<void> showQuantitySelectionDialog(
     context,
     title: l10n.selectQuantityToGive,
     content: _QuantitySelectionDialogContent(
-      maxQuantity: wish.quantity,
+      maxQuantity: wish.availableQuantity,
       onQuantityChanged: (quantity) {
         selectedQuantity = quantity;
       },
