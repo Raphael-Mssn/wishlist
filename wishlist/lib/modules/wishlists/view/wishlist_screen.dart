@@ -72,11 +72,12 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     BuildContext context,
     Wish wish, {
     required bool isMyWishlist,
+    WishlistStatsCardType? cardType,
   }) {
     if (isMyWishlist) {
       showEditWishBottomSheet(context, wish);
     } else {
-      showConsultWishBottomSheet(context, wish);
+      showConsultWishBottomSheet(context, wish, cardType: cardType);
     }
   }
 

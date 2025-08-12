@@ -36,7 +36,12 @@ class WishlistContent extends ConsumerWidget {
   final WishlistStatsCardType statCardSelected;
   final bool isWishsBookedHidden;
   final bool isMyWishlist;
-  final Function(BuildContext, Wish, {required bool isMyWishlist}) onTapWish;
+  final Function(
+    BuildContext,
+    Wish, {
+    required bool isMyWishlist,
+    WishlistStatsCardType? cardType,
+  }) onTapWish;
   final Function(BuildContext, Wishlist) onAddWish;
   final Function(Wish) onFavoriteToggle;
 
@@ -104,7 +109,12 @@ class _WishList extends ConsumerWidget {
   final IList<Wish> wishsToDisplay;
   final bool isMyWishlist;
   final WishlistStatsCardType statCardSelected;
-  final Function(BuildContext, Wish, {required bool isMyWishlist}) onTapWish;
+  final Function(
+    BuildContext,
+    Wish, {
+    required bool isMyWishlist,
+    WishlistStatsCardType? cardType,
+  }) onTapWish;
   final Function(Wish) onFavoriteToggle;
 
   @override
@@ -130,6 +140,7 @@ class _WishList extends ConsumerWidget {
               context,
               wish,
               isMyWishlist: isMyWishlist,
+              cardType: statCardSelected,
             ),
             onFavoriteToggle: () => onFavoriteToggle(wish),
             isMyWishlist: isMyWishlist,
