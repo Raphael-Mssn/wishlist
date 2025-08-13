@@ -30,10 +30,36 @@ class _WishlistSettingsBottomSheet extends ConsumerStatefulWidget {
 }
 
 class _WishlistSettingsBottomSheetState
-    extends ConsumerState<_WishlistSettingsBottomSheet> {
+    extends ConsumerState<_WishlistSettingsBottomSheet>
+    with WidgetsBindingObserver {
   late bool isPublic = widget.wishlist.visibility == WishlistVisibility.public;
   late bool canOwnerSeeTakenWish = widget.wishlist.canOwnerSeeTakenWish;
   late String wishlistName = widget.wishlist.name;
+  bool _isKeyboardVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    final bottomInset = View.of(context).viewInsets.bottom;
+    final isKeyboardVisible = bottomInset > 0;
+
+    if (_isKeyboardVisible != isKeyboardVisible) {
+      setState(() {
+        _isKeyboardVisible = isKeyboardVisible;
+      });
+    }
+  }
 
   void onChangeColor() {
     final l10n = context.l10n;
@@ -309,12 +335,29 @@ class _WishlistSettingsBottomSheetState
               ),
             ),
           ),
-          SecondaryButton(
-            text: l10n.deleteWishlist,
-            onPressed: onDeleteWishlist,
-            style: BaseButtonStyle.large,
-            isStretched: true,
-          ),
+          if (_isKeyboardVisible) ...[
+            Transform.translate(
+              offset: const Offset(0, -1),
+              child: Container(
+                height: 20,
+                decoration: const BoxDecoration(
+                  color: AppColors.gainsboro,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(24),
+                    bottomRight: Radius.circular(24),
+                  ),
+                ),
+              ),
+            ),
+          ],
+          if (!_isKeyboardVisible) ...[
+            SecondaryButton(
+              text: l10n.deleteWishlist,
+              onPressed: onDeleteWishlist,
+              style: BaseButtonStyle.large,
+              isStretched: true,
+            ),
+          ],
           const Gap(12),
           PrimaryButton(
             text: l10n.save,
