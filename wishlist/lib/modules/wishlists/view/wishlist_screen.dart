@@ -210,13 +210,17 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         );
       },
       loading: () => Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          backgroundColor: AppColors.background,
+        ),
         body: const Center(
           child: CircularProgressIndicator(),
         ),
       ),
       error: (error, stackTrace) => Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          backgroundColor: AppColors.background,
+        ),
         body: const SizedBox.shrink(),
       ),
     );
