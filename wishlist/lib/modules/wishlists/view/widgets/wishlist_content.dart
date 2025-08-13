@@ -63,7 +63,11 @@ class WishlistContent extends ConsumerWidget {
     return Expanded(
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(_verticalPadding),
+        padding: const EdgeInsets.only(
+          left: _verticalPadding,
+          right: _verticalPadding,
+          top: _verticalPadding,
+        ),
         decoration: const BoxDecoration(
           color: AppColors.gainsboro,
         ),
@@ -102,7 +106,7 @@ class _WishList extends ConsumerWidget {
     required this.onFavoriteToggle,
   });
 
-  static const double _bottomPadding = 100;
+  static const double _bottomPadding = 120;
   static const double _itemSpacing = 8;
 
   final Wishlist wishlist;
