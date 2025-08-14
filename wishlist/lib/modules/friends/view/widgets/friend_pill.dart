@@ -31,6 +31,7 @@ class FriendPill extends StatelessWidget {
       onTap: _onTap,
       backgroundColor: AppColors.primary,
       avatarBorderColor: AppColors.darkOrange,
+      avatarUrl: appUser.profile.avatarUrl,
       child: Text(
         appUser.profile.pseudo,
         overflow: TextOverflow.ellipsis,
