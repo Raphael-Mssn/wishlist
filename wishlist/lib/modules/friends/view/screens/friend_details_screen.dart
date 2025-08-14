@@ -5,11 +5,13 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/friends/view/widgets/default_avatar_icon.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_details_app_bar.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_pill.dart';
+import 'package:wishlist/shared/infra/avatar_service.dart';
 import 'package:wishlist/shared/infra/friend_details_provider.dart';
 import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/app_refresh_indicator.dart';
+import 'package:wishlist/shared/widgets/avatar/avatar_widget.dart';
 import 'package:wishlist/shared/widgets/wishlists_grid.dart';
 
 class FriendDetailsScreen extends ConsumerWidget {
@@ -91,34 +93,44 @@ class _FriendDetailsScreen extends StatelessWidget {
   }
 }
 
-class _FriendStatsSection extends StatelessWidget {
+class _FriendStatsSection extends ConsumerWidget {
   const _FriendStatsSection({required this.friendDetails});
   final FriendDetails friendDetails;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final nbWishlists = l10n.numberOfWishlists(friendDetails.nbWishlists);
     final nbWishs = l10n.numberOfWishs(friendDetails.nbWishs);
     final personalStats = '$nbWishlists | $nbWishs';
     const avatarSize = 64.0;
 
+    final fullAvatarUrl = ref
+        .watch(avatarServiceProvider)
+        .getAvatarUrl(friendDetails.appUser.profile.avatarUrl);
+
     return Row(
       children: [
-        Container(
-          width: avatarSize,
-          height: avatarSize,
-          decoration: const BoxDecoration(
-            color: AppColors.background,
-            shape: BoxShape.circle,
-          ),
-          child: const FittedBox(
-            fit: BoxFit.cover,
-            child: DefaultAvatarIcon(
-              color: AppColors.makara,
+        if (fullAvatarUrl.isNotEmpty)
+          AvatarWidget(
+            avatarUrl: fullAvatarUrl,
+            radius: avatarSize / 2,
+          )
+        else
+          Container(
+            width: avatarSize,
+            height: avatarSize,
+            decoration: const BoxDecoration(
+              color: AppColors.background,
+              shape: BoxShape.circle,
+            ),
+            child: const FittedBox(
+              fit: BoxFit.cover,
+              child: DefaultAvatarIcon(
+                color: AppColors.makara,
+              ),
             ),
           ),
-        ),
         const Gap(16),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
