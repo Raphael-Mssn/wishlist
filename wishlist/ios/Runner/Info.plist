@@ -62,5 +62,10 @@
 				</array>
 			</dict>
 		</array>
+		<!-- Privacy permissions for camera and photo library -->
+		<key>NSCameraUsageDescription</key>
+		<string>This app needs access to camera to take profile pictures.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>This app needs access to photo library to select profile pictures.</string>
 	</dict>
 </plist>
