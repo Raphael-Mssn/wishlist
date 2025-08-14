@@ -97,5 +97,11 @@
   "sortByDate": "By creation date",
   "selectQuantityToGive": "How much would you like to offer?",
   "wishReservedSuccess": "Wish reserved successfully!",
-  "quantityCannotBeLowerThanBooked": "Quantity cannot be lower than {bookedQuantity} (already booked quantity)"
+  "quantityCannotBeLowerThanBooked": "Quantity cannot be lower than {bookedQuantity} (already booked quantity)",
+  "sortByDate": "By creation date",
+  "avatarOptions": "Avatar modification",
+  "chooseFromGallery": "Choose from gallery",
+  "takePhoto": "Take a photo",
+  "removeAvatar": "Remove avatar",
+  "removeAvatarConfirmation": "Are you sure you want to remove your avatar?"
 }

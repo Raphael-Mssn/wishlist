@@ -97,5 +97,11 @@
   "sortByDate": "Par date de création",
   "selectQuantityToGive": "Quelle quantité souhaitez-vous offrir ?",
   "wishReservedSuccess": "Wish réservé avec succès !",
-  "quantityCannotBeLowerThanBooked": "La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)"
+  "quantityCannotBeLowerThanBooked": "La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)",
+  "sortByDate": "Par date de création",
+  "avatarOptions": "Modification de l'avatar",
+  "chooseFromGallery": "Choisir depuis la galerie",
+  "takePhoto": "Prendre une photo",
+  "removeAvatar": "Supprimer l'avatar",
+  "removeAvatarConfirmation": "Êtes-vous sûr de vouloir supprimer votre avatar ?"
 }
