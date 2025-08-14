@@ -16,6 +16,13 @@ Future<T> executeSafely<T>(
       statusCode: statusCode ?? 500,
       message: e.message,
     );
+  } on StorageException catch (e) {
+    customErrorHandler?.call(e);
+
+    throw AppException(
+      statusCode: int.tryParse(e.statusCode ?? '500') ?? 500,
+      message: e.message,
+    );
   } on Exception catch (e) {
     customErrorHandler?.call(e);
 

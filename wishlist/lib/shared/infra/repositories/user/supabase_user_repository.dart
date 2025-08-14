@@ -42,6 +42,19 @@ class SupabaseUserRepository implements UserRepository {
   }
 
   @override
+  Future<void> updateUserProfile(Profile profile) async {
+    return executeSafely(
+      () async {
+        await _client
+            .from('profiles')
+            .update(profile.toJson())
+            .eq('id', profile.id);
+      },
+      errorMessage: 'Failed to update user profile',
+    );
+  }
+
+  @override
   Future<IList<AppUser>> searchUsersByEmailOrPseudo(String query) async {
     return executeSafely(
       () async {

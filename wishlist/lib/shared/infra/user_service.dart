@@ -21,6 +21,10 @@ class UserService {
     return _userRepository.createUserProfile(profile);
   }
 
+  Future<void> updateUserProfile(Profile profile) async {
+    return _userRepository.updateUserProfile(profile);
+  }
+
   Future<IList<AppUser>> searchUsersByEmailOrPseudo(String query) async {
     return _userRepository.searchUsersByEmailOrPseudo(query);
   }
