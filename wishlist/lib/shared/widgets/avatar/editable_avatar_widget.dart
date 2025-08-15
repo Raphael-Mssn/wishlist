@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/current_user_avatar_provider.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/widgets/avatar/app_avatar.dart';
@@ -21,10 +22,11 @@ class EditableAvatarWidget extends ConsumerWidget {
 
     ref.listen<AsyncValue<String?>>(currentUserAvatarProvider,
         (previous, next) {
-      if (next.hasError) {
+      // Affiche le snackbar uniquement si l'erreur survient après un upload
+      if (next.hasError && previous != null && previous.isLoading) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error uploading avatar: ${next.error}'),
+            content: Text(context.l10n.avatarLoadError),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );

@@ -103,5 +103,6 @@
   "chooseFromGallery": "Choose from gallery",
   "takePhoto": "Take a photo",
   "removeAvatar": "Remove avatar",
-  "removeAvatarConfirmation": "Are you sure you want to remove your avatar?"
+  "removeAvatarConfirmation": "Are you sure you want to remove your avatar?",
+  "avatarLoadError": "Error loading image"
 }

@@ -103,5 +103,6 @@
   "chooseFromGallery": "Choisir depuis la galerie",
   "takePhoto": "Prendre une photo",
   "removeAvatar": "Supprimer l'avatar",
-  "removeAvatarConfirmation": "Êtes-vous sûr de vouloir supprimer votre avatar ?"
+  "removeAvatarConfirmation": "Êtes-vous sûr de vouloir supprimer votre avatar?",
+  "avatarLoadError": "Erreur lors du chargement de l'image"
 }
