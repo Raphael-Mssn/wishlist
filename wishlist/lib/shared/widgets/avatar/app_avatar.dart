@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wishlist/shared/infra/repositories/avatar/avatar_repository_provider.dart';
+import 'package:wishlist/shared/infra/avatar_service.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 
 class AppAvatar extends ConsumerWidget {
@@ -20,14 +20,11 @@ class AppAvatar extends ConsumerWidget {
   static const Color _iconColor = AppColors.background;
 
   @override
-  @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final avatarRepository = ref.watch(avatarRepositoryProvider);
-    final fullAvatarUrl = (avatarUrl != null && avatarUrl!.isNotEmpty)
-        ? avatarRepository.getAvatarUrl(avatarUrl!)
-        : null;
+    final fullAvatarUrl =
+        ref.watch(avatarServiceProvider).getAvatarUrl(avatarUrl);
 
-    if (fullAvatarUrl != null && fullAvatarUrl.isNotEmpty) {
+    if (fullAvatarUrl.isNotEmpty) {
       final Widget avatarImage = ClipOval(
         child: Image.network(
           fullAvatarUrl,
