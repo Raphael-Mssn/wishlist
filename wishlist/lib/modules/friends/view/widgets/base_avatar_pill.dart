@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wishlist/modules/friends/view/widgets/default_avatar_icon.dart';
-import 'package:wishlist/shared/infra/avatar_service.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/widgets/avatar/app_avatar.dart';
 
 class BaseAvatarPill extends ConsumerWidget {
   const BaseAvatarPill({
@@ -27,9 +26,6 @@ class BaseAvatarPill extends ConsumerWidget {
       Radius.circular(50),
     );
 
-    final fullAvatarUrl =
-        ref.watch(avatarServiceProvider).getAvatarUrl(avatarUrl);
-
     return InkWell(
       onTap: () => onTap(context),
       borderRadius: borderRadius,
@@ -40,36 +36,25 @@ class BaseAvatarPill extends ConsumerWidget {
         ),
         child: Row(
           children: <Widget>[
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  height: avatarSize,
-                  width: avatarSize,
-                  decoration: BoxDecoration(
-                    color: AppColors.makara,
-                    shape: BoxShape.circle,
-                    border: Border.fromBorderSide(
-                      BorderSide(
-                        color: avatarBorderColor,
-                        width: 6,
-                      ),
-                    ),
+            Container(
+              height: avatarSize,
+              width: avatarSize,
+              decoration: BoxDecoration(
+                color: AppColors.makara,
+                shape: BoxShape.circle,
+                border: Border.fromBorderSide(
+                  BorderSide(
+                    color: avatarBorderColor,
+                    width: 6,
                   ),
                 ),
-                if (fullAvatarUrl.isNotEmpty)
-                  ClipOval(
-                    child: CircleAvatar(
-                      radius: (avatarSize - 12) / 2, // Suppression border
-                      backgroundColor: AppColors.makara,
-                      backgroundImage: NetworkImage(fullAvatarUrl),
-                    ),
-                  )
-                else
-                  const DefaultAvatarIcon(
-                    color: AppColors.background,
-                  ),
-              ],
+              ),
+              child: AppAvatar(
+                avatarUrl: avatarUrl,
+                size: avatarSize - 12,
+                showBorder: false,
+                maskAccountCircleOuter: true,
+              ),
             ),
             Expanded(
               child: Padding(

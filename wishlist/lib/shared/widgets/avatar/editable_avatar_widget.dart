@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wishlist/modules/friends/view/widgets/default_avatar_icon.dart';
 import 'package:wishlist/shared/infra/current_user_avatar_provider.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/widgets/avatar/app_avatar.dart';
 import 'package:wishlist/shared/widgets/avatar/avatar_options_bottom_sheet.dart';
-import 'package:wishlist/shared/widgets/avatar/avatar_widget.dart';
 
 class EditableAvatarWidget extends ConsumerWidget {
   const EditableAvatarWidget({
@@ -38,31 +37,10 @@ class EditableAvatarWidget extends ConsumerWidget {
       child: Stack(
         children: [
           avatarAsync.when(
-            data: (avatarUrl) {
-              if (avatarUrl != null && avatarUrl.isNotEmpty) {
-                return ClipOval(
-                  child: AvatarWidget(
-                    avatarUrl: avatarUrl,
-                    radius: _size / 2,
-                  ),
-                );
-              } else {
-                return Container(
-                  width: _size,
-                  height: _size,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.makara,
-                  ),
-                  child: const Center(
-                    child: DefaultAvatarIcon(
-                      size: _size,
-                      color: AppColors.background,
-                    ),
-                  ),
-                );
-              }
-            },
+            data: (avatarUrl) => AppAvatar(
+              avatarUrl: avatarUrl,
+              size: _size,
+            ),
             loading: () => Container(
               width: _size,
               height: _size,

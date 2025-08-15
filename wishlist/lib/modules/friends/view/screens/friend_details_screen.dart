@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/modules/friends/view/widgets/default_avatar_icon.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_details_app_bar.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_pill.dart';
-import 'package:wishlist/shared/infra/avatar_service.dart';
 import 'package:wishlist/shared/infra/friend_details_provider.dart';
 import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/app_refresh_indicator.dart';
-import 'package:wishlist/shared/widgets/avatar/avatar_widget.dart';
+import 'package:wishlist/shared/widgets/avatar/app_avatar.dart';
 import 'package:wishlist/shared/widgets/wishlists_grid.dart';
 
 class FriendDetailsScreen extends ConsumerWidget {
@@ -105,32 +103,12 @@ class _FriendStatsSection extends ConsumerWidget {
     final personalStats = '$nbWishlists | $nbWishs';
     const avatarSize = 64.0;
 
-    final fullAvatarUrl = ref
-        .watch(avatarServiceProvider)
-        .getAvatarUrl(friendDetails.appUser.profile.avatarUrl);
-
     return Row(
       children: [
-        if (fullAvatarUrl.isNotEmpty)
-          AvatarWidget(
-            avatarUrl: fullAvatarUrl,
-            radius: avatarSize / 2,
-          )
-        else
-          Container(
-            width: avatarSize,
-            height: avatarSize,
-            decoration: const BoxDecoration(
-              color: AppColors.background,
-              shape: BoxShape.circle,
-            ),
-            child: const FittedBox(
-              fit: BoxFit.cover,
-              child: DefaultAvatarIcon(
-                color: AppColors.makara,
-              ),
-            ),
-          ),
+        AppAvatar(
+          avatarUrl: friendDetails.appUser.profile.avatarUrl,
+          size: avatarSize,
+        ),
         const Gap(16),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
