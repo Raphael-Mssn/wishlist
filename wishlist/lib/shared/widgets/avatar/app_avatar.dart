@@ -61,10 +61,13 @@ class AppAvatar extends ConsumerWidget {
       return Stack(
         alignment: Alignment.center,
         children: [
-          Icon(
-            Icons.account_circle,
-            color: _iconColor,
-            size: size,
+          Transform.scale(
+            scale: 1.2,
+            child: Icon(
+              Icons.account_circle,
+              color: _iconColor,
+              size: size,
+            ),
           ),
           Container(
             width: size,
