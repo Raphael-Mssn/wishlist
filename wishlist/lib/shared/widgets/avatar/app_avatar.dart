@@ -41,8 +41,8 @@ class AppAvatar extends ConsumerWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: AppColors.primary,
-              width: 3,
+              color: AppColors.makara,
+              width: 4,
             ),
           ),
           child: avatarImage,
