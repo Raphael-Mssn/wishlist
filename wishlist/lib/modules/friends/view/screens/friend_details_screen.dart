@@ -101,7 +101,7 @@ class _FriendStatsSection extends ConsumerWidget {
     final nbWishlists = l10n.numberOfWishlists(friendDetails.nbWishlists);
     final nbWishs = l10n.numberOfWishs(friendDetails.nbWishs);
     final personalStats = '$nbWishlists | $nbWishs';
-    const avatarSize = 64.0;
+    const avatarSize = 80.0;
 
     return Row(
       children: [
