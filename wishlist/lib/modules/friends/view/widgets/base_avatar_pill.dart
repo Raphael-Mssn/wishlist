@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pattern_box/pattern_box.dart';
 import 'package:wishlist/shared/theme/colors.dart';
-import 'package:wishlist/shared/theme/widgets/angled_wave_painter.dart';
-import 'package:wishlist/shared/theme/widgets/rotatable_pattern_box.dart';
+import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
 import 'package:wishlist/shared/widgets/avatar/app_avatar.dart';
 
 class BaseAvatarPill extends ConsumerWidget {
@@ -38,21 +36,12 @@ class BaseAvatarPill extends ConsumerWidget {
           borderRadius: borderRadius,
           color: backgroundColor,
         ),
-        child: PatternBoxWidget(
+        child: AppWavePattern(
+          backgroundColor: backgroundColor,
+          preset: WavePreset.pill,
+          rotationType: WaveRotationType.fixed,
+          rotationAngle: 45,
           height: avatarSize,
-          pattern: WavePainter(
-            frequency: 0.8,
-            thickness: 12,
-            gap: 42,
-            color: AppColors.lighten(backgroundColor),
-            amplitude: 80,
-          )
-              .withAngleVariation(
-                angleVariation: 0.2,
-              )
-              .rotatedDegrees(
-                45,
-              ),
           borderRadius: borderRadius,
           child: Row(
             children: <Widget>[
