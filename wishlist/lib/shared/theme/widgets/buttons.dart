@@ -13,7 +13,7 @@ abstract class BaseButton extends StatelessWidget {
   });
 
   final String text;
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final BaseButtonStyle style;
   final bool isLoading;
   final bool isStretched;
