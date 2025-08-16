@@ -1,7 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pattern_box/pattern_box.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_content.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_search_bar.dart';
@@ -20,10 +19,8 @@ import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
+import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
-import 'package:wishlist/shared/theme/widgets/angled_wave_painter.dart';
-import 'package:wishlist/shared/theme/widgets/rotatable_pattern_box.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/utils/wish_sort_utils.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
@@ -168,21 +165,11 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                     borderRadius: const BorderRadius.vertical(
                       bottom: Radius.circular(_appBarBorderRadius),
                     ),
-                    child: PatternBoxWidget(
+                    child: AppWavePattern(
                       backgroundColor: wishlistTheme.primaryColor,
-                      pattern: WavePainter(
-                        frequency: 1,
-                        thickness: 16,
-                        gap: 48,
-                        color: AppColors.lighten(wishlistTheme.primaryColor),
-                        amplitude: 40,
-                      )
-                          .withAngleVariation(
-                            angleVariation: 0.4,
-                          )
-                          .rotatedDegrees(
-                            45,
-                          ),
+                      preset: WavePreset.appBar,
+                      rotationType: WaveRotationType.fixed,
+                      rotationAngle: 45,
                       child: AppBar(
                         backgroundColor: Colors.transparent,
                         actions: [

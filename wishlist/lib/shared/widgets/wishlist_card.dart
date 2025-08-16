@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pattern_box/pattern_box.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
-import 'package:wishlist/shared/theme/widgets/angled_wave_painter.dart';
-import 'package:wishlist/shared/theme/widgets/rotatable_pattern_box.dart';
+import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
 
 class WishlistCard extends StatelessWidget {
   const WishlistCard({
@@ -20,9 +18,6 @@ class WishlistCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final borderRadius = BorderRadius.circular(36);
-
-    // north, east, south, west
-    final randomRotationAngleDegrees = wishlist.id % 4 * 90;
 
     void onTap() {
       WishlistRoute(wishlistId: wishlist.id).push(context);
@@ -40,18 +35,11 @@ class WishlistCard extends StatelessWidget {
             color: color,
             borderRadius: borderRadius,
           ),
-          child: PatternBoxWidget(
-            pattern: WavePainter(
-              frequency: 0.8,
-              thickness: 16,
-              gap: 48,
-              color: AppColors.lighten(color),
-              amplitude: 20,
-            )
-                .withAngleVariation(
-                  angleVariation: 0.2,
-                )
-                .rotatedDegrees(randomRotationAngleDegrees.toDouble()),
+          child: AppWavePattern(
+            backgroundColor: color,
+            preset: WavePreset.card,
+            rotationType: WaveRotationType.deterministic,
+            deterministicId: wishlist.id,
             borderRadius: borderRadius,
             child: Padding(
               padding: const EdgeInsets.all(16),
