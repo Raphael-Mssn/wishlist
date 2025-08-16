@@ -8,14 +8,12 @@ class AppAvatar extends ConsumerWidget {
     super.key,
     this.avatarUrl,
     required this.size,
-    this.showBorder = true,
-    this.maskAccountCircleOuter = false,
+    this.hasBorders = true,
   });
 
   final String? avatarUrl;
   final double size;
-  final bool showBorder;
-  final bool maskAccountCircleOuter;
+  final bool hasBorders;
 
   static const Color _iconColor = AppColors.background;
 
@@ -34,7 +32,7 @@ class AppAvatar extends ConsumerWidget {
           errorBuilder: (_, __, ___) => _defaultIcon(),
         ),
       );
-      if (showBorder) {
+      if (hasBorders) {
         return Container(
           width: size,
           height: size,
@@ -55,48 +53,48 @@ class AppAvatar extends ConsumerWidget {
   }
 
   Widget _defaultIcon() {
-    if (maskAccountCircleOuter) {
-      // Affiche l'icône account_circle et masque le cercle externe
-      // avec une bordure circulaire
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          Transform.scale(
-            scale: 1.2,
-            child: Icon(
-              Icons.account_circle,
-              color: _iconColor,
-              size: size,
-            ),
+    if (hasBorders) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: const BoxDecoration(
+          color: AppColors.makara,
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: Icon(
+            Icons.account_circle,
+            color: _iconColor,
+            size: size,
           ),
-          Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.background,
-                width: size * 0.1,
-              ),
-            ),
-          ),
-        ],
+        ),
       );
     }
-    return Container(
-      width: size,
-      height: size,
-      decoration: const BoxDecoration(
-        color: AppColors.makara,
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Icon(
-          Icons.account_circle,
-          color: _iconColor,
-          size: size,
+    // Affiche l'icône account_circle et masque le cercle externe
+    // avec une bordure circulaire
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Transform.scale(
+          scale: 1.2,
+          child: Icon(
+            Icons.account_circle,
+            color: _iconColor,
+            size: size,
+          ),
         ),
-      ),
+        Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: AppColors.background,
+              width: size * 0.1,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

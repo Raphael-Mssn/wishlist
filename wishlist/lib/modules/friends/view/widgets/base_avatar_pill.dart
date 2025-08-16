@@ -52,8 +52,7 @@ class BaseAvatarPill extends ConsumerWidget {
               child: AppAvatar(
                 avatarUrl: avatarUrl,
                 size: avatarSize - 12,
-                showBorder: false,
-                maskAccountCircleOuter: true,
+                hasBorders: false,
               ),
             ),
             Expanded(
