@@ -9,10 +9,10 @@ import 'package:wishlist/shared/infra/wish_taken_by_user_service.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
+import 'package:wishlist/shared/widgets/text_form_fields/validators/number_range_validator.dart';
 
 const double _buttonSize = 40;
 const double _buttonSpacing = 20;
-const Duration _animationDuration = Duration(milliseconds: 150);
 const double _borderRadius = 8;
 
 class _QuantityButton extends StatelessWidget {
@@ -30,9 +30,7 @@ class _QuantityButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: _animationDuration,
-      curve: Curves.easeInOut,
+    return DecoratedBox(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: isEnabled ? Theme.of(context).primaryColor : AppColors.gainsboro,
@@ -47,14 +45,10 @@ class _QuantityButton extends StatelessWidget {
           child: SizedBox(
             width: _buttonSize,
             height: _buttonSize,
-            child: AnimatedSwitcher(
-              duration: _animationDuration,
-              child: Icon(
-                icon,
-                key: ValueKey(isEnabled),
-                color: isEnabled ? Colors.white : AppColors.makara,
-                size: 20,
-              ),
+            child: Icon(
+              icon,
+              color: isEnabled ? Colors.white : AppColors.makara,
+              size: 20,
             ),
           ),
         ),
@@ -83,7 +77,7 @@ class _QuantitySelectionDialogContentState
     extends State<_QuantitySelectionDialogContent> {
   late int _selectedQuantity;
   late TextEditingController _quantityController;
-  bool _isValid = true;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -103,101 +97,109 @@ class _QuantitySelectionDialogContentState
       setState(() {
         _selectedQuantity = quantity;
         _quantityController.text = quantity.toString();
-        _isValid = true;
       });
       widget.onQuantityChanged(quantity);
-      widget.onValidationChanged(true);
+      _validateForm();
     }
   }
 
-  void _onTextChanged(String value) {
-    final quantity = int.tryParse(value);
-    if (quantity != null && quantity >= 1 && quantity <= widget.maxQuantity) {
-      setState(() {
-        _selectedQuantity = quantity;
-        _isValid = true;
-      });
-      widget.onQuantityChanged(quantity);
-      widget.onValidationChanged(true);
-    } else {
-      setState(() {
-        _isValid = false;
-      });
-      widget.onValidationChanged(false);
-    }
+  void _validateForm() {
+    final valid = _formKey.currentState?.validate() ?? false;
+    widget.onValidationChanged(valid);
+  }
+
+  String? _quantityValidator(String? value) {
+    final l10n = context.l10n;
+    return numberRangeValidator(value, 1, widget.maxQuantity, l10n);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Bouton moins
-            _QuantityButton(
-              icon: Icons.remove,
-              isEnabled: _selectedQuantity > 1,
-              onTap: () => _updateQuantity(_selectedQuantity - 1),
-              onLongPress: () => _updateQuantity(1),
-            ),
-            const Gap(_buttonSpacing),
-            // Champ de saisie de quantité
-            SizedBox(
-              width: 80,
-              child: TextField(
-                controller: _quantityController,
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                style: const TextStyle(
-                  fontFamily: FontFamily.truculenta,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(_borderRadius),
-                    borderSide: BorderSide(
-                      color: _isValid ? AppColors.makara : Colors.red,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(_borderRadius),
-                    borderSide: BorderSide(
-                      color: _isValid
-                          ? Theme.of(context).primaryColor
-                          : Colors.red,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(_borderRadius),
-                    borderSide: BorderSide(
-                      color: _isValid ? AppColors.makara : Colors.red,
-                    ),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 12,
-                  ),
-                ),
-                onChanged: _onTextChanged,
+    return Form(
+      key: _formKey,
+      onChanged: _validateForm,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Bouton moins
+              _QuantityButton(
+                icon: Icons.remove,
+                isEnabled: _selectedQuantity > 1,
+                onTap: () => _updateQuantity(_selectedQuantity - 1),
+                onLongPress: () => _updateQuantity(1),
               ),
-            ),
-            const Gap(_buttonSpacing),
-            // Bouton plus
-            _QuantityButton(
-              icon: Icons.add,
-              isEnabled: _selectedQuantity < widget.maxQuantity,
-              onTap: () => _updateQuantity(_selectedQuantity + 1),
-              onLongPress: () => _updateQuantity(widget.maxQuantity),
-            ),
-          ],
-        ),
-      ],
+              const Gap(_buttonSpacing),
+              // Champ de saisie de quantité
+              SizedBox(
+                width: 80,
+                child: TextFormField(
+                  controller: _quantityController,
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  style: const TextStyle(
+                    fontFamily: FontFamily.truculenta,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  decoration: InputDecoration(
+                    errorStyle: const TextStyle(
+                      color: Colors.transparent,
+                      fontSize: 0,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(_borderRadius),
+                      borderSide: const BorderSide(
+                        color: AppColors.makara,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(_borderRadius),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(_borderRadius),
+                      borderSide: const BorderSide(
+                        color: AppColors.makara,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 12,
+                    ),
+                  ),
+                  validator: _quantityValidator,
+                  onChanged: (value) {
+                    final quantity = int.tryParse(value);
+                    if (quantity != null) {
+                      setState(() {
+                        _selectedQuantity = quantity;
+                      });
+                      widget.onQuantityChanged(quantity);
+                    }
+                    _validateForm();
+                  },
+                ),
+              ),
+              const Gap(_buttonSpacing),
+              // Bouton plus
+              _QuantityButton(
+                icon: Icons.add,
+                isEnabled: _selectedQuantity < widget.maxQuantity,
+                onTap: () => _updateQuantity(_selectedQuantity + 1),
+                onLongPress: () => _updateQuantity(widget.maxQuantity),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

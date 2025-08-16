@@ -70,6 +70,8 @@
   "wishDescriptionLabel": "Description",
   "wishNameError": "Wish name is required",
   "notNullError": "This field is required",
+  "invalidNumber": "Invalid number",
+  "numberRangeError": "Enter a number between {min} and {max}",
   "openLink": "Open link",
   "linkNotValid": "The link is not valid",
   "iWantToGiveIt": "I want to give it",

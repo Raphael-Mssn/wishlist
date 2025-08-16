@@ -6,10 +6,9 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/theme/widgets/cancel_button.dart';
-import 'package:wishlist/shared/theme/widgets/conditional_button.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 
-class _DialogLayout extends StatelessWidget {
+class _DialogLayout extends StatefulWidget {
   const _DialogLayout({
     required this.title,
     required this.content,
@@ -27,18 +26,42 @@ class _DialogLayout extends StatelessWidget {
   final ValueListenable<bool>? isConfirmEnabled;
 
   @override
+  State<_DialogLayout> createState() => _DialogLayoutState();
+}
+
+class _DialogLayoutState extends State<_DialogLayout> {
+  @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final onCancel = this.onCancel;
-    final onConfirm = this.onConfirm;
+    final onCancel = widget.onCancel;
+    final onConfirm = widget.onConfirm;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    Future<void> Function()? confirmHandler() {
+      if (onConfirm == null) {
+        return null;
+      }
+      return () async {
+        try {
+          await onConfirm();
+
+          if (context.mounted && context.canPop()) {
+            context.pop();
+          }
+        } catch (e) {
+          if (context.mounted) {
+            scaffoldMessenger.showGenericError();
+          }
+        }
+      };
+    }
 
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
       title: Text(
-        title,
+        widget.title,
         style: const TextStyle(
           fontFamily: FontFamily.truculenta,
           fontSize: 28,
@@ -46,7 +69,7 @@ class _DialogLayout extends StatelessWidget {
         ),
         textAlign: TextAlign.center,
       ),
-      content: content,
+      content: widget.content,
       actions: <Widget>[
         if (onCancel != null)
           CancelButton(
@@ -57,50 +80,23 @@ class _DialogLayout extends StatelessWidget {
             },
           ),
         if (onConfirm != null)
-          isConfirmEnabled != null
-              ? ValueListenableBuilder<bool>(
-                  valueListenable: isConfirmEnabled!,
-                  builder: (context, isEnabled, child) {
-                    return ConditionalButton(
-                      text: confirmLabel,
-                      isEnabled: isEnabled,
-                      onPressed: isEnabled
-                          ? () async {
-                              try {
-                                await onConfirm();
-
-                                if (context.mounted && context.canPop()) {
-                                  context.pop();
-                                }
-                              } catch (e) {
-                                if (context.mounted) {
-                                  scaffoldMessenger.showGenericError();
-                                }
-                              }
-                            }
-                          : () {},
-                      style: BaseButtonStyle.medium,
-                    );
-                  },
-                )
-              : ConditionalButton(
-                  text: confirmLabel,
-                  isEnabled: true,
-                  onPressed: () async {
-                    try {
-                      await onConfirm();
-
-                      if (context.mounted && context.canPop()) {
-                        context.pop();
-                      }
-                    } catch (e) {
-                      if (context.mounted) {
-                        scaffoldMessenger.showGenericError();
-                      }
-                    }
-                  },
+          if (widget.isConfirmEnabled == null)
+            PrimaryButton(
+              text: widget.confirmLabel,
+              onPressed: confirmHandler(),
+              style: BaseButtonStyle.medium,
+            )
+          else
+            ValueListenableBuilder<bool>(
+              valueListenable: widget.isConfirmEnabled!,
+              builder: (context, enabled, child) {
+                return PrimaryButton(
+                  text: widget.confirmLabel,
+                  onPressed: enabled ? confirmHandler() : null,
                   style: BaseButtonStyle.medium,
-                ),
+                );
+              },
+            ),
       ],
       backgroundColor: AppColors.background,
     );
@@ -114,18 +110,10 @@ Future<void> showAppDialog(
   required String confirmButtonLabel,
   Future<void> Function()? onConfirm,
   void Function()? onCancel,
-  dynamic isConfirmEnabled = true, // Accepte bool ou ValueListenable<bool>
+  ValueListenable<bool>? isConfirmEnabled,
 }) async {
   final l10n = context.l10n;
   final theme = Theme.of(context);
-
-  // Convertir bool en ValueNotifier si nécessaire
-  ValueListenable<bool>? enabledNotifier;
-  if (isConfirmEnabled is bool) {
-    enabledNotifier = ValueNotifier<bool>(isConfirmEnabled);
-  } else if (isConfirmEnabled is ValueListenable<bool>) {
-    enabledNotifier = isConfirmEnabled;
-  }
 
   return showGeneralDialog<void>(
     context: context,
@@ -166,7 +154,7 @@ Future<void> showAppDialog(
                         confirmLabel: confirmButtonLabel,
                         onConfirm: onConfirm,
                         onCancel: onCancel,
-                        isConfirmEnabled: enabledNotifier,
+                        isConfirmEnabled: isConfirmEnabled,
                       ),
                     ),
                   ),
