@@ -6,8 +6,8 @@ import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/widgets/avatar/app_avatar.dart';
 import 'package:wishlist/shared/widgets/avatar/avatar_options_bottom_sheet.dart';
 
-class EditableAvatarWidget extends ConsumerWidget {
-  const EditableAvatarWidget({
+class EditableAvatar extends ConsumerWidget {
+  const EditableAvatar({
     super.key,
     this.showEditIcon = true,
   });

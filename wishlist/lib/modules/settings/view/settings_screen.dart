@@ -7,7 +7,7 @@ import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
-import 'package:wishlist/shared/widgets/avatar/editable_avatar_widget.dart';
+import 'package:wishlist/shared/widgets/avatar/editable_avatar.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 
@@ -29,7 +29,7 @@ class SettingsScreen extends ConsumerWidget {
           const Center(
             child: Column(
               children: [
-                EditableAvatarWidget(),
+                EditableAvatar(),
               ],
             ),
           ),
