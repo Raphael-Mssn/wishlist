@@ -14,6 +14,7 @@ import 'package:wishlist/shared/widgets/text_form_fields/validators/number_range
 const double _buttonSize = 48;
 const double _buttonSpacing = 20;
 const double _borderRadius = 8;
+const double _borderWidth = 2;
 
 class _QuantityButton extends StatelessWidget {
   const _QuantityButton({
@@ -158,18 +159,21 @@ class _QuantitySelectionDialogContentState
                       borderRadius: BorderRadius.circular(_borderRadius),
                       borderSide: const BorderSide(
                         color: AppColors.makara,
+                        width: _borderWidth,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(_borderRadius),
                       borderSide: BorderSide(
                         color: Theme.of(context).primaryColor,
+                        width: _borderWidth,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(_borderRadius),
                       borderSide: const BorderSide(
                         color: AppColors.makara,
+                        width: _borderWidth,
                       ),
                     ),
                     contentPadding: const EdgeInsets.symmetric(
