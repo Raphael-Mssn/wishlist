@@ -75,31 +75,40 @@ class _QuantitySelectionDialogContent extends StatefulWidget {
 
 class _QuantitySelectionDialogContentState
     extends State<_QuantitySelectionDialogContent> {
-  late int _selectedQuantity;
   late TextEditingController _quantityController;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _selectedQuantity = 1;
     _quantityController = TextEditingController(text: '1');
+    _quantityController.addListener(_onControllerChanged);
   }
 
   @override
   void dispose() {
+    _quantityController.removeListener(_onControllerChanged);
     _quantityController.dispose();
     super.dispose();
   }
 
+  void _onControllerChanged() {
+    final text = _quantityController.text;
+    final quantity = int.tryParse(text);
+    if (quantity != null) {
+      widget.onQuantityChanged(quantity);
+    }
+    _validateForm();
+    setState(() {});
+  }
+
   void _updateQuantity(int quantity) {
     if (quantity >= 1 && quantity <= widget.maxQuantity) {
-      setState(() {
-        _selectedQuantity = quantity;
-        _quantityController.text = quantity.toString();
-      });
-      widget.onQuantityChanged(quantity);
-      _validateForm();
+      _quantityController.text = quantity.toString();
+      // Préserver le curseur près de la fin
+      final newOffset = _quantityController.text.length;
+      _quantityController.selection =
+          TextSelection.collapsed(offset: newOffset);
     }
   }
 
@@ -127,8 +136,11 @@ class _QuantitySelectionDialogContentState
               // Bouton moins
               _QuantityButton(
                 icon: Icons.remove,
-                isEnabled: _selectedQuantity > 1,
-                onTap: () => _updateQuantity(_selectedQuantity - 1),
+                isEnabled: (int.tryParse(_quantityController.text) ?? 0) > 1,
+                onTap: () {
+                  final current = int.tryParse(_quantityController.text) ?? 1;
+                  _updateQuantity(current - 1);
+                },
                 onLongPress: () => _updateQuantity(1),
               ),
               const Gap(_buttonSpacing),
@@ -176,24 +188,19 @@ class _QuantitySelectionDialogContentState
                     ),
                   ),
                   validator: _quantityValidator,
-                  onChanged: (value) {
-                    final quantity = int.tryParse(value);
-                    if (quantity != null) {
-                      setState(() {
-                        _selectedQuantity = quantity;
-                      });
-                      widget.onQuantityChanged(quantity);
-                    }
-                    _validateForm();
-                  },
                 ),
               ),
               const Gap(_buttonSpacing),
               // Bouton plus
               _QuantityButton(
                 icon: Icons.add,
-                isEnabled: _selectedQuantity < widget.maxQuantity,
-                onTap: () => _updateQuantity(_selectedQuantity + 1),
+                isEnabled: (int.tryParse(_quantityController.text) ??
+                        widget.maxQuantity) <
+                    widget.maxQuantity,
+                onTap: () {
+                  final current = int.tryParse(_quantityController.text) ?? 1;
+                  _updateQuantity(current + 1);
+                },
                 onLongPress: () => _updateQuantity(widget.maxQuantity),
               ),
             ],
