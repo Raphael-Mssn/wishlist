@@ -66,7 +66,6 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
               widget.wish.totalBookedQuantity,
             ),
           ),
-          backgroundColor: Colors.red,
         ),
       );
       return false;
