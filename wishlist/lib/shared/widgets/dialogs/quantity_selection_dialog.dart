@@ -11,7 +11,7 @@ import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/validators/number_range_validator.dart';
 
-const double _buttonSize = 40;
+const double _buttonSize = 48;
 const double _buttonSpacing = 20;
 const double _borderRadius = 8;
 
@@ -30,27 +30,21 @@ class _QuantityButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: isEnabled ? Theme.of(context).primaryColor : AppColors.gainsboro,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        shape: const CircleBorder(),
-        clipBehavior: Clip.hardEdge,
-        child: InkWell(
-          onTap: isEnabled ? onTap : null,
-          onLongPress: isEnabled ? onLongPress : null,
-          child: SizedBox(
-            width: _buttonSize,
-            height: _buttonSize,
-            child: Icon(
-              icon,
-              color: isEnabled ? Colors.white : AppColors.makara,
-              size: 20,
-            ),
-          ),
+    return GestureDetector(
+      onLongPress: isEnabled ? onLongPress : null,
+      child: FilledButton(
+        onPressed: isEnabled ? onTap : null,
+        style: FilledButton.styleFrom(
+          backgroundColor:
+              isEnabled ? Theme.of(context).primaryColor : AppColors.gainsboro,
+          shape: const CircleBorder(),
+          padding: EdgeInsets.zero,
+          minimumSize: const Size(_buttonSize, _buttonSize),
+        ),
+        child: Icon(
+          icon,
+          color: isEnabled ? Colors.white : AppColors.makara,
+          size: 24,
         ),
       ),
     );
@@ -105,10 +99,6 @@ class _QuantitySelectionDialogContentState
   void _updateQuantity(int quantity) {
     if (quantity >= 1 && quantity <= widget.maxQuantity) {
       _quantityController.text = quantity.toString();
-      // Préserver le curseur près de la fin
-      final newOffset = _quantityController.text.length;
-      _quantityController.selection =
-          TextSelection.collapsed(offset: newOffset);
     }
   }
 
