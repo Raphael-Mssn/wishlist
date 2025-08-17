@@ -188,12 +188,18 @@ class _QuantitySelectionDialogContentState
               // Bouton plus
               _QuantityButton(
                 icon: Icons.add,
-                isEnabled: (int.tryParse(_quantityController.text) ??
-                        widget.maxQuantity) <
-                    widget.maxQuantity,
+                isEnabled: (() {
+                  final quantityParsed = int.tryParse(_quantityController.text);
+                  return quantityParsed == null ||
+                      quantityParsed < widget.maxQuantity;
+                })(),
                 onTap: () {
-                  final current = int.tryParse(_quantityController.text) ?? 1;
-                  _updateQuantity(current + 1);
+                  final current = int.tryParse(_quantityController.text);
+                  if (current == null) {
+                    _updateQuantity(1);
+                  } else {
+                    _updateQuantity(current + 1);
+                  }
                 },
                 onLongPress: () => _updateQuantity(widget.maxQuantity),
               ),
