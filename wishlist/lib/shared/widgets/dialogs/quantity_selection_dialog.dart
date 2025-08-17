@@ -244,6 +244,9 @@ Future<void> showQuantitySelectionDialog(
           );
       if (context.mounted) {
         context.pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.wishReservedSuccess)),
+        );
       }
     },
   );

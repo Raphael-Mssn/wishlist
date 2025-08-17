@@ -95,5 +95,6 @@
   "sortByPrice": "Par prix",
   "sortByDate": "Par date de création",
   "selectQuantityToGive": "Quelle quantité souhaitez-vous offrir ?",
+  "wishReservedSuccess": "Wish réservé avec succès !",
   "quantityCannotBeLowerThanBooked": "La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)"
 }

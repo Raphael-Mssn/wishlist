@@ -52,6 +52,9 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
           );
       if (context.mounted) {
         context.pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.wishReservedSuccess)),
+        );
       }
     } catch (e) {
       if (context.mounted) {

@@ -95,5 +95,6 @@
   "sortByPrice": "By price",
   "sortByDate": "By creation date",
   "selectQuantityToGive": "How much would you like to offer?",
+  "wishReservedSuccess": "Wish reserved successfully!",
   "quantityCannotBeLowerThanBooked": "Quantity cannot be lower than {bookedQuantity} (already booked quantity)"
 }
