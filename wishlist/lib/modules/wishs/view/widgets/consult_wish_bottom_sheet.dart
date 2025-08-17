@@ -38,23 +38,20 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
   }
 
   Future<void> onGiveIt(BuildContext context, WidgetRef ref) async {
+    // Si quantité disponible > 1, afficher le dialog de sélection
+    if (wish.availableQuantity > 1) {
+      await showQuantitySelectionDialog(context, ref, wish: wish);
+      return;
+    }
+
+    // Si quantité disponible = 1, réserver directement
     try {
-      // Si quantité disponible > 1, afficher le dialog de sélection
-      if (wish.availableQuantity > 1) {
-        await showQuantitySelectionDialog(
-          context,
-          ref,
-          wish: wish,
-        );
-      } else {
-        // Si quantité disponible = 1, réserver directement
-        await ref.read(wishTakenByUserServiceProvider).wishTakenByUser(
-              wish,
-              quantity: 1,
-            );
-        if (context.mounted) {
-          context.pop();
-        }
+      await ref.read(wishTakenByUserServiceProvider).wishTakenByUser(
+            wish,
+            quantity: 1,
+          );
+      if (context.mounted) {
+        context.pop();
       }
     } catch (e) {
       if (context.mounted) {
