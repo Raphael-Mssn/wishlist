@@ -11,6 +11,7 @@ import 'package:wishlist/modules/wishs/view/widgets/consult_wish_bottom_sheet.da
 import 'package:wishlist/modules/wishs/view/widgets/create_wish_bottom_sheet.dart';
 import 'package:wishlist/modules/wishs/view/widgets/edit_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
+import 'package:wishlist/shared/infra/wishlist_by_id_provider.dart';
 import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
@@ -54,6 +55,10 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
       setState(() {
         _searchQuery = _searchController.text.toLowerCase();
       });
+    });
+    // Rafraîchir les données de la wishlist à l'ouverture
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _refreshWishlistData();
     });
   }
 
@@ -112,6 +117,17 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
   void _clearFocusHistory() {
     // Forcer la perte de l'historique de focus
     FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  /// Rafraîchit les données de la wishlist (wishlist et wishs)
+  Future<void> _refreshWishlistData() async {
+    // Rafraîchir les wishs
+    await ref
+        .read(wishsFromWishlistProvider(widget.wishlistId).notifier)
+        .loadWishs();
+
+    // Rafraîchir les données de la wishlist
+    ref.invalidate(wishlistByIdProvider(widget.wishlistId));
   }
 
   IList<Wish> _sortAndFilterWishs(IList<Wish> wishs) {
