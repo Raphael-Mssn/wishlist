@@ -16,6 +16,7 @@ Future<void> showAppBottomSheet(
     context: context,
     backgroundColor: AppColors.background,
     expand: expandToFillHeight,
+    barrierColor: Colors.black54.withValues(alpha: 0.3),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: radius,
