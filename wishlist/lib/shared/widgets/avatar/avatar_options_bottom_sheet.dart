@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/current_user_avatar_provider.dart';
-import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
+import 'package:wishlist/shared/widgets/app_list_tile.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 
 class _AvatarOptionsBottomSheet extends ConsumerWidget {
@@ -31,50 +31,26 @@ class _AvatarOptionsBottomSheet extends ConsumerWidget {
             ),
           ),
         ),
-        ListTile(
-          leading: const Icon(
-            Icons.photo_library,
-            color: AppColors.darkGrey,
-          ),
-          title: Text(
-            l10n.chooseFromGallery,
-            style: AppTextStyles.small.copyWith(
-              color: AppColors.darkGrey,
-            ),
-          ),
+        AppListTile(
+          icon: Icons.photo_library,
+          title: l10n.chooseFromGallery,
           onTap: () {
             Navigator.pop(context);
             ref.read(currentUserAvatarProvider.notifier).pickAndUploadAvatar();
           },
         ),
-        ListTile(
-          leading: const Icon(
-            Icons.camera_alt,
-            color: AppColors.darkGrey,
-          ),
-          title: Text(
-            l10n.takePhoto,
-            style: AppTextStyles.small.copyWith(
-              color: AppColors.darkGrey,
-            ),
-          ),
+        AppListTile(
+          icon: Icons.camera_alt,
+          title: l10n.takePhoto,
           onTap: () {
             Navigator.pop(context);
             ref.read(currentUserAvatarProvider.notifier).takePhotoAndUpload();
           },
         ),
         if (hasAvatar)
-          ListTile(
-            leading: const Icon(
-              Icons.delete,
-              color: AppColors.darkGrey,
-            ),
-            title: Text(
-              l10n.removeAvatar,
-              style: AppTextStyles.small.copyWith(
-                color: AppColors.darkGrey,
-              ),
-            ),
+          AppListTile(
+            icon: Icons.delete,
+            title: l10n.removeAvatar,
             onTap: () {
               Navigator.pop(context);
               final avatarNotifier =
