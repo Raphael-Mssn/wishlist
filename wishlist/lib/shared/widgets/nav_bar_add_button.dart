@@ -31,7 +31,7 @@ class NavBarAddButton extends StatelessWidget {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: AppColors.darkGrey.withOpacity(0.15),
+                color: AppColors.darkGrey.withValues(alpha: 0.15),
                 blurRadius: 10,
                 spreadRadius: 2,
               ),

@@ -42,7 +42,7 @@ class _EditableTitleState extends State<EditableTitle> {
       data: Theme.of(context).copyWith(
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: AppColors.gainsboro,
-          selectionColor: AppColors.gainsboro.withOpacity(0.3),
+          selectionColor: AppColors.gainsboro.withValues(alpha: 0.3),
           selectionHandleColor: AppColors.gainsboro,
         ),
       ),

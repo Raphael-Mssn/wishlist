@@ -20,7 +20,7 @@ class FriendPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textShadow = Shadow(
-      color: AppColors.darkGrey.withOpacity(0.3),
+      color: AppColors.darkGrey.withValues(alpha: 0.3),
       offset: const Offset(2, 2),
       blurRadius: 5,
     );

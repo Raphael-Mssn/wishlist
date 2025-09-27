@@ -86,7 +86,7 @@ class EditableAvatar extends ConsumerWidget {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.darkGrey.withOpacity(0.12),
+                      color: AppColors.darkGrey.withValues(alpha: 0.12),
                       blurRadius: 6,
                       offset: const Offset(0, 2),
                     ),
