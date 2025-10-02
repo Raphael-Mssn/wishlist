@@ -64,7 +64,7 @@ class _SideButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      splashColor: AppColors.darkGrey.withOpacity(0.1),
+      splashColor: AppColors.darkGrey.withValues(alpha: 0.1),
       borderRadius: borderRadius,
       onTap: onTap,
       child: Ink(

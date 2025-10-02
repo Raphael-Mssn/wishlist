@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/modules/friends/view/infra/search_notifier.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
+import 'package:wishlist/shared/infra/current_user_avatar_provider.dart';
 import 'package:wishlist/shared/infra/friendship_status_provider.dart';
 import 'package:wishlist/shared/infra/friendships_provider.dart';
 import 'package:wishlist/shared/infra/repositories/friendship/friendship_repository_provider.dart';
@@ -17,4 +18,5 @@ void invalidateAllProviders(WidgetRef ref) {
   ref.invalidate(friendshipRepositoryProvider);
   ref.invalidate(userRepositoryProvider);
   ref.invalidate(wishlistsProvider);
+  ref.invalidate(currentUserAvatarProvider);
 }

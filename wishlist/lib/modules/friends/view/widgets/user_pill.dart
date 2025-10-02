@@ -44,6 +44,7 @@ class UserPill extends ConsumerWidget {
       onTap: (context) {},
       backgroundColor: AppColors.gainsboro,
       avatarBorderColor: AppColors.pastelGray,
+      avatarUrl: appUser.profile.avatarUrl,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

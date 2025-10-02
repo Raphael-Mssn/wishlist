@@ -42,15 +42,13 @@ abstract final class AppColors {
   }
 
   static Color darken(Color color, [double factor = 0.8]) {
-    final red = (color.red * 0.8).round();
-    final green = (color.green * 0.8).round();
-    final blue = (color.blue * 0.8).round();
-
-    return Color.fromARGB(color.alpha, red, green, blue);
+    final hsl = HSLColor.fromColor(color);
+    final newLightness = (hsl.lightness * factor).clamp(0.0, 1.0);
+    return hsl.withLightness(newLightness).toColor();
   }
 
   static String getHexValue(Color color) {
-    return '#${color.value.toRadixString(16).substring(2)}';
+    return '#${color.toARGB32().toRadixString(16).substring(2)}';
   }
 
   static Color getColorFromHexValue(String hexColor) {

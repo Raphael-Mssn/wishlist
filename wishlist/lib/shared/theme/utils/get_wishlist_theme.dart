@@ -16,7 +16,7 @@ ThemeData getWishlistTheme(BuildContext context, Wishlist wishlist) {
     textSelectionTheme: currentTheme.textSelectionTheme.copyWith(
       cursorColor: wishlistColor,
       selectionHandleColor: wishlistColor,
-      selectionColor: wishlistColor.withOpacity(0.3),
+      selectionColor: wishlistColor.withValues(alpha: 0.3),
     ),
   );
 }

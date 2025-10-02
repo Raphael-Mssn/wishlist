@@ -7,6 +7,7 @@ import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
+import 'package:wishlist/shared/widgets/avatar/editable_avatar.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 
@@ -25,6 +26,14 @@ class SettingsScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Gap(8),
+          const Center(
+            child: Column(
+              children: [
+                EditableAvatar(),
+              ],
+            ),
+          ),
+          const Gap(32),
           Row(
             children: [
               Expanded(

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
-import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
+import 'package:wishlist/shared/widgets/app_list_tile.dart';
 
 class _WishSortBottomSheet extends StatelessWidget {
   const _WishSortBottomSheet({
@@ -32,30 +32,11 @@ class _WishSortBottomSheet extends StatelessWidget {
           ),
         ),
         ...WishSortType.values.map(
-          (sortType) => ListTile(
-            leading: Icon(
-              sortType.icon,
-              color: currentSort.type == sortType
-                  ? Theme.of(context).primaryColor
-                  : AppColors.darkGrey,
-            ),
-            title: Text(
-              sortType.getLabel(l10n),
-              style: AppTextStyles.small.copyWith(
-                color: currentSort.type == sortType
-                    ? Theme.of(context).primaryColor
-                    : AppColors.darkGrey,
-                fontWeight: currentSort.type == sortType
-                    ? FontWeight.bold
-                    : FontWeight.normal,
-              ),
-            ),
-            trailing: currentSort.type == sortType
-                ? Icon(
-                    Icons.check,
-                    color: Theme.of(context).primaryColor,
-                  )
-                : null,
+          (sortType) => AppListTile(
+            icon: sortType.icon,
+            title: sortType.getLabel(l10n),
+            isSelected: currentSort.type == sortType,
+            showCheckmark: true,
             onTap: () {
               final newSort = WishSort(
                 type: sortType,

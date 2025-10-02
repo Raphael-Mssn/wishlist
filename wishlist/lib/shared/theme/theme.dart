@@ -6,8 +6,8 @@ import 'package:wishlist/shared/theme/colors.dart';
 ThemeData get theme => ThemeData(
       scaffoldBackgroundColor: AppColors.background,
       primaryColor: AppColors.primary,
-      primaryColorDark: AppColors.darkOrange,
-      tabBarTheme: const TabBarTheme(
+      primaryColorDark: const Color.fromRGBO(223, 115, 61, 1),
+      tabBarTheme: const TabBarThemeData(
         labelColor: AppColors.primary,
         unselectedLabelColor: AppColors.background,
         dividerColor: Colors.transparent,
@@ -39,7 +39,7 @@ ThemeData get theme => ThemeData(
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: AppColors.primary,
         selectionHandleColor: AppColors.primary,
-        selectionColor: AppColors.primary.withOpacity(0.3),
+        selectionColor: AppColors.primary.withValues(alpha: 0.3),
       ),
       inputDecorationTheme: const InputDecorationTheme(
         floatingLabelStyle: TextStyle(
