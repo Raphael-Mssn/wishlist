@@ -47,6 +47,12 @@ abstract final class AppColors {
     return hsl.withLightness(newLightness).toColor();
   }
 
+  static Color lighten(Color color, [double factor = 1.07]) {
+    final hsl = HSLColor.fromColor(color);
+    final newLightness = (hsl.lightness * factor).clamp(0.0, 1.0);
+    return hsl.withLightness(newLightness).toColor();
+  }
+
   static String getHexValue(Color color) {
     return '#${color.toARGB32().toRadixString(16).substring(2)}';
   }
