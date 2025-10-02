@@ -25,5 +25,4 @@ const _$FriendshipStatusEnumMap = {
   FriendshipStatus.accepted: 'accepted',
   FriendshipStatus.pending: 'pending',
   FriendshipStatus.rejected: 'rejected',
-  FriendshipStatus.blocked: 'blocked',
 };

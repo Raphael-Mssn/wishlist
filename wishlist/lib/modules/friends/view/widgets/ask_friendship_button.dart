@@ -127,9 +127,6 @@ class _StatusButton extends StatelessWidget {
         return Icons.access_time_filled;
       case FriendshipStatus.accepted:
         return Icons.check;
-      case FriendshipStatus.rejected:
-      case FriendshipStatus.blocked:
-        return Icons.block;
     }
   }
 }
