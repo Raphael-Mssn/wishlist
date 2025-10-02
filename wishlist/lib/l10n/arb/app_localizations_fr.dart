@@ -217,6 +217,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get deleteWish => 'Supprimer le wish';
 
   @override
+  String get deleteWishSuccess => 'Wish supprimé avec succès';
+
+  @override
   String get editButton => 'Modifier';
 
   @override
@@ -239,6 +242,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get notNullError => 'Ce champ est requis';
+
+  @override
+  String get invalidNumber => 'Nombre invalide';
+
+  @override
+  String numberRangeError(Object max, Object min) {
+    return 'Saisissez un nombre entre $min et $max';
+  }
 
   @override
   String get openLink => 'Ouvrir le lien';
@@ -305,6 +316,17 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get sortByDate => 'Par date de création';
+
+  @override
+  String get selectQuantityToGive => 'Quelle quantité souhaitez-vous offrir ?';
+
+  @override
+  String get wishReservedSuccess => 'Wish réservé avec succès !';
+
+  @override
+  String quantityCannotBeLowerThanBooked(Object bookedQuantity) {
+    return 'La quantité ne peut pas être inférieure à $bookedQuantity (quantité déjà réservée)';
+  }
 
   @override
   String get avatarOptions => 'Modification de l\'avatar';

@@ -470,6 +470,12 @@ abstract class AppLocalizations {
   /// **'Supprimer le wish'**
   String get deleteWish;
 
+  /// No description provided for @deleteWishSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Wish supprimé avec succès'**
+  String get deleteWishSuccess;
+
   /// No description provided for @editButton.
   ///
   /// In fr, this message translates to:
@@ -517,6 +523,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ce champ est requis'**
   String get notNullError;
+
+  /// No description provided for @invalidNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nombre invalide'**
+  String get invalidNumber;
+
+  /// No description provided for @numberRangeError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez un nombre entre {min} et {max}'**
+  String numberRangeError(Object max, Object min);
 
   /// No description provided for @openLink.
   ///
@@ -649,6 +667,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Par date de création'**
   String get sortByDate;
+
+  /// No description provided for @selectQuantityToGive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quelle quantité souhaitez-vous offrir ?'**
+  String get selectQuantityToGive;
+
+  /// No description provided for @wishReservedSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Wish réservé avec succès !'**
+  String get wishReservedSuccess;
+
+  /// No description provided for @quantityCannotBeLowerThanBooked.
+  ///
+  /// In fr, this message translates to:
+  /// **'La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)'**
+  String quantityCannotBeLowerThanBooked(Object bookedQuantity);
 
   /// No description provided for @avatarOptions.
   ///
