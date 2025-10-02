@@ -113,7 +113,7 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
             context.pop();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(l10n.deleteWishlistSuccess),
+                content: Text(l10n.deleteWishSuccess),
               ),
             );
           }

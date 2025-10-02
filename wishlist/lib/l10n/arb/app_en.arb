@@ -62,6 +62,7 @@
   "createWishBottomSheetTitle": "Create a wish",
   "editWishBottomSheetTitle": "Edit a wish",
   "deleteWish": "Delete wish",
+  "deleteWishSuccess": "Wish deleted successfully",
   "editButton": "Edit",
   "wishNameLabel": "Name",
   "wishPriceLabel": "Price",
