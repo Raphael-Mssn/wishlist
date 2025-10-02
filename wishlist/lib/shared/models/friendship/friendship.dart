@@ -29,8 +29,7 @@ class Friendship with _$Friendship {
 enum FriendshipStatus {
   none,
   accepted,
-  pending,
-  rejected;
+  pending;
 
   @override
   String toString() {
@@ -41,8 +40,6 @@ enum FriendshipStatus {
         return 'accepted';
       case FriendshipStatus.pending:
         return 'pending';
-      case FriendshipStatus.rejected:
-        return 'rejected';
     }
   }
 }
