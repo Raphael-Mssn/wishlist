@@ -113,8 +113,28 @@ class _QuantitySelectionDialogContentState
     return numberRangeValidator(value, 1, widget.maxQuantity, l10n);
   }
 
+  void _decreaseQuantity() {
+    final current = int.tryParse(_quantityController.text) ?? 1;
+    _updateQuantity(current - 1);
+  }
+
+  void _increaseQuantity() {
+    final current = int.tryParse(_quantityController.text);
+    if (current == null) {
+      _updateQuantity(1);
+    } else {
+      _updateQuantity(current + 1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final quantityParsed = int.tryParse(_quantityController.text);
+    final hasReachedMinQuantity = (quantityParsed ?? 0) > 1;
+
+    final hasReachedMaxQuantity =
+        quantityParsed == null || quantityParsed < widget.maxQuantity;
+
     return Form(
       key: _formKey,
       onChanged: _validateForm,
@@ -127,11 +147,8 @@ class _QuantitySelectionDialogContentState
               // Bouton moins
               _QuantityButton(
                 icon: Icons.remove,
-                isEnabled: (int.tryParse(_quantityController.text) ?? 0) > 1,
-                onTap: () {
-                  final current = int.tryParse(_quantityController.text) ?? 1;
-                  _updateQuantity(current - 1);
-                },
+                isEnabled: hasReachedMinQuantity,
+                onTap: _decreaseQuantity,
                 onLongPress: () => _updateQuantity(1),
               ),
               const Gap(_buttonSpacing),
@@ -188,19 +205,8 @@ class _QuantitySelectionDialogContentState
               // Bouton plus
               _QuantityButton(
                 icon: Icons.add,
-                isEnabled: (() {
-                  final quantityParsed = int.tryParse(_quantityController.text);
-                  return quantityParsed == null ||
-                      quantityParsed < widget.maxQuantity;
-                })(),
-                onTap: () {
-                  final current = int.tryParse(_quantityController.text);
-                  if (current == null) {
-                    _updateQuantity(1);
-                  } else {
-                    _updateQuantity(current + 1);
-                  }
-                },
+                isEnabled: hasReachedMaxQuantity,
+                onTap: _increaseQuantity,
                 onLongPress: () => _updateQuantity(widget.maxQuantity),
               ),
             ],
