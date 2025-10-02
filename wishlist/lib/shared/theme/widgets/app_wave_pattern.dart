@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pattern_box/pattern_box.dart';
 import 'package:wishlist/shared/theme/colors.dart';
-import 'package:wishlist/shared/theme/widgets/angled_wave_painter.dart';
-import 'package:wishlist/shared/theme/widgets/rotatable_pattern_box.dart';
+import 'package:wishlist/shared/theme/widgets/enhanced_wave_painter.dart';
 
 /// Types de rotation prédéfinis
 enum WaveRotationType {
@@ -77,17 +76,15 @@ class AppWavePattern extends StatelessWidget {
     return PatternBoxWidget(
       height: height,
       width: width,
-      pattern: WavePainter(
+      pattern: EnhancedWavePainter(
         frequency: finalParams.frequency,
         thickness: finalParams.thickness,
         gap: finalParams.gap,
         color: finalPatternColor,
         amplitude: finalParams.amplitude,
-      )
-          .withAngleVariation(
-            angleVariation: finalParams.angleVariation,
-          )
-          .rotatedDegrees(finalRotation),
+        angleVariation: finalParams.angleVariation,
+        rotationAngleDegrees: finalRotation,
+      ),
       borderRadius: borderRadius,
       backgroundColor: backgroundColor,
       child: child,
