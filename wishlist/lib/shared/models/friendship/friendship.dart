@@ -30,8 +30,7 @@ enum FriendshipStatus {
   none,
   accepted,
   pending,
-  rejected,
-  blocked;
+  rejected;
 
   @override
   String toString() {
@@ -44,8 +43,6 @@ enum FriendshipStatus {
         return 'pending';
       case FriendshipStatus.rejected:
         return 'rejected';
-      case FriendshipStatus.blocked:
-        return 'blocked';
     }
   }
 }
