@@ -23,6 +23,27 @@ class SupabaseWishTakenByUserRepository implements WishTakenByUserRepository {
   }
 
   @override
+  Future<void> updateWishTakenByUser({
+    required int wishId,
+    required String userId,
+    required int newQuantity,
+  }) async {
+    return executeSafely(
+      () async {
+        await _client
+            .from(_wishTakenByUser)
+            .update({
+              'quantity': newQuantity,
+              'updated_at': DateTime.now().toUtc().toIso8601String(),
+            })
+            .eq('wish_id', wishId)
+            .eq('user_id', userId);
+      },
+      errorMessage: 'Failed to update wish taken by user',
+    );
+  }
+
+  @override
   Future<void> cancelWishTaken(int wishId) async {
     return executeSafely(
       () async {

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/gen/fonts.gen.dart';
@@ -7,13 +8,14 @@ import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/theme/widgets/cancel_button.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 
-class _DialogLayout extends StatelessWidget {
+class _DialogLayout extends StatefulWidget {
   const _DialogLayout({
     required this.title,
     required this.content,
     required this.confirmLabel,
     this.onCancel,
     this.onConfirm,
+    this.isConfirmEnabled,
   });
 
   final String title;
@@ -21,27 +23,53 @@ class _DialogLayout extends StatelessWidget {
   final String confirmLabel;
   final void Function()? onCancel;
   final Future<void> Function()? onConfirm;
+  final ValueListenable<bool>? isConfirmEnabled;
 
+  @override
+  State<_DialogLayout> createState() => _DialogLayoutState();
+}
+
+class _DialogLayoutState extends State<_DialogLayout> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final onCancel = this.onCancel;
-    final onConfirm = this.onConfirm;
+    final onCancel = widget.onCancel;
+    final onConfirm = widget.onConfirm;
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    Future<void> Function()? confirmHandler() {
+      if (onConfirm == null) {
+        return null;
+      }
+      return () async {
+        try {
+          await onConfirm();
+
+          if (context.mounted && context.canPop()) {
+            context.pop();
+          }
+        } catch (e) {
+          if (context.mounted) {
+            scaffoldMessenger.showGenericError();
+          }
+        }
+      };
+    }
 
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
       title: Text(
-        title,
+        widget.title,
         style: const TextStyle(
           fontFamily: FontFamily.truculenta,
           fontSize: 28,
           fontWeight: FontWeight.w500,
         ),
+        textAlign: TextAlign.center,
       ),
-      content: content,
+      content: widget.content,
       actions: <Widget>[
         if (onCancel != null)
           CancelButton(
@@ -52,23 +80,23 @@ class _DialogLayout extends StatelessWidget {
             },
           ),
         if (onConfirm != null)
-          PrimaryButton(
-            text: confirmLabel,
-            onPressed: () async {
-              try {
-                await onConfirm();
-
-                if (context.mounted && context.canPop()) {
-                  context.pop();
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  scaffoldMessenger.showGenericError();
-                }
-              }
-            },
-            style: BaseButtonStyle.medium,
-          ),
+          if (widget.isConfirmEnabled == null)
+            PrimaryButton(
+              text: widget.confirmLabel,
+              onPressed: confirmHandler(),
+              style: BaseButtonStyle.medium,
+            )
+          else
+            ValueListenableBuilder<bool>(
+              valueListenable: widget.isConfirmEnabled!,
+              builder: (context, enabled, child) {
+                return PrimaryButton(
+                  text: widget.confirmLabel,
+                  onPressed: enabled ? confirmHandler() : null,
+                  style: BaseButtonStyle.medium,
+                );
+              },
+            ),
       ],
       backgroundColor: AppColors.background,
     );
@@ -82,6 +110,7 @@ Future<void> showAppDialog(
   required String confirmButtonLabel,
   Future<void> Function()? onConfirm,
   void Function()? onCancel,
+  ValueListenable<bool>? isConfirmEnabled,
 }) async {
   final l10n = context.l10n;
   final theme = Theme.of(context);
@@ -125,6 +154,7 @@ Future<void> showAppDialog(
                         confirmLabel: confirmButtonLabel,
                         onConfirm: onConfirm,
                         onCancel: onCancel,
+                        isConfirmEnabled: isConfirmEnabled,
                       ),
                     ),
                   ),

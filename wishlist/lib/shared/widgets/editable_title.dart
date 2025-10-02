@@ -7,19 +7,19 @@ class EditableTitle extends StatefulWidget {
     super.key,
     required this.initialTitle,
     this.onTitleChanged,
+    this.validator,
   });
 
   final String initialTitle;
   final Function(String)? onTitleChanged;
+  final String? Function(String?)? validator;
 
   @override
   State<EditableTitle> createState() => _EditableTitleState();
 }
 
 class _EditableTitleState extends State<EditableTitle> {
-  bool _isEditing = false;
   late TextEditingController _titleController;
-  late FocusNode _focusNode;
   bool _hasBeenModified = false;
   late String _initialTitle;
 
@@ -28,92 +28,78 @@ class _EditableTitleState extends State<EditableTitle> {
     super.initState();
     _initialTitle = widget.initialTitle;
     _titleController = TextEditingController(text: widget.initialTitle);
-    _focusNode = FocusNode();
   }
 
   @override
   void dispose() {
     _titleController.dispose();
-    _focusNode.dispose();
     super.dispose();
-  }
-
-  void _startEditing() {
-    setState(() {
-      _isEditing = true;
-    });
-    _focusNode.requestFocus();
-  }
-
-  void _finishEditing() {
-    setState(() {
-      _isEditing = false;
-      _hasBeenModified = _titleController.text != _initialTitle;
-    });
-    widget.onTitleChanged?.call(_titleController.text);
   }
 
   @override
   Widget build(BuildContext context) {
-    return _isEditing
-        ? Theme(
-            data: Theme.of(context).copyWith(
-              textSelectionTheme: TextSelectionThemeData(
-                cursorColor: AppColors.gainsboro,
-                selectionColor: AppColors.gainsboro.withOpacity(0.3),
-                selectionHandleColor: AppColors.gainsboro,
-              ),
+    return Theme(
+      data: Theme.of(context).copyWith(
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: AppColors.gainsboro,
+          selectionColor: AppColors.gainsboro.withOpacity(0.3),
+          selectionHandleColor: AppColors.gainsboro,
+        ),
+      ),
+      child: Stack(
+        children: [
+          TextFormField(
+            controller: _titleController,
+            validator: widget.validator,
+            style: AppTextStyles.medium.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.background,
             ),
-            child: TextField(
-              controller: _titleController,
-              focusNode: _focusNode,
-              style: AppTextStyles.medium.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.background,
+            textAlign: TextAlign.center,
+            cursorColor: AppColors.gainsboro,
+            cursorErrorColor: AppColors.gainsboro,
+            decoration: const InputDecoration(
+              //errorText: '',
+              errorStyle: TextStyle(color: Colors.transparent, fontSize: 0),
+              border: InputBorder.none,
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.gainsboro),
               ),
-              textAlign: TextAlign.center,
-              cursorColor: AppColors.gainsboro,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.gainsboro),
-                ),
-                contentPadding: EdgeInsets.zero,
+              errorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.gainsboro),
               ),
-              onSubmitted: (_) => _finishEditing(),
-              onTapOutside: (_) => _finishEditing(),
+              focusedErrorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.gainsboro),
+              ),
+              contentPadding: EdgeInsets.zero,
             ),
-          )
-        : GestureDetector(
-            onTap: _startEditing,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Tooltip(
-                    message: _titleController.text,
-                    child: Text(
-                      _titleController.text,
-                      style: AppTextStyles.medium.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Transform.translate(
-                  offset: const Offset(0, -1),
-                  child: Icon(
-                    _hasBeenModified ? Icons.circle : Icons.edit,
-                    size: _hasBeenModified ? 8 : 16,
+            onChanged: (value) {
+              setState(() {
+                _hasBeenModified = value != _initialTitle;
+              });
+              widget.onTitleChanged?.call(value);
+            },
+            onTapOutside: (event) {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+          Positioned(
+            top: 0,
+            right: 0,
+            child: _hasBeenModified
+                ? const Icon(
+                    Icons.circle,
+                    size: 8,
+                    color: AppColors.background,
+                  )
+                : const Icon(
+                    Icons.edit,
+                    size: 16,
                     color: AppColors.background,
                   ),
-                ),
-              ],
-            ),
-          );
+          ),
+        ],
+      ),
+    );
   }
 }

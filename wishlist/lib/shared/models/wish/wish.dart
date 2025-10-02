@@ -30,6 +30,18 @@ class Wish with _$Wish implements Updatable {
 
   factory Wish.fromJson(Map<String, dynamic> json) => _$WishFromJson(json);
 
+  /// Quantité totale réservée par tous les utilisateurs
+  int get totalBookedQuantity => takenByUser.fold(
+        0,
+        (sum, reservation) => sum + reservation.quantity,
+      );
+
+  /// Quantité disponible restante
+  int get availableQuantity => quantity - totalBookedQuantity;
+
+  /// Vérifie si le wish est entièrement réservé
+  bool get isFullyBooked => availableQuantity <= 0;
+
   @override
   Wish copyWith({
     String? name,

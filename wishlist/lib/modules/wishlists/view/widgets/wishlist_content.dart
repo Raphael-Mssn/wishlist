@@ -36,7 +36,12 @@ class WishlistContent extends ConsumerWidget {
   final WishlistStatsCardType statCardSelected;
   final bool isWishsBookedHidden;
   final bool isMyWishlist;
-  final Function(BuildContext, Wish, {required bool isMyWishlist}) onTapWish;
+  final Function(
+    BuildContext,
+    Wish, {
+    required bool isMyWishlist,
+    WishlistStatsCardType? cardType,
+  }) onTapWish;
   final Function(BuildContext, Wishlist) onAddWish;
   final Function(Wish) onFavoriteToggle;
 
@@ -58,7 +63,11 @@ class WishlistContent extends ConsumerWidget {
     return Expanded(
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(_verticalPadding),
+        padding: const EdgeInsets.only(
+          left: _verticalPadding,
+          right: _verticalPadding,
+          top: _verticalPadding,
+        ),
         decoration: const BoxDecoration(
           color: AppColors.gainsboro,
         ),
@@ -69,6 +78,7 @@ class WishlistContent extends ConsumerWidget {
                     wishlist: wishlist,
                     wishsToDisplay: wishsToDisplay,
                     isMyWishlist: isMyWishlist,
+                    statCardSelected: statCardSelected,
                     onTapWish: onTapWish,
                     onFavoriteToggle: onFavoriteToggle,
                   )
@@ -91,17 +101,24 @@ class _WishList extends ConsumerWidget {
     required this.wishlist,
     required this.wishsToDisplay,
     required this.isMyWishlist,
+    required this.statCardSelected,
     required this.onTapWish,
     required this.onFavoriteToggle,
   });
 
-  static const double _bottomPadding = 100;
+  static const double _bottomPadding = 120;
   static const double _itemSpacing = 8;
 
   final Wishlist wishlist;
   final IList<Wish> wishsToDisplay;
   final bool isMyWishlist;
-  final Function(BuildContext, Wish, {required bool isMyWishlist}) onTapWish;
+  final WishlistStatsCardType statCardSelected;
+  final Function(
+    BuildContext,
+    Wish, {
+    required bool isMyWishlist,
+    WishlistStatsCardType? cardType,
+  }) onTapWish;
   final Function(Wish) onFavoriteToggle;
 
   @override
@@ -119,6 +136,7 @@ class _WishList extends ConsumerWidget {
         separatorBuilder: (context, index) => const Gap(_itemSpacing),
         itemBuilder: (context, index) {
           final wish = wishsToDisplay[index];
+
           return WishCard(
             key: ValueKey(wish.id),
             wish: wish,
@@ -126,9 +144,11 @@ class _WishList extends ConsumerWidget {
               context,
               wish,
               isMyWishlist: isMyWishlist,
+              cardType: statCardSelected,
             ),
             onFavoriteToggle: () => onFavoriteToggle(wish),
             isMyWishlist: isMyWishlist,
+            cardType: statCardSelected,
           );
         },
       ),

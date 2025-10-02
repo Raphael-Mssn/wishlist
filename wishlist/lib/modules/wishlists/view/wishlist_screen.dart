@@ -77,11 +77,12 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     BuildContext context,
     Wish wish, {
     required bool isMyWishlist,
+    WishlistStatsCardType? cardType,
   }) {
     if (isMyWishlist) {
       showEditWishBottomSheet(context, wish);
     } else {
-      showConsultWishBottomSheet(context, wish);
+      showConsultWishBottomSheet(context, wish, cardType: cardType);
     }
   }
 
@@ -225,13 +226,17 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         );
       },
       loading: () => Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          backgroundColor: AppColors.background,
+        ),
         body: const Center(
           child: CircularProgressIndicator(),
         ),
       ),
       error: (error, stackTrace) => Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          backgroundColor: AppColors.background,
+        ),
         body: const SizedBox.shrink(),
       ),
     );
@@ -247,9 +252,9 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     final wishs = _sortAndFilterWishs(wishlistScreenData.wishs);
 
     final wishsPending =
-        wishs.where((wish) => wish.takenByUser.isEmpty).toIList();
+        wishs.where((wish) => wish.availableQuantity > 0).toIList();
     final wishsBooked =
-        wishs.where((wish) => wish.takenByUser.isNotEmpty).toIList();
+        wishs.where((wish) => wish.totalBookedQuantity > 0).toIList();
     final isWishsBookedHidden = !wishlist.canOwnerSeeTakenWish && isMyWishlist;
 
     final wishsToDisplay = isWishsBookedHidden

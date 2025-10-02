@@ -71,6 +71,8 @@
   "wishDescriptionLabel": "Description",
   "wishNameError": "Le nom du wish est requis",
   "notNullError": "Ce champ est requis",
+  "invalidNumber": "Nombre invalide",
+  "numberRangeError": "Saisissez un nombre entre {min} et {max}",
   "openLink": "Ouvrir le lien",
   "linkNotValid": "Le lien n'est pas valide",
   "iWantToGiveIt": "Je veux l'offrir",
@@ -92,5 +94,8 @@
   "sortByFavorite": "Par favoris",
   "sortByAlphabetical": "Par ordre alphabétique",
   "sortByPrice": "Par prix",
-  "sortByDate": "Par date de création"
+  "sortByDate": "Par date de création",
+  "selectQuantityToGive": "Quelle quantité souhaitez-vous offrir ?",
+  "wishReservedSuccess": "Wish réservé avec succès !",
+  "quantityCannotBeLowerThanBooked": "La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)"
 }
