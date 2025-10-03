@@ -9,6 +9,7 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_toggle_switch.d
 import 'package:wishlist/shared/infra/wishlist_service.dart';
 import 'package:wishlist/shared/infra/wishlists_provider.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
+import 'package:wishlist/shared/models/wishlist/wishlist_extensions.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -120,35 +121,64 @@ class _WishlistSettingsBottomSheetState
 
   void onAddCollaborator() {}
 
-  void onDeleteWishlist() {
+  Future onDeleteWishlist() async {
     final l10n = context.l10n;
 
-    showAppDialog(
-      context,
-      title: l10n.deleteWishlist,
-      content: const SizedBox.shrink(),
-      confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
-      onConfirm: () async {
-        try {
-          await ref
-              .read(wishlistsProvider.notifier)
-              .deleteWishlist(widget.wishlist.id);
-          if (mounted) {
-            HomeRoute().go(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(l10n.deleteWishlistSuccess),
+    try {
+      final hasWishes = await widget.wishlist.hasWishes(ref);
+
+      if (mounted) {
+        await showAppDialog(
+          context,
+          title: l10n.deleteWishlist,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l10n.deleteWishlistConfirmation,
+                style: AppTextStyles.small.copyWith(
+                  color: AppColors.makara,
+                ),
               ),
-            );
-          }
-        } catch (e) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showGenericError();
-          }
-        }
-      },
-      onCancel: () {},
-    );
+              if (hasWishes) ...[
+                const Gap(8),
+                Text(
+                  l10n.deleteWishlistWishesWarning,
+                  style: AppTextStyles.smaller.copyWith(
+                    color: AppColors.makara,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
+          onConfirm: () async {
+            try {
+              await ref
+                  .read(wishlistsProvider.notifier)
+                  .deleteWishlist(widget.wishlist.id);
+              if (mounted) {
+                HomeRoute().go(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.deleteWishlistSuccess),
+                  ),
+                );
+              }
+            } catch (e) {
+              if (mounted) {
+                ScaffoldMessenger.of(context).showGenericError();
+              }
+            }
+          },
+          onCancel: () {},
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showGenericError();
+      }
+    }
   }
 
   Future<void> onSaveSettings() async {
