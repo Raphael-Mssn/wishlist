@@ -7,7 +7,7 @@ import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 
-enum FriendDetailsAppBarAction { remove, block }
+enum FriendDetailsAppBarAction { remove }
 
 class FriendDetailsAppBar extends ConsumerWidget
     implements PreferredSizeWidget {
@@ -52,8 +52,6 @@ class FriendDetailsAppBar extends ConsumerWidget
             onChanged: (value) {
               if (value == FriendDetailsAppBarAction.remove) {
                 removeFriend();
-              } else if (value == FriendDetailsAppBarAction.block) {
-                removeFriend();
               }
             },
             items: [
@@ -61,12 +59,6 @@ class FriendDetailsAppBar extends ConsumerWidget
                 value: FriendDetailsAppBarAction.remove,
                 child: Text(
                   l10n.friendDetailsRemove,
-                ),
-              ),
-              DropdownMenuItem(
-                value: FriendDetailsAppBarAction.block,
-                child: Text(
-                  l10n.friendDetailsBlock,
                 ),
               ),
             ],
