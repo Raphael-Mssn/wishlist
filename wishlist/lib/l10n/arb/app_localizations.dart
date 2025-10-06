@@ -626,6 +626,18 @@ abstract class AppLocalizations {
   /// **'Supprimer ma wishlist'**
   String get deleteWishlist;
 
+  /// No description provided for @deleteWishlistConfirmation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Es-tu sûr(e) de vouloir supprimer cette wishlist ?'**
+  String get deleteWishlistConfirmation;
+
+  /// No description provided for @deleteWishlistWishesWarning.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les wishs seront également supprimés.'**
+  String get deleteWishlistWishesWarning;
+
   /// No description provided for @deleteWishlistSuccess.
   ///
   /// In fr, this message translates to:
