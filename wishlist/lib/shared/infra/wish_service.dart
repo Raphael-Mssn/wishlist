@@ -36,6 +36,11 @@ class WishService {
   Future<void> deleteWish(int wishId) async {
     return _wishRepository.deleteWish(wishId);
   }
+
+  Future<bool> hasWishesInWishlist(int wishlistId) async {
+    final wishes = await getWishsFromWishlist(wishlistId);
+    return wishes.isNotEmpty;
+  }
 }
 
 final wishServiceProvider =
