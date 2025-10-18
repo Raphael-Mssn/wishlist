@@ -50,7 +50,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   freezed_annotation: ^2.4.4
   gap: ^3.0.1
-  go_router: ^14.3.0
+  go_router: ^14.8.1
   image_picker: ^1.1.2
   intl: any
   json_annotation: ^4.9.0
@@ -75,7 +75,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^2.5.7
-  go_router_builder: ^2.7.1
+  go_router_builder: 2.8.0
   json_serializable: ^6.8.0
 
 flutter_icons:
