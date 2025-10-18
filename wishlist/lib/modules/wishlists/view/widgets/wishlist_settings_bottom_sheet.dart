@@ -135,6 +135,7 @@ class _WishlistSettingsBottomSheetState
           title: l10n.deleteWishlist,
           content: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 l10n.deleteWishlistConfirmation,
