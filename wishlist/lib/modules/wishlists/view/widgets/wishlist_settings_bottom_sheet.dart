@@ -6,10 +6,10 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_toggle_switch.dart';
+import 'package:wishlist/shared/infra/wish_service.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
 import 'package:wishlist/shared/infra/wishlists_provider.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
-import 'package:wishlist/shared/models/wishlist/wishlist_extensions.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -125,7 +125,9 @@ class _WishlistSettingsBottomSheetState
     final l10n = context.l10n;
 
     try {
-      final hasWishes = await widget.wishlist.hasWishes(ref);
+      final hasWishes = await ref
+          .read(wishServiceProvider)
+          .hasWishesInWishlist(widget.wishlist.id);
 
       if (mounted) {
         await showAppDialog(
