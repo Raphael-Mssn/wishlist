@@ -146,9 +146,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get friendDetailsRemove => 'Remove';
 
   @override
-  String get friendDetailsBlock => 'Block';
-
-  @override
   String numberOfWishlists(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
