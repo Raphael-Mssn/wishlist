@@ -130,16 +130,11 @@ class _AnimatedSnackBarState extends State<_AnimatedSnackBar>
       vsync: this,
       duration: widget.duration,
       value: 1,
-      animationBehavior: AnimationBehavior.preserve,
     );
 
     // Démarrer les animations
     _slideController.forward();
-    _progressController.animateBack(
-      0,
-      duration: widget.duration,
-      curve: Curves.linear,
-    ).then((_) {
+    _progressController.reverse().then((_) {
       if (mounted) {
         _dismiss();
       }
@@ -199,13 +194,13 @@ class _AnimatedSnackBarState extends State<_AnimatedSnackBar>
                 onTap: _handleTap,
                 child: SlideTransition(
                   position: _slideAnimation,
-                  child: ValueListenableBuilder<double>(
-                    valueListenable: _progressController,
-                    builder: (context, value, child) => _AppSnackBarContent(
+                  child: AnimatedBuilder(
+                    animation: _progressController,
+                    builder: (context, child) => _AppSnackBarContent(
                       message: widget.message,
                       icon: widget.icon,
                       iconColor: widget.iconColor,
-                      progress: value,
+                      progress: _progressController.value,
                     ),
                   ),
                 ),
