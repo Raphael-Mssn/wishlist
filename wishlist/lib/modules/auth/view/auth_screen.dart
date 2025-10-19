@@ -8,7 +8,7 @@ import 'package:wishlist/shared/infra/auth_service.dart';
 import 'package:wishlist/shared/infra/current_user_avatar_provider.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_email.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_password.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_pseudo_or_email.dart';
@@ -62,24 +62,20 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       if (statusCode != null) {
         switch (int.parse(statusCode)) {
           case 422:
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  l10n.userAlreadyRegistered,
-                ),
-              ),
+            showAppSnackBar(
+              context,
+              l10n.userAlreadyRegistered,
+              type: SnackBarType.error,
             );
           case 400:
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  l10n.invalidLoginCredentials,
-                ),
-              ),
+            showAppSnackBar(
+              context,
+              l10n.invalidLoginCredentials,
+              type: SnackBarType.error,
             );
         }
       } else {
-        ScaffoldMessenger.of(context).showGenericError();
+        showGenericError(context);
       }
     }
   }
