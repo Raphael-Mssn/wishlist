@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wishlist/modules/booked_wishes/view/booked_wishes_screen.dart';
 import 'package:wishlist/modules/friends/view/screens/friends_screen.dart';
 import 'package:wishlist/modules/friends/view/widgets/add_friend_bottom_sheet.dart';
 import 'package:wishlist/modules/home/view/home_screen.dart';
-import 'package:wishlist/modules/settings/view/settings_screen.dart';
 import 'package:wishlist/shared/theme/widgets/app_scaffold.dart';
 import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
 import 'package:wishlist/shared/widgets/floating_nav_bar.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
-enum FloatingNavBarTab { home, friends, settings }
+enum FloatingNavBarTab { home, friends, bookedWishes }
 
 class FloatingNavBarNavigator extends ConsumerStatefulWidget {
   const FloatingNavBarNavigator({
@@ -126,7 +126,7 @@ class _FloatingNavBarNavigatorState
         children: const [
           HomeScreen(),
           FriendsScreen(),
-          SettingsScreen(),
+          BookedWishesScreen(),
         ],
       ),
     );
