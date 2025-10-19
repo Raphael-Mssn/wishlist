@@ -368,12 +368,6 @@ abstract class AppLocalizations {
   /// **'Supprimer'**
   String get friendDetailsRemove;
 
-  /// No description provided for @friendDetailsBlock.
-  ///
-  /// In fr, this message translates to:
-  /// **'Bloquer'**
-  String get friendDetailsBlock;
-
   /// No description provided for @numberOfWishlists.
   ///
   /// In fr, this message translates to:
