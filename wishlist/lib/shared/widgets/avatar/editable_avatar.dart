@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/current_user_avatar_provider.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/avatar/app_avatar.dart';
 import 'package:wishlist/shared/widgets/avatar/avatar_options_bottom_sheet.dart';
 
@@ -24,11 +25,10 @@ class EditableAvatar extends ConsumerWidget {
         (previous, next) {
       // Affiche le snackbar uniquement si l'erreur survient après un upload
       if (next.hasError && previous != null && previous.isLoading) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.l10n.avatarLoadError),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
+        showAppSnackBar(
+          context,
+          context.l10n.avatarLoadError,
+          type: SnackBarType.error,
         );
       }
     });
