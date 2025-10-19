@@ -58,6 +58,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get savePseudo => 'Sauvegarder';
 
   @override
+  String get bookedWishesScreenTitle => 'Mes réservations';
+
+  @override
   String get settingsScreenTitle => 'Paramètres';
 
   @override

@@ -16,6 +16,7 @@
   "validPseudoError": "Pseudo cannot be empty",
   "pseudoAlreadyExists": "This pseudo is already used",
   "savePseudo": "Save",
+  "bookedWishesScreenTitle": "My bookings",
   "settingsScreenTitle": "Settings",
   "settingsScreenEmail": "Email",
   "settingsScreenEmailModify": "Modify",
