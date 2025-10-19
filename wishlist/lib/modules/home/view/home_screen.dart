@@ -6,7 +6,7 @@ import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_nul
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 import 'package:wishlist/shared/infra/wishlists_provider.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 import 'package:wishlist/shared/widgets/wishlists_grid.dart';
@@ -30,7 +30,7 @@ class HomeScreen extends ConsumerWidget {
         child: CircularProgressIndicator(),
       ),
       error: (error, stackTrace) {
-        ScaffoldMessenger.of(context).showGenericError(isTopSnackBar: true);
+        showGenericError(context, isTopSnackBar: true);
         return const SizedBox.shrink();
       },
       data: (data) => data.isEmpty
