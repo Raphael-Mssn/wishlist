@@ -19,6 +19,14 @@
   "bookedWishesScreenTitle": "Mes réservations",
   "bookedWishesEmptyTitle": "Aucune réservation",
   "bookedWishesEmptyCallToAction": "Explorer les wishlists de vos amis",
+  "bookedWishCount": "{count, plural, =1{1 réservation} other{{count} réservations}}",
+  "@bookedWishCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "settingsScreenTitle": "Paramètres",
   "settingsScreenEmail": "Email",
   "settingsScreenEmailModify": "Modifier",

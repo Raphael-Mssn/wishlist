@@ -68,6 +68,17 @@ class AppLocalizationsFr extends AppLocalizations {
       'Explorer les wishlists de vos amis';
 
   @override
+  String bookedWishCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count réservations',
+      one: '1 réservation',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get settingsScreenTitle => 'Paramètres';
 
   @override
