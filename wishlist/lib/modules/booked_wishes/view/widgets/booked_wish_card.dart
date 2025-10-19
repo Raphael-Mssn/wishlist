@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
-import 'package:wishlist/shared/widgets/avatar/app_avatar.dart';
 
 class BookedWishCard extends StatelessWidget {
   const BookedWishCard({
@@ -21,7 +20,6 @@ class BookedWishCard extends StatelessWidget {
     final wish = bookedWish.wish;
     final price = wish.price;
     const iconDimension = 64.0;
-    const avatarSize = 32.0;
 
     final borderRadius = BorderRadius.circular(24);
 
@@ -64,56 +62,27 @@ class BookedWishCard extends StatelessWidget {
               ),
               const Gap(16),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    RichText(
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(
-                        style: AppTextStyles.small.copyWith(
-                          color: AppColors.darkGrey,
-                          fontWeight: FontWeight.bold,
+                child: RichText(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(
+                    style: AppTextStyles.small.copyWith(
+                      color: AppColors.darkGrey,
+                      fontWeight: FontWeight.bold,
+                      height: 1.2,
+                    ),
+                    children: [
+                      TextSpan(text: wish.name),
+                      TextSpan(
+                        text: ' (${bookedWish.wishlistName})',
+                        style: AppTextStyles.smaller.copyWith(
+                          color: AppColors.makara,
+                          fontWeight: FontWeight.normal,
                           height: 1.2,
                         ),
-                        children: [
-                          TextSpan(text: wish.name),
-                          TextSpan(
-                            text: ' (${bookedWish.wishlistName})',
-                            style: AppTextStyles.smaller.copyWith(
-                              color: AppColors.makara,
-                              fontWeight: FontWeight.normal,
-                              height: 1.2,
-                            ),
-                          ),
-                        ],
                       ),
-                    ),
-                    const Gap(8),
-                    Row(
-                      children: [
-                        AppAvatar(
-                          avatarUrl: bookedWish.ownerAvatarUrl,
-                          size: avatarSize,
-                          hasBorders: bookedWish.ownerAvatarUrl == null ||
-                              bookedWish.ownerAvatarUrl!.isEmpty,
-                        ),
-                        const Gap(8),
-                        Expanded(
-                          child: Text(
-                            bookedWish.ownerPseudo,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.small.copyWith(
-                              color: AppColors.makara,
-                              height: 1,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               if (price != null)
