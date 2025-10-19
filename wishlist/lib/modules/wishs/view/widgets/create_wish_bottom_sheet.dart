@@ -59,6 +59,11 @@ class _CreateWishBottomSheetState
           );
 
       if (mounted) {
+        showAppSnackBar(
+          context,
+          context.l10n.createWishSuccess,
+          type: SnackBarType.success,
+        );
         context.pop();
       }
     } catch (e) {

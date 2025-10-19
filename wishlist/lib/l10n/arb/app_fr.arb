@@ -59,6 +59,7 @@
   "wishlistNoWishBookedDisplayed": "Vous avez choisi de ne pas afficher les wishs réservés",
   "wishlistAddWish": "Ajouter un wish",
   "createWishBottomSheetTitle": "Créer un wish",
+  "createWishSuccess": "Wish créé avec succès",
   "editWishBottomSheetTitle": "Modifier un wish",
   "deleteWish": "Supprimer le wish",
   "deleteWishConfirmationMessage": "Es-tu sûr(e) de vouloir supprimer ce wish ?",

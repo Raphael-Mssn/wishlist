@@ -207,6 +207,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createWishBottomSheetTitle => 'Create a wish';
 
   @override
+  String get createWishSuccess => 'Wish created successfully';
+
+  @override
   String get editWishBottomSheetTitle => 'Edit a wish';
 
   @override
