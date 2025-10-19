@@ -9,8 +9,8 @@ class PageLayoutEmpty extends StatelessWidget {
     required this.illustrationUrl,
     this.illustrationHeight,
     required this.title,
-    required this.callToAction,
-    required this.onCallToAction,
+    this.callToAction,
+    this.onCallToAction,
     this.onRefresh,
     this.appBarTitle,
     this.actions,
@@ -19,8 +19,8 @@ class PageLayoutEmpty extends StatelessWidget {
   final String illustrationUrl;
   final double? illustrationHeight;
   final String title;
-  final String callToAction;
-  final Function() onCallToAction;
+  final String? callToAction;
+  final Function()? onCallToAction;
   final Future<void> Function()? onRefresh;
   final String? appBarTitle;
   final List<Widget>? actions;
