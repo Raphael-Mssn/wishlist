@@ -17,6 +17,8 @@
   "pseudoAlreadyExists": "Ce pseudo est déjà utilisé",
   "savePseudo": "Sauvegarder",
   "bookedWishesScreenTitle": "Mes réservations",
+  "bookedWishesEmptyTitle": "Aucune réservation",
+  "bookedWishesEmptyCallToAction": "Explorer les wishlists de vos amis",
   "settingsScreenTitle": "Paramètres",
   "settingsScreenEmail": "Email",
   "settingsScreenEmailModify": "Modifier",

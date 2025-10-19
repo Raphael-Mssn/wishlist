@@ -60,6 +60,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookedWishesScreenTitle => 'My bookings';
 
   @override
+  String get bookedWishesEmptyTitle => 'No bookings';
+
+  @override
+  String get bookedWishesEmptyCallToAction =>
+      'Explore your friends\' wishlists';
+
+  @override
   String get settingsScreenTitle => 'Settings';
 
   @override
