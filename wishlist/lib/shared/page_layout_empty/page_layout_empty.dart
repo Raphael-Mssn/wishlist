@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty_content.dart';
+import 'package:wishlist/shared/theme/widgets/app_app_bar.dart';
 import 'package:wishlist/shared/theme/widgets/app_refresh_indicator.dart';
 
 class PageLayoutEmpty extends StatelessWidget {
@@ -11,6 +12,8 @@ class PageLayoutEmpty extends StatelessWidget {
     required this.callToAction,
     required this.onCallToAction,
     this.onRefresh,
+    this.appBarTitle,
+    this.actions,
   });
 
   final String illustrationUrl;
@@ -19,6 +22,8 @@ class PageLayoutEmpty extends StatelessWidget {
   final String callToAction;
   final Function() onCallToAction;
   final Future<void> Function()? onRefresh;
+  final String? appBarTitle;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,7 @@ class PageLayoutEmpty extends StatelessWidget {
       ),
     );
 
-    return SafeArea(
+    final body = SafeArea(
       child: onRefresh != null
           ? AppRefreshIndicator(
               onRefresh: onRefresh,
@@ -59,5 +64,18 @@ class PageLayoutEmpty extends StatelessWidget {
             )
           : content,
     );
+
+    final appBarTitle = this.appBarTitle;
+    if (appBarTitle != null) {
+      return Scaffold(
+        appBar: AppAppBar(
+          title: appBarTitle,
+          actions: actions,
+        ),
+        body: body,
+      );
+    }
+
+    return body;
   }
 }

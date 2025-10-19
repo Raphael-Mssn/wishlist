@@ -5,6 +5,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 import 'package:wishlist/shared/infra/wishlists_provider.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
@@ -42,11 +43,24 @@ class HomeScreen extends ConsumerWidget {
                 showCreateDialog(context, ref);
               },
               onRefresh: refreshWishlists,
+              appBarTitle: l10n.myWishlists,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () => SettingsRoute().push(context),
+                ),
+              ],
             )
           : PageLayout(
               padding: const EdgeInsets.all(20).copyWith(bottom: 0),
               title: l10n.myWishlists,
               onRefresh: refreshWishlists,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () => SettingsRoute().push(context),
+                ),
+              ],
               child: WishlistsGrid(
                 wishlists: data,
                 isReorderable: true,

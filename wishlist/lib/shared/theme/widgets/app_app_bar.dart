@@ -3,9 +3,14 @@ import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 
 class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const AppAppBar({super.key, required this.title});
+  const AppAppBar({
+    super.key,
+    required this.title,
+    this.actions,
+  });
 
   final String title;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +32,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
           style: AppTextStyles.title.copyWith(fontSize: titleSize),
         ),
       ),
+      actions: actions,
     );
   }
 
