@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart' as tsb;
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 
@@ -40,25 +39,24 @@ void showAppSnackBar(
       ? Icons.check_circle_outline
       : Icons.error_outline;
 
-  final overlay = Overlay.of(context, rootOverlay: true);
+  final overlayState = Overlay.of(context, rootOverlay: true);
 
-  tsb.showTopSnackBar(
-    overlay,
-    _AppSnackBarContent(
+  late final OverlayEntry overlayEntry;
+
+  overlayEntry = OverlayEntry(
+    builder: (context) => _AnimatedSnackBar(
       message: message,
       icon: icon,
       iconColor: indicatorColor,
-      textColor: Colors.black87,
       duration: duration,
+      isTop: isTopSnackBar,
+      onDismissed: () {
+        overlayEntry.remove();
+      },
     ),
-    displayDuration: duration,
-    animationDuration: const Duration(milliseconds: 400),
-    reverseAnimationDuration: const Duration(milliseconds: 400),
-    dismissType: tsb.DismissType.onSwipe,
-    dismissDirection: const [DismissDirection.horizontal],
-    snackBarPosition:
-        isTopSnackBar ? tsb.SnackBarPosition.top : tsb.SnackBarPosition.bottom,
   );
+
+  overlayState.insert(overlayEntry);
 }
 
 /// Affiche une erreur générique
@@ -76,50 +74,168 @@ void showGenericError(
   );
 }
 
-class _AppSnackBarContent extends StatefulWidget {
-  const _AppSnackBarContent({
+/// Widget qui gère l'animation d'entrée/sortie et la progress bar du snackbar
+class _AnimatedSnackBar extends StatefulWidget {
+  const _AnimatedSnackBar({
     required this.message,
     required this.icon,
     required this.iconColor,
-    required this.textColor,
     required this.duration,
+    required this.isTop,
+    required this.onDismissed,
   });
 
   final String message;
   final IconData icon;
   final Color iconColor;
-  final Color textColor;
   final Duration duration;
+  final bool isTop;
+  final VoidCallback onDismissed;
 
   @override
-  State<_AppSnackBarContent> createState() => _AppSnackBarContentState();
+  State<_AnimatedSnackBar> createState() => _AnimatedSnackBarState();
 }
 
-class _AppSnackBarContentState extends State<_AppSnackBarContent>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _AnimatedSnackBarState extends State<_AnimatedSnackBar>
+    with TickerProviderStateMixin {
+  late final AnimationController _slideController;
+  late final AnimationController _progressController;
+  late final Animation<Offset> _slideAnimation;
+  late final Key _dismissibleKey;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _dismissibleKey = ValueKey(DateTime.now().millisecondsSinceEpoch);
+
+    // Animation d'entrée/sortie
+    _slideController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(0, widget.isTop ? -1.5 : 1.5),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _slideController,
+        curve: Curves.elasticOut,
+        reverseCurve: Curves.easeInCubic,
+      ),
+    );
+
+    // Animation de la progress bar (1.0 -> 0.0)
+    _progressController = AnimationController(
       vsync: this,
       duration: widget.duration,
-    )..forward();
+      value: 1,
+      animationBehavior: AnimationBehavior.preserve,
+    );
+
+    // Démarrer les animations
+    _slideController.forward();
+    _progressController.animateBack(
+      0,
+      duration: widget.duration,
+      curve: Curves.linear,
+    ).then((_) {
+      if (mounted) {
+        _dismiss();
+      }
+    });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _slideController.dispose();
+    _progressController.dispose();
     super.dispose();
   }
+
+  /// Déclenche l'animation de sortie automatique
+  void _dismiss() {
+    if (!mounted) {
+      return;
+    }
+
+    _slideController.duration = const Duration(milliseconds: 300);
+    _slideController.reverse().then((_) {
+      if (mounted) {
+        widget.onDismissed();
+      }
+    });
+  }
+
+  /// Gère le dismiss manuel par swipe
+  void _handleDismiss(DismissDirection direction) {
+    _progressController.stop();
+    widget.onDismissed();
+  }
+
+  /// Gère le dismiss manuel par tap
+  void _handleTap() {
+    _progressController.stop();
+    _dismiss();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: SafeArea(
+        child: Align(
+          alignment:
+              widget.isTop ? Alignment.topCenter : Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Dismissible(
+              key: _dismissibleKey,
+              onDismissed: _handleDismiss,
+              dismissThresholds: const {
+                DismissDirection.startToEnd: 0.3,
+                DismissDirection.endToStart: 0.3,
+              },
+              child: GestureDetector(
+                onTap: _handleTap,
+                child: SlideTransition(
+                  position: _slideAnimation,
+                  child: ValueListenableBuilder<double>(
+                    valueListenable: _progressController,
+                    builder: (context, value, child) => _AppSnackBarContent(
+                      message: widget.message,
+                      icon: widget.icon,
+                      iconColor: widget.iconColor,
+                      progress: value,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AppSnackBarContent extends StatelessWidget {
+  const _AppSnackBarContent({
+    required this.message,
+    required this.icon,
+    required this.iconColor,
+    required this.progress,
+  });
+
+  final String message;
+  final IconData icon;
+  final Color iconColor;
+  final double progress;
 
   @override
   Widget build(BuildContext context) {
     const radius = 8.0;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(radius),
@@ -140,16 +256,16 @@ class _AppSnackBarContentState extends State<_AppSnackBarContent>
             child: Row(
               children: [
                 Icon(
-                  widget.icon,
-                  color: widget.iconColor,
+                  icon,
+                  color: iconColor,
                   size: 24,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    widget.message,
+                    message,
                     style: AppTextStyles.smaller.copyWith(
-                      color: widget.textColor,
+                      color: Colors.black87,
                       fontWeight: FontWeight.w500,
                       decoration: TextDecoration.none,
                     ),
@@ -158,22 +274,17 @@ class _AppSnackBarContentState extends State<_AppSnackBarContent>
               ],
             ),
           ),
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(radius),
-                  bottomRight: Radius.circular(radius),
-                ),
-                child: LinearProgressIndicator(
-                  value: 1 - _controller.value,
-                  backgroundColor: Colors.transparent,
-                  valueColor: AlwaysStoppedAnimation<Color>(widget.iconColor),
-                  minHeight: 3,
-                ),
-              );
-            },
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(radius),
+              bottomRight: Radius.circular(radius),
+            ),
+            child: LinearProgressIndicator(
+              value: progress,
+              backgroundColor: Colors.transparent,
+              valueColor: AlwaysStoppedAnimation<Color>(iconColor),
+              minHeight: 3,
+            ),
           ),
         ],
       ),
