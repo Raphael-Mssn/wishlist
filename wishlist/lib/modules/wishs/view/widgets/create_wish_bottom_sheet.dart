@@ -6,7 +6,7 @@ import 'package:wishlist/modules/wishs/view/widgets/wish_form.dart';
 import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 
 class _CreateWishBottomSheet extends ConsumerStatefulWidget {
@@ -63,7 +63,7 @@ class _CreateWishBottomSheetState
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showGenericError();
+        showGenericError(context);
       }
     }
   }
