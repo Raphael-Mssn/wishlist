@@ -8,6 +8,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/wish_taken_by_user_service.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/validators/number_range_validator.dart';
 
@@ -250,8 +251,10 @@ Future<void> showQuantitySelectionDialog(
           );
       if (context.mounted) {
         context.pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.wishReservedSuccess)),
+        showAppSnackBar(
+          context,
+          l10n.wishReservedSuccess,
+          type: SnackBarType.success,
         );
       }
     },
