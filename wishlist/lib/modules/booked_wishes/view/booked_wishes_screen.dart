@@ -36,11 +36,6 @@ class BookedWishesScreen extends ConsumerWidget {
           ? PageLayoutEmpty(
               illustrationUrl: Assets.svg.noWishlist,
               title: l10n.bookedWishesEmptyTitle,
-              callToAction: l10n.bookedWishesEmptyCallToAction,
-              onCallToAction: () {
-                // Naviguer vers l'écran des amis pour trouver des wishlists
-                // On pourrait améliorer ça en créant une route dédiée
-              },
               onRefresh: refreshBookedWishes,
               appBarTitle: l10n.bookedWishesScreenTitle,
               actions: [
