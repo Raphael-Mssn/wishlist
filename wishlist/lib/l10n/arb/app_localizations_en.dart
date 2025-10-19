@@ -57,6 +57,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savePseudo => 'Save';
 
   @override
+  String get bookedWishesScreenTitle => 'My bookings';
+
+  @override
   String get settingsScreenTitle => 'Settings';
 
   @override

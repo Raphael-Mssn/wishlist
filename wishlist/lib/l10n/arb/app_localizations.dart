@@ -194,6 +194,12 @@ abstract class AppLocalizations {
   /// **'Sauvegarder'**
   String get savePseudo;
 
+  /// No description provided for @bookedWishesScreenTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes réservations'**
+  String get bookedWishesScreenTitle;
+
   /// No description provided for @settingsScreenTitle.
   ///
   /// In fr, this message translates to:
