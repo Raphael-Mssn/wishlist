@@ -61,6 +61,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get bookedWishesScreenTitle => 'Mes réservations';
 
   @override
+  String get bookedWishesEmptyTitle => 'Aucune réservation';
+
+  @override
+  String get bookedWishesEmptyCallToAction =>
+      'Explorer les wishlists de vos amis';
+
+  @override
   String get settingsScreenTitle => 'Paramètres';
 
   @override

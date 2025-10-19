@@ -200,6 +200,18 @@ abstract class AppLocalizations {
   /// **'Mes réservations'**
   String get bookedWishesScreenTitle;
 
+  /// No description provided for @bookedWishesEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune réservation'**
+  String get bookedWishesEmptyTitle;
+
+  /// No description provided for @bookedWishesEmptyCallToAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Explorer les wishlists de vos amis'**
+  String get bookedWishesEmptyCallToAction;
+
   /// No description provided for @settingsScreenTitle.
   ///
   /// In fr, this message translates to:
