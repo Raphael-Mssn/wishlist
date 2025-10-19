@@ -6,7 +6,7 @@ import 'package:wishlist/modules/friends/view/infra/search_notifier.dart';
 import 'package:wishlist/modules/friends/view/widgets/user_pill.dart';
 import 'package:wishlist/modules/friends/view/widgets/user_search_bar.dart';
 import 'package:wishlist/shared/infra/utils/debouncer.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 
 class AddFriendBottomSheet extends ConsumerStatefulWidget {
@@ -59,7 +59,7 @@ class _AddFriendBottomSheetState extends ConsumerState<AddFriendBottomSheet> {
               searchState.when(
                 loading: () => const CircularProgressIndicator(),
                 error: (error, stackTrace) {
-                  ScaffoldMessenger.of(context).showGenericError();
+                  showGenericError(context);
                   return const SizedBox.shrink();
                 },
                 data: (users) {
