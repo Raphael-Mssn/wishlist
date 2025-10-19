@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
@@ -65,22 +66,33 @@ class BookedWishesScreen extends ConsumerWidget {
                     topRight: Radius.circular(24),
                   ),
                 ),
-                child: ListView.separated(
-                  padding: const EdgeInsets.only(bottom: 96),
-                  itemCount: bookedWishes.length,
-                  separatorBuilder: (context, index) => const Gap(8),
-                  itemBuilder: (context, index) {
-                    final bookedWish = bookedWishes[index];
-                    return BookedWishCard(
-                      bookedWish: bookedWish,
-                      onTap: () {
-                        showConsultWishBottomSheet(
-                          context,
-                          bookedWish.wish,
-                        );
-                      },
-                    );
-                  },
+                child: AnimationLimiter(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.only(bottom: 96),
+                    itemCount: bookedWishes.length,
+                    separatorBuilder: (context, index) => const Gap(8),
+                    itemBuilder: (context, index) {
+                      final bookedWish = bookedWishes[index];
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        duration: const Duration(milliseconds: 375),
+                        child: SlideAnimation(
+                          verticalOffset: 50,
+                          child: FadeInAnimation(
+                            child: BookedWishCard(
+                              bookedWish: bookedWish,
+                              onTap: () {
+                                showConsultWishBottomSheet(
+                                  context,
+                                  bookedWish.wish,
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
