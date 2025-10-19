@@ -52,7 +52,6 @@ class SupabaseWishRepository implements WishRepository {
   ) async {
     return executeSafely(
       () async {
-        // Récupérer les wishes réservés avec les détails via une requête avec jointures
         final response =
             await _client.from(_wishTakenByUserTableName).select('''
               quantity,
