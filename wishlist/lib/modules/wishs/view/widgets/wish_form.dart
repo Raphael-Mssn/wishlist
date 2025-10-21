@@ -5,6 +5,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_property.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/static_title.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/validators/not_null_validator.dart';
@@ -81,12 +82,10 @@ class _WishFormState extends State<WishForm> {
       // Focus name node
       _focusNodes[0].requestFocus();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.l10n.wishNameError,
-          ),
-        ),
+      showAppSnackBar(
+        context,
+        context.l10n.wishNameError,
+        type: SnackBarType.error,
       );
 
       return;

@@ -11,8 +11,8 @@ import 'package:wishlist/shared/infra/wish_taken_by_user_service.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/double_extension.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/dialogs/quantity_selection_dialog.dart';
 import 'package:wishlist/shared/widgets/static_title.dart';
@@ -29,10 +29,10 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
   Future<void> onOpenLink(BuildContext context, String linkUrl) async {
     final canLaunch = await launchUrl(Uri.parse(linkUrl));
     if (context.mounted && !canLaunch) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.linkNotValid),
-        ),
+      showAppSnackBar(
+        context,
+        context.l10n.linkNotValid,
+        type: SnackBarType.error,
       );
     }
   }
@@ -52,13 +52,15 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
           );
       if (context.mounted) {
         context.pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n.wishReservedSuccess)),
+        showAppSnackBar(
+          context,
+          context.l10n.wishReservedSuccess,
+          type: SnackBarType.success,
         );
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showGenericError();
+        showGenericError(context);
       }
     }
   }
@@ -71,7 +73,7 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showGenericError();
+        showGenericError(context);
       }
     }
   }

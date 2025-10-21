@@ -7,8 +7,8 @@ import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/double_extension.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 
@@ -61,14 +61,12 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
 
     // La quantité ne peut pas être inférieure à la quantité déjà réservée
     if (quantity < widget.wish.totalBookedQuantity) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.l10n.quantityCannotBeLowerThanBooked(
-              widget.wish.totalBookedQuantity,
-            ),
-          ),
+      showAppSnackBar(
+        context,
+        context.l10n.quantityCannotBeLowerThanBooked(
+          widget.wish.totalBookedQuantity,
         ),
+        type: SnackBarType.error,
       );
       return false;
     }
@@ -108,16 +106,16 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
       ref.invalidate(wishsFromWishlistProvider(wish.wishlistId));
 
       if (mounted) {
-        context.pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.l10n.updateSuccess),
-          ),
+        showAppSnackBar(
+          context,
+          context.l10n.updateSuccess,
+          type: SnackBarType.success,
         );
+        context.pop();
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showGenericError();
+        showGenericError(context);
       }
     }
   }
@@ -143,16 +141,16 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
                 widget.wish.id,
               );
           if (mounted) {
-            context.pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(l10n.deleteWishSuccess),
-              ),
+            showAppSnackBar(
+              context,
+              l10n.deleteWishSuccess,
+              type: SnackBarType.success,
             );
+            context.pop();
           }
         } catch (e) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showGenericError();
+            showGenericError(context);
           }
         }
       },

@@ -10,7 +10,7 @@ import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/models/profile.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/validators/pseudo_validator.dart';
 
 class PseudoScreen extends ConsumerStatefulWidget {
@@ -45,14 +45,14 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
 
       switch (statusCode) {
         case 409:
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(context.l10n.pseudoAlreadyExists),
-            ),
+          showAppSnackBar(
+            context,
+            context.l10n.pseudoAlreadyExists,
+            type: SnackBarType.error,
           );
         case 401:
         default:
-          ScaffoldMessenger.of(context).showGenericError();
+          showGenericError(context);
       }
     }
   }

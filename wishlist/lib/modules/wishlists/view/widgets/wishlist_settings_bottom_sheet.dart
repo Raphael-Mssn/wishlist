@@ -14,7 +14,7 @@ import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 import 'package:wishlist/shared/widgets/editable_title.dart';
@@ -104,14 +104,16 @@ class _WishlistSettingsBottomSheetState
               .updateWishlist(wishlistUpdated);
 
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.updateSuccess)),
+            showAppSnackBar(
+              context,
+              l10n.updateSuccess,
+              type: SnackBarType.success,
             );
             Navigator.pop(context);
           }
         } catch (e) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showGenericError();
+            showGenericError(context);
           }
         }
       },
@@ -162,15 +164,15 @@ class _WishlistSettingsBottomSheetState
                   .deleteWishlist(widget.wishlist.id);
               if (mounted) {
                 HomeRoute().go(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.deleteWishlistSuccess),
-                  ),
+                showAppSnackBar(
+                  context,
+                  l10n.deleteWishlistSuccess,
+                  type: SnackBarType.success,
                 );
               }
             } catch (e) {
               if (mounted) {
-                ScaffoldMessenger.of(context).showGenericError();
+                showGenericError(context);
               }
             }
           },
@@ -179,7 +181,7 @@ class _WishlistSettingsBottomSheetState
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showGenericError();
+        showGenericError(context);
       }
     }
   }
@@ -202,16 +204,16 @@ class _WishlistSettingsBottomSheetState
           );
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.updateSuccess),
-          ),
+        showAppSnackBar(
+          context,
+          l10n.updateSuccess,
+          type: SnackBarType.success,
         );
         Navigator.pop(context);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showGenericError();
+        showGenericError(context);
       }
     }
   }

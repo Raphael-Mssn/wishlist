@@ -208,6 +208,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get createWishBottomSheetTitle => 'Créer un wish';
 
   @override
+  String get createWishSuccess => 'Wish créé avec succès';
+
+  @override
   String get editWishBottomSheetTitle => 'Modifier un wish';
 
   @override

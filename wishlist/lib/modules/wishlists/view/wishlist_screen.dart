@@ -19,7 +19,7 @@ import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/wish_sort_utils.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
@@ -109,7 +109,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
           .updateWish(updatedWish);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showGenericError();
+        showGenericError(context);
       }
     }
   }

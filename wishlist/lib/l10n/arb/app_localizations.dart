@@ -452,6 +452,12 @@ abstract class AppLocalizations {
   /// **'Créer un wish'**
   String get createWishBottomSheetTitle;
 
+  /// No description provided for @createWishSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Wish créé avec succès'**
+  String get createWishSuccess;
+
   /// No description provided for @editWishBottomSheetTitle.
   ///
   /// In fr, this message translates to:
