@@ -116,6 +116,7 @@
   "sortByAlphabetical": "Par ordre alphabétique",
   "sortByPrice": "Par prix",
   "sortByDate": "Par date de création",
+  "sortByBookingCount": "Par nombre de réservations",
   "selectQuantityToGive": "Quelle quantité souhaitez-vous offrir ?",
   "wishReservedSuccess": "Wish réservé avec succès !",
   "quantityCannotBeLowerThanBooked": "La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)",

@@ -373,6 +373,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sortByDate => 'Par date de création';
 
   @override
+  String get sortByBookingCount => 'Par nombre de réservations';
+
+  @override
   String get selectQuantityToGive => 'Quelle quantité souhaitez-vous offrir ?';
 
   @override

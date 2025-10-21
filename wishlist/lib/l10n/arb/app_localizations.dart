@@ -752,6 +752,12 @@ abstract class AppLocalizations {
   /// **'Par date de création'**
   String get sortByDate;
 
+  /// No description provided for @sortByBookingCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par nombre de réservations'**
+  String get sortByBookingCount;
+
   /// No description provided for @selectQuantityToGive.
   ///
   /// In fr, this message translates to:
