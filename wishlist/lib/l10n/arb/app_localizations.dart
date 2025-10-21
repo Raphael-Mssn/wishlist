@@ -464,6 +464,12 @@ abstract class AppLocalizations {
   /// **'Supprimer le wish'**
   String get deleteWish;
 
+  /// No description provided for @deleteWishConfirmationMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Es-tu sûr(e) de vouloir supprimer ce wish ?'**
+  String get deleteWishConfirmationMessage;
+
   /// No description provided for @deleteWishSuccess.
   ///
   /// In fr, this message translates to:

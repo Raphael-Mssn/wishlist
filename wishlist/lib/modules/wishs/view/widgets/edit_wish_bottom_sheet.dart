@@ -5,6 +5,8 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form.dart';
 import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
+import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/utils/double_extension.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
@@ -126,7 +128,12 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
     showAppDialog(
       context,
       title: l10n.deleteWish,
-      content: const SizedBox.shrink(),
+      content: Text(
+        l10n.deleteWishConfirmationMessage,
+        style: AppTextStyles.small.copyWith(
+          color: AppColors.makara,
+        ),
+      ),
       confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
       onConfirm: () async {
         try {

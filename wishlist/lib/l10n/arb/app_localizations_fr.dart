@@ -214,6 +214,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get deleteWish => 'Supprimer le wish';
 
   @override
+  String get deleteWishConfirmationMessage =>
+      'Es-tu sûr(e) de vouloir supprimer ce wish ?';
+
+  @override
   String get deleteWishSuccess => 'Wish supprimé avec succès';
 
   @override
