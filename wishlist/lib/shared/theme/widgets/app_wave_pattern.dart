@@ -50,7 +50,8 @@ class AppWavePattern extends StatelessWidget {
     this.rotationAngle = 0.0,
     this.preset = WavePreset.standard,
     this.customParams,
-    this.deterministicId, // Nouveau paramètre pour l'ID
+    this.deterministicId,
+    this.onTap,
   });
 
   final Color backgroundColor;
@@ -64,6 +65,7 @@ class AppWavePattern extends StatelessWidget {
   final WavePreset preset;
   final WaveCustomParams? customParams;
   final int? deterministicId; // ID pour la rotation déterminée
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +75,53 @@ class AppWavePattern extends StatelessWidget {
     final finalPatternColor =
         patternColor ?? AppColors.lighten(backgroundColor);
 
+    // Si onTap est fourni, utiliser l'architecture avec splash
+    if (onTap != null) {
+      return ClipRRect(
+        borderRadius: borderRadius ?? BorderRadius.zero,
+        child: Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+          ),
+          child: Stack(
+            children: [
+              // Le motif peint en arrière-plan
+              Positioned.fill(
+                child: PatternBoxWidget(
+                  pattern: EnhancedWavePainter(
+                    frequency: finalParams.frequency,
+                    thickness: finalParams.thickness,
+                    gap: finalParams.gap,
+                    color: finalPatternColor,
+                    amplitude: finalParams.amplitude,
+                    angleVariation: finalParams.angleVariation,
+                    rotationAngleDegrees: finalRotation,
+                  ),
+                  backgroundColor: backgroundColor,
+                ),
+              ),
+              // Le Material + InkWell par-dessus pour le splash
+              Positioned.fill(
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: onTap,
+                    highlightColor: Colors.transparent,
+                    splashColor: AppColors.darken(backgroundColor)
+                        .withValues(alpha: 0.5),
+                    child: child ?? const SizedBox.shrink(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // Architecture normale sans splash
     return PatternBoxWidget(
       height: height,
       width: width,
