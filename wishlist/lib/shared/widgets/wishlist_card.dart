@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
-import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
 
@@ -26,42 +25,32 @@ class WishlistCard extends StatelessWidget {
     return Card(
       color: Colors.transparent,
       elevation: 0,
-      child: InkWell(
-        onTap: onTap,
+      child: AppWavePattern(
+        backgroundColor: color,
+        preset: WavePreset.card,
+        rotationType: WaveRotationType.deterministic,
+        deterministicId: wishlist.id,
         borderRadius: borderRadius,
-        highlightColor: AppColors.darken(color),
-        child: Ink(
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: borderRadius,
-          ),
-          child: AppWavePattern(
-            backgroundColor: color,
-            preset: WavePreset.card,
-            rotationType: WaveRotationType.deterministic,
-            deterministicId: wishlist.id,
-            borderRadius: borderRadius,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text(
-                        wishlist.name,
-                        style: AppTextStyles.medium.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          height: 1,
-                        ),
-                      ),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    wishlist.name,
+                    style: AppTextStyles.medium.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      height: 1,
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),

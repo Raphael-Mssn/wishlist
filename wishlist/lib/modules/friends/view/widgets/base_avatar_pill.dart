@@ -27,55 +27,45 @@ class BaseAvatarPill extends ConsumerWidget {
       Radius.circular(50),
     );
 
-    return InkWell(
-      onTap: () => onTap(context),
+    return AppWavePattern(
+      backgroundColor: backgroundColor,
+      preset: WavePreset.pill,
+      rotationType: WaveRotationType.fixed,
+      rotationAngle: 45,
       borderRadius: borderRadius,
-      highlightColor: AppColors.darken(backgroundColor),
-      child: Ink(
-        decoration: BoxDecoration(
-          borderRadius: borderRadius,
-          color: backgroundColor,
-        ),
-        child: AppWavePattern(
-          backgroundColor: backgroundColor,
-          preset: WavePreset.pill,
-          rotationType: WaveRotationType.fixed,
-          rotationAngle: 45,
-          height: avatarSize,
-          borderRadius: borderRadius,
-          child: Row(
-            children: <Widget>[
-              Container(
-                height: avatarSize,
-                width: avatarSize,
-                decoration: BoxDecoration(
-                  color: AppColors.makara,
-                  shape: BoxShape.circle,
-                  border: Border.fromBorderSide(
-                    BorderSide(
-                      color: avatarBorderColor,
-                      width: 6,
-                    ),
-                  ),
-                ),
-                child: AppAvatar(
-                  avatarUrl: avatarUrl,
-                  size: avatarSize - 12,
-                  hasBorders: false,
+      height: avatarSize,
+      onTap: () => onTap(context),
+      child: Row(
+        children: <Widget>[
+          Container(
+            height: avatarSize,
+            width: avatarSize,
+            decoration: BoxDecoration(
+              color: AppColors.makara,
+              shape: BoxShape.circle,
+              border: Border.fromBorderSide(
+                BorderSide(
+                  color: avatarBorderColor,
+                  width: 6,
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  child: child,
-                ),
-              ),
-            ],
+            ),
+            child: AppAvatar(
+              avatarUrl: avatarUrl,
+              size: avatarSize - 12,
+              hasBorders: false,
+            ),
           ),
-        ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 8,
+              ),
+              child: child,
+            ),
+          ),
+        ],
       ),
     );
   }
