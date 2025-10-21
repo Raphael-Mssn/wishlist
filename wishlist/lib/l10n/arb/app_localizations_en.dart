@@ -335,6 +335,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sortByDate => 'By creation date';
 
   @override
+  String get sortByBookingCount => 'By booking count';
+
+  @override
   String get selectQuantityToGive => 'How much would you like to offer?';
 
   @override
