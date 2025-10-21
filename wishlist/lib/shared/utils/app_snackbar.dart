@@ -274,11 +274,15 @@ class _AppSnackBarContent extends StatelessWidget {
               bottomLeft: Radius.circular(radius),
               bottomRight: Radius.circular(radius),
             ),
-            child: LinearProgressIndicator(
-              value: progress,
-              backgroundColor: Colors.transparent,
-              valueColor: AlwaysStoppedAnimation<Color>(iconColor),
-              minHeight: 3,
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity().scaledByDouble(-1, -1, 1, 1),
+              child: LinearProgressIndicator(
+                value: progress,
+                backgroundColor: Colors.transparent,
+                valueColor: AlwaysStoppedAnimation<Color>(iconColor),
+                minHeight: 3,
+              ),
             ),
           ),
         ],
