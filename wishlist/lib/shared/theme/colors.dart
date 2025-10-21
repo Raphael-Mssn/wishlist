@@ -42,9 +42,19 @@ abstract final class AppColors {
   }
 
   static Color darken(Color color, [double factor = 0.8]) {
-    final hsl = HSLColor.fromColor(color);
-    final newLightness = (hsl.lightness * factor).clamp(0.0, 1.0);
-    return hsl.withLightness(newLightness).toColor();
+    final red = color.r * factor;
+    final green = color.g * factor;
+    final blue = color.b * factor;
+
+    return Color.from(alpha: color.a, red: red, green: green, blue: blue);
+  }
+
+  static Color lighten(Color color, [double factor = 1.07]) {
+    final red = color.r * factor;
+    final green = color.g * factor;
+    final blue = color.b * factor;
+
+    return Color.from(alpha: color.a, red: red, green: green, blue: blue);
   }
 
   static String getHexValue(Color color) {

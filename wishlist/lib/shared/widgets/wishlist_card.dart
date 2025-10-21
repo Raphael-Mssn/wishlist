@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
 
 class WishlistCard extends StatelessWidget {
   const WishlistCard({
@@ -22,11 +23,15 @@ class WishlistCard extends StatelessWidget {
     }
 
     return Card(
-      color: color,
-      shape: RoundedRectangleBorder(borderRadius: borderRadius),
-      child: InkWell(
-        onTap: onTap,
+      color: Colors.transparent,
+      elevation: 0,
+      child: AppWavePattern(
+        backgroundColor: color,
+        preset: WavePreset.card,
+        rotationType: WaveRotationType.deterministic,
+        deterministicId: wishlist.id,
         borderRadius: borderRadius,
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

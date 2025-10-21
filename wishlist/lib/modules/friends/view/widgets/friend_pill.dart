@@ -28,7 +28,7 @@ class FriendPill extends StatelessWidget {
     const textColor = AppColors.background;
 
     return BaseAvatarPill(
-      onTap: _onTap,
+      onTap: () => _onTap(context),
       backgroundColor: AppColors.primary,
       avatarBorderColor: AppColors.darkOrange,
       avatarUrl: appUser.profile.avatarUrl,

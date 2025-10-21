@@ -19,6 +19,7 @@ import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
+import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/wish_sort_utils.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
@@ -160,37 +161,50 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                 resizeToAvoidBottomInset: false,
                 appBar: PreferredSize(
                   preferredSize: const Size.fromHeight(70),
-                  child: AppBar(
-                    actions: [
-                      if (isMyWishlist)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.settings,
-                              size: 32,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      bottom: Radius.circular(_appBarBorderRadius),
+                    ),
+                    child: AppWavePattern(
+                      backgroundColor: wishlistTheme.primaryColor,
+                      preset: WavePreset.appBar,
+                      rotationType: WaveRotationType.fixed,
+                      rotationAngle: 45,
+                      child: AppBar(
+                        backgroundColor: Colors.transparent,
+                        actions: [
+                          if (isMyWishlist)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.settings,
+                                  size: 32,
+                                ),
+                                onPressed: () =>
+                                    showWishlistSettingsBottomSheet(
+                                  context,
+                                  wishlist,
+                                ),
+                              ),
                             ),
-                            onPressed: () => showWishlistSettingsBottomSheet(
-                              context,
-                              wishlist,
+                        ],
+                        foregroundColor: AppColors.background,
+                        title: Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Text(
+                            wishlist.name,
+                            style: AppTextStyles.medium.copyWith(
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                    ],
-                    foregroundColor: AppColors.background,
-                    title: Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        wishlist.name,
-                        style: AppTextStyles.medium.copyWith(
-                          fontWeight: FontWeight.bold,
+                        centerTitle: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            bottom: Radius.circular(_appBarBorderRadius),
+                          ),
                         ),
-                      ),
-                    ),
-                    centerTitle: true,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        bottom: Radius.circular(_appBarBorderRadius),
                       ),
                     ),
                   ),
