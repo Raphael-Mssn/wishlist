@@ -17,7 +17,7 @@ class BaseAvatarPill extends ConsumerWidget {
   final Color backgroundColor;
   final Color avatarBorderColor;
   final Widget child;
-  final void Function(BuildContext) onTap;
+  final VoidCallback? onTap;
   final String? avatarUrl;
 
   @override
@@ -34,7 +34,7 @@ class BaseAvatarPill extends ConsumerWidget {
       rotationAngle: 45,
       borderRadius: borderRadius,
       height: avatarSize,
-      onTap: () => onTap(context),
+      onTap: onTap,
       child: Row(
         children: <Widget>[
           Container(
