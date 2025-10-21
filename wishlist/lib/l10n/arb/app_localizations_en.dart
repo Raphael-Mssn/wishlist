@@ -293,6 +293,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteWishlist => 'Delete my wishlist';
 
   @override
+  String get deleteWishlistConfirmation =>
+      'Are you sure you want to delete this wishlist?';
+
+  @override
+  String get deleteWishlistWishesWarning => 'Wishes will also be deleted.';
+
+  @override
   String get deleteWishlistSuccess => 'Wishlist successfully deleted';
 
   @override
