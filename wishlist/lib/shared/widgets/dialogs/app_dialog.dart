@@ -5,7 +5,6 @@ import 'package:wishlist/gen/fonts.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
-import 'package:wishlist/shared/theme/widgets/cancel_button.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 
 class _DialogLayout extends StatefulWidget {
@@ -70,33 +69,41 @@ class _DialogLayoutState extends State<_DialogLayout> {
         textAlign: TextAlign.center,
       ),
       content: widget.content,
-      actions: <Widget>[
-        if (onCancel != null)
-          CancelButton(
-            text: l10n.cancelButton,
-            onPressed: () {
-              context.pop();
-              onCancel();
-            },
-          ),
-        if (onConfirm != null)
-          if (widget.isConfirmEnabled == null)
-            PrimaryButton(
-              text: widget.confirmLabel,
-              onPressed: confirmHandler(),
-              style: BaseButtonStyle.medium,
-            )
-          else
-            ValueListenableBuilder<bool>(
-              valueListenable: widget.isConfirmEnabled!,
-              builder: (context, enabled, child) {
-                return PrimaryButton(
+      actions: [
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 12,
+          children: [
+            if (onCancel != null)
+              SecondaryButton(
+                style: BaseButtonStyle.medium,
+                text: l10n.cancelButton,
+                onPressed: () {
+                  context.pop();
+                  onCancel();
+                },
+              ),
+            if (onConfirm != null)
+              if (widget.isConfirmEnabled == null)
+                PrimaryButton(
                   text: widget.confirmLabel,
-                  onPressed: enabled ? confirmHandler() : null,
+                  onPressed: confirmHandler(),
                   style: BaseButtonStyle.medium,
-                );
-              },
-            ),
+                )
+              else
+                ValueListenableBuilder<bool>(
+                  valueListenable: widget.isConfirmEnabled!,
+                  builder: (context, enabled, child) {
+                    return PrimaryButton(
+                      text: widget.confirmLabel,
+                      onPressed: enabled ? confirmHandler() : null,
+                      style: BaseButtonStyle.medium,
+                    );
+                  },
+                ),
+          ],
+        ),
       ],
       backgroundColor: AppColors.background,
     );
