@@ -17,6 +17,7 @@ class AppScaffold extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           body,
