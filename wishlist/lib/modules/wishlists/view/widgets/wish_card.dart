@@ -60,17 +60,18 @@ class WishCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Text(
-                          'x$quantityToDisplay',
-                          style: AppTextStyles.small.copyWith(
-                            color: AppColors.makara,
-                            height: 1,
+                      if (quantityToDisplay > 1)
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Text(
+                            'x$quantityToDisplay',
+                            style: AppTextStyles.small.copyWith(
+                              color: AppColors.makara,
+                              height: 1,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                   const Gap(16),
