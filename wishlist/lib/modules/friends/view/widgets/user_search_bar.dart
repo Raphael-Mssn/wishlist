@@ -34,10 +34,12 @@ class _UserSearchBarState extends State<UserSearchBar> {
       ),
       child: TextField(
         controller: widget.controller,
+        textInputAction: TextInputAction.search,
         autofocus: true,
         style: AppTextStyles.smaller.copyWith(
           color: AppColors.darkGrey,
         ),
+        autofillHints: null,
         textCapitalization: TextCapitalization.sentences,
         decoration: InputDecoration(
           focusedBorder: InputBorder.none,
