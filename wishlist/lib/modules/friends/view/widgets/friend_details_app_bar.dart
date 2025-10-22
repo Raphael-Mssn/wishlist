@@ -19,6 +19,8 @@ class FriendDetailsAppBar extends ConsumerWidget
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
 
+    const iconsColor = AppColors.darkGrey;
+
     final dropdownMenuItemTextStyle = AppTextStyles.smaller.copyWith(
       color: AppColors.darkGrey,
     );
@@ -37,12 +39,18 @@ class FriendDetailsAppBar extends ConsumerWidget
         titleSpacing: 0,
         scrolledUnderElevation: 0,
         backgroundColor: AppColors.background,
+        iconTheme: const IconThemeData(
+          color: iconsColor,
+        ),
         title: Align(
           alignment: Alignment.centerRight,
           child: DropdownButton(
             icon: const Padding(
               padding: EdgeInsets.only(right: 12),
-              child: Icon(Icons.more_vert),
+              child: Icon(
+                Icons.more_vert,
+                color: iconsColor,
+              ),
             ),
             underline: const SizedBox.shrink(),
             dropdownColor: AppColors.gainsboro,
