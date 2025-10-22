@@ -51,7 +51,11 @@ class WishlistService {
     for (final wishlist in wishlists) {
       final wishlistUpdated =
           wishlist.copyWith(order: wishlists.indexOf(wishlist));
-      await updateWishlist(wishlistUpdated);
+      await updateEntity(
+        wishlistUpdated,
+        ref,
+        _wishlistRepository.updateWishlist,
+      );
     }
   }
 
