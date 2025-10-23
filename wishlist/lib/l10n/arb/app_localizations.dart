@@ -368,6 +368,18 @@ abstract class AppLocalizations {
   /// **'Supprimer'**
   String get friendDetailsRemove;
 
+  /// No description provided for @removeFriendConfirmation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Es-tu sûr(e) de vouloir supprimer cet ami ?'**
+  String get removeFriendConfirmation;
+
+  /// No description provided for @removeFriendSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ami supprimé avec succès'**
+  String get removeFriendSuccess;
+
   /// No description provided for @numberOfWishlists.
   ///
   /// In fr, this message translates to:
