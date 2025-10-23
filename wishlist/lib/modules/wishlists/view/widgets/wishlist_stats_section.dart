@@ -6,6 +6,7 @@ class WishlistStatsSection extends StatelessWidget {
   const WishlistStatsSection({
     super.key,
     required this.statCardSelected,
+    required this.nbWishsTotal,
     required this.nbWishsPending,
     required this.nbWishsBooked,
     required this.isWishsBookedHidden,
@@ -13,6 +14,7 @@ class WishlistStatsSection extends StatelessWidget {
   });
 
   final WishlistStatsCardType statCardSelected;
+  final int nbWishsTotal;
   final int nbWishsPending;
   final int nbWishsBooked;
   final bool isWishsBookedHidden;
@@ -20,6 +22,9 @@ class WishlistStatsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final countToDisplayPending =
+        isWishsBookedHidden ? nbWishsTotal : nbWishsPending;
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -28,8 +33,7 @@ class WishlistStatsSection extends StatelessWidget {
             child: WishlistStatsCard(
               type: WishlistStatsCardType.pending,
               isSelected: statCardSelected == WishlistStatsCardType.pending,
-              count: nbWishsPending,
-              countIsHidden: isWishsBookedHidden,
+              count: countToDisplayPending,
               onTap: () => onTapStatCard(WishlistStatsCardType.pending),
             ),
           ),
