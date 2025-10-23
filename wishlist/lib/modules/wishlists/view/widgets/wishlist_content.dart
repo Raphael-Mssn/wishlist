@@ -1,7 +1,8 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:implicitly_animated_list/implicitly_animated_list.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wish_card.dart';
@@ -96,7 +97,7 @@ class WishlistContent extends ConsumerWidget {
   }
 }
 
-class _WishList extends ConsumerWidget {
+class _WishList extends ConsumerStatefulWidget {
   const _WishList({
     required this.wishlist,
     required this.wishsToDisplay,
@@ -122,36 +123,116 @@ class _WishList extends ConsumerWidget {
   final Function(Wish) onFavoriteToggle;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_WishList> createState() => _WishListState();
+}
+
+class _WishListState extends ConsumerState<_WishList> {
+  static const _staggeredAnimationDuration = 500;
+  static const _staggeredAnimationDelay = 20;
+
+  bool _isInitialLoad = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _scheduleInitialLoadCompletion();
+  }
+
+  void _scheduleInitialLoadCompletion() {
+    final totalDuration = _staggeredAnimationDuration +
+        (widget.wishsToDisplay.length * _staggeredAnimationDelay);
+
+    Future.delayed(Duration(milliseconds: totalDuration), () {
+      if (mounted) {
+        setState(() => _isInitialLoad = false);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AppRefreshIndicator(
       onRefresh: () => ref
           .read(
-            wishsFromWishlistProvider(wishlist.id).notifier,
+            wishsFromWishlistProvider(widget.wishlist.id).notifier,
           )
           .loadWishs(),
-      child: ListView.separated(
-        // Espace pour le bouton flottant
-        padding: const EdgeInsets.only(bottom: _bottomPadding),
-        itemCount: wishsToDisplay.length,
-        separatorBuilder: (context, index) => const Gap(_itemSpacing),
-        itemBuilder: (context, index) {
-          final wish = wishsToDisplay[index];
+      child: _isInitialLoad
+          ? _buildStaggeredListView()
+          : _buildImplicitlyAnimatedList(),
+    );
+  }
 
-          return WishCard(
-            key: ValueKey(wish.id),
-            wish: wish,
-            onTap: () => onTapWish(
-              context,
-              wish,
-              isMyWishlist: isMyWishlist,
-              cardType: statCardSelected,
+  // Animates the list when the wishs are loaded
+  Widget _buildStaggeredListView() {
+    return AnimationLimiter(
+      child: ListView.builder(
+        padding: const EdgeInsets.only(bottom: _WishList._bottomPadding),
+        itemCount: widget.wishsToDisplay.length,
+        itemBuilder: (context, index) {
+          final wish = widget.wishsToDisplay[index];
+          return AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: _staggeredAnimationDuration),
+            child: SlideAnimation(
+              verticalOffset: _staggeredAnimationDelay.toDouble(),
+              child: FadeInAnimation(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: index < widget.wishsToDisplay.length - 1
+                        ? _WishList._itemSpacing
+                        : 0,
+                  ),
+                  child: WishCard(
+                    wish: wish,
+                    onTap: () => widget.onTapWish(
+                      context,
+                      wish,
+                      isMyWishlist: widget.isMyWishlist,
+                      cardType: widget.statCardSelected,
+                    ),
+                    onFavoriteToggle: () => widget.onFavoriteToggle(wish),
+                    isMyWishlist: widget.isMyWishlist,
+                    cardType: widget.statCardSelected,
+                  ),
+                ),
+              ),
             ),
-            onFavoriteToggle: () => onFavoriteToggle(wish),
-            isMyWishlist: isMyWishlist,
-            cardType: statCardSelected,
           );
         },
       ),
+    );
+  }
+
+  // Animates the list when the wishs are reordered
+  Widget _buildImplicitlyAnimatedList() {
+    return ImplicitlyAnimatedList<Wish>(
+      padding: const EdgeInsets.only(bottom: _WishList._bottomPadding),
+      itemData: widget.wishsToDisplay.toList(),
+      itemEquality: (oldItem, newItem) => oldItem.id == newItem.id,
+      initialAnimation: false,
+      itemBuilder: (context, wish) {
+        final index = widget.wishsToDisplay.indexOf(wish);
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: index < widget.wishsToDisplay.length - 1
+                ? _WishList._itemSpacing
+                : 0,
+          ),
+          child: WishCard(
+            wish: wish,
+            onTap: () => widget.onTapWish(
+              context,
+              wish,
+              isMyWishlist: widget.isMyWishlist,
+              cardType: widget.statCardSelected,
+            ),
+            onFavoriteToggle: () => widget.onFavoriteToggle(wish),
+            isMyWishlist: widget.isMyWishlist,
+            cardType: widget.statCardSelected,
+          ),
+        );
+      },
     );
   }
 }
