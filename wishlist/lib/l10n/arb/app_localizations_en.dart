@@ -146,6 +146,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get friendDetailsRemove => 'Remove';
 
   @override
+  String get removeFriendConfirmation =>
+      'Are you sure you want to remove this friend?';
+
+  @override
+  String get removeFriendSuccess => 'Friend removed successfully';
+
+  @override
   String numberOfWishlists(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

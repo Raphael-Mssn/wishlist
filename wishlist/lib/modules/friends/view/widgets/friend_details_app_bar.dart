@@ -6,6 +6,8 @@ import 'package:wishlist/shared/infra/friendships_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
+import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 
 enum FriendDetailsAppBarAction { remove }
 
@@ -14,6 +16,48 @@ class FriendDetailsAppBar extends ConsumerWidget
   const FriendDetailsAppBar({super.key, required this.friend});
 
   final AppUser friend;
+
+  Future<void> _deleteFriend(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
+
+    try {
+      await ref.read(friendshipsProvider.notifier).removeFriendshipWith(friend);
+
+      if (context.mounted) {
+        showAppSnackBar(
+          context,
+          l10n.removeFriendSuccess,
+          type: SnackBarType.success,
+        );
+        context.pop();
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showGenericError(context);
+      }
+    }
+  }
+
+  Future<void> _onRemoveFriendPressed(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final l10n = context.l10n;
+
+    await showAppDialog(
+      context,
+      title: l10n.friendDetailsRemove,
+      content: Text(
+        l10n.removeFriendConfirmation,
+        style: AppTextStyles.small.copyWith(
+          color: AppColors.makara,
+        ),
+      ),
+      confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
+      onConfirm: () => _deleteFriend(context, ref),
+      onCancel: () {},
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,14 +68,6 @@ class FriendDetailsAppBar extends ConsumerWidget
     final dropdownMenuItemTextStyle = AppTextStyles.smaller.copyWith(
       color: AppColors.darkGrey,
     );
-
-    Future<void> removeFriend() async {
-      await ref.read(friendshipsProvider.notifier).removeFriendshipWith(friend);
-
-      if (context.mounted) {
-        context.pop();
-      }
-    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -59,7 +95,7 @@ class FriendDetailsAppBar extends ConsumerWidget
             borderRadius: BorderRadius.circular(8),
             onChanged: (value) {
               if (value == FriendDetailsAppBarAction.remove) {
-                removeFriend();
+                _onRemoveFriendPressed(context, ref);
               }
             },
             items: [

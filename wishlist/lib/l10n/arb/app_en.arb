@@ -45,6 +45,8 @@
   "emailOrPseudoHint": "Email or pseudo",
   "noUserFound": "No user found",
   "friendDetailsRemove": "Remove",
+  "removeFriendConfirmation": "Are you sure you want to remove this friend?",
+  "removeFriendSuccess": "Friend removed successfully",
   "numberOfWishlists": "{count, plural, =0 {0 wishlist} =1 {1 wishlist} other {{count} wishlists}}",
   "numberOfWishs": "{count, plural, =0 {0 wish} =1 {1 wish} other {{count} wishs}}",
   "friendDetailsMutualFriendsTitle": "Mutual friends",
