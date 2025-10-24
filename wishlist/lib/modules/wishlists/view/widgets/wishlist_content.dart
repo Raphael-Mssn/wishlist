@@ -129,6 +129,7 @@ class _WishList extends ConsumerStatefulWidget {
 class _WishListState extends ConsumerState<_WishList> {
   static const _staggeredAnimationDuration = 500;
   static const _staggeredAnimationDelay = 20;
+  static const _staggeredAnimationMargin = 200;
 
   bool _isInitialLoad = true;
 
@@ -140,7 +141,8 @@ class _WishListState extends ConsumerState<_WishList> {
 
   void _scheduleInitialLoadCompletion() {
     final totalDuration = _staggeredAnimationDuration +
-        (widget.wishsToDisplay.length * _staggeredAnimationDelay);
+        (widget.wishsToDisplay.length * _staggeredAnimationDelay) +
+        _staggeredAnimationMargin;
 
     Future.delayed(Duration(milliseconds: totalDuration), () {
       if (mounted) {
