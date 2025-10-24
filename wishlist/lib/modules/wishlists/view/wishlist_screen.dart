@@ -277,8 +277,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
             ? wishsPending
             : wishsBooked;
 
-    final nbWishsPending =
-        isWishsBookedHidden ? wishs.length : wishsPending.length;
+    final nbWishsPending = wishsPending.length;
     final nbWishsBooked = wishsBooked.length;
 
     final hasWishsPending = nbWishsPending > 0;
@@ -294,6 +293,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
       children: [
         WishlistStatsSection(
           statCardSelected: statCardSelected,
+          nbWishsTotal: wishs.length,
           nbWishsPending: nbWishsPending,
           nbWishsBooked: nbWishsBooked,
           isWishsBookedHidden: isWishsBookedHidden,
