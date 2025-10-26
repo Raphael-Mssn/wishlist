@@ -22,6 +22,15 @@ class SupabaseUserRepository implements UserRepository {
     return _client.auth.currentUserNonNull.id;
   }
 
+  void _handleDuplicateProfileError(Object error) {
+    if (error is PostgrestException && error.code == '23505') {
+      throw AppException(
+        statusCode: 409,
+        message: 'User profile already exists',
+      );
+    }
+  }
+
   @override
   Future<void> createUserProfile(Profile profile) async {
     return executeSafely(
@@ -30,14 +39,7 @@ class SupabaseUserRepository implements UserRepository {
         await _client.auth.refreshSession();
       },
       errorMessage: 'Failed to create user profile',
-      customErrorHandler: (error) {
-        if (error is PostgrestException && error.code == '23505') {
-          throw AppException(
-            statusCode: 409,
-            message: 'User profile already exists',
-          );
-        }
-      },
+      customErrorHandler: _handleDuplicateProfileError,
     );
   }
 
@@ -51,6 +53,7 @@ class SupabaseUserRepository implements UserRepository {
             .eq('id', profile.id);
       },
       errorMessage: 'Failed to update user profile',
+      customErrorHandler: _handleDuplicateProfileError,
     );
   }
 
