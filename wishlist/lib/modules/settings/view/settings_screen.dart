@@ -80,6 +80,14 @@ class SettingsScreen extends ConsumerWidget {
             },
             style: BaseButtonStyle.medium,
           ),
+          const Gap(24),
+          PrimaryButton(
+            text: l10n.settingsScreenPseudoModify,
+            onPressed: () {
+              ChangePseudoRoute().push(context);
+            },
+            style: BaseButtonStyle.medium,
+          ),
         ],
       ),
     );

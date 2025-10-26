@@ -12,6 +12,7 @@ List<RouteBase> get $appRoutes => [
       $wishlistRoute,
       $settingsRoute,
       $changePasswordRoute,
+      $changePseudoRoute,
       $authRoute,
       $friendDetailsRoute,
     ];
@@ -117,6 +118,29 @@ extension $ChangePasswordRouteExtension on ChangePasswordRoute {
 
   String get location => GoRouteData.$location(
         '/change-password',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $changePseudoRoute => GoRouteData.$route(
+      path: '/change-pseudo',
+      factory: $ChangePseudoRouteExtension._fromState,
+    );
+
+extension $ChangePseudoRouteExtension on ChangePseudoRoute {
+  static ChangePseudoRoute _fromState(GoRouterState state) =>
+      ChangePseudoRoute();
+
+  String get location => GoRouteData.$location(
+        '/change-pseudo',
       );
 
   void go(BuildContext context) => context.go(location);

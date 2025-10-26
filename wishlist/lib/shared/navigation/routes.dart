@@ -4,6 +4,7 @@ import 'package:wishlist/modules/auth/view/auth_screen.dart';
 import 'package:wishlist/modules/auth/view/pseudo_screen.dart';
 import 'package:wishlist/modules/friends/view/screens/friend_details_screen.dart';
 import 'package:wishlist/modules/settings/change_password/view/change_password_screen.dart';
+import 'package:wishlist/modules/settings/change_pseudo/view/change_pseudo_screen.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
 import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 
@@ -61,6 +62,15 @@ class ChangePasswordRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const ChangePasswordScreen();
+}
+
+@TypedGoRoute<ChangePseudoRoute>(
+  path: '/change-pseudo',
+)
+class ChangePseudoRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ChangePseudoScreen();
 }
 
 @TypedGoRoute<AuthRoute>(
