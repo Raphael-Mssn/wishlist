@@ -59,16 +59,9 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const Gap(40),
           PrimaryButton(
-            text: l10n.settingsScreenDisconnect,
+            text: l10n.settingsScreenPseudoModify,
             onPressed: () {
-              showConfirmDialog(
-                context,
-                title: l10n.settingsScreenDisconnectDialogTitle,
-                explanation: l10n.settingsScreenDisconnectDialogExplanation,
-                onConfirm: () async {
-                  await ref.read(authServiceProvider).signOut(context, ref);
-                },
-              );
+              ChangePseudoRoute().push(context);
             },
             style: BaseButtonStyle.medium,
           ),
@@ -82,9 +75,16 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const Gap(24),
           PrimaryButton(
-            text: l10n.settingsScreenPseudoModify,
+            text: l10n.settingsScreenDisconnect,
             onPressed: () {
-              ChangePseudoRoute().push(context);
+              showConfirmDialog(
+                context,
+                title: l10n.settingsScreenDisconnectDialogTitle,
+                explanation: l10n.settingsScreenDisconnectDialogExplanation,
+                onConfirm: () async {
+                  await ref.read(authServiceProvider).signOut(context, ref);
+                },
+              );
             },
             style: BaseButtonStyle.medium,
           ),
