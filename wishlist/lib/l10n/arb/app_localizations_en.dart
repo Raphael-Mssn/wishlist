@@ -363,4 +363,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get avatarLoadError => 'Error loading image';
+
+  @override
+  String get forgotPasswordButton => 'Forgot password?';
+
+  @override
+  String get forgotPasswordTitle => 'Forgot password';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Enter your email address and we will send you a link to reset your password.';
+
+  @override
+  String get forgotPasswordSendButton => 'Send';
+
+  @override
+  String get forgotPasswordEmailSent => 'A password reset email has been sent!';
+
+  @override
+  String get resetPasswordTitle => 'Reset password';
+
+  @override
+  String get resetPasswordDescription => 'Enter your new password.';
+
+  @override
+  String get resetPasswordConfirm => 'Reset';
+
+  @override
+  String get resetPasswordSuccess =>
+      'Password reset successfully! Please sign in with your new password.';
+
+  @override
+  String get resetPasswordLinkExpired =>
+      'The reset link has expired. Please request a new one.';
 }

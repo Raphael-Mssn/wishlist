@@ -365,4 +365,39 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get avatarLoadError => 'Erreur lors du chargement de l\'image';
+
+  @override
+  String get forgotPasswordButton => 'Mot de passe oublié ?';
+
+  @override
+  String get forgotPasswordTitle => 'Mot de passe oublié';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.';
+
+  @override
+  String get forgotPasswordSendButton => 'Envoyer';
+
+  @override
+  String get forgotPasswordEmailSent =>
+      'Un e-mail de réinitialisation a été envoyé !';
+
+  @override
+  String get resetPasswordTitle => 'Réinitialiser le mot de passe';
+
+  @override
+  String get resetPasswordDescription =>
+      'Saisissez votre nouveau mot de passe.';
+
+  @override
+  String get resetPasswordConfirm => 'Réinitialiser';
+
+  @override
+  String get resetPasswordSuccess =>
+      'Mot de passe réinitialisé avec succès ! Reconnectez-vous avec votre nouveau mot de passe.';
+
+  @override
+  String get resetPasswordLinkExpired =>
+      'Le lien de réinitialisation a expiré. Veuillez en demander un nouveau.';
 }

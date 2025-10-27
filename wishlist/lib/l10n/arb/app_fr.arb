@@ -108,5 +108,15 @@
   "takePhoto": "Prendre une photo",
   "removeAvatar": "Supprimer l'avatar",
   "removeAvatarConfirmation": "Êtes-vous sûr de vouloir supprimer votre avatar?",
-  "avatarLoadError": "Erreur lors du chargement de l'image"
+  "avatarLoadError": "Erreur lors du chargement de l'image",
+  "forgotPasswordButton": "Mot de passe oublié ?",
+  "forgotPasswordTitle": "Mot de passe oublié",
+  "forgotPasswordDescription": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+  "forgotPasswordSendButton": "Envoyer",
+  "forgotPasswordEmailSent": "Un e-mail de réinitialisation a été envoyé !",
+  "resetPasswordTitle": "Réinitialiser le mot de passe",
+  "resetPasswordDescription": "Saisissez votre nouveau mot de passe.",
+  "resetPasswordConfirm": "Réinitialiser",
+  "resetPasswordSuccess": "Mot de passe réinitialisé avec succès ! Reconnectez-vous avec votre nouveau mot de passe.",
+  "resetPasswordLinkExpired": "Le lien de réinitialisation a expiré. Veuillez en demander un nouveau."
 }

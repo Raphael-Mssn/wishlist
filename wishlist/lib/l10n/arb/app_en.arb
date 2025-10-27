@@ -108,5 +108,15 @@
   "takePhoto": "Take a photo",
   "removeAvatar": "Remove avatar",
   "removeAvatarConfirmation": "Are you sure you want to remove your avatar?",
-  "avatarLoadError": "Error loading image"
+  "avatarLoadError": "Error loading image",
+  "forgotPasswordButton": "Forgot password?",
+  "forgotPasswordTitle": "Forgot password",
+  "forgotPasswordDescription": "Enter your email address and we will send you a link to reset your password.",
+  "forgotPasswordSendButton": "Send",
+  "forgotPasswordEmailSent": "A password reset email has been sent!",
+  "resetPasswordTitle": "Reset password",
+  "resetPasswordDescription": "Enter your new password.",
+  "resetPasswordConfirm": "Reset",
+  "resetPasswordSuccess": "Password reset successfully! Please sign in with your new password.",
+  "resetPasswordLinkExpired": "The reset link has expired. Please request a new one."
 }
