@@ -156,6 +156,18 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               textAlign: TextAlign.center,
             ),
           ),
+          const Gap(8),
+          TextButton(
+            onPressed: () => ForgotPasswordRoute().push(context),
+            child: Text(
+              l10n.forgotPasswordButton,
+              style: const TextStyle(
+                color: Colors.black54,
+                decoration: TextDecoration.underline,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ],
       ),
     );
