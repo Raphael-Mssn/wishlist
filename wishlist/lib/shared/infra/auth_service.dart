@@ -85,6 +85,21 @@ class AuthService {
       return false;
     }
   }
+
+  Future<void> sendPasswordResetEmail({required String email}) async {
+    try {
+      await supabase.auth.resetPasswordForEmail(
+        email,
+        redirectTo: 'wishlist://com.raphtang.wishlist/reset-password',
+      );
+    } on AuthException catch (e) {
+      final statusCode = e.statusCode;
+      throw AppException(
+        statusCode: statusCode != null ? int.parse(statusCode) : 500,
+        message: e.message,
+      );
+    }
+  }
 }
 
 final authServiceProvider = Provider((ref) => AuthService.instance);
