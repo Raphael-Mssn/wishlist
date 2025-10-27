@@ -14,6 +14,8 @@ List<RouteBase> get $appRoutes => [
       $changePasswordRoute,
       $authRoute,
       $friendDetailsRoute,
+      $forgotPasswordRoute,
+      $resetPasswordRoute,
     ];
 
 RouteBase get $homeRoute => GoRouteData.$route(
@@ -164,6 +166,52 @@ extension $FriendDetailsRouteExtension on FriendDetailsRoute {
 
   String get location => GoRouteData.$location(
         '/friend/${Uri.encodeComponent(friendId)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $forgotPasswordRoute => GoRouteData.$route(
+      path: '/forgot-password',
+      factory: $ForgotPasswordRouteExtension._fromState,
+    );
+
+extension $ForgotPasswordRouteExtension on ForgotPasswordRoute {
+  static ForgotPasswordRoute _fromState(GoRouterState state) =>
+      ForgotPasswordRoute();
+
+  String get location => GoRouteData.$location(
+        '/forgot-password',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $resetPasswordRoute => GoRouteData.$route(
+      path: '/reset-password',
+      factory: $ResetPasswordRouteExtension._fromState,
+    );
+
+extension $ResetPasswordRouteExtension on ResetPasswordRoute {
+  static ResetPasswordRoute _fromState(GoRouterState state) =>
+      ResetPasswordRoute();
+
+  String get location => GoRouteData.$location(
+        '/reset-password',
       );
 
   void go(BuildContext context) => context.go(location);

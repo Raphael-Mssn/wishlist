@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/modules/auth/view/auth_screen.dart';
+import 'package:wishlist/modules/auth/view/forgot_password_screen.dart';
 import 'package:wishlist/modules/auth/view/pseudo_screen.dart';
+import 'package:wishlist/modules/auth/view/reset_password_screen.dart';
 import 'package:wishlist/modules/friends/view/screens/friend_details_screen.dart';
 import 'package:wishlist/modules/settings/change_password/view/change_password_screen.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
@@ -82,4 +84,22 @@ class FriendDetailsRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) {
     return FriendDetailsScreen(friendId: friendId);
   }
+}
+
+@TypedGoRoute<ForgotPasswordRoute>(
+  path: '/forgot-password',
+)
+class ForgotPasswordRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ForgotPasswordScreen();
+}
+
+@TypedGoRoute<ResetPasswordRoute>(
+  path: '/reset-password',
+)
+class ResetPasswordRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ResetPasswordScreen();
 }
