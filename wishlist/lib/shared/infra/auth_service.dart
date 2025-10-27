@@ -100,6 +100,18 @@ class AuthService {
       );
     }
   }
+
+  Future<void> resetPassword({required String newPassword}) async {
+    try {
+      await supabase.auth.updateUser(UserAttributes(password: newPassword));
+    } on AuthException catch (e) {
+      final statusCode = e.statusCode;
+      throw AppException(
+        statusCode: statusCode != null ? int.parse(statusCode) : 500,
+        message: e.message,
+      );
+    }
+  }
 }
 
 final authServiceProvider = Provider((ref) => AuthService.instance);
