@@ -180,15 +180,17 @@ class AppWavePattern extends StatelessWidget {
 
   /// Fusionne les paramètres du preset avec les paramètres personnalisés
   _WaveParams _mergeWithCustomParams(_WaveParams presetParams) {
-    if (customParams == null) return presetParams;
+    final params = customParams;
+    if (params == null) {
+      return presetParams;
+    }
 
     return _WaveParams(
-      frequency: customParams!.frequency ?? presetParams.frequency,
-      thickness: customParams!.thickness ?? presetParams.thickness,
-      gap: customParams!.gap ?? presetParams.gap,
-      amplitude: customParams!.amplitude ?? presetParams.amplitude,
-      angleVariation:
-          customParams!.angleVariation ?? presetParams.angleVariation,
+      frequency: params.frequency ?? presetParams.frequency,
+      thickness: params.thickness ?? presetParams.thickness,
+      gap: params.gap ?? presetParams.gap,
+      amplitude: params.amplitude ?? presetParams.amplitude,
+      angleVariation: params.angleVariation ?? presetParams.angleVariation,
     );
   }
 
