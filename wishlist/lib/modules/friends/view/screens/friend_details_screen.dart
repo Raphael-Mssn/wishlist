@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_details_app_bar.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_pill.dart';
-import 'package:wishlist/shared/infra/friend_details_provider.dart';
+import 'package:wishlist/shared/infra/friend_details_realtime_provider.dart';
 import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -18,14 +18,17 @@ class FriendDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final friendDetails = ref.watch(friendDetailsProvider(friendId));
+    // ✅ Utiliser le provider Realtime
+    final friendDetails = ref.watch(friendDetailsRealtimeProvider(friendId));
 
+    /// 🔄 Force un rechargement des données
+    /// Utile en cas d'erreur réseau ou pour rassurer l'utilisateur
     Future<void> refreshFriendDetails() async {
-      await ref
-          .read(friendDetailsProvider(friendId).notifier)
-          .loadFriendDetails(
-            friendId,
-          );
+      // Invalider le provider force une reconnexion Realtime et un rechargement
+      ref.invalidate(friendDetailsRealtimeProvider(friendId));
+
+      // Attendre que le nouveau stream soit initialisé
+      await ref.read(friendDetailsRealtimeProvider(friendId).future);
     }
 
     return Scaffold(
