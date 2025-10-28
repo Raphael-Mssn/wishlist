@@ -97,7 +97,6 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
     );
 
     try {
-      // ✅ Utiliser wishActionsProvider, Realtime met à jour l'UI automatiquement
       await ref.read(wishActionsProvider).updateWish(wishToUpdate);
 
       if (mounted) {
@@ -130,8 +129,8 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
       confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
       onConfirm: () async {
         try {
-          // ✅ Utiliser wishActionsProvider, Realtime met à jour l'UI automatiquement
           await ref.read(wishActionsProvider).deleteWish(widget.wish.id);
+
           if (mounted) {
             showAppSnackBar(
               context,

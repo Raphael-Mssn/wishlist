@@ -52,7 +52,6 @@ class _CreateWishBottomSheetState
     );
 
     try {
-      // ✅ Utiliser wishActionsProvider, Realtime met à jour l'UI automatiquement
       await ref.read(wishActionsProvider).createWish(wish);
 
       if (mounted) {

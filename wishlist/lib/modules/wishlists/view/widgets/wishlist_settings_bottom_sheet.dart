@@ -159,10 +159,10 @@ class _WishlistSettingsBottomSheetState
           confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
           onConfirm: () async {
             try {
-              // ✅ Utiliser wishlistActionsProvider, Realtime met à jour l'UI automatiquement
               await ref
                   .read(wishlistActionsProvider)
                   .deleteWishlist(widget.wishlist.id);
+
               if (mounted) {
                 HomeRoute().go(context);
                 showAppSnackBar(

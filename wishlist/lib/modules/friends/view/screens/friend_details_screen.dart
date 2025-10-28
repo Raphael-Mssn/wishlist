@@ -18,7 +18,6 @@ class FriendDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // ✅ Utiliser le provider Realtime
     final friendDetails = ref.watch(friendDetailsRealtimeProvider(friendId));
 
     /// 🔄 Force un rechargement des données

@@ -25,7 +25,6 @@ final friendDetailsRealtimeProvider =
   final wishlistService = ref.watch(wishlistServiceProvider);
   final wishService = ref.watch(wishServiceProvider);
 
-  // ✅ Écouter le profil ET les wishlists publiques en Realtime
   final profileStream = userStreamRepo.watchProfileById(userId);
   final publicWishlistsStream =
       wishlistStreamRepo.watchPublicWishlistsByUser(userId);
