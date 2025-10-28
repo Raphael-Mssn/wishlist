@@ -5,7 +5,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/friends/view/widgets/add_friend_bottom_sheet.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_pill.dart';
 import 'package:wishlist/modules/friends/view/widgets/user_pill.dart';
-import 'package:wishlist/shared/infra/friendships_provider.dart';
+import 'package:wishlist/shared/infra/friendships_realtime_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
@@ -54,10 +54,16 @@ class FriendsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final friendsData = ref.watch(friendshipsProvider);
+    final friendsData = ref.watch(friendshipsRealtimeProvider);
 
+    /// 🔄 Force un rechargement des données
+    /// Utile en cas d'erreur réseau ou pour rassurer l'utilisateur
     Future<void> refreshFriends() async {
-      await ref.read(friendshipsProvider.notifier).loadFriends();
+      // Invalider le provider force une reconnexion Realtime et un rechargement
+      ref.invalidate(friendshipsRealtimeProvider);
+
+      // Attendre que le nouveau stream soit initialisé
+      await ref.read(friendshipsRealtimeProvider.future);
     }
 
     return friendsData.when(
