@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
-import 'package:wishlist/shared/infra/supabase_client_provider.dart';
-import 'package:wishlist/shared/infra/wishlists_provider.dart';
+import 'package:wishlist/shared/infra/wishlists_realtime_provider.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
@@ -17,12 +15,16 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final wishlists = ref.watch(wishlistsProvider);
+    final wishlists = ref.watch(wishlistsRealtimeProvider);
 
+    /// 🔄 Force un rechargement des données
+    /// Utile en cas d'erreur réseau ou pour rassurer l'utilisateur
     Future<void> refreshWishlists() async {
-      await ref.read(wishlistsProvider.notifier).loadWishlists(
-            ref.read(supabaseClientProvider).auth.currentUserNonNull.id,
-          );
+      // Invalider le provider force une reconnexion Realtime et un rechargement
+      ref.invalidate(wishlistsRealtimeProvider);
+
+      // Attendre que le nouveau stream soit initialisé
+      await ref.read(wishlistsRealtimeProvider.future);
     }
 
     return wishlists.when(
