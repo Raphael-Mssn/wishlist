@@ -18,6 +18,7 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
 
   final Map<String, RealtimeChannel> _channels = {};
   final Map<String, StreamController<IList<Wish>>> _controllers = {};
+  final Map<String, StreamController<Wish?>> _singleControllers = {};
 
   @override
   Stream<IList<Wish>> watchWishsFromWishlist(int wishlistId) {
@@ -75,8 +76,20 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
 
   @override
   Stream<Wish?> watchWishById(int wishId) {
-    // Créer un nouveau controller broadcast pour chaque écoute
-    final controller = StreamController<Wish?>.broadcast();
+    final key = 'wish_$wishId';
+
+    // Si le stream existe déjà, le retourner
+    // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupSingleStream
+    final existingController = _singleControllers[key];
+    if (existingController != null) {
+      return existingController.stream;
+    }
+
+    // Créer un nouveau controller broadcast
+    final controller = StreamController<Wish?>.broadcast(
+      onCancel: () => _cleanupSingleStream(key),
+    );
+    _singleControllers[key] = controller;
 
     // Charger les données initiales
     _loadInitialWish(wishId, controller);
@@ -98,8 +111,7 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
         )
         .subscribe();
 
-    // Cleanup quand le stream est fermé
-    controller.onCancel = channel.unsubscribe;
+    _channels[key] = channel;
 
     return controller.stream;
   }
@@ -185,6 +197,13 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
     _controllers.remove(key);
   }
 
+  void _cleanupSingleStream(String key) {
+    _channels[key]?.unsubscribe();
+    _channels.remove(key);
+    _singleControllers[key]?.close();
+    _singleControllers.remove(key);
+  }
+
   @override
   Future<void> dispose() async {
     for (final channel in _channels.values) {
@@ -196,5 +215,10 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
       await controller.close();
     }
     _controllers.clear();
+
+    for (final controller in _singleControllers.values) {
+      await controller.close();
+    }
+    _singleControllers.clear();
   }
 }

@@ -18,6 +18,7 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
 
   final Map<String, RealtimeChannel> _channels = {};
   final Map<String, StreamController<IList<Wishlist>>> _controllers = {};
+  final Map<String, StreamController<Wishlist?>> _singleControllers = {};
 
   @override
   Stream<IList<Wishlist>> watchWishlistsByUser(String userId) {
@@ -62,8 +63,20 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
 
   @override
   Stream<Wishlist?> watchWishlistById(int wishlistId) {
-    // Créer un nouveau controller broadcast pour chaque écoute
-    final controller = StreamController<Wishlist?>.broadcast();
+    final key = 'wishlist_$wishlistId';
+
+    // Si le stream existe déjà, le retourner
+    // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupSingleStream
+    final existingController = _singleControllers[key];
+    if (existingController != null) {
+      return existingController.stream;
+    }
+
+    // Créer un nouveau controller broadcast
+    final controller = StreamController<Wishlist?>.broadcast(
+      onCancel: () => _cleanupSingleStream(key),
+    );
+    _singleControllers[key] = controller;
 
     // Charger les données initiales
     _loadInitialWishlist(wishlistId, controller);
@@ -85,8 +98,7 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
         )
         .subscribe();
 
-    // Cleanup quand le stream est fermé
-    controller.onCancel = channel.unsubscribe;
+    _channels[key] = channel;
 
     return controller.stream;
   }
@@ -252,6 +264,13 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
     _controllers.remove(key);
   }
 
+  void _cleanupSingleStream(String key) {
+    _channels[key]?.unsubscribe();
+    _channels.remove(key);
+    _singleControllers[key]?.close();
+    _singleControllers.remove(key);
+  }
+
   @override
   Future<void> dispose() async {
     for (final channel in _channels.values) {
@@ -263,5 +282,10 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
       await controller.close();
     }
     _controllers.clear();
+
+    for (final controller in _singleControllers.values) {
+      await controller.close();
+    }
+    _singleControllers.clear();
   }
 }

@@ -12,10 +12,24 @@ class SupabaseUserStreamRepository implements UserStreamRepository {
   static const _profilesTableName = 'profiles';
 
   final Map<String, RealtimeChannel> _channels = {};
+  final Map<String, StreamController<Profile?>> _controllers = {};
 
   @override
   Stream<Profile?> watchProfileById(String userId) {
-    final controller = StreamController<Profile?>.broadcast();
+    final key = 'profile_$userId';
+
+    // Si le stream existe déjà, le retourner
+    // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupStream
+    final existingController = _controllers[key];
+    if (existingController != null) {
+      return existingController.stream;
+    }
+
+    // Créer un nouveau controller broadcast
+    final controller = StreamController<Profile?>.broadcast(
+      onCancel: () => _cleanupStream(key),
+    );
+    _controllers[key] = controller;
 
     // Charger les données initiales
     _loadInitialProfile(userId, controller);
@@ -37,13 +51,7 @@ class SupabaseUserStreamRepository implements UserStreamRepository {
         )
         .subscribe();
 
-    // Cleanup quand le stream est fermé
-    controller.onCancel = () {
-      channel.unsubscribe();
-      _channels.remove('profile_$userId');
-    };
-
-    _channels['profile_$userId'] = channel;
+    _channels[key] = channel;
 
     return controller.stream;
   }
@@ -103,11 +111,23 @@ class SupabaseUserStreamRepository implements UserStreamRepository {
     }
   }
 
+  void _cleanupStream(String key) {
+    _channels[key]?.unsubscribe();
+    _channels.remove(key);
+    _controllers[key]?.close();
+    _controllers.remove(key);
+  }
+
   @override
   Future<void> dispose() async {
     for (final channel in _channels.values) {
       await channel.unsubscribe();
     }
     _channels.clear();
+
+    for (final controller in _controllers.values) {
+      await controller.close();
+    }
+    _controllers.clear();
   }
 }

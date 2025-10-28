@@ -19,13 +19,15 @@ class SupabaseWishTakenByUserStreamRepository
   Stream<IList<WishTakenByUser>> watchTakenByUsersForWish(int wishId) {
     final key = 'wish_$wishId';
 
-    // ignore: close_sinks - Le controller est déjà créé et sera fermé dans dispose
+    // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupStream
     final existingController = _controllers[key];
     if (existingController != null) {
       return existingController.stream as Stream<IList<WishTakenByUser>>;
     }
 
-    final controller = StreamController<IList<WishTakenByUser>>.broadcast();
+    final controller = StreamController<IList<WishTakenByUser>>.broadcast(
+      onCancel: () => _cleanupStream(key),
+    );
     _controllers[key] = controller;
 
     // Fonction pour charger les données actuelles
@@ -83,13 +85,15 @@ class SupabaseWishTakenByUserStreamRepository
   Stream<IList<WishTakenByUser>> watchTakenByUser(String userId) {
     final key = 'user_$userId';
 
-    // ignore: close_sinks - Le controller est déjà créé et sera fermé dans dispose
+    // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupStream
     final existingController = _controllers[key];
     if (existingController != null) {
       return existingController.stream as Stream<IList<WishTakenByUser>>;
     }
 
-    final controller = StreamController<IList<WishTakenByUser>>.broadcast();
+    final controller = StreamController<IList<WishTakenByUser>>.broadcast(
+      onCancel: () => _cleanupStream(key),
+    );
     _controllers[key] = controller;
 
     // Fonction pour charger les données actuelles
@@ -141,6 +145,13 @@ class SupabaseWishTakenByUserStreamRepository
     _channels[key] = channel;
 
     return controller.stream;
+  }
+
+  void _cleanupStream(String key) {
+    _channels[key]?.unsubscribe();
+    _channels.remove(key);
+    _controllers[key]?.close();
+    _controllers.remove(key);
   }
 
   @override
