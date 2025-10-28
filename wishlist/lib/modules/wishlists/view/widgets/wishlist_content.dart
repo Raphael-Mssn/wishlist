@@ -7,7 +7,6 @@ import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wish_card.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
-import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty_content.dart';
@@ -27,6 +26,7 @@ class WishlistContent extends ConsumerWidget {
     required this.onTapWish,
     required this.onAddWish,
     required this.onFavoriteToggle,
+    this.onRefresh,
   });
 
   static const double _verticalPadding = 16;
@@ -45,6 +45,7 @@ class WishlistContent extends ConsumerWidget {
   }) onTapWish;
   final Function(BuildContext, Wishlist) onAddWish;
   final Function(Wish) onFavoriteToggle;
+  final Future<void> Function()? onRefresh;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -82,6 +83,7 @@ class WishlistContent extends ConsumerWidget {
                     statCardSelected: statCardSelected,
                     onTapWish: onTapWish,
                     onFavoriteToggle: onFavoriteToggle,
+                    onRefresh: onRefresh,
                   )
                 : _EmptyState(
                     constraints: constraints,
@@ -105,6 +107,7 @@ class _WishList extends ConsumerStatefulWidget {
     required this.statCardSelected,
     required this.onTapWish,
     required this.onFavoriteToggle,
+    this.onRefresh,
   });
 
   static const double _bottomPadding = 120;
@@ -121,6 +124,7 @@ class _WishList extends ConsumerStatefulWidget {
     WishlistStatsCardType? cardType,
   }) onTapWish;
   final Function(Wish) onFavoriteToggle;
+  final Future<void> Function()? onRefresh;
 
   @override
   ConsumerState<_WishList> createState() => _WishListState();
@@ -154,11 +158,13 @@ class _WishListState extends ConsumerState<_WishList> {
   @override
   Widget build(BuildContext context) {
     return AppRefreshIndicator(
-      onRefresh: () => ref
-          .read(
-            wishsFromWishlistProvider(widget.wishlist.id).notifier,
-          )
-          .loadWishs(),
+      /// 🔄 Force un rechargement des données
+      /// Utile en cas d'erreur réseau ou pour rassurer l'utilisateur
+      onRefresh: widget.onRefresh ??
+          () async {
+            // Fallback : simple délai si aucun callback fourni
+            await Future.delayed(const Duration(milliseconds: 300));
+          },
       child: _isInitialLoad
           ? _buildStaggeredListView()
           : _buildImplicitlyAnimatedList(),

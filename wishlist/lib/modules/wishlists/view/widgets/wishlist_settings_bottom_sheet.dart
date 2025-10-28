@@ -7,8 +7,8 @@ import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_toggle_switch.dart';
 import 'package:wishlist/shared/infra/wish_service.dart';
+import 'package:wishlist/shared/infra/wishlist_actions_provider.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
-import 'package:wishlist/shared/infra/wishlists_provider.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
@@ -159,8 +159,9 @@ class _WishlistSettingsBottomSheetState
           confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
           onConfirm: () async {
             try {
+              // ✅ Utiliser wishlistActionsProvider, Realtime met à jour l'UI automatiquement
               await ref
-                  .read(wishlistsProvider.notifier)
+                  .read(wishlistActionsProvider)
                   .deleteWishlist(widget.wishlist.id);
               if (mounted) {
                 HomeRoute().go(context);
