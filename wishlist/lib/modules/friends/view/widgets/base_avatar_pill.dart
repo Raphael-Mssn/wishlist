@@ -12,6 +12,8 @@ class BaseAvatarPill extends ConsumerWidget {
     required this.child,
     required this.onTap,
     this.avatarUrl,
+    this.userId,
+    this.showOnlineIndicator = false,
   });
 
   final Color backgroundColor;
@@ -19,6 +21,8 @@ class BaseAvatarPill extends ConsumerWidget {
   final Widget child;
   final VoidCallback? onTap;
   final String? avatarUrl;
+  final String? userId;
+  final bool showOnlineIndicator;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,6 +58,8 @@ class BaseAvatarPill extends ConsumerWidget {
               avatarUrl: avatarUrl,
               size: avatarSize - 12,
               hasBorders: false,
+              userId: userId,
+              showOnlineIndicator: showOnlineIndicator,
             ),
           ),
           Expanded(

@@ -110,6 +110,8 @@ class _FriendStatsSection extends ConsumerWidget {
         AppAvatar(
           avatarUrl: friendDetails.appUser.profile.avatarUrl,
           size: avatarSize,
+          userId: friendDetails.appUser.user.id,
+          showOnlineIndicator: true,
         ),
         const Gap(16),
         Column(

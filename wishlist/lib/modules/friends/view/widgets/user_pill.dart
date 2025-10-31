@@ -45,6 +45,7 @@ class UserPill extends ConsumerWidget {
       backgroundColor: AppColors.gainsboro,
       avatarBorderColor: AppColors.pastelGray,
       avatarUrl: appUser.profile.avatarUrl,
+      userId: appUser.user.id,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

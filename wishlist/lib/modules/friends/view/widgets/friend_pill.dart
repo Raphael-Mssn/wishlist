@@ -32,6 +32,8 @@ class FriendPill extends StatelessWidget {
       backgroundColor: AppColors.primary,
       avatarBorderColor: AppColors.darkOrange,
       avatarUrl: appUser.profile.avatarUrl,
+      userId: appUser.user.id,
+      showOnlineIndicator: true,
       child: Text(
         appUser.profile.pseudo,
         overflow: TextOverflow.ellipsis,

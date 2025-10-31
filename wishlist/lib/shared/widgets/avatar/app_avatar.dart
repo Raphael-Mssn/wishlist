@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/avatar_service.dart';
+import 'package:wishlist/shared/infra/presence_provider.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/widgets/avatar/online_indicator.dart';
 
 class AppAvatar extends ConsumerWidget {
   const AppAvatar({
@@ -9,11 +11,15 @@ class AppAvatar extends ConsumerWidget {
     this.avatarUrl,
     required this.size,
     this.hasBorders = true,
+    this.userId,
+    this.showOnlineIndicator = false,
   });
 
   final String? avatarUrl;
   final double size;
   final bool hasBorders;
+  final String? userId;
+  final bool showOnlineIndicator;
 
   static const Color _iconColor = AppColors.background;
 
@@ -21,6 +27,13 @@ class AppAvatar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final fullAvatarUrl =
         ref.watch(avatarServiceProvider).getAvatarUrl(avatarUrl);
+
+    final userId = this.userId;
+    final isOnline = showOnlineIndicator &&
+        userId != null &&
+        ref.watch(isUserOnlineProvider(userId));
+
+    Widget avatarWidget;
 
     if (fullAvatarUrl.isNotEmpty) {
       final Widget avatarImage = ClipOval(
@@ -33,7 +46,7 @@ class AppAvatar extends ConsumerWidget {
         ),
       );
       if (hasBorders) {
-        return Container(
+        avatarWidget = Container(
           width: size,
           height: size,
           decoration: BoxDecoration(
@@ -46,10 +59,30 @@ class AppAvatar extends ConsumerWidget {
           child: avatarImage,
         );
       } else {
-        return avatarImage;
+        avatarWidget = avatarImage;
       }
+    } else {
+      avatarWidget = _defaultIcon();
     }
-    return _defaultIcon();
+
+    // Ajouter l'indicateur de présence si nécessaire
+    if (isOnline) {
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          avatarWidget,
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: OnlineIndicator(
+              size: size * 0.25, // 25% de la taille de l'avatar
+            ),
+          ),
+        ],
+      );
+    }
+
+    return avatarWidget;
   }
 
   Widget _defaultIcon() {
