@@ -18,7 +18,6 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
 
   final Map<String, RealtimeChannel> _channels = {};
   final Map<String, StreamController<ISet<String>>> _controllers = {};
-  final Map<String, Timer?> _debounceTimers = {};
 
   StreamController<FriendshipIds>? _allFriendshipsController;
 
@@ -266,65 +265,53 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
     String userId,
     StreamController<ISet<String>> controller,
   ) async {
-    final key = 'friends_$userId';
-    _debounceTimers[key]?.cancel();
-    _debounceTimers[key] = Timer(const Duration(milliseconds: 200), () async {
-      try {
-        final friendsIds = await _friendshipRepository.getFriendsIds(userId);
+    try {
+      final friendsIds = await _friendshipRepository.getFriendsIds(userId);
 
-        if (!controller.isClosed) {
-          controller.add(friendsIds);
-        }
-      } catch (e) {
-        if (!controller.isClosed) {
-          controller.addError(e);
-        }
+      if (!controller.isClosed) {
+        controller.add(friendsIds);
       }
-    });
+    } catch (e) {
+      if (!controller.isClosed) {
+        controller.addError(e);
+      }
+    }
   }
 
   Future<void> _handlePendingChange(
     String userId,
     StreamController<ISet<String>> controller,
   ) async {
-    final key = 'pending_$userId';
-    _debounceTimers[key]?.cancel();
-    _debounceTimers[key] = Timer(const Duration(milliseconds: 200), () async {
-      try {
-        final pendingIds =
-            await _friendshipRepository.getCurrentUserPendingFriendsIds();
+    try {
+      final pendingIds =
+          await _friendshipRepository.getCurrentUserPendingFriendsIds();
 
-        if (!controller.isClosed) {
-          controller.add(pendingIds);
-        }
-      } catch (e) {
-        if (!controller.isClosed) {
-          controller.addError(e);
-        }
+      if (!controller.isClosed) {
+        controller.add(pendingIds);
       }
-    });
+    } catch (e) {
+      if (!controller.isClosed) {
+        controller.addError(e);
+      }
+    }
   }
 
   Future<void> _handleRequestedChange(
     String userId,
     StreamController<ISet<String>> controller,
   ) async {
-    final key = 'requested_$userId';
-    _debounceTimers[key]?.cancel();
-    _debounceTimers[key] = Timer(const Duration(milliseconds: 200), () async {
-      try {
-        final requestedIds =
-            await _friendshipRepository.getCurrentUserRequestedFriendsIds();
+    try {
+      final requestedIds =
+          await _friendshipRepository.getCurrentUserRequestedFriendsIds();
 
-        if (!controller.isClosed) {
-          controller.add(requestedIds);
-        }
-      } catch (e) {
-        if (!controller.isClosed) {
-          controller.addError(e);
-        }
+      if (!controller.isClosed) {
+        controller.add(requestedIds);
       }
-    });
+    } catch (e) {
+      if (!controller.isClosed) {
+        controller.addError(e);
+      }
+    }
   }
 
   void _cleanupStream(String key) {
@@ -336,11 +323,6 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
 
   @override
   Future<void> dispose() async {
-    for (final timer in _debounceTimers.values) {
-      timer?.cancel();
-    }
-    _debounceTimers.clear();
-
     for (final channel in _channels.values) {
       await channel.unsubscribe();
     }
