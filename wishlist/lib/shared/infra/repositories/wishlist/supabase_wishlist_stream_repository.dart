@@ -113,8 +113,8 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
     _loadInitialPublicWishlists(userId, controller);
 
     // Créer le channel Realtime
-    // Note: Pour les wishlists publiques, on écoute tous les changements
-    // de l'utilisateur et on filtre côté client
+    // Note: Supabase Realtime ne supporte qu'un seul filtre PostgresChangeFilter
+    // On filtre par id_owner et on vérifie is_public dans le payload
     final channel = _client
         .channel('wishlists_public_user_$userId')
         .onPostgresChanges(
@@ -127,7 +127,7 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
             value: userId,
           ),
           callback: (payload) =>
-              _handlePublicWishlistChange(userId, controller),
+              _handlePublicWishlistChange(userId, controller, payload),
         )
         .subscribe();
 
@@ -204,8 +204,21 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
   Future<void> _handlePublicWishlistChange(
     String userId,
     StreamController<IList<Wishlist>> controller,
+    PostgresChangePayload payload,
   ) async {
     try {
+      // Optimisation: vérifier si la wishlist concernée est publique
+      // avant de recharger toutes les wishlists
+      final record = payload.eventType == PostgresChangeEvent.delete
+          ? payload.oldRecord
+          : payload.newRecord;
+
+      // Si la wishlist n'est pas publique, ignorer l'événement
+      if (record['is_public'] != true) {
+        return;
+      }
+
+      // Recharger uniquement si c'est une wishlist publique
       final wishlists =
           await _wishlistRepository.getPublicWishlistsByUser(userId);
       if (!controller.isClosed) {
