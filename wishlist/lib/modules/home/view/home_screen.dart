@@ -17,10 +17,7 @@ class HomeScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final wishlists = ref.watch(wishlistsRealtimeProvider);
 
-    /// 🔄 Force un rechargement des données
-    /// Utile en cas d'erreur réseau ou pour rassurer l'utilisateur
     Future<void> refreshWishlists() async {
-      // Invalider le provider force une reconnexion Realtime et un rechargement
       ref.invalidate(wishlistsRealtimeProvider);
 
       // Attendre que le nouveau stream soit initialisé

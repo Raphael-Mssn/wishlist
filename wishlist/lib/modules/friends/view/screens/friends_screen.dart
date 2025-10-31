@@ -56,10 +56,7 @@ class FriendsScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final friendsData = ref.watch(friendshipsRealtimeProvider);
 
-    /// 🔄 Force un rechargement des données
-    /// Utile en cas d'erreur réseau ou pour rassurer l'utilisateur
     Future<void> refreshFriends() async {
-      // Invalider le provider force une reconnexion Realtime et un rechargement
       ref.invalidate(friendshipsRealtimeProvider);
 
       // Attendre que le nouveau stream soit initialisé

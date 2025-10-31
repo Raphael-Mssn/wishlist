@@ -158,8 +158,6 @@ class _WishListState extends ConsumerState<_WishList> {
   @override
   Widget build(BuildContext context) {
     return AppRefreshIndicator(
-      /// 🔄 Force un rechargement des données
-      /// Utile en cas d'erreur réseau ou pour rassurer l'utilisateur
       onRefresh: widget.onRefresh,
       child: _isInitialLoad
           ? _buildStaggeredListView()

@@ -124,10 +124,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     );
   }
 
-  /// 🔄 Force un rechargement des données
-  /// Utile en cas d'erreur réseau ou pour rassurer l'utilisateur
   Future<void> refreshWishlistScreen() async {
-    // Invalider le provider composite force une reconnexion Realtime et un rechargement
     ref.invalidate(wishlistScreenDataRealtimeProvider(widget.wishlistId));
 
     // Attendre un peu pour voir le feedback visuel du RefreshIndicator

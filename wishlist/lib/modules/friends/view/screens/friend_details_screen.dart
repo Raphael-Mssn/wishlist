@@ -20,10 +20,7 @@ class FriendDetailsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final friendDetails = ref.watch(friendDetailsRealtimeProvider(friendId));
 
-    /// 🔄 Force un rechargement des données
-    /// Utile en cas d'erreur réseau ou pour rassurer l'utilisateur
     Future<void> refreshFriendDetails() async {
-      // Invalider le provider force une reconnexion Realtime et un rechargement
       ref.invalidate(friendDetailsRealtimeProvider(friendId));
 
       // Attendre que le nouveau stream soit initialisé
