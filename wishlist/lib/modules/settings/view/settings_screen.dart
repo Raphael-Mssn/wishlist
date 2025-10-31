@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
+import 'package:wishlist/shared/infra/current_user_profile_provider.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -19,6 +20,7 @@ class SettingsScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final currentUserEmail =
         ref.read(userServiceProvider).getCurrentUserEmail();
+    final currentUserProfile = ref.watch(currentUserProfileProvider);
 
     return PageLayout(
       title: l10n.settingsScreenTitle,
@@ -33,7 +35,22 @@ class SettingsScreen extends ConsumerWidget {
               ],
             ),
           ),
-          const Gap(32),
+          const Gap(8),
+          Center(
+            child: currentUserProfile.when(
+              loading: CircularProgressIndicator.new,
+              data: (currentUser) {
+                return Text(
+                  currentUser.profile.pseudo,
+                  style: AppTextStyles.small.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
+              error: (error, stackTrace) => const SizedBox.shrink(),
+            ),
+          ),
+          const Gap(16),
           Row(
             children: [
               Expanded(
@@ -59,6 +76,22 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const Gap(40),
           PrimaryButton(
+            text: l10n.settingsScreenPseudoModify,
+            onPressed: () {
+              ChangePseudoRoute().push(context);
+            },
+            style: BaseButtonStyle.medium,
+          ),
+          const Gap(24),
+          PrimaryButton(
+            text: l10n.settingsScreenPasswordModify,
+            onPressed: () {
+              ChangePasswordRoute().push(context);
+            },
+            style: BaseButtonStyle.medium,
+          ),
+          const Gap(24),
+          PrimaryButton(
             text: l10n.settingsScreenDisconnect,
             onPressed: () {
               showConfirmDialog(
@@ -69,14 +102,6 @@ class SettingsScreen extends ConsumerWidget {
                   await ref.read(authServiceProvider).signOut(context, ref);
                 },
               );
-            },
-            style: BaseButtonStyle.medium,
-          ),
-          const Gap(24),
-          PrimaryButton(
-            text: l10n.settingsScreenPasswordModify,
-            onPressed: () {
-              ChangePasswordRoute().push(context);
             },
             style: BaseButtonStyle.medium,
           ),

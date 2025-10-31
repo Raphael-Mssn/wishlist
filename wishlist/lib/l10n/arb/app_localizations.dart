@@ -236,6 +236,12 @@ abstract class AppLocalizations {
   /// **'Modifier mon mot de passe'**
   String get settingsScreenPasswordModify;
 
+  /// No description provided for @settingsScreenPseudoModify.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier mon pseudo'**
+  String get settingsScreenPseudoModify;
+
   /// No description provided for @changePasswordScreenTitle.
   ///
   /// In fr, this message translates to:
@@ -283,6 +289,30 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le nouveau mot de passe doit être différent de l\'ancien'**
   String get newPasswordShouldBeDifferent;
+
+  /// No description provided for @changePseudoScreenTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pseudo'**
+  String get changePseudoScreenTitle;
+
+  /// No description provided for @newPseudoField.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau pseudo'**
+  String get newPseudoField;
+
+  /// No description provided for @changePseudoConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get changePseudoConfirm;
+
+  /// No description provided for @changePseudoSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pseudo modifié avec succès'**
+  String get changePseudoSuccess;
 
   /// No description provided for @settingsScreenDeleteAccount.
   ///

@@ -80,6 +80,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsScreenPasswordModify => 'Modifier mon mot de passe';
 
   @override
+  String get settingsScreenPseudoModify => 'Modifier mon pseudo';
+
+  @override
   String get changePasswordScreenTitle => 'Mot de passe';
 
   @override
@@ -103,6 +106,18 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get newPasswordShouldBeDifferent =>
       'Le nouveau mot de passe doit être différent de l\'ancien';
+
+  @override
+  String get changePseudoScreenTitle => 'Pseudo';
+
+  @override
+  String get newPseudoField => 'Nouveau pseudo';
+
+  @override
+  String get changePseudoConfirm => 'Modifier';
+
+  @override
+  String get changePseudoSuccess => 'Pseudo modifié avec succès';
 
   @override
   String get settingsScreenDeleteAccount => 'Supprimer mon compte';
