@@ -8,11 +8,6 @@ abstract class WishStreamRepository {
   /// Émet une nouvelle liste à chaque changement (INSERT, UPDATE, DELETE)
   Stream<IList<Wish>> watchWishsFromWishlist(int wishlistId);
 
-  /// Écoute les changements sur un wish spécifique
-  ///
-  /// Émet le wish mis à jour à chaque changement
-  Stream<Wish?> watchWishById(int wishId);
-
   /// Ferme tous les streams et libère les ressources
   Future<void> dispose();
 }

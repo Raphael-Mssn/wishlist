@@ -27,12 +27,3 @@ final watchWishsFromWishlistProvider =
   final repository = ref.watch(wishStreamRepositoryProvider);
   return repository.watchWishsFromWishlist(wishlistId);
 });
-
-/// Stream provider pour un wish spécifique en temps réel
-///
-/// Émet `null` si le wish est supprimé
-final watchWishByIdProvider =
-    StreamProvider.autoDispose.family<Wish?, int>((ref, wishId) {
-  final repository = ref.watch(wishStreamRepositoryProvider);
-  return repository.watchWishById(wishId);
-});
