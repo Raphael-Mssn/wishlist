@@ -3,9 +3,6 @@ import 'package:wishlist/shared/infra/repositories/wish_taken_by_user/supabase_w
 import 'package:wishlist/shared/infra/repositories/wish_taken_by_user/wish_taken_by_user_stream_repository.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 
-/// Provider pour le repository de stream des wish_taken_by_user
-///
-/// Gère automatiquement le lifecycle (dispose) du repository
 final wishTakenByUserStreamRepositoryProvider =
     Provider.autoDispose<WishTakenByUserStreamRepository>((ref) {
   final client = ref.watch(supabaseClientProvider);

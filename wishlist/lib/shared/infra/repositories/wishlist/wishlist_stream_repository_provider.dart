@@ -4,7 +4,6 @@ import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_repository_
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_stream_repository.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 
-/// Provider pour le repository de streaming des wishlists
 final wishlistStreamRepositoryProvider =
     Provider<WishlistStreamRepository>((ref) {
   final client = ref.watch(supabaseClientProvider);
@@ -15,7 +14,6 @@ final wishlistStreamRepositoryProvider =
     wishlistRepository,
   );
 
-  // Cleanup automatique quand le provider est disposed
   ref.onDispose(repository.dispose);
 
   return repository;

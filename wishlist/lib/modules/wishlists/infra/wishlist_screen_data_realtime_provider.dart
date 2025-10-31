@@ -6,9 +6,6 @@ import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_streams_pro
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 
-/// Version Realtime du wishlistScreenDataProvider
-///
-/// Combine les données de la wishlist et ses wishs en temps réel
 final wishlistScreenDataRealtimeProvider =
     Provider.family<AsyncValue<WishlistScreenData>, int>((ref, wishlistId) {
   final wishlist = ref.watch(watchWishlistByIdProvider(wishlistId));

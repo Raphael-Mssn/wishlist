@@ -56,7 +56,6 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         _searchQuery = _searchController.text.toLowerCase();
       });
     });
-    // Avec Realtime, les données se chargent automatiquement !
   }
 
   @override
@@ -101,7 +100,6 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         isFavourite: !wish.isFavourite,
       );
 
-      // Avec Realtime, on met à jour via le provider d'actions et l'UI se met à jour automatiquement
       await ref.read(wishActionsProvider).updateWish(updatedWish);
     } catch (e) {
       if (mounted) {

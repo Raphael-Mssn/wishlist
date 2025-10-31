@@ -4,20 +4,13 @@ import 'package:wishlist/shared/infra/repositories/friendship/friendship_stream_
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 
-/// Version Realtime du friendshipsProvider
-///
-/// Cette version écoute les changements de friendships en temps réel
-/// et recharge les détails des utilisateurs quand nécessaire
 final friendshipsRealtimeProvider = StreamProvider<FriendsData>((ref) {
   final userService = ref.watch(userServiceProvider);
   final friendshipRepo = ref.watch(friendshipStreamRepositoryProvider);
 
-  // 🎯 UN SEUL stream qui émet tous les IDs en une fois
   final allFriendshipsStream = friendshipRepo.watchCurrentUserAllFriendships();
 
-  // Transformer le stream d'IDs en stream de FriendsData
   return allFriendshipsStream.asyncMap((friendshipIds) async {
-    // Charger les détails des utilisateurs en parallèle
     final results = await Future.wait([
       _loadUsersFromIds(userService, friendshipIds.friendsIds),
       _loadUsersFromIds(userService, friendshipIds.pendingIds),
@@ -36,12 +29,13 @@ final friendshipsRealtimeProvider = StreamProvider<FriendsData>((ref) {
   });
 });
 
-/// Charge les détails des utilisateurs à partir de leurs IDs
 Future<IList<AppUser>> _loadUsersFromIds(
   UserService userService,
   ISet<String> userIds,
 ) async {
-  if (userIds.isEmpty) return const IListConst([]);
+  if (userIds.isEmpty) {
+    return const IListConst([]);
+  }
 
   try {
     final users = await Future.wait(
@@ -49,7 +43,6 @@ Future<IList<AppUser>> _loadUsersFromIds(
     );
     return users.toIList();
   } catch (e) {
-    // En cas d'erreur, retourner une liste vide
     return const IListConst([]);
   }
 }

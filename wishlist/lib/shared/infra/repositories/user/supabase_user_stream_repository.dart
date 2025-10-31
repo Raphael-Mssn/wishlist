@@ -18,23 +18,19 @@ class SupabaseUserStreamRepository implements UserStreamRepository {
   Stream<Profile?> watchProfileById(String userId) {
     final key = 'profile_$userId';
 
-    // Si le stream existe déjà, le retourner
     // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupStream
     final existingController = _controllers[key];
     if (existingController != null) {
       return existingController.stream;
     }
 
-    // Créer un nouveau controller broadcast
     final controller = StreamController<Profile?>.broadcast(
       onCancel: () => _cleanupStream(key),
     );
     _controllers[key] = controller;
 
-    // Charger les données initiales
     _loadInitialProfile(userId, controller);
 
-    // Créer le channel Realtime
     final channel = _client
         .channel('profile_$userId')
         .onPostgresChanges(
@@ -91,7 +87,6 @@ class SupabaseUserStreamRepository implements UserStreamRepository {
     PostgresChangePayload payload,
   ) async {
     try {
-      // Si c'est une suppression, émettre null
       if (payload.eventType == PostgresChangeEvent.delete) {
         if (!controller.isClosed) {
           controller.add(null);
@@ -99,7 +94,6 @@ class SupabaseUserStreamRepository implements UserStreamRepository {
         return;
       }
 
-      // Sinon, parser les nouvelles données
       final profile = Profile.fromJson(payload.newRecord);
       if (!controller.isClosed) {
         controller.add(profile);

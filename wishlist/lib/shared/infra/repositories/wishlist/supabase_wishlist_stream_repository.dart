@@ -24,23 +24,19 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
   Stream<IList<Wishlist>> watchWishlistsByUser(String userId) {
     final key = 'user_$userId';
 
-    // Si le stream existe déjà, le retourner
     // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupStream
     final existingController = _controllers[key];
     if (existingController != null) {
       return existingController.stream;
     }
 
-    // Créer un nouveau controller
     final controller = StreamController<IList<Wishlist>>.broadcast(
       onCancel: () => _cleanupStream(key),
     );
     _controllers[key] = controller;
 
-    // Charger les données initiales
     _loadInitialWishlists(userId, controller);
 
-    // Créer le channel Realtime
     final channel = _client
         .channel('wishlists_user_$userId')
         .onPostgresChanges(
@@ -65,23 +61,19 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
   Stream<Wishlist?> watchWishlistById(int wishlistId) {
     final key = 'wishlist_$wishlistId';
 
-    // Si le stream existe déjà, le retourner
     // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupSingleStream
     final existingController = _singleControllers[key];
     if (existingController != null) {
       return existingController.stream;
     }
 
-    // Créer un nouveau controller broadcast
     final controller = StreamController<Wishlist?>.broadcast(
       onCancel: () => _cleanupSingleStream(key),
     );
     _singleControllers[key] = controller;
 
-    // Charger les données initiales
     _loadInitialWishlist(wishlistId, controller);
 
-    // Créer le channel Realtime
     final channel = _client
         .channel('wishlist_$wishlistId')
         .onPostgresChanges(
@@ -107,20 +99,17 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
   Stream<IList<Wishlist>> watchPublicWishlistsByUser(String userId) {
     final key = 'user_public_$userId';
 
-    // Si le stream existe déjà, le retourner
     // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupStream
     final existingController = _controllers[key];
     if (existingController != null) {
       return existingController.stream;
     }
 
-    // Créer un nouveau controller
     final controller = StreamController<IList<Wishlist>>.broadcast(
       onCancel: () => _cleanupStream(key),
     );
     _controllers[key] = controller;
 
-    // Charger les données initiales
     _loadInitialPublicWishlists(userId, controller);
 
     // Créer le channel Realtime
@@ -200,7 +189,6 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
     String userId,
     StreamController<IList<Wishlist>> controller,
   ) async {
-    // Recharger toutes les wishlists de l'utilisateur
     try {
       final wishlists = await _wishlistRepository.getWishlistsByUser(userId);
       if (!controller.isClosed) {
@@ -217,7 +205,6 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
     String userId,
     StreamController<IList<Wishlist>> controller,
   ) async {
-    // Recharger toutes les wishlists publiques de l'utilisateur
     try {
       final wishlists =
           await _wishlistRepository.getPublicWishlistsByUser(userId);
@@ -237,7 +224,6 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
     PostgresChangePayload payload,
   ) async {
     try {
-      // Si c'est une suppression, émettre null
       if (payload.eventType == PostgresChangeEvent.delete) {
         if (!controller.isClosed) {
           controller.add(null);
@@ -245,7 +231,6 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
         return;
       }
 
-      // Sinon, recharger la wishlist
       final wishlist = await _wishlistRepository.getWishlistById(wishlistId);
       if (!controller.isClosed) {
         controller.add(wishlist);

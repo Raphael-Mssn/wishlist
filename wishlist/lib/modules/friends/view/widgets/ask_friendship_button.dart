@@ -27,17 +27,16 @@ class _AskFriendshipButtonState extends ConsumerState<AskFriendshipButton> {
 
     try {
       if (status == FriendshipStatus.none) {
-        // Optimistic UI : afficher PENDING immédiatement
         setState(() => _optimisticStatus = FriendshipStatus.pending);
         await actions.askFriendship(widget.appUser.user.id);
       } else if (status == FriendshipStatus.pending) {
-        // Optimistic UI : afficher NONE immédiatement
         setState(() => _optimisticStatus = FriendshipStatus.none);
         await actions.cancelFriendshipRequest(widget.appUser.user.id);
       }
     } catch (e) {
-      // En cas d'erreur, on annule l'optimistic UI
-      if (mounted) setState(() => _optimisticStatus = null);
+      if (mounted) {
+        setState(() => _optimisticStatus = null);
+      }
       rethrow;
     }
   }

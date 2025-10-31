@@ -20,7 +20,6 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
   final Map<String, StreamController<ISet<String>>> _controllers = {};
   final Map<String, Timer?> _debounceTimers = {};
 
-  // Controller pour le stream combiné
   StreamController<FriendshipIds>? _allFriendshipsController;
 
   @override
@@ -28,23 +27,19 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
     final currentUserId = _client.auth.currentUserNonNull.id;
     final key = 'all_friendships_$currentUserId';
 
-    // Si le stream existe déjà, le retourner
     final existingController = _allFriendshipsController;
     if (existingController != null) {
       return existingController.stream;
     }
 
-    // Créer un nouveau controller et l'assigner à la variable d'instance
     // ignore: close_sinks - Le controller sera fermé dans _cleanupAllFriendshipsStream
     final newController = StreamController<FriendshipIds>.broadcast(
       onCancel: _cleanupAllFriendshipsStream,
     );
     _allFriendshipsController = newController;
 
-    // Charger les données initiales
     _loadAllFriendships(currentUserId);
 
-    // Créer UN SEUL channel Realtime pour écouter TOUS les changements
     final channel = _client
         .channel('friendships_all_$currentUserId')
         .onPostgresChanges(
@@ -62,7 +57,6 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
 
   Future<void> _loadAllFriendships(String userId) async {
     try {
-      // Charger les 3 listes en parallèle
       final results = await Future.wait([
         _friendshipRepository.getFriendsIds(userId),
         _friendshipRepository.getCurrentUserPendingFriendsIds(),
@@ -116,24 +110,19 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
   Stream<ISet<String>> watchFriendsIds(String userId) {
     final key = 'friends_$userId';
 
-    // Si le stream existe déjà, le retourner
     // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupStream
     final existingController = _controllers[key];
     if (existingController != null) {
       return existingController.stream;
     }
 
-    // Créer un nouveau controller
     final controller = StreamController<ISet<String>>.broadcast(
       onCancel: () => _cleanupStream(key),
     );
     _controllers[key] = controller;
 
-    // Charger les données initiales
     _loadInitialFriends(userId, controller);
 
-    // Créer le channel Realtime
-    // Écouter les changements où l'utilisateur est impliqué (requester ou receiver)
     final channel = _client
         .channel('friendships_$userId')
         .onPostgresChanges(
@@ -160,23 +149,19 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
     final currentUserId = _client.auth.currentUserNonNull.id;
     final key = 'pending_$currentUserId';
 
-    // Si le stream existe déjà, le retourner
     // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupStream
     final existingController = _controllers[key];
     if (existingController != null) {
       return existingController.stream;
     }
 
-    // Créer un nouveau controller
     final controller = StreamController<ISet<String>>.broadcast(
       onCancel: () => _cleanupStream(key),
     );
     _controllers[key] = controller;
 
-    // Charger les données initiales
     _loadInitialPending(currentUserId, controller);
 
-    // Créer le channel Realtime
     final channel = _client
         .channel('friendships_pending_$currentUserId')
         .onPostgresChanges(
@@ -198,23 +183,19 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
     final currentUserId = _client.auth.currentUserNonNull.id;
     final key = 'requested_$currentUserId';
 
-    // Si le stream existe déjà, le retourner
     // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupStream
     final existingController = _controllers[key];
     if (existingController != null) {
       return existingController.stream;
     }
 
-    // Créer un nouveau controller
     final controller = StreamController<ISet<String>>.broadcast(
       onCancel: () => _cleanupStream(key),
     );
     _controllers[key] = controller;
 
-    // Charger les données initiales
     _loadInitialRequested(currentUserId, controller);
 
-    // Créer le channel Realtime
     final channel = _client
         .channel('friendships_requested_$currentUserId')
         .onPostgresChanges(
@@ -285,7 +266,6 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
     String userId,
     StreamController<ISet<String>> controller,
   ) async {
-    // ⏱️ Debounce : Annuler le timer précédent et en créer un nouveau
     final key = 'friends_$userId';
     _debounceTimers[key]?.cancel();
     _debounceTimers[key] = Timer(const Duration(milliseconds: 200), () async {
@@ -307,7 +287,6 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
     String userId,
     StreamController<ISet<String>> controller,
   ) async {
-    // ⏱️ Debounce : Annuler le timer précédent et en créer un nouveau
     final key = 'pending_$userId';
     _debounceTimers[key]?.cancel();
     _debounceTimers[key] = Timer(const Duration(milliseconds: 200), () async {
@@ -330,7 +309,6 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
     String userId,
     StreamController<ISet<String>> controller,
   ) async {
-    // ⏱️ Debounce : Annuler le timer précédent et en créer un nouveau
     final key = 'requested_$userId';
     _debounceTimers[key]?.cancel();
     _debounceTimers[key] = Timer(const Duration(milliseconds: 200), () async {
@@ -358,7 +336,6 @@ class SupabaseFriendshipStreamRepository implements FriendshipStreamRepository {
 
   @override
   Future<void> dispose() async {
-    // Annuler tous les timers
     for (final timer in _debounceTimers.values) {
       timer?.cancel();
     }

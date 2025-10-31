@@ -21,7 +21,6 @@ class FriendDetailsAppBar extends ConsumerWidget
     final l10n = context.l10n;
 
     try {
-      // Utiliser le provider d'actions, Realtime mettra à jour l'UI automatiquement
       await ref
           .read(friendshipActionsProvider)
           .removeFriendship(friend.user.id);

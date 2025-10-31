@@ -24,26 +24,21 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
   Stream<IList<Wish>> watchWishsFromWishlist(int wishlistId) {
     final key = 'wishlist_$wishlistId';
 
-    // Si le stream existe déjà, le retourner
     // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupStream
     final existingController = _controllers[key];
     if (existingController != null) {
       return existingController.stream;
     }
 
-    // Créer un nouveau controller
     final controller = StreamController<IList<Wish>>.broadcast(
       onCancel: () => _cleanupStream(key),
     );
     _controllers[key] = controller;
 
-    // Charger les données initiales
     _loadInitialWishs(wishlistId, controller);
 
-    // Créer le channel Realtime avec écoute sur wishs ET wish_taken_by_user
     final channel = _client
         .channel('wishs_wishlist_$wishlistId')
-        // Écouter les changements sur la table wishs
         .onPostgresChanges(
           event: PostgresChangeEvent.all,
           schema: 'public',
@@ -78,23 +73,19 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
   Stream<Wish?> watchWishById(int wishId) {
     final key = 'wish_$wishId';
 
-    // Si le stream existe déjà, le retourner
     // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupSingleStream
     final existingController = _singleControllers[key];
     if (existingController != null) {
       return existingController.stream;
     }
 
-    // Créer un nouveau controller broadcast
     final controller = StreamController<Wish?>.broadcast(
       onCancel: () => _cleanupSingleStream(key),
     );
     _singleControllers[key] = controller;
 
-    // Charger les données initiales
     _loadInitialWish(wishId, controller);
 
-    // Créer le channel Realtime
     final channel = _client
         .channel('wish_$wishId')
         .onPostgresChanges(
@@ -151,7 +142,6 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
     int wishlistId,
     StreamController<IList<Wish>> controller,
   ) async {
-    // Recharger tous les wishs de la wishlist
     try {
       final wishs = await _wishRepository.getWishsFromWishlist(wishlistId);
       if (!controller.isClosed) {
@@ -170,7 +160,6 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
     PostgresChangePayload payload,
   ) async {
     try {
-      // Si c'est une suppression, émettre null
       if (payload.eventType == PostgresChangeEvent.delete) {
         if (!controller.isClosed) {
           controller.add(null);
@@ -178,7 +167,6 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
         return;
       }
 
-      // Sinon, parser les nouvelles données
       final wish = Wish.fromJson(payload.newRecord);
       if (!controller.isClosed) {
         controller.add(wish);

@@ -11,11 +11,6 @@ import 'package:wishlist/shared/infra/wish_service.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
 import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 
-/// Provider Realtime pour les détails d'un ami
-///
-/// ✨ Écoute les changements en temps réel :
-/// - Profil de l'ami
-/// - Wishlists publiques de l'ami
 final friendDetailsRealtimeProvider =
     StreamProvider.family.autoDispose<FriendDetails, String>((ref, userId) {
   final userStreamRepo = ref.watch(userStreamRepositoryProvider);
@@ -39,10 +34,8 @@ final friendDetailsRealtimeProvider =
 
       // Charger les autres données (pas encore en Realtime)
       try {
-        // Charger l'AppUser complet (avec User et Profile)
         final appUser = await userService.getAppUserById(userId);
 
-        // Charger les amis mutuels
         final mutualFriendsIds =
             await friendshipRepo.getMutualFriendsIds(userId);
         final mutualFriendsList = await Future.wait(
