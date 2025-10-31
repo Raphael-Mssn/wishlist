@@ -26,7 +26,7 @@ class WishlistContent extends ConsumerWidget {
     required this.onTapWish,
     required this.onAddWish,
     required this.onFavoriteToggle,
-    this.onRefresh,
+    required this.onRefresh,
   });
 
   static const double _verticalPadding = 16;
@@ -45,7 +45,7 @@ class WishlistContent extends ConsumerWidget {
   }) onTapWish;
   final Function(BuildContext, Wishlist) onAddWish;
   final Function(Wish) onFavoriteToggle;
-  final Future<void> Function()? onRefresh;
+  final Future<void> Function() onRefresh;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -107,7 +107,7 @@ class _WishList extends ConsumerStatefulWidget {
     required this.statCardSelected,
     required this.onTapWish,
     required this.onFavoriteToggle,
-    this.onRefresh,
+    required this.onRefresh,
   });
 
   static const double _bottomPadding = 120;
@@ -124,7 +124,7 @@ class _WishList extends ConsumerStatefulWidget {
     WishlistStatsCardType? cardType,
   }) onTapWish;
   final Function(Wish) onFavoriteToggle;
-  final Future<void> Function()? onRefresh;
+  final Future<void> Function() onRefresh;
 
   @override
   ConsumerState<_WishList> createState() => _WishListState();
@@ -160,11 +160,7 @@ class _WishListState extends ConsumerState<_WishList> {
     return AppRefreshIndicator(
       /// 🔄 Force un rechargement des données
       /// Utile en cas d'erreur réseau ou pour rassurer l'utilisateur
-      onRefresh: widget.onRefresh ??
-          () async {
-            // Fallback : simple délai si aucun callback fourni
-            await Future.delayed(const Duration(milliseconds: 300));
-          },
+      onRefresh: widget.onRefresh,
       child: _isInitialLoad
           ? _buildStaggeredListView()
           : _buildImplicitlyAnimatedList(),
