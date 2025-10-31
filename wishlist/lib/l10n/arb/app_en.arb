@@ -111,7 +111,7 @@
   "avatarLoadError": "Error loading image",
   "forgotPasswordButton": "Forgot password?",
   "forgotPasswordTitle": "Forgot password",
-  "forgotPasswordDescription": "Enter your email address and we will send you a link to reset your password.",
+  "forgotPasswordDescription": "Please enter your email address to receive the password reset link.",
   "forgotPasswordSendButton": "Send",
   "forgotPasswordEmailSent": "A password reset email has been sent!",
   "resetPasswordTitle": "Reset password",

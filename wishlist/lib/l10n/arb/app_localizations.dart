@@ -767,7 +767,7 @@ abstract class AppLocalizations {
   /// No description provided for @forgotPasswordDescription.
   ///
   /// In fr, this message translates to:
-  /// **'Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.'**
+  /// **'Veuillez saisir votre adresse e-mail afin de recevoir le lien de réinitialisation de votre mot de passe.'**
   String get forgotPasswordDescription;
 
   /// No description provided for @forgotPasswordSendButton.

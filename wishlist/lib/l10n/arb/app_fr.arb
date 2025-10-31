@@ -111,7 +111,7 @@
   "avatarLoadError": "Erreur lors du chargement de l'image",
   "forgotPasswordButton": "Mot de passe oublié ?",
   "forgotPasswordTitle": "Mot de passe oublié",
-  "forgotPasswordDescription": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+  "forgotPasswordDescription": "Veuillez saisir votre adresse e-mail afin de recevoir le lien de réinitialisation de votre mot de passe.",
   "forgotPasswordSendButton": "Envoyer",
   "forgotPasswordEmailSent": "Un e-mail de réinitialisation a été envoyé !",
   "resetPasswordTitle": "Réinitialiser le mot de passe",

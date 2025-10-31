@@ -372,7 +372,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgotPasswordDescription =>
-      'Enter your email address and we will send you a link to reset your password.';
+      'Please enter your email address to receive the password reset link.';
 
   @override
   String get forgotPasswordSendButton => 'Send';
