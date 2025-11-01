@@ -781,6 +781,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Erreur lors du chargement de l\'image'**
   String get avatarLoadError;
+
+  /// No description provided for @forgotPasswordButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe oublié ?'**
+  String get forgotPasswordButton;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe oublié'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Veuillez saisir votre adresse e-mail afin de recevoir le lien de réinitialisation de votre mot de passe.'**
+  String get forgotPasswordDescription;
+
+  /// No description provided for @forgotPasswordSendButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer'**
+  String get forgotPasswordSendButton;
+
+  /// No description provided for @forgotPasswordEmailSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un e-mail de réinitialisation a été envoyé !'**
+  String get forgotPasswordEmailSent;
+
+  /// No description provided for @resetPasswordTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réinitialiser le mot de passe'**
+  String get resetPasswordTitle;
+
+  /// No description provided for @resetPasswordDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisissez votre nouveau mot de passe.'**
+  String get resetPasswordDescription;
+
+  /// No description provided for @resetPasswordConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réinitialiser'**
+  String get resetPasswordConfirm;
+
+  /// No description provided for @resetPasswordSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe réinitialisé avec succès ! Reconnectez-vous avec votre nouveau mot de passe.'**
+  String get resetPasswordSuccess;
+
+  /// No description provided for @resetPasswordLinkExpired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le lien de réinitialisation a expiré. Veuillez en demander un nouveau.'**
+  String get resetPasswordLinkExpired;
 }
 
 class _AppLocalizationsDelegate
