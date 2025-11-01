@@ -75,6 +75,9 @@ class AppWavePattern extends StatelessWidget {
     final finalPatternColor =
         patternColor ?? AppColors.lighten(backgroundColor);
 
+    // Active l'expansion uniquement pour les rotations déterministes
+    final useExpansion = rotationType == WaveRotationType.deterministic;
+
     // Si onTap est fourni, utiliser l'architecture avec splash
     if (onTap != null) {
       return ClipRRect(
@@ -98,6 +101,7 @@ class AppWavePattern extends StatelessWidget {
                     amplitude: finalParams.amplitude,
                     angleVariation: finalParams.angleVariation,
                     rotationAngleDegrees: finalRotation,
+                    useExpansion: useExpansion,
                   ),
                   backgroundColor: backgroundColor,
                 ),
@@ -133,6 +137,7 @@ class AppWavePattern extends StatelessWidget {
         amplitude: finalParams.amplitude,
         angleVariation: finalParams.angleVariation,
         rotationAngleDegrees: finalRotation,
+        useExpansion: useExpansion,
       ),
       borderRadius: borderRadius,
       backgroundColor: backgroundColor,

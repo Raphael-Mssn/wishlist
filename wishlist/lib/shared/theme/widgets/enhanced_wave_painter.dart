@@ -12,6 +12,8 @@ class EnhancedWavePainter extends PatternBox {
     this.amplitude = 10,
     this.angleVariation = 0.0, // Variation d'angle en radians
     double rotationAngleDegrees = 0.0, // Rotation globale en degrés
+    this.useExpansion =
+        false, // Active l'expansion de la zone de dessin avec la rotation
     bool? repaint,
   })  : rotationAngle = rotationAngleDegrees * (pi / 180),
         super(
@@ -26,6 +28,7 @@ class EnhancedWavePainter extends PatternBox {
   final double amplitude;
   final double angleVariation; // Variation d'angle en radians
   final double rotationAngle;
+  final bool useExpansion;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -36,8 +39,9 @@ class EnhancedWavePainter extends PatternBox {
 
     canvas.save();
 
-    // Applique la rotation globale si nécessaire
-    if (rotationAngle != 0) {
+    // Applique la rotation avec ou sans expansion
+    if (rotationAngle != 0 || useExpansion) {
+      // Rotation avec expansion : agrandit la zone de dessin
       final center = Offset(size.width / 2, size.height / 2);
 
       // Agrandit la zone de dessin pour couvrir tout le widget après rotation
@@ -111,6 +115,7 @@ class EnhancedWavePainter extends PatternBox {
           oldDelegate.amplitude != amplitude ||
           oldDelegate.angleVariation != angleVariation ||
           oldDelegate.rotationAngle != rotationAngle ||
+          oldDelegate.useExpansion != useExpansion ||
           oldDelegate.color != color ||
           oldDelegate.thickness != thickness ||
           oldDelegate.gap != gap;
