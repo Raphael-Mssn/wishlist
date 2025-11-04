@@ -207,18 +207,6 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
     PostgresChangePayload payload,
   ) async {
     try {
-      // Optimisation: vérifier si la wishlist concernée est publique
-      // avant de recharger toutes les wishlists
-      final record = payload.eventType == PostgresChangeEvent.delete
-          ? payload.oldRecord
-          : payload.newRecord;
-
-      // Si la wishlist n'est pas publique, ignorer l'événement
-      if (record['is_public'] != true) {
-        return;
-      }
-
-      // Recharger uniquement si c'est une wishlist publique
       final wishlists =
           await _wishlistRepository.getPublicWishlistsByUser(userId);
       if (!controller.isClosed) {
