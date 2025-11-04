@@ -62,27 +62,31 @@ class BookedWishCard extends StatelessWidget {
               ),
               const Gap(16),
               Expanded(
-                child: RichText(
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(
-                    style: AppTextStyles.small.copyWith(
-                      color: AppColors.darkGrey,
-                      fontWeight: FontWeight.bold,
-                      height: 1.2,
-                    ),
-                    children: [
-                      TextSpan(text: wish.name),
-                      TextSpan(
-                        text: ' (${bookedWish.wishlistName})',
-                        style: AppTextStyles.smaller.copyWith(
-                          color: AppColors.makara,
-                          fontWeight: FontWeight.normal,
-                          height: 1.2,
-                        ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      wish.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.small.copyWith(
+                        color: AppColors.darkGrey,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
                       ),
-                    ],
-                  ),
+                    ),
+                    Text(
+                      bookedWish.wishlistName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.smaller.copyWith(
+                        color: AppColors.makara,
+                        fontWeight: FontWeight.normal,
+                        height: 1.2,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               if (price != null)
