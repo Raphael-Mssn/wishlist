@@ -68,7 +68,9 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   ) {
     // Filtrer par recherche
     final filtered = bookedWishes.where((bookedWish) {
-      if (_searchQuery.isEmpty) return true;
+      if (_searchQuery.isEmpty) {
+        return true;
+      }
 
       final wishName = bookedWish.wish.name.toLowerCase();
       final ownerPseudo = bookedWish.ownerPseudo.toLowerCase();
