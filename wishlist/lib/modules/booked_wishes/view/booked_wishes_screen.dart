@@ -349,6 +349,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
                   avatarUrl: firstWish.ownerAvatarUrl,
                   pseudo: firstWish.ownerPseudo,
                   wishCount: ownerWishes.length,
+                  onTap: () => _onUserTap(firstWish.ownerId),
                 ),
                 const Gap(_itemSpacing),
                 ...ownerWishes.map((bookedWish) {
@@ -375,5 +376,9 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
       cardType: WishlistStatsCardType.booked,
       onWishUpdated: _refreshBookedWishes,
     );
+  }
+
+  void _onUserTap(String userId) {
+    FriendDetailsRoute(userId).push(context);
   }
 }

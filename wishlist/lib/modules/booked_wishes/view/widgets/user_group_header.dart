@@ -10,42 +10,51 @@ class UserGroupHeader extends StatelessWidget {
     required this.pseudo,
     required this.wishCount,
     this.avatarUrl,
+    this.onTap,
     super.key,
   });
 
   final String pseudo;
   final String? avatarUrl;
   final int wishCount;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return Row(
-      children: [
-        AppAvatar(
-          avatarUrl: avatarUrl,
-          size: 32,
-          hasBorders: avatarUrl == null || avatarUrl!.isEmpty,
-        ),
-        const Gap(12),
-        Expanded(
-          child: Text(
-            pseudo,
-            style: AppTextStyles.medium.copyWith(
-              fontWeight: FontWeight.bold,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: [
+            AppAvatar(
+              avatarUrl: avatarUrl,
+              size: 32,
+              hasBorders: avatarUrl == null || avatarUrl!.isEmpty,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+            const Gap(12),
+            Expanded(
+              child: Text(
+                pseudo,
+                style: AppTextStyles.medium.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Text(
+              l10n.bookedWishCount(wishCount),
+              style: AppTextStyles.small.copyWith(
+                color: AppColors.makara,
+              ),
+            ),
+          ],
         ),
-        Text(
-          l10n.bookedWishCount(wishCount),
-          style: AppTextStyles.small.copyWith(
-            color: AppColors.makara,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
