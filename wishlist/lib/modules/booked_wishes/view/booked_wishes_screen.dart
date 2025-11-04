@@ -7,6 +7,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wish_card.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wishes_search_bar.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/user_group_header.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/booked_wishes_provider.dart';
 import 'package:wishlist/shared/models/booked_wish_sort_type.dart';
@@ -227,6 +228,12 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
                                 showConsultWishBottomSheet(
                                   context,
                                   bookedWish.wish,
+                                  cardType: WishlistStatsCardType.booked,
+                                  onWishUpdated: () {
+                                    ref
+                                        .read(bookedWishesProvider.notifier)
+                                        .loadBookedWishes();
+                                  },
                                 );
                               },
                             ),
