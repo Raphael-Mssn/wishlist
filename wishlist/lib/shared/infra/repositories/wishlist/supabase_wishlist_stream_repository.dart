@@ -18,7 +18,7 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
 
   final Map<String, RealtimeChannel> _channels = {};
   final Map<String, StreamController<IList<Wishlist>>> _controllers = {};
-  final Map<String, StreamController<Wishlist?>> _singleControllers = {};
+  final Map<String, StreamController<Wishlist>> _singleControllers = {};
 
   @override
   Stream<IList<Wishlist>> watchWishlistsByUser(String userId) {
@@ -58,7 +58,7 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
   }
 
   @override
-  Stream<Wishlist?> watchWishlistById(int wishlistId) {
+  Stream<Wishlist> watchWishlistById(int wishlistId) {
     final key = 'wishlist_$wishlistId';
 
     // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupSingleStream
@@ -67,7 +67,7 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
       return existingController.stream;
     }
 
-    final controller = StreamController<Wishlist?>.broadcast(
+    final controller = StreamController<Wishlist>.broadcast(
       onCancel: () => _cleanupSingleStream(key),
     );
     _singleControllers[key] = controller;

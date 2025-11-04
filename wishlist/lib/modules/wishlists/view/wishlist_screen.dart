@@ -138,16 +138,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
 
     return wishlistScreenData.when(
       data: (data) {
-        // Gérer le cas où la wishlist a été supprimée
         final wishlist = data.wishlist;
-        if (wishlist == null) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) {
-              Navigator.of(context).pop();
-            }
-          });
-          return const SizedBox.shrink();
-        }
         final wishlistTheme = getWishlistTheme(context, wishlist);
         final isMyWishlist = wishlist.idOwner ==
             ref.read(userServiceProvider).getCurrentUserId();
@@ -264,7 +255,6 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
   }) {
     // On sait que wishlist n'est pas null car on a déjà vérifié dans build()
     final wishlist = wishlistScreenData.wishlist;
-    if (wishlist == null) return const SizedBox.shrink();
     final wishs = _sortAndFilterWishs(wishlistScreenData.wishs);
 
     final wishsPending =

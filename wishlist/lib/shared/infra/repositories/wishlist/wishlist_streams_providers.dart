@@ -32,7 +32,7 @@ final watchWishlistsByUserProvider =
 ///
 /// Émet `null` si la wishlist est supprimée
 final watchWishlistByIdProvider =
-    StreamProvider.autoDispose.family<Wishlist?, int>((ref, wishlistId) {
+    StreamProvider.autoDispose.family<Wishlist, int>((ref, wishlistId) {
   final repository = ref.watch(wishlistStreamRepositoryProvider);
   return repository.watchWishlistById(wishlistId);
 });

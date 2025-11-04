@@ -16,9 +16,9 @@ final wishlistScreenDataRealtimeProvider =
   return wishlistScreenData;
 });
 
-typedef WishlistScreenData = (Wishlist? wishlist, IList<Wish> wishs);
+typedef WishlistScreenData = (Wishlist wishlist, IList<Wish> wishs);
 
 extension WishlistScreenDataGetters on WishlistScreenData {
-  Wishlist? get wishlist => $1;
+  Wishlist get wishlist => $1;
   IList<Wish> get wishs => $2;
 }
