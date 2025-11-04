@@ -72,6 +72,7 @@
   "wishlistStatusPending": "En attente",
   "wishlistStatusBooked": "Réservés",
   "wishlistSearchHint": "Rechercher un wish...",
+  "bookedWishesSearchHint": "Rechercher un wish ou un pseudo...",
   "wishlistNoWish": "Aucun wish",
   "wishlistNoWishBooked": "Aucun wish réservé",
   "wishlistNoWishBookedDisplayed": "Vous avez choisi de ne pas afficher les wishs réservés",

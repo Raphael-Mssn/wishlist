@@ -235,6 +235,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get wishlistSearchHint => 'Rechercher un wish...';
 
   @override
+  String get bookedWishesSearchHint => 'Rechercher un wish ou un pseudo...';
+
+  @override
   String get wishlistNoWish => 'Aucun wish';
 
   @override

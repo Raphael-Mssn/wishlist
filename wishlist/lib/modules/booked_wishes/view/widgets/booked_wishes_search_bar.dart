@@ -197,7 +197,7 @@ class _SearchField extends StatelessWidget {
         focusNode: searchFocusNode,
         textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
-          hintText: '${l10n.wishlistSearchHint} / Pseudo',
+          hintText: l10n.bookedWishesSearchHint,
           hintStyle: AppTextStyles.small.copyWith(
             color: AppColors.makara,
             fontSize: _searchFontSize,

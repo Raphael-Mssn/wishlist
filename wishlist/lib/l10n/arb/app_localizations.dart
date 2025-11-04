@@ -488,6 +488,12 @@ abstract class AppLocalizations {
   /// **'Rechercher un wish...'**
   String get wishlistSearchHint;
 
+  /// No description provided for @bookedWishesSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un wish ou un pseudo...'**
+  String get bookedWishesSearchHint;
+
   /// No description provided for @wishlistNoWish.
   ///
   /// In fr, this message translates to:
