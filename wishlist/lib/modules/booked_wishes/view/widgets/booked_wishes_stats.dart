@@ -40,7 +40,7 @@ class BookedWishesStats extends StatelessWidget {
         children: [
           Icon(
             Icons.card_giftcard,
-            size: 20,
+            size: 24,
             color: Theme.of(context).primaryColor,
           ),
           const SizedBox(width: 6),
