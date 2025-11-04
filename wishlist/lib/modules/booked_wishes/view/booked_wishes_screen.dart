@@ -26,6 +26,13 @@ class BookedWishesScreen extends ConsumerStatefulWidget {
 }
 
 class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
+  // Constantes
+  static const double _contentPadding = 16;
+  static const double _itemSpacing = 16;
+  static const double _listBottomPadding = 120;
+  static const int _animationDurationMs = 375;
+
+  // État
   BookedWishSort _sort = const BookedWishSort(
     type: BookedWishSortType.alphabetical,
     order: SortOrder.ascending,
@@ -38,18 +45,22 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(() {
-      setState(() {
-        _searchQuery = _searchController.text.toLowerCase();
-      });
-    });
+    _searchController.addListener(_onSearchChanged);
   }
 
   @override
   void dispose() {
-    _searchController.dispose();
+    _searchController
+      ..removeListener(_onSearchChanged)
+      ..dispose();
     _searchFocusNode.dispose();
     super.dispose();
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      _searchQuery = _searchController.text.toLowerCase();
+    });
   }
 
   void _onSortChanged(BookedWishSort sort) {
@@ -58,8 +69,21 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
     });
   }
 
-  void _clearFocusHistory() {
+  void _clearFocus() {
     FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  Future<void> _refreshBookedWishes() async {
+    await ref.read(bookedWishesProvider.notifier).loadBookedWishes();
+  }
+
+  List<Widget> _buildSettingsAction() {
+    return [
+      IconButton(
+        icon: const Icon(Icons.settings),
+        onPressed: () => SettingsRoute().push(context),
+      ),
+    ];
   }
 
   /// Filtre et groupe les wishes par utilisateur
@@ -114,180 +138,166 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final bookedWishesAsync = ref.watch(bookedWishesProvider);
-    const gap = 16.0;
-
-    Future<void> refreshBookedWishes() async {
-      await ref.read(bookedWishesProvider.notifier).loadBookedWishes();
-    }
 
     return bookedWishesAsync.when(
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) {
         ScaffoldMessenger.of(context).showGenericError(isTopSnackBar: true);
         return const SizedBox.shrink();
       },
       data: (bookedWishes) {
         if (bookedWishes.isEmpty) {
-          return PageLayoutEmpty(
-            illustrationUrl: Assets.svg.noWishlist,
-            title: l10n.bookedWishesEmptyTitle,
-            onRefresh: refreshBookedWishes,
-            appBarTitle: l10n.bookedWishesScreenTitle,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () => SettingsRoute().push(context),
-              ),
-            ],
-          );
+          return _buildEmptyState(l10n);
         }
 
         final groupedWishes = _filterAndGroupWishes(bookedWishes.toList());
 
-        // Si le filtrage ne retourne aucun résultat
         if (groupedWishes.isEmpty) {
-          return PageLayout(
-            title: l10n.bookedWishesScreenTitle,
-            onRefresh: refreshBookedWishes,
-            padding: EdgeInsets.zero,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () => SettingsRoute().push(context),
-              ),
-            ],
-            child: Padding(
-              padding: const EdgeInsets.all(16).copyWith(bottom: 0),
-              child: Column(
-                children: [
-                  BookedWishesSearchBar(
-                    searchController: _searchController,
-                    searchFocusNode: _searchFocusNode,
-                    searchQuery: _searchQuery,
-                    sort: _sort,
-                    onSortChanged: _onSortChanged,
-                    onClearFocus: _clearFocusHistory,
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        l10n.noUserFound,
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
+          return _buildEmptySearchResults(l10n);
         }
 
-        final containers = <Widget>[];
-        var position = 0;
+        return _buildContent(l10n, groupedWishes);
+      },
+    );
+  }
 
-        for (final entry in groupedWishes.entries) {
-          final ownerWishes = entry.value;
-          final firstWish = ownerWishes.first;
+  Widget _buildEmptyState(AppLocalizations l10n) {
+    return PageLayoutEmpty(
+      illustrationUrl: Assets.svg.noWishlist,
+      title: l10n.bookedWishesEmptyTitle,
+      onRefresh: _refreshBookedWishes,
+      appBarTitle: l10n.bookedWishesScreenTitle,
+      actions: _buildSettingsAction(),
+    );
+  }
 
-          containers.add(
-            AnimationConfiguration.staggeredList(
-              position: position++,
-              duration: const Duration(milliseconds: 375),
-              child: SlideAnimation(
-                verticalOffset: 50,
-                child: FadeInAnimation(
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.gainsboro,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // User header
-                        UserGroupHeader(
-                          avatarUrl: firstWish.ownerAvatarUrl,
-                          pseudo: firstWish.ownerPseudo,
-                          wishCount: ownerWishes.length,
-                        ),
-                        const Gap(gap),
-                        ...ownerWishes.map((bookedWish) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: BookedWishCard(
-                              bookedWish: bookedWish,
-                              onTap: () {
-                                showConsultWishBottomSheet(
-                                  context,
-                                  bookedWish.wish,
-                                  cardType: WishlistStatsCardType.booked,
-                                  onWishUpdated: () {
-                                    ref
-                                        .read(bookedWishesProvider.notifier)
-                                        .loadBookedWishes();
-                                  },
-                                );
-                              },
-                            ),
-                          );
-                        }),
-                      ],
-                    ),
-                  ),
+  Widget _buildEmptySearchResults(AppLocalizations l10n) {
+    return PageLayout(
+      title: l10n.bookedWishesScreenTitle,
+      onRefresh: _refreshBookedWishes,
+      padding: EdgeInsets.zero,
+      actions: _buildSettingsAction(),
+      child: Padding(
+        padding: const EdgeInsets.all(_contentPadding).copyWith(bottom: 0),
+        child: Column(
+          children: [
+            _buildSearchBar(l10n),
+            Expanded(
+              child: Center(
+                child: Text(
+                  l10n.noUserFound,
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ),
-            ),
-          );
-        }
-
-        return PageLayout(
-          title: l10n.bookedWishesScreenTitle,
-          onRefresh: refreshBookedWishes,
-          padding: EdgeInsets.zero,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () => SettingsRoute().push(context),
             ),
           ],
-          child: Padding(
-            padding: const EdgeInsets.all(16).copyWith(bottom: 0),
-            child: Column(
-              spacing: gap,
-              children: [
-                BookedWishesSearchBar(
-                  searchController: _searchController,
-                  searchFocusNode: _searchFocusNode,
-                  searchQuery: _searchQuery,
-                  sort: _sort,
-                  onSortChanged: _onSortChanged,
-                  onClearFocus: _clearFocusHistory,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent(
+    AppLocalizations l10n,
+    Map<String, List<BookedWishWithDetails>> groupedWishes,
+  ) {
+    return PageLayout(
+      title: l10n.bookedWishesScreenTitle,
+      onRefresh: _refreshBookedWishes,
+      padding: EdgeInsets.zero,
+      actions: _buildSettingsAction(),
+      child: Padding(
+        padding: const EdgeInsets.all(_contentPadding).copyWith(bottom: 0),
+        child: Column(
+          spacing: _itemSpacing,
+          children: [
+            _buildSearchBar(l10n),
+            Expanded(
+              child: AnimationLimiter(
+                child: ListView.separated(
+                  padding: const EdgeInsets.only(bottom: _listBottomPadding),
+                  itemCount: groupedWishes.length,
+                  separatorBuilder: (context, index) => const Gap(_itemSpacing),
+                  itemBuilder: (context, index) {
+                    final entry = groupedWishes.entries.elementAt(index);
+                    return _buildUserGroup(entry.value, index);
+                  },
                 ),
-                Expanded(
-                  child: AnimationLimiter(
-                    child: ListView.separated(
-                      padding: const EdgeInsets.only(bottom: 120),
-                      itemCount: containers.length,
-                      separatorBuilder: (context, index) => const Gap(gap),
-                      itemBuilder: (context, index) => containers[index],
-                    ),
-                  ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchBar(AppLocalizations l10n) {
+    return BookedWishesSearchBar(
+      searchController: _searchController,
+      searchFocusNode: _searchFocusNode,
+      searchQuery: _searchQuery,
+      sort: _sort,
+      onSortChanged: _onSortChanged,
+      onClearFocus: _clearFocus,
+    );
+  }
+
+  Widget _buildUserGroup(
+    List<BookedWishWithDetails> ownerWishes,
+    int position,
+  ) {
+    final firstWish = ownerWishes.first;
+
+    return AnimationConfiguration.staggeredList(
+      position: position,
+      duration: const Duration(milliseconds: _animationDurationMs),
+      child: SlideAnimation(
+        verticalOffset: 50,
+        child: FadeInAnimation(
+          child: Container(
+            padding: const EdgeInsets.all(_contentPadding),
+            decoration: BoxDecoration(
+              color: AppColors.gainsboro,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                UserGroupHeader(
+                  avatarUrl: firstWish.ownerAvatarUrl,
+                  pseudo: firstWish.ownerPseudo,
+                  wishCount: ownerWishes.length,
+                ),
+                const Gap(_itemSpacing),
+                ...ownerWishes.map((bookedWish) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: BookedWishCard(
+                      bookedWish: bookedWish,
+                      onTap: () => _onWishTap(bookedWish),
+                    ),
+                  );
+                }),
+              ],
+            ),
           ),
-        );
-      },
+        ),
+      ),
+    );
+  }
+
+  void _onWishTap(BookedWishWithDetails bookedWish) {
+    showConsultWishBottomSheet(
+      context,
+      bookedWish.wish,
+      cardType: WishlistStatsCardType.booked,
+      onWishUpdated: _refreshBookedWishes,
     );
   }
 }
