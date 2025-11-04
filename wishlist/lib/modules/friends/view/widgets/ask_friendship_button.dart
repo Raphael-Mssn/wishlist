@@ -58,7 +58,10 @@ class _AskFriendshipButtonState extends ConsumerState<AskFriendshipButton> {
 
     return asyncStatus.when(
       loading: () => const _LoadingButton(),
-      error: (error, stackTrace) => const SizedBox(),
+      error: (error, stackTrace) {
+        // TODO: Handle error
+        return const SizedBox();
+      },
       data: (status) {
         // Utiliser l'optimistic status si disponible, sinon le status réel
         final displayStatus = _optimisticStatus ?? status;
