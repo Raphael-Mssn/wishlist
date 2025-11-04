@@ -6,6 +6,7 @@ import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wish_card.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wishes_search_bar.dart';
+import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wishes_stats.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/user_group_header.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_wish_bottom_sheet.dart';
@@ -26,13 +27,11 @@ class BookedWishesScreen extends ConsumerStatefulWidget {
 }
 
 class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
-  // Constantes
   static const double _contentPadding = 16;
   static const double _itemSpacing = 16;
-  static const double _listBottomPadding = 120;
+  static const double _listBottomPadding = 110;
   static const int _animationDurationMs = 375;
 
-  // État
   BookedWishSort _sort = const BookedWishSort(
     type: BookedWishSortType.alphabetical,
     order: SortOrder.ascending,
@@ -177,21 +176,58 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
       onRefresh: _refreshBookedWishes,
       padding: EdgeInsets.zero,
       actions: _buildSettingsAction(),
-      child: Padding(
-        padding: const EdgeInsets.all(_contentPadding).copyWith(bottom: 0),
-        child: Column(
-          children: [
-            _buildSearchBar(l10n),
-            Expanded(
+      child: Stack(
+        children: [
+          // Centre avec message "aucun résultat"
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 110),
               child: Center(
                 child: Text(
-                  l10n.noUserFound,
+                  l10n.wishlistNoWishBooked,
                   style: const TextStyle(color: Colors.grey),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+          // Header fixe avec stats + searchbar
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.background,
+                    AppColors.background,
+                    AppColors.background.withValues(alpha: 0.95),
+                    AppColors.background.withValues(alpha: 0),
+                  ],
+                  stops: const [0.0, 0.7, 0.9, 1.0],
+                ),
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.all(_contentPadding).copyWith(bottom: 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: _itemSpacing,
+                  children: [
+                    BookedWishesStats(
+                      bookedWishes: List<BookedWishWithDetails>.from(
+                        ref.watch(bookedWishesProvider).value ?? [],
+                      ),
+                    ),
+                    _buildSearchBar(l10n),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -205,16 +241,19 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
       onRefresh: _refreshBookedWishes,
       padding: EdgeInsets.zero,
       actions: _buildSettingsAction(),
-      child: Padding(
-        padding: const EdgeInsets.all(_contentPadding).copyWith(bottom: 0),
-        child: Column(
-          spacing: _itemSpacing,
-          children: [
-            _buildSearchBar(l10n),
-            Expanded(
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: _contentPadding),
               child: AnimationLimiter(
                 child: ListView.separated(
-                  padding: const EdgeInsets.only(bottom: _listBottomPadding),
+                  // Padding pour éviter que le premier élément soit
+                  // sous la searchbar
+                  padding: const EdgeInsets.only(
+                    top: 140,
+                    bottom: _listBottomPadding,
+                  ),
                   itemCount: groupedWishes.length,
                   separatorBuilder: (context, index) => const Gap(_itemSpacing),
                   itemBuilder: (context, index) {
@@ -224,8 +263,45 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+          // Header fixe avec stats + searchbar
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.background,
+                    AppColors.background,
+                    AppColors.background.withValues(alpha: 0.95),
+                    AppColors.background.withValues(alpha: 0),
+                  ],
+                  stops: const [0.0, 0.7, 0.9, 1.0],
+                ),
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.all(_contentPadding).copyWith(bottom: 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: _itemSpacing,
+                  children: [
+                    BookedWishesStats(
+                      bookedWishes: List<BookedWishWithDetails>.from(
+                        ref.watch(bookedWishesProvider).value ?? [],
+                      ),
+                    ),
+                    _buildSearchBar(l10n),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
