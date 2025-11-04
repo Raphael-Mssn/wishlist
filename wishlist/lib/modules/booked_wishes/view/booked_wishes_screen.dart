@@ -155,25 +155,28 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
                 onPressed: () => SettingsRoute().push(context),
               ),
             ],
-            child: Column(
-              children: [
-                BookedWishesSearchBar(
-                  searchController: _searchController,
-                  searchFocusNode: _searchFocusNode,
-                  searchQuery: _searchQuery,
-                  sort: _sort,
-                  onSortChanged: _onSortChanged,
-                  onClearFocus: _clearFocusHistory,
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      l10n.noUserFound,
-                      style: const TextStyle(color: Colors.grey),
+            child: Padding(
+              padding: const EdgeInsets.all(16).copyWith(bottom: 0),
+              child: Column(
+                children: [
+                  BookedWishesSearchBar(
+                    searchController: _searchController,
+                    searchFocusNode: _searchFocusNode,
+                    searchQuery: _searchQuery,
+                    sort: _sort,
+                    onSortChanged: _onSortChanged,
+                    onClearFocus: _clearFocusHistory,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        l10n.noUserFound,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }
@@ -248,27 +251,31 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
               onPressed: () => SettingsRoute().push(context),
             ),
           ],
-          child: Column(
-            children: [
-              BookedWishesSearchBar(
-                searchController: _searchController,
-                searchFocusNode: _searchFocusNode,
-                searchQuery: _searchQuery,
-                sort: _sort,
-                onSortChanged: _onSortChanged,
-                onClearFocus: _clearFocusHistory,
-              ),
-              Expanded(
-                child: AnimationLimiter(
-                  child: ListView.separated(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: containers.length,
-                    separatorBuilder: (context, index) => const Gap(gap),
-                    itemBuilder: (context, index) => containers[index],
+          child: Padding(
+            padding: const EdgeInsets.all(16).copyWith(bottom: 0),
+            child: Column(
+              spacing: gap,
+              children: [
+                BookedWishesSearchBar(
+                  searchController: _searchController,
+                  searchFocusNode: _searchFocusNode,
+                  searchQuery: _searchQuery,
+                  sort: _sort,
+                  onSortChanged: _onSortChanged,
+                  onClearFocus: _clearFocusHistory,
+                ),
+                Expanded(
+                  child: AnimationLimiter(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.only(bottom: 120),
+                      itemCount: containers.length,
+                      separatorBuilder: (context, index) => const Gap(gap),
+                      itemBuilder: (context, index) => containers[index],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
