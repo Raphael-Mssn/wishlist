@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form.dart';
-import 'package:wishlist/shared/infra/wish_actions_provider.dart';
+import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -97,7 +97,9 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
     );
 
     try {
-      await ref.read(wishActionsProvider).updateWish(wishToUpdate);
+      await ref
+          .read(updateWishMutationProvider.notifier)
+          .updateWish(wishToUpdate);
 
       if (mounted) {
         showAppSnackBar(
@@ -129,7 +131,9 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
       confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
       onConfirm: () async {
         try {
-          await ref.read(wishActionsProvider).deleteWish(widget.wish.id);
+          await ref
+              .read(deleteWishMutationProvider.notifier)
+              .deleteWish(widget.wish.id, widget.wish.wishlistId);
 
           if (mounted) {
             showAppSnackBar(

@@ -6,8 +6,9 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_toggle_switch.dart';
+import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wish_service.dart';
-import 'package:wishlist/shared/infra/wishlist_actions_provider.dart';
+import 'package:wishlist/shared/infra/wishlist_mutations_provider.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
@@ -159,9 +160,10 @@ class _WishlistSettingsBottomSheetState
           confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
           onConfirm: () async {
             try {
+              final userId = ref.read(userServiceProvider).getCurrentUserId();
               await ref
-                  .read(wishlistActionsProvider)
-                  .deleteWishlist(widget.wishlist.id);
+                  .read(deleteWishlistMutationProvider.notifier)
+                  .deleteWishlist(widget.wishlist.id, userId);
 
               if (mounted) {
                 HomeRoute().go(context);
@@ -200,7 +202,7 @@ class _WishlistSettingsBottomSheetState
     );
 
     try {
-      await ref.read(wishlistServiceProvider).updateWishlist(
+      await ref.read(updateWishlistMutationProvider.notifier).updateWishlist(
             wishlistUpdated,
           );
 

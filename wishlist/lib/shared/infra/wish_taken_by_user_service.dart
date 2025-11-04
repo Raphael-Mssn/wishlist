@@ -1,12 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wishlist/shared/infra/repositories/wish_taken_by_user.dart/wish_taken_by_user_repository.dart';
+import 'package:wishlist/shared/infra/repositories/wish_taken_by_user.dart/wish_taken_by_user_repository_provider.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
-import 'package:wishlist/shared/infra/wish_taken_by_user_actions_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wish_taken_by_user/create_request/wish_taken_by_user_create_request.dart';
 
 class WishTakenByUserService {
-  WishTakenByUserService(this._actions, this.ref);
-  final WishTakenByUserActions _actions;
+  WishTakenByUserService(this._repository, this.ref);
+  final WishTakenByUserRepository _repository;
   final Ref ref;
 
   Future<void> wishTakenByUser(
@@ -26,7 +27,7 @@ class WishTakenByUserService {
     if (existingReservation != null) {
       // Mettre à jour la réservation existante en additionnant les quantités
       final newQuantity = existingReservation.quantity + quantityToReserve;
-      await _actions.updateWishTakenByUser(
+      await _repository.updateWishTakenByUser(
         wishId: wish.id,
         userId: currentUserId,
         newQuantity: newQuantity,
@@ -39,20 +40,20 @@ class WishTakenByUserService {
         quantity: quantityToReserve,
       );
 
-      await _actions.createWishTakenByUser(
+      await _repository.createWishTakenByUser(
         wishTakenByUserCreateRequest,
       );
     }
   }
 
   Future<void> cancelWishTaken(Wish wish) async {
-    await _actions.cancelWishTaken(wish.id);
+    await _repository.cancelWishTaken(wish.id);
   }
 }
 
 final wishTakenByUserServiceProvider = Provider(
   (ref) => WishTakenByUserService(
-    ref.watch(wishTakenByUserActionsProvider),
+    ref.watch(wishTakenByUserRepositoryProvider),
     ref,
   ),
 );

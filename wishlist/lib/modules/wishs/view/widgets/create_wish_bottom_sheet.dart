@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form.dart';
-import 'package:wishlist/shared/infra/wish_actions_provider.dart';
+import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
@@ -52,7 +52,7 @@ class _CreateWishBottomSheetState
     );
 
     try {
-      await ref.read(wishActionsProvider).createWish(wish);
+      await ref.read(createWishMutationProvider.notifier).createWish(wish);
 
       if (mounted) {
         showAppSnackBar(

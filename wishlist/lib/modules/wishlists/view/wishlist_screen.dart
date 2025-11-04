@@ -11,7 +11,7 @@ import 'package:wishlist/modules/wishs/view/widgets/consult_wish_bottom_sheet.da
 import 'package:wishlist/modules/wishs/view/widgets/create_wish_bottom_sheet.dart';
 import 'package:wishlist/modules/wishs/view/widgets/edit_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
-import 'package:wishlist/shared/infra/wish_actions_provider.dart';
+import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
@@ -100,7 +100,9 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         isFavourite: !wish.isFavourite,
       );
 
-      await ref.read(wishActionsProvider).updateWish(updatedWish);
+      await ref
+          .read(updateWishMutationProvider.notifier)
+          .updateWish(updatedWish);
     } catch (e) {
       if (mounted) {
         showGenericError(context);

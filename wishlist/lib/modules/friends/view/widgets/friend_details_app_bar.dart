@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/shared/infra/friendship_actions_provider.dart';
+import 'package:wishlist/shared/infra/friendship_mutations_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -22,7 +22,7 @@ class FriendDetailsAppBar extends ConsumerWidget
 
     try {
       await ref
-          .read(friendshipActionsProvider)
+          .read(friendshipMutationsProvider.notifier)
           .removeFriendship(friend.user.id);
 
       if (context.mounted) {

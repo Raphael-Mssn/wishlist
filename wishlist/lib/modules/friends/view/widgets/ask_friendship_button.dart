@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wishlist/shared/infra/friendship_actions_provider.dart';
+import 'package:wishlist/shared/infra/friendship_mutations_provider.dart';
 import 'package:wishlist/shared/infra/friendship_status_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/models/friendship/friendship.dart';
@@ -23,15 +23,15 @@ class _AskFriendshipButtonState extends ConsumerState<AskFriendshipButton> {
   FriendshipStatus? _optimisticStatus;
 
   Future<void> onPressed(FriendshipStatus status) async {
-    final actions = ref.read(friendshipActionsProvider);
+    final mutations = ref.read(friendshipMutationsProvider.notifier);
 
     try {
       if (status == FriendshipStatus.none) {
         setState(() => _optimisticStatus = FriendshipStatus.pending);
-        await actions.askFriendship(widget.appUser.user.id);
+        await mutations.askFriendship(widget.appUser.user.id);
       } else if (status == FriendshipStatus.pending) {
         setState(() => _optimisticStatus = FriendshipStatus.none);
-        await actions.cancelFriendshipRequest(widget.appUser.user.id);
+        await mutations.cancelFriendshipRequest(widget.appUser.user.id);
       }
     } catch (e) {
       if (mounted) {
