@@ -52,7 +52,7 @@ class _CreateWishBottomSheetState
     );
 
     try {
-      await ref.read(createWishMutationProvider.notifier).createWish(wish);
+      await ref.read(wishMutationsProvider.notifier).create(wish);
 
       if (mounted) {
         showAppSnackBar(

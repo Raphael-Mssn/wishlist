@@ -68,7 +68,7 @@ Future<void> showCreateDialog(BuildContext context, WidgetRef ref) async {
     content: _CreateDialogContent(nameController: nameController),
     confirmButtonLabel: l10n.createButton,
     onConfirm: () async {
-      await ref.read(createWishlistMutationProvider.notifier).createWishlist(
+      await ref.read(wishlistMutationsProvider.notifier).create(
             WishlistCreateRequest(
               name: nameController.text,
               idOwner: userId,

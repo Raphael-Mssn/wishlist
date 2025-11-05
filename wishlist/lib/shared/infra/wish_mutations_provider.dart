@@ -7,51 +7,31 @@ import 'package:wishlist/shared/models/wish/wish.dart';
 part 'wish_mutations_provider.g.dart';
 
 @riverpod
-class CreateWishMutation extends _$CreateWishMutation with Mutation<Wish> {
-  @override
-  AsyncUpdate<Wish> build() {
-    return const AsyncUpdate.idle();
-  }
-
-  Future<Wish?> createWish(WishCreateRequest request) async {
-    await mutate(
-      () async {
-        final service = ref.read(wishServiceProvider);
-        return service.createWish(request);
-      },
-    );
-
-    return state.value;
-  }
-}
-
-@riverpod
-class UpdateWishMutation extends _$UpdateWishMutation with Mutation<Wish> {
-  @override
-  AsyncUpdate<Wish> build() {
-    return const AsyncUpdate.idle();
-  }
-
-  Future<Wish?> updateWish(Wish wish) async {
-    await mutate(
-      () async {
-        final service = ref.read(wishServiceProvider);
-        return service.updateWish(wish);
-      },
-    );
-
-    return state.value;
-  }
-}
-
-@riverpod
-class DeleteWishMutation extends _$DeleteWishMutation with Mutation<void> {
+class WishMutations extends _$WishMutations with Mutation<void> {
   @override
   AsyncUpdate<void> build() {
     return const AsyncUpdate.idle();
   }
 
-  Future<void> deleteWish(int wishId, int wishlistId) async {
+  Future<void> create(WishCreateRequest request) async {
+    await mutate(
+      () async {
+        final service = ref.read(wishServiceProvider);
+        await service.createWish(request);
+      },
+    );
+  }
+
+  Future<void> update(Wish wish) async {
+    await mutate(
+      () async {
+        final service = ref.read(wishServiceProvider);
+        await service.updateWish(wish);
+      },
+    );
+  }
+
+  Future<void> delete(int wishId) async {
     await mutate(
       () async {
         final service = ref.read(wishServiceProvider);

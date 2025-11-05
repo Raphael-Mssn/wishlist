@@ -7,11 +7,9 @@ part of 'friendship_mutations_provider.dart';
 // **************************************************************************
 
 String _$friendshipMutationsHash() =>
-    r'787177891a61f4204a7b93f2a35d652199184e37';
+    r'3c6f9be9748e583fbe9da81f5e4b61ca5d313267';
 
-/// Mutation pour les actions d'amitié
-///
-/// Copied from [FriendshipMutations].
+/// See also [FriendshipMutations].
 @ProviderFor(FriendshipMutations)
 final friendshipMutationsProvider = AutoDisposeNotifierProvider<
     FriendshipMutations, AsyncUpdate<void>>.internal(

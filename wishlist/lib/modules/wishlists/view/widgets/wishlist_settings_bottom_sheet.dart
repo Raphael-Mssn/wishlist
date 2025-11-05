@@ -160,10 +160,9 @@ class _WishlistSettingsBottomSheetState
           confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
           onConfirm: () async {
             try {
-              final userId = ref.read(userServiceProvider).getCurrentUserId();
               await ref
-                  .read(deleteWishlistMutationProvider.notifier)
-                  .deleteWishlist(widget.wishlist.id, userId);
+                  .read(wishlistMutationsProvider.notifier)
+                  .delete(widget.wishlist.id);
 
               if (mounted) {
                 HomeRoute().go(context);
@@ -202,9 +201,9 @@ class _WishlistSettingsBottomSheetState
     );
 
     try {
-      await ref.read(updateWishlistMutationProvider.notifier).updateWishlist(
-            wishlistUpdated,
-          );
+      await ref
+          .read(wishlistMutationsProvider.notifier)
+          .update(wishlistUpdated);
 
       if (mounted) {
         showAppSnackBar(

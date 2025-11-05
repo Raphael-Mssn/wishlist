@@ -100,9 +100,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         isFavourite: !wish.isFavourite,
       );
 
-      await ref
-          .read(updateWishMutationProvider.notifier)
-          .updateWish(updatedWish);
+      await ref.read(wishMutationsProvider.notifier).update(updatedWish);
     } catch (e) {
       if (mounted) {
         showGenericError(context);
