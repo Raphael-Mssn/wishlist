@@ -27,8 +27,8 @@ class BookedWishesNotifier
   }
 }
 
-final bookedWishesProvider = StateNotifierProvider<BookedWishesNotifier,
-    AsyncValue<IList<BookedWishWithDetails>>>((ref) {
+final bookedWishesProvider = StateNotifierProvider.autoDispose<
+    BookedWishesNotifier, AsyncValue<IList<BookedWishWithDetails>>>((ref) {
   return BookedWishesNotifier(
     ref.watch(wishRepositoryProvider),
     ref.watch(userServiceProvider),

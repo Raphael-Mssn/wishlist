@@ -4,8 +4,8 @@ import 'package:wishlist/shared/models/friendship/friendship.dart';
 
 /// Écoute les changements de friendships en temps réel et calcule
 /// le statut de l'amitié avec l'utilisateur spécifié
-final friendshipStatusProvider =
-    Provider.family<AsyncValue<FriendshipStatus>, String>((ref, userId) {
+final friendshipStatusProvider = Provider.family
+    .autoDispose<AsyncValue<FriendshipStatus>, String>((ref, userId) {
   final friendshipsAsync = ref.watch(friendshipsRealtimeProvider);
 
   // Transformer l'AsyncValue<FriendsData> en AsyncValue<FriendshipStatus>

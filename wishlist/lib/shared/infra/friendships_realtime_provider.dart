@@ -4,7 +4,8 @@ import 'package:wishlist/shared/infra/repositories/friendship/friendship_stream_
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 
-final friendshipsRealtimeProvider = StreamProvider<FriendsData>((ref) {
+final friendshipsRealtimeProvider =
+    StreamProvider.autoDispose<FriendsData>((ref) {
   final userService = ref.watch(userServiceProvider);
   final friendshipRepo = ref.watch(friendshipStreamRepositoryProvider);
 
