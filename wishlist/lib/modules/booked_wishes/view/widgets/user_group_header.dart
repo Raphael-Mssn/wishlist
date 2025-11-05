@@ -23,38 +23,48 @@ class UserGroupHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          children: [
-            AppAvatar(
-              avatarUrl: avatarUrl,
-              size: 32,
-              hasBorders: avatarUrl == null || avatarUrl!.isEmpty,
-            ),
-            const Gap(12),
-            Expanded(
-              child: Text(
-                pseudo,
-                style: AppTextStyles.medium.copyWith(
-                  fontWeight: FontWeight.bold,
+    return Row(
+      children: [
+        Expanded(
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                child: Row(
+                  children: [
+                    AppAvatar(
+                      avatarUrl: avatarUrl,
+                      size: 32,
+                      hasBorders: avatarUrl == null || avatarUrl!.isEmpty,
+                    ),
+                    const Gap(12),
+                    Expanded(
+                      child: Text(
+                        pseudo,
+                        style: AppTextStyles.medium.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
-            Text(
-              l10n.bookedWishCount(wishCount),
-              style: AppTextStyles.small.copyWith(
-                color: AppColors.makara,
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
+        const Gap(8),
+        Text(
+          l10n.bookedWishCount(wishCount),
+          style: AppTextStyles.small.copyWith(
+            color: AppColors.makara,
+          ),
+        ),
+      ],
     );
   }
 }
