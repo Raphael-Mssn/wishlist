@@ -4,9 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/main.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
-import 'package:wishlist/shared/infra/invalidate_all_providers.dart';
 import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
-import 'package:wishlist/shared/navigation/routes.dart';
 
 class AuthService {
   static final AuthService _instance = AuthService();
@@ -15,10 +13,6 @@ class AuthService {
 
   Future<void> signOut(BuildContext context, WidgetRef ref) async {
     await supabase.auth.signOut();
-    invalidateAllProviders(ref);
-    if (context.mounted) {
-      AuthRoute().go(context);
-    }
   }
 
   Future<void> signIn({
