@@ -1,7 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_provider.dart';
+import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_realtime_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_content.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_search_bar.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom_sheet.dart';
@@ -11,8 +11,7 @@ import 'package:wishlist/modules/wishs/view/widgets/consult_wish_bottom_sheet.da
 import 'package:wishlist/modules/wishs/view/widgets/create_wish_bottom_sheet.dart';
 import 'package:wishlist/modules/wishs/view/widgets/edit_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
-import 'package:wishlist/shared/infra/wishlist_by_id_provider.dart';
-import 'package:wishlist/shared/infra/wishs_from_wishlist_provider.dart';
+import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
@@ -56,10 +55,6 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
       setState(() {
         _searchQuery = _searchController.text.toLowerCase();
       });
-    });
-    // Rafraîchir les données de la wishlist à l'ouverture
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _refreshWishlistData();
     });
   }
 
@@ -105,9 +100,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         isFavourite: !wish.isFavourite,
       );
 
-      await ref
-          .read(wishsFromWishlistProvider(widget.wishlistId).notifier)
-          .updateWish(updatedWish);
+      await ref.read(wishMutationsProvider.notifier).update(updatedWish);
     } catch (e) {
       if (mounted) {
         showGenericError(context);
@@ -121,17 +114,6 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  /// Rafraîchit les données de la wishlist (wishlist et wishs)
-  Future<void> _refreshWishlistData() async {
-    // Rafraîchir les wishs
-    await ref
-        .read(wishsFromWishlistProvider(widget.wishlistId).notifier)
-        .loadWishs();
-
-    // Rafraîchir les données de la wishlist
-    ref.invalidate(wishlistByIdProvider(widget.wishlistId));
-  }
-
   IList<Wish> _sortAndFilterWishs(IList<Wish> wishs) {
     return WishSortUtils.sortAndFilterWishs(
       wishs,
@@ -140,10 +122,17 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     );
   }
 
+  Future<void> refreshWishlistScreen() async {
+    ref.invalidate(wishlistScreenDataRealtimeProvider(widget.wishlistId));
+
+    // Attendre un peu pour voir le feedback visuel du RefreshIndicator
+    await Future.delayed(const Duration(milliseconds: 300));
+  }
+
   @override
   Widget build(BuildContext context) {
     final wishlistScreenData =
-        ref.watch(wishlistScreenDataProvider(widget.wishlistId));
+        ref.watch(wishlistScreenDataRealtimeProvider(widget.wishlistId));
 
     return wishlistScreenData.when(
       data: (data) {
@@ -262,6 +251,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     WidgetRef ref, {
     required bool isMyWishlist,
   }) {
+    // On sait que wishlist n'est pas null car on a déjà vérifié dans build()
     final wishlist = wishlistScreenData.wishlist;
     final wishs = _sortAndFilterWishs(wishlistScreenData.wishs);
 
@@ -317,6 +307,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
           onTapWish: onTapWish,
           onAddWish: onAddWish,
           onFavoriteToggle: onFavoriteToggle,
+          onRefresh: refreshWishlistScreen,
         ),
       ],
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wishlist/shared/infra/friendship_mutations_provider.dart';
 import 'package:wishlist/shared/infra/friendship_status_provider.dart';
-import 'package:wishlist/shared/infra/friendships_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/models/friendship/friendship.dart';
 import 'package:wishlist/shared/theme/colors.dart';
@@ -20,30 +20,24 @@ class AskFriendshipButton extends ConsumerStatefulWidget {
 }
 
 class _AskFriendshipButtonState extends ConsumerState<AskFriendshipButton> {
-  bool _isLoading = false;
+  FriendshipStatus? _optimisticStatus;
 
   Future<void> onPressed(FriendshipStatus status) async {
-    if (_isLoading) {
-      return;
-    }
-    setState(() {
-      _isLoading = true;
-    });
-
-    final notifier = ref.read(friendshipsProvider.notifier);
+    final mutations = ref.read(friendshipMutationsProvider.notifier);
 
     try {
       if (status == FriendshipStatus.none) {
-        await notifier.askFriendship(widget.appUser);
+        setState(() => _optimisticStatus = FriendshipStatus.pending);
+        await mutations.askFriendship(widget.appUser.user.id);
       } else if (status == FriendshipStatus.pending) {
-        await notifier.cancelFriendshipRequest(widget.appUser);
+        setState(() => _optimisticStatus = FriendshipStatus.none);
+        await mutations.cancelFriendshipRequest(widget.appUser.user.id);
       }
-
-      ref.invalidate(friendshipStatusProvider(widget.appUser.user.id));
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+    } catch (e) {
+      if (mounted) {
+        setState(() => _optimisticStatus = null);
+      }
+      rethrow;
     }
   }
 
@@ -52,6 +46,16 @@ class _AskFriendshipButtonState extends ConsumerState<AskFriendshipButton> {
     final asyncStatus =
         ref.watch(friendshipStatusProvider(widget.appUser.user.id));
 
+    // Quand Realtime propage le changement, on retire l'optimistic status
+    ref.listen(
+      friendshipStatusProvider(widget.appUser.user.id),
+      (previous, next) {
+        if (_optimisticStatus != null && mounted) {
+          setState(() => _optimisticStatus = null);
+        }
+      },
+    );
+
     return asyncStatus.when(
       loading: () => const _LoadingButton(),
       error: (error, stackTrace) {
@@ -59,9 +63,10 @@ class _AskFriendshipButtonState extends ConsumerState<AskFriendshipButton> {
         return const SizedBox();
       },
       data: (status) {
+        // Utiliser l'optimistic status si disponible, sinon le status réel
+        final displayStatus = _optimisticStatus ?? status;
         return _StatusButton(
-          status: status,
-          isLoading: _isLoading,
+          status: displayStatus,
           onPressed: onPressed,
         );
       },
@@ -92,12 +97,10 @@ class _LoadingButton extends StatelessWidget {
 class _StatusButton extends StatelessWidget {
   const _StatusButton({
     required this.status,
-    required this.isLoading,
     required this.onPressed,
   });
 
   final FriendshipStatus status;
-  final bool isLoading;
   final Function(FriendshipStatus) onPressed;
 
   static const Color iconColor = AppColors.background;
@@ -106,16 +109,11 @@ class _StatusButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _ButtonBase(
       onPressed: () => onPressed(status),
-      child: isLoading
-          ? const CircularProgressIndicator(
-              color: iconColor,
-              strokeWidth: 3,
-            )
-          : Icon(
-              _getIconForStatus(status),
-              color: iconColor,
-              size: _ButtonBase.size,
-            ),
+      child: Icon(
+        _getIconForStatus(status),
+        color: iconColor,
+        size: _ButtonBase.size,
+      ),
     );
   }
 
