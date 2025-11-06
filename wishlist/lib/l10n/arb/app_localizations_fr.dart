@@ -418,4 +418,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsGeneral => 'Général';
+
+  @override
+  String get settingsAbout => 'À propos';
+
+  @override
+  String get settingsTermsOfUse => 'Conditions d\'utilisation';
+
+  @override
+  String get settingsPrivacyPolicy => 'Politique de confidentialité';
 }

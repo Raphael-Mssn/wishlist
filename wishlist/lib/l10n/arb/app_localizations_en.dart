@@ -414,4 +414,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsGeneral => 'General';
+
+  @override
+  String get settingsAbout => 'About';
+
+  @override
+  String get settingsTermsOfUse => 'Terms of use';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privacy policy';
 }

@@ -847,6 +847,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Général'**
   String get settingsGeneral;
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In fr, this message translates to:
+  /// **'À propos'**
+  String get settingsAbout;
+
+  /// No description provided for @settingsTermsOfUse.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conditions d\'utilisation'**
+  String get settingsTermsOfUse;
+
+  /// No description provided for @settingsPrivacyPolicy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Politique de confidentialité'**
+  String get settingsPrivacyPolicy;
 }
 
 class _AppLocalizationsDelegate

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/settings/widgets/settings_line.dart';
 import 'package:wishlist/modules/settings/widgets/settings_section.dart';
@@ -16,6 +17,19 @@ import 'package:wishlist/shared/widgets/page_layout.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
+
+  String get termsOfUseUrl =>
+      'https://worried-vise-c54.notion.site/Conditions-d-utilisation-2a357ab93afe80a5a8aed27983db886c';
+  String get privacyPolicyUrl =>
+      'https://worried-vise-c54.notion.site/Politique-de-confidentialit-Application-Wishlist-29557ab93afe80a59b49ead8425b9ca2';
+
+  void onTermsOfUseTap(BuildContext context) {
+    launchUrl(Uri.parse(termsOfUseUrl));
+  }
+
+  void onPrivacyPolicyTap(BuildContext context) {
+    launchUrl(Uri.parse(privacyPolicyUrl));
+  }
 
   void onSignOutTap(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
@@ -86,6 +100,20 @@ class SettingsScreen extends ConsumerWidget {
                     onTap: () {
                       ChangePasswordRoute().push(context);
                     },
+                  ),
+                ],
+              ),
+              const Gap(16),
+              SettingsSection(
+                title: l10n.settingsAbout,
+                children: [
+                  SettingsLine(
+                    title: l10n.settingsTermsOfUse,
+                    onTap: () => onTermsOfUseTap(context),
+                  ),
+                  SettingsLine(
+                    title: l10n.settingsPrivacyPolicy,
+                    onTap: () => onPrivacyPolicyTap(context),
                   ),
                 ],
               ),

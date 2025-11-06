@@ -124,5 +124,8 @@
   "resetPasswordConfirm": "Reset",
   "resetPasswordSuccess": "Password reset successfully! Please sign in with your new password.",
   "resetPasswordLinkExpired": "The reset link has expired. Please request a new one.",
-  "settingsGeneral": "General"
+  "settingsGeneral": "General",
+  "settingsAbout": "About",
+  "settingsTermsOfUse": "Terms of use",
+  "settingsPrivacyPolicy": "Privacy policy"
 }
