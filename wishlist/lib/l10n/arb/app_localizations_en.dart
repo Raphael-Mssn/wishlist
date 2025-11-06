@@ -411,4 +411,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get resetPasswordLinkExpired =>
       'The reset link has expired. Please request a new one.';
+
+  @override
+  String get settingsGeneral => 'General';
 }

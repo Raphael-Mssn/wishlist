@@ -841,6 +841,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le lien de réinitialisation a expiré. Veuillez en demander un nouveau.'**
   String get resetPasswordLinkExpired;
+
+  /// No description provided for @settingsGeneral.
+  ///
+  /// In fr, this message translates to:
+  /// **'Général'**
+  String get settingsGeneral;
 }
 
 class _AppLocalizationsDelegate

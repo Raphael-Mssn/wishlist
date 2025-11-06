@@ -415,4 +415,7 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get resetPasswordLinkExpired =>
       'Le lien de réinitialisation a expiré. Veuillez en demander un nouveau.';
+
+  @override
+  String get settingsGeneral => 'Général';
 }

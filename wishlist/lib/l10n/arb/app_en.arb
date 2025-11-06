@@ -123,5 +123,6 @@
   "resetPasswordDescription": "Enter your new password.",
   "resetPasswordConfirm": "Reset",
   "resetPasswordSuccess": "Password reset successfully! Please sign in with your new password.",
-  "resetPasswordLinkExpired": "The reset link has expired. Please request a new one."
+  "resetPasswordLinkExpired": "The reset link has expired. Please request a new one.",
+  "settingsGeneral": "General"
 }

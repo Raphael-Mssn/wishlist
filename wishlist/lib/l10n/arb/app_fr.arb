@@ -123,5 +123,6 @@
   "resetPasswordDescription": "Saisissez votre nouveau mot de passe.",
   "resetPasswordConfirm": "Réinitialiser",
   "resetPasswordSuccess": "Mot de passe réinitialisé avec succès ! Reconnectez-vous avec votre nouveau mot de passe.",
-  "resetPasswordLinkExpired": "Le lien de réinitialisation a expiré. Veuillez en demander un nouveau."
+  "resetPasswordLinkExpired": "Le lien de réinitialisation a expiré. Veuillez en demander un nouveau.",
+  "settingsGeneral": "Général"
 }
