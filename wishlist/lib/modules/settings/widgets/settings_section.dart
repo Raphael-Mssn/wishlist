@@ -25,6 +25,7 @@ class SettingsSection extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(16),
           child: Column(
+            spacing: 2,
             children: children,
           ),
         ),
