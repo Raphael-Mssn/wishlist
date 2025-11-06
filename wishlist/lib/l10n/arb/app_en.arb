@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Wishlist",
+  "appTitle": "Wishy",
   "emailField": "Email",
   "validEmailError": "Please enter a valid email address",
   "passwordField": "Password",

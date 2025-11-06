@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       restorationScopeId: 'app',
-      onGenerateTitle: (context) => 'Wishlist',
+      onGenerateTitle: (context) => 'Wishy',
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
