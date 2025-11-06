@@ -16,7 +16,9 @@ import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/utils/booked_wish_sort_utils.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
+import 'package:wishlist/shared/utils/string_utils.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 
 class BookedWishesScreen extends ConsumerStatefulWidget {
@@ -58,7 +60,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
 
   void _onSearchChanged() {
     setState(() {
-      _searchQuery = _searchController.text.toLowerCase();
+      _searchQuery = normalizeString(_searchController.text);
     });
   }
 
@@ -89,48 +91,11 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   Map<String, List<BookedWishWithDetails>> _filterAndGroupWishes(
     List<BookedWishWithDetails> bookedWishes,
   ) {
-    // Filtrer par recherche
-    final filtered = bookedWishes.where((bookedWish) {
-      if (_searchQuery.isEmpty) {
-        return true;
-      }
-
-      final wishName = bookedWish.wish.name.toLowerCase();
-      final ownerPseudo = bookedWish.ownerPseudo.toLowerCase();
-
-      return wishName.contains(_searchQuery) ||
-          ownerPseudo.contains(_searchQuery);
-    }).toList();
-
-    // Grouper par utilisateur
-    final grouped = <String, List<BookedWishWithDetails>>{};
-    for (final bookedWish in filtered) {
-      grouped.putIfAbsent(bookedWish.ownerId, () => []).add(bookedWish);
-    }
-
-    // Trier les groupes
-    final sortedEntries = grouped.entries.toList();
-
-    switch (_sort.type) {
-      case BookedWishSortType.alphabetical:
-        sortedEntries.sort((a, b) {
-          final pseudo1 = a.value.first.ownerPseudo.toLowerCase();
-          final pseudo2 = b.value.first.ownerPseudo.toLowerCase();
-          return _sort.order == SortOrder.ascending
-              ? pseudo1.compareTo(pseudo2)
-              : pseudo2.compareTo(pseudo1);
-        });
-      case BookedWishSortType.bookingCount:
-        sortedEntries.sort((a, b) {
-          final count1 = a.value.length;
-          final count2 = b.value.length;
-          return _sort.order == SortOrder.ascending
-              ? count1.compareTo(count2)
-              : count2.compareTo(count1);
-        });
-    }
-
-    return Map.fromEntries(sortedEntries);
+    return BookedWishSortUtils.filterAndGroupWishes(
+      bookedWishes,
+      sort: _sort,
+      searchQuery: _searchQuery,
+    );
   }
 
   @override

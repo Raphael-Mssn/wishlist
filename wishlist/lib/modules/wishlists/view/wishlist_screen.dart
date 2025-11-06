@@ -20,6 +20,7 @@ import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
+import 'package:wishlist/shared/utils/string_utils.dart';
 import 'package:wishlist/shared/utils/wish_sort_utils.dart';
 import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
@@ -53,7 +54,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     super.initState();
     _searchController.addListener(() {
       setState(() {
-        _searchQuery = _searchController.text.toLowerCase();
+        _searchQuery = normalizeString(_searchController.text);
       });
     });
   }
