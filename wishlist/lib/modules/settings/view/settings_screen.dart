@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/settings/widgets/settings_line.dart';
 import 'package:wishlist/modules/settings/widgets/settings_section.dart';
+import 'package:wishlist/shared/infra/app_info_provider.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
 import 'package:wishlist/shared/infra/current_user_profile_provider.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
@@ -50,6 +52,7 @@ class SettingsScreen extends ConsumerWidget {
     final currentUserEmail =
         ref.read(userServiceProvider).getCurrentUserEmail();
     final currentUserProfile = ref.watch(currentUserProfileProvider);
+    final appInfo = ref.watch(appInfoProvider);
 
     return PageLayout(
       title: l10n.settingsScreenTitle,
@@ -124,10 +127,33 @@ class SettingsScreen extends ConsumerWidget {
                 style: BaseButtonStyle.medium,
               ),
               const Gap(24),
+              _AppVersionInfo(appInfo: appInfo),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _AppVersionInfo extends StatelessWidget {
+  const _AppVersionInfo({required this.appInfo});
+
+  final AsyncValue<PackageInfo> appInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    return appInfo.when(
+      data: (info) => Center(
+        child: Text(
+          '${info.appName} v${info.version} (${info.buildNumber})',
+          style: AppTextStyles.smaller.copyWith(
+            color: Colors.grey,
+          ),
+        ),
+      ),
+      loading: SizedBox.shrink,
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }
