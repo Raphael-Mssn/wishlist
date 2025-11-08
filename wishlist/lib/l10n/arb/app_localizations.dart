@@ -560,6 +560,18 @@ abstract class AppLocalizations {
   /// **'Description'**
   String get wishDescriptionLabel;
 
+  /// No description provided for @wishImageLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image du wish'**
+  String get wishImageLabel;
+
+  /// No description provided for @uploadImage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une image'**
+  String get uploadImage;
+
   /// No description provided for @wishNameError.
   ///
   /// In fr, this message translates to:

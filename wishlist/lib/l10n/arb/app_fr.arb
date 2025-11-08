@@ -77,6 +77,8 @@
   "wishQuantityLabel": "Quantité",
   "wishLinkLabel": "Lien",
   "wishDescriptionLabel": "Description",
+  "wishImageLabel": "Image du wish",
+  "uploadImage": "Ajouter une image",
   "wishNameError": "Le nom du wish est requis",
   "notNullError": "Ce champ est requis",
   "invalidNumber": "Nombre invalide",

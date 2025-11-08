@@ -263,6 +263,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wishDescriptionLabel => 'Description';
 
   @override
+  String get wishImageLabel => 'Wish image';
+
+  @override
+  String get uploadImage => 'Upload Image';
+
+  @override
   String get wishNameError => 'Wish name is required';
 
   @override
