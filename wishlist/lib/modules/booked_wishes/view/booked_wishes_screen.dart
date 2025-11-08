@@ -95,9 +95,6 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   }
 
   Future<void> _refreshBookedWishes() async {
-    // Avec Realtime, pas besoin de refresh manuel !
-    // Le StreamProvider se met à jour automatiquement.
-    // On peut tout de même forcer un rebuild si nécessaire :
     ref.invalidate(bookedWishesRealtimeProvider);
   }
 
