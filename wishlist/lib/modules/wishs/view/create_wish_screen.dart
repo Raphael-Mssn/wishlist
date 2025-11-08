@@ -27,6 +27,7 @@ class CreateWishScreen extends ConsumerStatefulWidget {
 
 class _CreateWishScreenState extends ConsumerState<CreateWishScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _createWishFormKey = GlobalKey<CreateWishFormState>();
 
   final _nameInputController = TextEditingController();
   final _priceInputController = TextEditingController();
@@ -45,6 +46,9 @@ class _CreateWishScreenState extends ConsumerState<CreateWishScreen> {
   }
 
   Future<void> _onCreateWish() async {
+    // Activer la validation automatique après la première tentative
+    _createWishFormKey.currentState?.enableAutovalidation();
+
     if (!_formKey.currentState!.validate()) {
       showAppSnackBar(
         context,
@@ -167,6 +171,7 @@ class _CreateWishScreenState extends ConsumerState<CreateWishScreen> {
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.all(20),
                       child: CreateWishForm(
+                        key: _createWishFormKey,
                         formKey: _formKey,
                         nameController: _nameInputController,
                         priceController: _priceInputController,

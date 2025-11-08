@@ -38,11 +38,20 @@ class CreateWishForm extends StatefulWidget {
   final ValueChanged<File?> onImageSelected;
 
   @override
-  State<CreateWishForm> createState() => _CreateWishFormState();
+  State<CreateWishForm> createState() => CreateWishFormState();
 }
 
-class _CreateWishFormState extends State<CreateWishForm> {
+class CreateWishFormState extends State<CreateWishForm> {
   File? _selectedImage;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+
+  void enableAutovalidation() {
+    if (_autovalidateMode != AutovalidateMode.onUserInteraction) {
+      setState(() {
+        _autovalidateMode = AutovalidateMode.onUserInteraction;
+      });
+    }
+  }
 
   Future<void> _showImageOptions() async {
     final l10n = context.l10n;
@@ -139,6 +148,7 @@ class _CreateWishFormState extends State<CreateWishForm> {
 
     return Form(
       key: widget.formKey,
+      autovalidateMode: _autovalidateMode,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
