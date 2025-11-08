@@ -388,13 +388,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'Êtes-vous sûr de vouloir supprimer cette image ?';
 
   @override
-  String get removeAvatar => 'Supprimer l\'avatar';
-
-  @override
-  String get removeAvatarConfirmation =>
-      'Êtes-vous sûr de vouloir supprimer votre avatar?';
-
-  @override
   String get avatarLoadError => 'Erreur lors du chargement de l\'image';
 
   @override

@@ -794,18 +794,6 @@ abstract class AppLocalizations {
   /// **'Êtes-vous sûr de vouloir supprimer cette image ?'**
   String get removeImageConfirmation;
 
-  /// No description provided for @removeAvatar.
-  ///
-  /// In fr, this message translates to:
-  /// **'Supprimer l\'avatar'**
-  String get removeAvatar;
-
-  /// No description provided for @removeAvatarConfirmation.
-  ///
-  /// In fr, this message translates to:
-  /// **'Êtes-vous sûr de vouloir supprimer votre avatar?'**
-  String get removeAvatarConfirmation;
-
   /// No description provided for @avatarLoadError.
   ///
   /// In fr, this message translates to:

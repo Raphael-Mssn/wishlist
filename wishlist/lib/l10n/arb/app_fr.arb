@@ -116,8 +116,6 @@
   "imageOptions": "Modification de l'image",
   "removeImage": "Supprimer l'image",
   "removeImageConfirmation": "Êtes-vous sûr de vouloir supprimer cette image ?",
-  "removeAvatar": "Supprimer l'avatar",
-  "removeAvatarConfirmation": "Êtes-vous sûr de vouloir supprimer votre avatar?",
   "avatarLoadError": "Erreur lors du chargement de l'image",
   "forgotPasswordButton": "Mot de passe oublié ?",
   "forgotPasswordTitle": "Mot de passe oublié",
