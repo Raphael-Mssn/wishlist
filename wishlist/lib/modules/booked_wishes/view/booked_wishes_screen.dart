@@ -10,7 +10,7 @@ import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wishes_stats.
 import 'package:wishlist/modules/booked_wishes/view/widgets/user_group_header.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_wish_bottom_sheet.dart';
-import 'package:wishlist/shared/infra/booked_wishes_provider.dart';
+import 'package:wishlist/shared/infra/booked_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/models/booked_wish_sort_type.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
@@ -75,7 +75,10 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   }
 
   Future<void> _refreshBookedWishes() async {
-    await ref.read(bookedWishesProvider.notifier).loadBookedWishes();
+    // Avec Realtime, pas besoin de refresh manuel !
+    // Le StreamProvider se met à jour automatiquement.
+    // On peut tout de même forcer un rebuild si nécessaire :
+    ref.invalidate(bookedWishesRealtimeProvider);
   }
 
   List<Widget> _buildSettingsAction() {
@@ -101,7 +104,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final bookedWishesAsync = ref.watch(bookedWishesProvider);
+    final bookedWishesAsync = ref.watch(bookedWishesRealtimeProvider);
 
     return bookedWishesAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -183,7 +186,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
                   children: [
                     BookedWishesStats(
                       bookedWishes: List<BookedWishWithDetails>.from(
-                        ref.watch(bookedWishesProvider).value ?? [],
+                        ref.watch(bookedWishesRealtimeProvider).value ?? [],
                       ),
                     ),
                     _buildSearchBar(l10n),
@@ -257,7 +260,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
                   children: [
                     BookedWishesStats(
                       bookedWishes: List<BookedWishWithDetails>.from(
-                        ref.watch(bookedWishesProvider).value ?? [],
+                        ref.watch(bookedWishesRealtimeProvider).value ?? [],
                       ),
                     ),
                     _buildSearchBar(l10n),
