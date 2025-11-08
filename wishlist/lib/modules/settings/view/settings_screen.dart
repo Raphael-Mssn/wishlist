@@ -20,20 +20,20 @@ import 'package:wishlist/shared/widgets/page_layout.dart';
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  String get termsOfUseUrl =>
+  String get _termsOfUseUrl =>
       'https://worried-vise-c54.notion.site/Conditions-d-utilisation-2a357ab93afe80a5a8aed27983db886c';
-  String get privacyPolicyUrl =>
+  String get _privacyPolicyUrl =>
       'https://worried-vise-c54.notion.site/Politique-de-confidentialit-Application-Wishlist-29557ab93afe80a59b49ead8425b9ca2';
 
-  void onTermsOfUseTap(BuildContext context) {
-    launchUrl(Uri.parse(termsOfUseUrl));
+  void _onTermsOfUseTap(BuildContext context) {
+    launchUrl(Uri.parse(_termsOfUseUrl));
   }
 
-  void onPrivacyPolicyTap(BuildContext context) {
-    launchUrl(Uri.parse(privacyPolicyUrl));
+  void _onPrivacyPolicyTap(BuildContext context) {
+    launchUrl(Uri.parse(_privacyPolicyUrl));
   }
 
-  void onSignOutTap(BuildContext context, WidgetRef ref) {
+  void _onSignOutTap(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
 
     showConfirmDialog(
@@ -112,18 +112,18 @@ class SettingsScreen extends ConsumerWidget {
                 children: [
                   SettingsLine(
                     title: l10n.settingsTermsOfUse,
-                    onTap: () => onTermsOfUseTap(context),
+                    onTap: () => _onTermsOfUseTap(context),
                   ),
                   SettingsLine(
                     title: l10n.settingsPrivacyPolicy,
-                    onTap: () => onPrivacyPolicyTap(context),
+                    onTap: () => _onPrivacyPolicyTap(context),
                   ),
                 ],
               ),
               const Gap(24),
               PrimaryButton(
                 text: l10n.settingsScreenDisconnect,
-                onPressed: () => onSignOutTap(context, ref),
+                onPressed: () => _onSignOutTap(context, ref),
                 style: BaseButtonStyle.medium,
               ),
               const Gap(24),
