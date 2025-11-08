@@ -776,6 +776,24 @@ abstract class AppLocalizations {
   /// **'Prendre une photo'**
   String get takePhoto;
 
+  /// No description provided for @imageOptions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modification de l\'image'**
+  String get imageOptions;
+
+  /// No description provided for @removeImage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer l\'image'**
+  String get removeImage;
+
+  /// No description provided for @removeImageConfirmation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir supprimer cette image ?'**
+  String get removeImageConfirmation;
+
   /// No description provided for @removeAvatar.
   ///
   /// In fr, this message translates to:
