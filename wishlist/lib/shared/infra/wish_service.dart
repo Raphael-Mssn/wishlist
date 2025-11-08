@@ -37,9 +37,18 @@ class WishService {
   }
 
   Future<void> deleteWish(int wishId, {String? iconUrl}) async {
-    // Supprimer l'image si elle existe (on laisse l'erreur remonter si ça échoue)
+    // Supprimer les images si elles existent (principale + miniature)
     if (iconUrl != null && iconUrl.isNotEmpty) {
+      // Supprimer l'image principale
       await _wishRepository.deleteWishImage(iconUrl);
+
+      // Supprimer la miniature
+      final thumbnailPath = iconUrl.replaceAll('.webp', '_thumb.webp');
+      try {
+        await _wishRepository.deleteWishImage(thumbnailPath);
+      } catch (e) {
+        // Ignorer si la miniature n'existe pas (anciennes images)
+      }
     }
 
     // Supprimer le wish
@@ -77,28 +86,49 @@ class WishService {
 
   /// Upload une image pour un wish
   Future<String> uploadWishImage(File imageFile, int wishId) async {
-    // Compression de l'image
+    // Compression de l'image principale
     final processedImageData = await _processImage(imageFile);
+
+    // Compression de la miniature
+    final thumbnailData = await _processThumbnail(imageFile);
 
     // Utilisation d'un timestamp pour garantir un nom de fichier unique
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final fileName = 'wish_image_$timestamp.webp';
+    final baseName = 'wish_image_$timestamp';
+    final fileName = '$baseName.webp';
+    final thumbnailFileName = '${baseName}_thumb.webp';
 
-    // Upload de l'image via le repository
+    // Upload de l'image principale via le repository
     final filePath = await _wishRepository.uploadWishImage(
       wishId: wishId,
       imageData: processedImageData,
       fileName: fileName,
     );
 
+    // Upload de la miniature
+    await _wishRepository.uploadWishImage(
+      wishId: wishId,
+      imageData: thumbnailData,
+      fileName: thumbnailFileName,
+    );
+
     return filePath;
   }
 
   /// Récupère l'URL publique d'une image de wish
-  String getWishImageUrl(String? imagePath) {
+  String getWishImageUrl(String? imagePath, {bool thumbnail = false}) {
     if (imagePath == null || imagePath.isEmpty) {
       return '';
     }
+
+    // Si on veut la miniature, on remplace .webp par _thumb.webp dans le path
+    if (thumbnail) {
+      // imagePath est du type: "wishId/wish_image_timestamp.webp"
+      // On veut obtenir: "wishId/wish_image_timestamp_thumb.webp"
+      final thumbnailPath = imagePath.replaceFirst('.webp', '_thumb.webp');
+      return _wishRepository.getWishImageUrl(thumbnailPath);
+    }
+
     return _wishRepository.getWishImageUrl(imagePath);
   }
 
@@ -121,6 +151,23 @@ class WishService {
 
     if (compressedFile == null) {
       throw Exception('Failed to compress image');
+    }
+
+    return compressedFile;
+  }
+
+  /// Compresse une image en miniature (pour les listes)
+  Future<Uint8List> _processThumbnail(File imageFile) async {
+    final compressedFile = await FlutterImageCompress.compressWithFile(
+      imageFile.absolute.path,
+      format: CompressFormat.webp,
+      quality: 80,
+      minWidth: 128,
+      minHeight: 128,
+    );
+
+    if (compressedFile == null) {
+      throw Exception('Failed to compress thumbnail');
     }
 
     return compressedFile;
