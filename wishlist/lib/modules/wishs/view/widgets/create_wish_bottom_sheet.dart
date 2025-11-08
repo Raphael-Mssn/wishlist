@@ -1,3 +1,7 @@
+// DEPRECATED: This file is deprecated and has been replaced by create_wish_screen.dart
+// which provides a full-screen modern UI for creating wishes.
+// Kept for reference only.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
