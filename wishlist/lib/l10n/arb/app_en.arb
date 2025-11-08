@@ -113,7 +113,7 @@
   "avatarOptions": "Avatar modification",
   "chooseFromGallery": "Choose from gallery",
   "takePhoto": "Take a photo",
-  "imageOptions": "Image modification",
+  "imageOptions": "Image upload",
   "removeImage": "Remove image",
   "removeImageConfirmation": "Are you sure you want to remove this image?",
   "avatarLoadError": "Error loading image",

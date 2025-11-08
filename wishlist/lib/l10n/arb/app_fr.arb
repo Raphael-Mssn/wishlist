@@ -113,7 +113,7 @@
   "avatarOptions": "Modification de l'avatar",
   "chooseFromGallery": "Choisir depuis la galerie",
   "takePhoto": "Prendre une photo",
-  "imageOptions": "Modification de l'image",
+  "imageOptions": "Ajout de l'image",
   "removeImage": "Supprimer l'image",
   "removeImageConfirmation": "Êtes-vous sûr de vouloir supprimer cette image ?",
   "avatarLoadError": "Erreur lors du chargement de l'image",

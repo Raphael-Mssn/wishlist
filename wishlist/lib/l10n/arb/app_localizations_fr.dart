@@ -378,7 +378,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get takePhoto => 'Prendre une photo';
 
   @override
-  String get imageOptions => 'Modification de l\'image';
+  String get imageOptions => 'Ajout de l\'image';
 
   @override
   String get removeImage => 'Supprimer l\'image';

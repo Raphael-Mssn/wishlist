@@ -779,7 +779,7 @@ abstract class AppLocalizations {
   /// No description provided for @imageOptions.
   ///
   /// In fr, this message translates to:
-  /// **'Modification de l\'image'**
+  /// **'Ajout de l\'image'**
   String get imageOptions;
 
   /// No description provided for @removeImage.

@@ -100,7 +100,7 @@ class EditableAvatar extends ConsumerWidget {
                     final l10n = context.l10n;
                     showImageOptionsBottomSheet(
                       context,
-                      title: l10n.imageOptions,
+                      title: l10n.avatarOptions,
                       hasImage: hasAvatar,
                       onPickFromGallery: () => ref
                           .read(currentUserAvatarProvider.notifier)
