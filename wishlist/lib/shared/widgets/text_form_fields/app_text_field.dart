@@ -5,7 +5,7 @@ import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 
 /// Un TextField avec un design arrondi et un icône
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
     required this.controller,
@@ -30,25 +30,40 @@ class AppTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
 
   @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  bool _hasError = false;
+  final _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.gainsboro,
         borderRadius: BorderRadius.circular(16),
+        border: _hasError ? Border.all(color: Colors.red, width: 2) : null,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Row(
-          crossAxisAlignment: maxLines != null && maxLines! > 1
+          crossAxisAlignment: widget.maxLines != null && widget.maxLines! > 1
               ? CrossAxisAlignment.start
               : CrossAxisAlignment.center,
           children: [
             Padding(
               padding: EdgeInsets.only(
-                top: maxLines != null && maxLines! > 1 ? 12 : 0,
+                top: widget.maxLines != null && widget.maxLines! > 1 ? 12 : 0,
               ),
               child: Icon(
-                icon,
+                widget.icon,
                 color: AppColors.makara,
                 size: 24,
               ),
@@ -56,38 +71,58 @@ class AppTextField extends StatelessWidget {
             const Gap(12),
             Expanded(
               child: TextFormField(
-                controller: controller,
-                validator: validator,
-                keyboardType: keyboardType,
-                inputFormatters: inputFormatters,
-                maxLines: maxLines ?? 1,
-                minLines: minLines ?? 1,
+                controller: widget.controller,
+                focusNode: _focusNode,
+                cursorErrorColor: Colors.red,
+                validator: (value) {
+                  final error = widget.validator?.call(value);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (mounted) {
+                      setState(() {
+                        _hasError = error != null;
+                      });
+                      // Remettre le focus sur le champ en erreur
+                      if (error != null) {
+                        _focusNode.requestFocus();
+                      }
+                    }
+                  });
+                  return error;
+                },
+                keyboardType: widget.keyboardType,
+                inputFormatters: widget.inputFormatters,
+                maxLines: widget.maxLines ?? 1,
+                minLines: widget.minLines ?? 1,
                 style: AppTextStyles.small.copyWith(
                   color: AppColors.darkGrey,
                 ),
                 decoration: InputDecoration(
-                  labelText: label,
+                  labelText: widget.label,
                   labelStyle: AppTextStyles.small.copyWith(
                     color: AppColors.makara,
                   ),
-                  alignLabelWithHint: maxLines != null && maxLines! > 1,
+                  alignLabelWithHint:
+                      widget.maxLines != null && widget.maxLines! > 1,
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   errorBorder: InputBorder.none,
                   focusedErrorBorder: InputBorder.none,
+                  errorStyle: const TextStyle(fontSize: 0),
                   contentPadding: EdgeInsets.only(
                     top: 12,
                     bottom: 12,
-                    right: suffixButtons != null && suffixButtons!.isNotEmpty
+                    right: widget.suffixButtons != null &&
+                            widget.suffixButtons!.isNotEmpty
                         ? 8
                         : 0,
                   ),
                 ),
               ),
             ),
-            if (suffixButtons != null && suffixButtons!.isNotEmpty) ...[
-              ...suffixButtons!,
+            if (widget.suffixButtons != null &&
+                widget.suffixButtons!.isNotEmpty) ...[
+              ...widget.suffixButtons!,
             ],
           ],
         ),
