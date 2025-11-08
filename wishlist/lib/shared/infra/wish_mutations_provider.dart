@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_community_mutation/riverpod_community_mutation.dart';
 import 'package:wishlist/shared/infra/wish_service.dart';
@@ -22,6 +23,21 @@ class WishMutations extends _$WishMutations with Mutation<void> {
     );
   }
 
+  Future<void> createWithImage({
+    required WishCreateRequest request,
+    File? imageFile,
+  }) async {
+    await mutate(
+      () async {
+        final service = ref.read(wishServiceProvider);
+        await service.createWishWithImage(
+          wishCreateRequest: request,
+          imageFile: imageFile,
+        );
+      },
+    );
+  }
+
   Future<void> update(Wish wish) async {
     await mutate(
       () async {
@@ -31,11 +47,11 @@ class WishMutations extends _$WishMutations with Mutation<void> {
     );
   }
 
-  Future<void> delete(int wishId) async {
+  Future<void> delete(int wishId, {String? iconUrl}) async {
     await mutate(
       () async {
         final service = ref.read(wishServiceProvider);
-        await service.deleteWish(wishId);
+        await service.deleteWish(wishId, iconUrl: iconUrl);
       },
     );
   }
