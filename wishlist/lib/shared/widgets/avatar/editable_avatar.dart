@@ -5,7 +5,7 @@ import 'package:wishlist/shared/infra/current_user_avatar_provider.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/avatar/app_avatar.dart';
-import 'package:wishlist/shared/widgets/avatar/avatar_options_bottom_sheet.dart';
+import 'package:wishlist/shared/widgets/image_options_bottom_sheet.dart';
 
 class EditableAvatar extends ConsumerWidget {
   const EditableAvatar({
@@ -97,9 +97,22 @@ class EditableAvatar extends ConsumerWidget {
                     final avatarAsync = ref.read(currentUserAvatarProvider);
                     final avatarUrl = avatarAsync.valueOrNull;
                     final hasAvatar = avatarUrl != null && avatarUrl.isNotEmpty;
-                    showAvatarOptionsBottomSheet(
+                    final l10n = context.l10n;
+                    showImageOptionsBottomSheet(
                       context,
-                      hasAvatar: hasAvatar,
+                      title: l10n.imageOptions,
+                      hasImage: hasAvatar,
+                      onPickFromGallery: () => ref
+                          .read(currentUserAvatarProvider.notifier)
+                          .pickAndUploadAvatar(),
+                      onTakePhoto: () => ref
+                          .read(currentUserAvatarProvider.notifier)
+                          .takePhotoAndUpload(),
+                      onRemoveImage: () => ref
+                          .read(currentUserAvatarProvider.notifier)
+                          .deleteAvatar(),
+                      removeImageTitle: l10n.removeImage,
+                      removeImageConfirmation: l10n.removeImageConfirmation,
                     );
                   },
                   icon: const Icon(

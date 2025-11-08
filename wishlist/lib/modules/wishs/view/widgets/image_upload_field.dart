@@ -1,17 +1,19 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 
-/// Widget pour uploader une image avec un design moderne
 class ImageUploadField extends StatelessWidget {
   const ImageUploadField({
     super.key,
     this.onTap,
+    this.imageFile,
   });
 
   final VoidCallback? onTap;
+  final File? imageFile;
 
   @override
   Widget build(BuildContext context) {
@@ -22,30 +24,70 @@ class ImageUploadField extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.gainsboro,
         borderRadius: BorderRadius.circular(16),
+        image: imageFile != null
+            ? DecorationImage(
+                image: FileImage(imageFile!),
+                fit: BoxFit.cover,
+              )
+            : null,
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: onTap,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.add_photo_alternate_outlined,
-                size: 48,
-                color: AppColors.makara.withValues(alpha: 0.6),
-              ),
-              const Gap(12),
-              Text(
-                l10n.uploadImage,
-                style: AppTextStyles.small.copyWith(
-                  color: AppColors.makara,
-                  fontWeight: FontWeight.w500,
+          child: imageFile == null
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.add_photo_alternate_outlined,
+                      size: 48,
+                      color: AppColors.makara.withValues(alpha: 0.6),
+                    ),
+                    const Gap(12),
+                    Text(
+                      l10n.uploadImage,
+                      style: AppTextStyles.small.copyWith(
+                        color: AppColors.makara,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                )
+              : Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withValues(alpha: 0.3),
+                      ],
+                    ),
+                  ),
+                  alignment: Alignment.bottomCenter,
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.edit,
+                        size: 16,
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
+                      const Gap(8),
+                      Text(
+                        l10n.uploadImage,
+                        style: AppTextStyles.small.copyWith(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -35,6 +36,13 @@ class _CreateWishScreenState extends ConsumerState<CreateWishScreen> {
 
   bool _isFavourite = false;
   bool _isLoading = false;
+  File? _selectedImage;
+
+  void _onImageSelected(File? imageFile) {
+    setState(() {
+      _selectedImage = imageFile;
+    });
+  }
 
   Future<void> _onCreateWish() async {
     if (!_formKey.currentState!.validate()) {
@@ -72,7 +80,14 @@ class _CreateWishScreenState extends ConsumerState<CreateWishScreen> {
       );
 
       try {
-        await ref.read(wishMutationsProvider.notifier).create(wish);
+        if (_selectedImage != null) {
+          await ref.read(wishMutationsProvider.notifier).createWithImage(
+                request: wish,
+                imageFile: _selectedImage,
+              );
+        } else {
+          await ref.read(wishMutationsProvider.notifier).create(wish);
+        }
 
         if (mounted) {
           showAppSnackBar(
@@ -158,6 +173,7 @@ class _CreateWishScreenState extends ConsumerState<CreateWishScreen> {
                         quantityController: _quantityInputController,
                         linkController: _linkInputController,
                         descriptionController: _descriptionInputController,
+                        onImageSelected: _onImageSelected,
                       ),
                     ),
                   ),
