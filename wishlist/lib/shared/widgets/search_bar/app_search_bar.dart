@@ -111,7 +111,7 @@ class SearchField extends StatelessWidget {
   final String hintText;
   final VoidCallback onClearFocus;
 
-  static const double _searchBarBorderRadius = 6;
+  static const double _searchBarBorderRadius = 12;
   static const double _searchFontSize = 16;
 
   @override
@@ -192,7 +192,7 @@ class SearchBarButton extends StatelessWidget {
   final IconData? smallIcon;
   final VoidCallback onTap;
 
-  static const double _searchBarBorderRadius = 6;
+  static const double _searchBarBorderRadius = 12;
   static const double _buttonSize = 40;
 
   @override

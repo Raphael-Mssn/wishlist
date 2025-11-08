@@ -33,7 +33,7 @@ class BookedWishesSearchBar extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       decoration: const BoxDecoration(
         color: AppColors.gainsboro,
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderRadius: BorderRadius.all(Radius.circular(24)),
       ),
       child: Row(
         children: [

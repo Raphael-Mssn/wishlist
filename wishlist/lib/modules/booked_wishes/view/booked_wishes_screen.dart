@@ -315,7 +315,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
       padding: const EdgeInsets.all(_contentPadding),
       decoration: BoxDecoration(
         color: AppColors.gainsboro,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -334,15 +334,15 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
             onTap: () => _onUserTap(firstWish.ownerId),
           ),
           const Gap(_itemSpacing),
-          ...ownerWishes.map((bookedWish) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: BookedWishCard(
+          Column(
+            spacing: 8,
+            children: ownerWishes.map((bookedWish) {
+              return BookedWishCard(
                 bookedWish: bookedWish,
                 onTap: () => _onWishTap(bookedWish),
-              ),
-            );
-          }),
+              );
+            }).toList(),
+          ),
         ],
       ),
     );
