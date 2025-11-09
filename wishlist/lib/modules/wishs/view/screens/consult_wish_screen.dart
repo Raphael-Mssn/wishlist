@@ -7,6 +7,7 @@ import 'package:wishlist/modules/wishs/view/widgets/consult_wish_image.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_wish_info_container.dart';
 import 'package:wishlist/shared/infra/repositories/wish/wish_streams_providers.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 
 class ConsultWishScreen extends ConsumerWidget {
   const ConsultWishScreen({
@@ -21,37 +22,49 @@ class ConsultWishScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final wish = ref.watch(watchWishByIdProvider(wishId));
 
-    return Scaffold(
-      backgroundColor: AppColors.gainsboro,
-      body: wish.when(
-        data: (wish) {
-          final descriptionText = wish.description.isNotEmpty
-              ? wish.description
-              : l10n.noDescription;
+    return wish.when(
+      data: (wishData) {
+        final wishlistTheme =
+            ref.watch(wishlistThemeProvider(wishData.wishlistId));
 
-          return Stack(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    const Gap(64),
-                    const ConsultWishBackButton(),
-                    const Gap(16),
-                    ConsultWishImage(wish: wish),
-                    const Gap(32),
-                    ConsultWishInfoContainer(
-                      wish: wish,
-                      descriptionText: descriptionText,
-                    ),
-                  ],
+        final descriptionText = wishData.description.isNotEmpty
+            ? wishData.description
+            : l10n.noDescription;
+
+        return AnimatedTheme(
+          data: wishlistTheme,
+          child: Scaffold(
+            backgroundColor: AppColors.gainsboro,
+            body: Stack(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      const Gap(64),
+                      const ConsultWishBackButton(),
+                      const Gap(16),
+                      ConsultWishImage(wish: wishData),
+                      const Gap(32),
+                      ConsultWishInfoContainer(
+                        wish: wishData,
+                        descriptionText: descriptionText,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
-        error: (error, stackTrace) => const SizedBox.shrink(),
-        loading: () => const Center(child: CircularProgressIndicator()),
+              ],
+            ),
+          ),
+        );
+      },
+      error: (error, stackTrace) => const Scaffold(
+        backgroundColor: AppColors.gainsboro,
+        body: SizedBox.shrink(),
+      ),
+      loading: () => const Scaffold(
+        backgroundColor: AppColors.gainsboro,
+        body: Center(child: CircularProgressIndicator()),
       ),
     );
   }
