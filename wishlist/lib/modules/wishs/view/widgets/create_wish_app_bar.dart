@@ -17,7 +17,7 @@ class CreateWishAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Color backgroundColor;
   final bool isFavourite;
-  final Future<bool> Function(bool) onFavouriteTap;
+  final Future<bool> Function(bool isLiked) onFavouriteTap;
 
   @override
   Size get preferredSize => const Size.fromHeight(70);
