@@ -3,11 +3,11 @@ import 'package:wishlist/shared/infra/wish_service.dart';
 
 /// Provider qui retourne l'URL complète d'une image de wish à partir de
 /// son path
-/// Paramètres: (imagePath, thumbnail)
+/// Paramètres: (imagePath: String?, thumbnail: bool)
 final wishImageUrlProvider =
-    Provider.family<String, (String?, bool)>((ref, params) {
-  final (imagePath, thumbnail) = params;
+    Provider.family<String, ({String? imagePath, bool thumbnail})>(
+        (ref, params) {
   return ref
       .watch(wishServiceProvider)
-      .getWishImageUrl(imagePath, thumbnail: thumbnail);
+      .getWishImageUrl(params.imagePath, thumbnail: params.thumbnail);
 });

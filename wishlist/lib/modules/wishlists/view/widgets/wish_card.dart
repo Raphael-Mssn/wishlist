@@ -36,9 +36,8 @@ class WishCard extends ConsumerWidget {
     // Calculer la quantité à afficher selon le contexte
     final quantityToDisplay = _getQuantityToDisplay();
 
-    // TODO: ne pas passer 'true' en dur pour le thumbnail
     final wishImageUrl = ref.watch(
-      wishImageUrlProvider((wish.iconUrl, true)),
+      wishImageUrlProvider((imagePath: wish.iconUrl, thumbnail: true)),
     );
 
     return Material(
