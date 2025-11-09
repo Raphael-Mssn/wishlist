@@ -157,7 +157,7 @@ class _CreateWishScreenState extends ConsumerState<CreateWishScreen> {
               title: l10n.createWishBottomSheetTitle,
               backgroundColor: wishlistTheme.primaryColor,
               isFavourite: _isFavourite,
-              onFavouriteTap: (isLiked) async {
+              onFavouriteTap: ({required isLiked}) async {
                 setState(() {
                   _isFavourite = !isLiked;
                 });
