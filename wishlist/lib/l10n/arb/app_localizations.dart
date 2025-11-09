@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Wishlist'**
+  /// **'Wishy'**
   String get appTitle;
 
   /// No description provided for @emailField.
@@ -841,6 +841,30 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le lien de réinitialisation a expiré. Veuillez en demander un nouveau.'**
   String get resetPasswordLinkExpired;
+
+  /// No description provided for @settingsGeneral.
+  ///
+  /// In fr, this message translates to:
+  /// **'Général'**
+  String get settingsGeneral;
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In fr, this message translates to:
+  /// **'À propos'**
+  String get settingsAbout;
+
+  /// No description provided for @settingsTermsOfUse.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conditions d\'utilisation'**
+  String get settingsTermsOfUse;
+
+  /// No description provided for @settingsPrivacyPolicy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Politique de confidentialité'**
+  String get settingsPrivacyPolicy;
 }
 
 class _AppLocalizationsDelegate

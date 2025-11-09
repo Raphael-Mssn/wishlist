@@ -9,7 +9,7 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get appTitle => 'Wishlist';
+  String get appTitle => 'Wishy';
 
   @override
   String get emailField => 'Email';
@@ -415,4 +415,16 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get resetPasswordLinkExpired =>
       'Le lien de réinitialisation a expiré. Veuillez en demander un nouveau.';
+
+  @override
+  String get settingsGeneral => 'Général';
+
+  @override
+  String get settingsAbout => 'À propos';
+
+  @override
+  String get settingsTermsOfUse => 'Conditions d\'utilisation';
+
+  @override
+  String get settingsPrivacyPolicy => 'Politique de confidentialité';
 }

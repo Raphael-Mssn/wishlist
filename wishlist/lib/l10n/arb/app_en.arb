@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Wishlist",
+  "appTitle": "Wishy",
   "emailField": "Email",
   "validEmailError": "Please enter a valid email address",
   "passwordField": "Password",
@@ -123,5 +123,9 @@
   "resetPasswordDescription": "Enter your new password.",
   "resetPasswordConfirm": "Reset",
   "resetPasswordSuccess": "Password reset successfully! Please sign in with your new password.",
-  "resetPasswordLinkExpired": "The reset link has expired. Please request a new one."
+  "resetPasswordLinkExpired": "The reset link has expired. Please request a new one.",
+  "settingsGeneral": "General",
+  "settingsAbout": "About",
+  "settingsTermsOfUse": "Terms of use",
+  "settingsPrivacyPolicy": "Privacy policy"
 }
