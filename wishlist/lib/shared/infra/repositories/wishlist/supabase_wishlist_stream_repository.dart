@@ -113,7 +113,8 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
     _loadInitialPublicWishlists(userId, controller);
 
     // Créer le channel Realtime
-    // Note: Supabase Realtime ne supporte qu'un seul filtre PostgresChangeFilter
+    // Note: Supabase Realtime ne supporte qu'un seul filtre
+    // PostgresChangeFilter
     // On filtre par id_owner et on vérifie is_public dans le payload
     final channel = _client
         .channel('wishlists_public_user_$userId')

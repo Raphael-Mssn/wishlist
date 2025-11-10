@@ -2,7 +2,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:pattern_box/pattern_box.dart';
 
-/// Un WavePainter amélioré qui combine rotation et variation d'angle en une seule classe
+/// Un WavePainter amélioré qui combine rotation et variation d'angle en une
+/// seule classe
 class EnhancedWavePainter extends PatternBox {
   EnhancedWavePainter({
     Color? color,
