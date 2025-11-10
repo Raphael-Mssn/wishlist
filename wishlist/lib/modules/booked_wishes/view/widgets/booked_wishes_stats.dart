@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
@@ -43,7 +44,7 @@ class BookedWishesStats extends StatelessWidget {
             size: 24,
             color: Theme.of(context).primaryColor,
           ),
-          const SizedBox(width: 6),
+          const Gap(6),
           Expanded(
             child: RichText(
               text: TextSpan(
