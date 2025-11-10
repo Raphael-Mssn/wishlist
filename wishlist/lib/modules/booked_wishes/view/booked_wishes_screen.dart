@@ -33,6 +33,8 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   static const double _contentPadding = 16;
   static const double _itemSpacing = 16;
   static const double _listBottomPadding = 110;
+  static const EdgeInsets _headerPadding =
+      EdgeInsets.fromLTRB(_contentPadding, _contentPadding, _contentPadding, 8);
   static const int _animationDurationMs = 375;
   static const int _staggeredAnimationDelay = 20;
   static const int _staggeredAnimationMargin = 200;
@@ -195,8 +197,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
                 ),
               ),
               child: Padding(
-                padding:
-                    const EdgeInsets.all(_contentPadding).copyWith(bottom: 8),
+                padding: _headerPadding,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   spacing: _itemSpacing,
@@ -256,8 +257,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
                 ),
               ),
               child: Padding(
-                padding:
-                    const EdgeInsets.all(_contentPadding).copyWith(bottom: 8),
+                padding: _headerPadding,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   spacing: _itemSpacing,
