@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/utils/formatters.dart';
 
 class BookedWishCard extends StatelessWidget {
   const BookedWishCard({
@@ -93,10 +94,8 @@ class BookedWishCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    CurrencyFormatter.format(
+                    Formatters.currency(
                       price,
-                      CurrencyFormat.eur,
-                      showThousandSeparator: false,
                     ),
                     style: AppTextStyles.small.copyWith(
                       color: AppColors.darkGrey,

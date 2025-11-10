@@ -5,6 +5,7 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/utils/formatters.dart';
 
 class WishCard extends StatelessWidget {
   const WishCard({
@@ -95,10 +96,8 @@ class WishCard extends StatelessWidget {
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                CurrencyFormatter.format(
+                                Formatters.currency(
                                   price,
-                                  CurrencyFormat.eur,
-                                  showThousandSeparator: false,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,

@@ -4,6 +4,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/utils/formatters.dart';
 
 class BookedWishesStats extends StatelessWidget {
   const BookedWishesStats({
@@ -61,7 +62,9 @@ class BookedWishesStats extends StatelessWidget {
                   if (totalBudget != null) ...[
                     const TextSpan(text: ' • '),
                     TextSpan(
-                      text: '${totalBudget.toStringAsFixed(0)}€',
+                      text: Formatters.currency(
+                        totalBudget,
+                      ),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).primaryColor,
