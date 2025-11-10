@@ -25,6 +25,7 @@ class SupabaseWishTakenByUserStreamRepository
       return existingController.stream as Stream<IList<WishTakenByUser>>;
     }
 
+    // ignore: close_sinks
     final controller = StreamController<IList<WishTakenByUser>>.broadcast(
       onCancel: () => _cleanupStream(key),
     );
@@ -91,6 +92,7 @@ class SupabaseWishTakenByUserStreamRepository
       return existingController.stream as Stream<IList<WishTakenByUser>>;
     }
 
+    // ignore: close_sinks
     final controller = StreamController<IList<WishTakenByUser>>.broadcast(
       onCancel: () => _cleanupStream(key),
     );
