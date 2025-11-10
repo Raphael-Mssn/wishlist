@@ -3,6 +3,6 @@ import 'package:wishlist/shared/infra/repositories/user/supabase_user_repository
 import 'package:wishlist/shared/infra/repositories/user/user_repository.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 
-final userRepositoryProvider = Provider<UserRepository>((ref) {
+final userRepositoryProvider = Provider.autoDispose<UserRepository>((ref) {
   return SupabaseUserRepository(ref.watch(supabaseClientProvider));
 });

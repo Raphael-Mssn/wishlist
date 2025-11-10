@@ -57,6 +57,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savePseudo => 'Save';
 
   @override
+  String get bookedWishesScreenTitle => 'My bookings';
+
+  @override
+  String get bookedWishesEmptyTitle => 'No bookings';
+
+  @override
+  String get bookedWishesEmptyCallToAction =>
+      'Explore your friends\' wishlists';
+
+  @override
+  String bookedWishCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bookings',
+      one: '1 booking',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get settingsScreenTitle => 'Settings';
 
   @override
@@ -213,6 +234,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wishlistSearchHint => 'Search for a wish...';
 
   @override
+  String get bookedWishesSearchHint => 'Search for a wish or a pseudo...';
+
+  @override
   String get wishlistNoWish => 'No wish';
 
   @override
@@ -348,6 +372,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sortByDate => 'By creation date';
+
+  @override
+  String get sortByBookingCount => 'By booking count';
 
   @override
   String get selectQuantityToGive => 'How much would you like to offer?';

@@ -51,6 +51,14 @@ class FriendsScreen extends ConsumerWidget {
     return combinedList;
   }
 
+  void _onError(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (context.mounted) {
+        showGenericError(context, isTopSnackBar: true);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
@@ -68,7 +76,7 @@ class FriendsScreen extends ConsumerWidget {
         child: CircularProgressIndicator(),
       ),
       error: (error, stackTrace) {
-        showGenericError(context, isTopSnackBar: true);
+        _onError(context);
         return const SizedBox.shrink();
       },
       data: (data) => data.isEmpty
@@ -78,6 +86,7 @@ class FriendsScreen extends ConsumerWidget {
               callToAction: l10n.addButton,
               onCallToAction: () => showAddFriendBottomSheet(context),
               onRefresh: refreshFriends,
+              appBarTitle: l10n.fiendsScreenTitle,
             )
           : PageLayout(
               title: l10n.fiendsScreenTitle,

@@ -58,6 +58,27 @@ class AppLocalizationsFr extends AppLocalizations {
   String get savePseudo => 'Sauvegarder';
 
   @override
+  String get bookedWishesScreenTitle => 'Mes réservations';
+
+  @override
+  String get bookedWishesEmptyTitle => 'Aucune réservation';
+
+  @override
+  String get bookedWishesEmptyCallToAction =>
+      'Explorer les wishlists de vos amis';
+
+  @override
+  String bookedWishCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count réservations',
+      one: '1 réservation',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get settingsScreenTitle => 'Paramètres';
 
   @override
@@ -214,6 +235,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get wishlistSearchHint => 'Rechercher un wish...';
 
   @override
+  String get bookedWishesSearchHint => 'Rechercher un wish ou un pseudo...';
+
+  @override
   String get wishlistNoWish => 'Aucun wish';
 
   @override
@@ -350,6 +374,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get sortByDate => 'Par date de création';
+
+  @override
+  String get sortByBookingCount => 'Par nombre de réservations';
 
   @override
   String get selectQuantityToGive => 'Quelle quantité souhaitez-vous offrir ?';

@@ -4,7 +4,8 @@ import 'package:wishlist/shared/infra/repositories/wish/wish_repository_provider
 import 'package:wishlist/shared/infra/repositories/wish/wish_stream_repository.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 
-final wishStreamRepositoryProvider = Provider<WishStreamRepository>((ref) {
+final wishStreamRepositoryProvider =
+    Provider.autoDispose<WishStreamRepository>((ref) {
   final client = ref.watch(supabaseClientProvider);
   final wishRepository = ref.watch(wishRepositoryProvider);
 

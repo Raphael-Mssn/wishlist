@@ -1,9 +1,21 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/main.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 
+class AuthStateNotifier extends ChangeNotifier {
+  AuthStateNotifier() {
+    supabase.auth.onAuthStateChange.listen((data) {
+      notifyListeners();
+    });
+  }
+}
+
+final _authStateNotifier = AuthStateNotifier();
+
 final router = GoRouter(
   initialLocation: HomeRoute().location,
+  refreshListenable: _authStateNotifier,
   routes: $appRoutes,
   redirect: (context, state) {
     final activeSession = supabase.auth.currentSession;

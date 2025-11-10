@@ -21,10 +21,12 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
   const _ConsultWishBottomSheet({
     required this.wish,
     this.cardType,
+    this.onWishUpdated,
   });
 
   final Wish wish;
   final WishlistStatsCardType? cardType;
+  final VoidCallback? onWishUpdated;
 
   Future<void> onOpenLink(BuildContext context, String linkUrl) async {
     final canLaunch = await launchUrl(Uri.parse(linkUrl));
@@ -69,6 +71,7 @@ class _ConsultWishBottomSheet extends ConsumerWidget {
     try {
       await ref.read(wishTakenByUserServiceProvider).cancelWishTaken(wish);
       if (context.mounted) {
+        onWishUpdated?.call();
         context.pop();
       }
     } catch (e) {
@@ -183,12 +186,14 @@ Future<void> showConsultWishBottomSheet(
   BuildContext context,
   Wish wish, {
   WishlistStatsCardType? cardType,
+  VoidCallback? onWishUpdated,
 }) async {
   await showAppBottomSheet(
     context,
     body: _ConsultWishBottomSheet(
       wish: wish,
       cardType: cardType,
+      onWishUpdated: onWishUpdated,
     ),
   );
 }

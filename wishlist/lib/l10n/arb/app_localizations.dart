@@ -194,6 +194,30 @@ abstract class AppLocalizations {
   /// **'Sauvegarder'**
   String get savePseudo;
 
+  /// No description provided for @bookedWishesScreenTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes réservations'**
+  String get bookedWishesScreenTitle;
+
+  /// No description provided for @bookedWishesEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune réservation'**
+  String get bookedWishesEmptyTitle;
+
+  /// No description provided for @bookedWishesEmptyCallToAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Explorer les wishlists de vos amis'**
+  String get bookedWishesEmptyCallToAction;
+
+  /// No description provided for @bookedWishCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{1 réservation} other{{count} réservations}}'**
+  String bookedWishCount(int count);
+
   /// No description provided for @settingsScreenTitle.
   ///
   /// In fr, this message translates to:
@@ -464,6 +488,12 @@ abstract class AppLocalizations {
   /// **'Rechercher un wish...'**
   String get wishlistSearchHint;
 
+  /// No description provided for @bookedWishesSearchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un wish ou un pseudo...'**
+  String get bookedWishesSearchHint;
+
   /// No description provided for @wishlistNoWish.
   ///
   /// In fr, this message translates to:
@@ -727,6 +757,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Par date de création'**
   String get sortByDate;
+
+  /// No description provided for @sortByBookingCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par nombre de réservations'**
+  String get sortByBookingCount;
 
   /// No description provided for @selectQuantityToGive.
   ///

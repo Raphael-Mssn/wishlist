@@ -16,6 +16,17 @@
   "validPseudoError": "Le pseudo ne peut pas être vide",
   "pseudoAlreadyExists": "Ce pseudo est déjà utilisé",
   "savePseudo": "Sauvegarder",
+  "bookedWishesScreenTitle": "Mes réservations",
+  "bookedWishesEmptyTitle": "Aucune réservation",
+  "bookedWishesEmptyCallToAction": "Explorer les wishlists de vos amis",
+  "bookedWishCount": "{count, plural, =1{1 réservation} other{{count} réservations}}",
+  "@bookedWishCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "settingsScreenTitle": "Paramètres",
   "settingsScreenEmail": "Email",
   "settingsScreenEmailModify": "Modifier",
@@ -61,6 +72,7 @@
   "wishlistStatusPending": "En attente",
   "wishlistStatusBooked": "Réservés",
   "wishlistSearchHint": "Rechercher un wish...",
+  "bookedWishesSearchHint": "Rechercher un wish ou un pseudo...",
   "wishlistNoWish": "Aucun wish",
   "wishlistNoWishBooked": "Aucun wish réservé",
   "wishlistNoWishBookedDisplayed": "Vous avez choisi de ne pas afficher les wishs réservés",
@@ -105,6 +117,7 @@
   "sortByAlphabetical": "Par ordre alphabétique",
   "sortByPrice": "Par prix",
   "sortByDate": "Par date de création",
+  "sortByBookingCount": "Par nombre de réservations",
   "selectQuantityToGive": "Quelle quantité souhaitez-vous offrir ?",
   "wishReservedSuccess": "Wish réservé avec succès !",
   "quantityCannotBeLowerThanBooked": "La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)",

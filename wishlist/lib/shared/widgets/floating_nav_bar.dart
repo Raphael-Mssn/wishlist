@@ -38,7 +38,7 @@ class FloatingNavBar extends StatelessWidget {
         tabs: const [
           _TabIcon(icon: Icons.home),
           _TabIcon(icon: Icons.group),
-          _TabIcon(icon: Icons.settings),
+          _TabIcon(icon: Icons.bookmark),
         ],
       ),
     );

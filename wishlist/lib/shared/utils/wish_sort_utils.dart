@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
+import 'package:wishlist/shared/utils/string_utils.dart';
 
 /// Utilitaires pour le tri et le filtrage des wishs
 class WishSortUtils {
@@ -15,10 +16,10 @@ class WishSortUtils {
     // D'abord filtrer par recherche
     var filteredWishs = wishs;
     if (searchQuery.isNotEmpty) {
+      final normalizedQuery = normalizeString(searchQuery);
       filteredWishs = wishs
           .where(
-            (wish) =>
-                wish.name.toLowerCase().contains(searchQuery.toLowerCase()),
+            (wish) => normalizeString(wish.name).contains(normalizedQuery),
           )
           .toIList();
     }

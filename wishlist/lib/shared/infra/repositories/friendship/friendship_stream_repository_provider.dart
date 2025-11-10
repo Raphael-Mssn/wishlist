@@ -5,7 +5,7 @@ import 'package:wishlist/shared/infra/repositories/friendship/supabase_friendshi
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 
 final friendshipStreamRepositoryProvider =
-    Provider<FriendshipStreamRepository>((ref) {
+    Provider.autoDispose<FriendshipStreamRepository>((ref) {
   final client = ref.watch(supabaseClientProvider);
   final friendshipRepository = ref.watch(friendshipRepositoryProvider);
 

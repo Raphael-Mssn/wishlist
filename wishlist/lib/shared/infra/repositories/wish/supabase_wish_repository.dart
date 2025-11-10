@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/shared/infra/repositories/wish/wish_repository.dart';
 import 'package:wishlist/shared/infra/utils/execute_safely.dart';
+import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 
@@ -42,6 +43,48 @@ class SupabaseWishRepository implements WishRepository {
         );
       },
       errorMessage: 'Failed to get number of wishs by user',
+    );
+  }
+
+  @override
+  Future<IList<BookedWishWithDetails>> getBookedWishesByUser(
+    String userId,
+  ) async {
+    return executeSafely(
+      () async {
+        final response =
+            await _client.from(_wishTakenByUserTableName).select('''
+              quantity,
+              wishs!inner(
+                *,
+                taken_by_user:$_wishTakenByUserTableName(*),
+                wishlists!inner(
+                  name,
+                  id_owner,
+                  profiles!inner(
+                    pseudo,
+                    avatar_url
+                  )
+                )
+              )
+            ''').eq('user_id', userId).order('created_at', ascending: false);
+
+        return response.map((item) {
+          final wishData = item['wishs'] as Map<String, dynamic>;
+          final wishlistData = wishData['wishlists'] as Map<String, dynamic>;
+          final profileData = wishlistData['profiles'] as Map<String, dynamic>;
+
+          return BookedWishWithDetails(
+            wish: Wish.fromJson(wishData),
+            bookedQuantity: item['quantity'] as int,
+            wishlistName: wishlistData['name'] as String,
+            ownerId: wishlistData['id_owner'] as String,
+            ownerPseudo: profileData['pseudo'] as String,
+            ownerAvatarUrl: profileData['avatar_url'] as String?,
+          );
+        }).toIList();
+      },
+      errorMessage: 'Failed to get booked wishes by user',
     );
   }
 

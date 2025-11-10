@@ -65,13 +65,15 @@ void showGenericError(
   bool isTopSnackBar = false,
   Duration duration = const Duration(seconds: 4),
 }) {
-  showAppSnackBar(
-    context,
-    context.l10n.genericError,
-    type: SnackBarType.error,
-    isTopSnackBar: isTopSnackBar,
-    duration: duration,
-  );
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    showAppSnackBar(
+      context,
+      context.l10n.genericError,
+      type: SnackBarType.error,
+      isTopSnackBar: isTopSnackBar,
+      duration: duration,
+    );
+  });
 }
 
 /// Widget qui gère l'animation d'entrée/sortie et la progress bar du snackbar
