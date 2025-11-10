@@ -22,6 +22,7 @@ class UserGroupHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final avatarUrl = this.avatarUrl ?? '';
 
     return Row(
       children: [
@@ -38,7 +39,7 @@ class UserGroupHeader extends StatelessWidget {
                     AppAvatar(
                       avatarUrl: avatarUrl,
                       size: 32,
-                      hasBorders: avatarUrl == null || avatarUrl!.isEmpty,
+                      hasBorders: avatarUrl.isEmpty,
                     ),
                     const Gap(12),
                     Expanded(
