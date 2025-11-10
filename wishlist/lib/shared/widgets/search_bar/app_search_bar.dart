@@ -17,10 +17,6 @@ class AppSearchBar<T> extends StatelessWidget {
     required this.onSortButtonTap,
     required this.sortIcon,
     this.showOrderButton = true,
-    this.borderRadius = const BorderRadius.vertical(
-      top: Radius.circular(16),
-      bottom: Radius.circular(16),
-    ),
   });
 
   final TextEditingController searchController;
@@ -33,23 +29,25 @@ class AppSearchBar<T> extends StatelessWidget {
   final VoidCallback onSortButtonTap;
   final IconData sortIcon;
   final bool showOrderButton;
-  final BorderRadius borderRadius;
 
-  static const double _verticalPadding = 16;
+  static const double _horizontalPadding = 16;
+  static const double _verticalPadding = 12;
+  static const BorderRadius _defaultBorderRadius = BorderRadius.vertical(
+    top: Radius.circular(16),
+    bottom: Radius.circular(16),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(
-        _verticalPadding,
-        12,
-        _verticalPadding,
-        12,
+      padding: const EdgeInsets.symmetric(
+        horizontal: _horizontalPadding,
+        vertical: _verticalPadding,
       ),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.gainsboro,
-        borderRadius: borderRadius,
+        borderRadius: _defaultBorderRadius,
       ),
       child: Row(
         children: [
@@ -94,7 +92,7 @@ class AppSearchBar<T> extends StatelessWidget {
   }
 }
 
-/// Champ de recherche réutilisable
+/// Champ de recherche
 class SearchField extends StatelessWidget {
   const SearchField({
     super.key,
@@ -113,6 +111,10 @@ class SearchField extends StatelessWidget {
 
   static const double _searchBarBorderRadius = 12;
   static const double _searchFontSize = 16;
+  static const BoxConstraints _prefixIconConstraints = BoxConstraints(
+    minWidth: 40,
+    minHeight: 40,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -137,10 +139,7 @@ class SearchField extends StatelessWidget {
             color: AppColors.makara,
             size: 20,
           ),
-          prefixIconConstraints: const BoxConstraints(
-            minWidth: 40,
-            minHeight: 40,
-          ),
+          prefixIconConstraints: _prefixIconConstraints,
           suffixIcon: searchQuery.isNotEmpty
               ? IconButton(
                   icon: const Icon(
@@ -194,6 +193,7 @@ class SearchBarButton extends StatelessWidget {
 
   static const double _searchBarBorderRadius = 12;
   static const double _buttonSize = 40;
+  static const double _smallIcon = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -219,8 +219,8 @@ class SearchBarButton extends StatelessWidget {
                       color: AppColors.darkGrey,
                     ),
                     Positioned(
-                      bottom: 4,
-                      right: 4,
+                      bottom: _smallIcon,
+                      right: _smallIcon,
                       child: Icon(
                         smallIcon,
                         size: 16,
