@@ -70,7 +70,6 @@ class PageLayoutEmpty extends StatelessWidget {
       return Scaffold(
         appBar: AppAppBar(
           title: appBarTitle,
-          actions: actions,
         ),
         body: body,
       );

@@ -25,7 +25,6 @@ class PageLayout extends StatelessWidget {
     return Scaffold(
       appBar: AppAppBar(
         title: title,
-        actions: actions,
       ),
       body: Padding(
         padding: padding,
