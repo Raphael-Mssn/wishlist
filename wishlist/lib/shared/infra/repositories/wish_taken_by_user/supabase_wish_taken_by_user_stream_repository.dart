@@ -158,9 +158,7 @@ class SupabaseWishTakenByUserStreamRepository
 
   @override
   void dispose() {
-    for (final channel in _channels.values) {
-      _client.removeChannel(channel);
-    }
+    _channels.values.forEach(_client.removeChannel);
     for (final controller in _controllers.values) {
       controller.close();
     }
