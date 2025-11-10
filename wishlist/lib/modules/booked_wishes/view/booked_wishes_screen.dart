@@ -100,15 +100,6 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
     ref.invalidate(bookedWishesRealtimeProvider);
   }
 
-  List<Widget> _buildSettingsAction() {
-    return [
-      IconButton(
-        icon: const Icon(Icons.settings),
-        onPressed: () => SettingsRoute().push(context),
-      ),
-    ];
-  }
-
   /// Filtre et groupe les wishes par utilisateur
   Map<String, List<BookedWishWithDetails>> _filterAndGroupWishes(
     List<BookedWishWithDetails> bookedWishes,
@@ -153,7 +144,6 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
       title: l10n.bookedWishesEmptyTitle,
       onRefresh: _refreshBookedWishes,
       appBarTitle: l10n.bookedWishesScreenTitle,
-      actions: _buildSettingsAction(),
     );
   }
 
@@ -162,7 +152,6 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
       title: l10n.bookedWishesScreenTitle,
       onRefresh: _refreshBookedWishes,
       padding: EdgeInsets.zero,
-      actions: _buildSettingsAction(),
       child: Stack(
         children: [
           // Centre avec message "aucun résultat"
@@ -226,7 +215,6 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
       title: l10n.bookedWishesScreenTitle,
       onRefresh: _refreshBookedWishes,
       padding: EdgeInsets.zero,
-      actions: _buildSettingsAction(),
       child: Stack(
         children: [
           Positioned.fill(

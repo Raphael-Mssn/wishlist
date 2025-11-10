@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 
@@ -6,11 +7,9 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   const AppAppBar({
     super.key,
     required this.title,
-    this.actions,
   });
 
   final String title;
-  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +18,14 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     final titleSize = isFirstRoute
         ? AppTextStyles.title.fontSize
         : AppTextStyles.title.fontSize! - 4;
+
+    final actions = [
+      if (isFirstRoute)
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () => SettingsRoute().push(context),
+        ),
+    ];
 
     return AppBar(
       centerTitle: !isFirstRoute,

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/wishlists_realtime_provider.dart';
-import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
@@ -43,23 +42,11 @@ class HomeScreen extends ConsumerWidget {
               },
               onRefresh: refreshWishlists,
               appBarTitle: l10n.myWishlists,
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () => SettingsRoute().push(context),
-                ),
-              ],
             )
           : PageLayout(
               padding: const EdgeInsets.all(20).copyWith(bottom: 0),
               title: l10n.myWishlists,
               onRefresh: refreshWishlists,
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () => SettingsRoute().push(context),
-                ),
-              ],
               child: WishlistsGrid(
                 wishlists: data,
                 isReorderable: true,

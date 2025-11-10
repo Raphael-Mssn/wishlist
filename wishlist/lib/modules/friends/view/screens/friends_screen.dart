@@ -7,7 +7,6 @@ import 'package:wishlist/modules/friends/view/widgets/friend_pill.dart';
 import 'package:wishlist/modules/friends/view/widgets/user_pill.dart';
 import 'package:wishlist/shared/infra/friendships_realtime_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
-import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
@@ -88,22 +87,10 @@ class FriendsScreen extends ConsumerWidget {
               onCallToAction: () => showAddFriendBottomSheet(context),
               onRefresh: refreshFriends,
               appBarTitle: l10n.fiendsScreenTitle,
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () => SettingsRoute().push(context),
-                ),
-              ],
             )
           : PageLayout(
               title: l10n.fiendsScreenTitle,
               onRefresh: refreshFriends,
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () => SettingsRoute().push(context),
-                ),
-              ],
               child: ListView.builder(
                 itemCount: data.totalCount,
                 itemBuilder: (context, index) {
