@@ -1,16 +1,18 @@
 import 'package:currency_formatter/currency_formatter.dart';
 
-/// Utility helpers for formatting values across the app.
+/// Helpers utilitaires pour formater les valeurs dans l'application.
 class Formatters {
-  /// Format a numeric value as a currency string.
+  /// Formate une valeur numérique en chaîne monétaire.
   ///
-  /// - [amount]: numeric value (double/int/num) to format.
-  /// - [currency]: CurrencyFormat to use (defaults to Euro).
-  /// - [decimal]: number of decimal places to show (defaults to 2).
-  /// - [showThousandSeparator]: whether to show thousand separators (defaults to false).
+  /// - [amount] : valeur numérique (double/int/num) à formater.
+  /// - [currency] : `CurrencyFormat` à utiliser (par défaut Euro).
+  /// - [decimal] : nombre de décimales à afficher (par défaut 2).
+  /// - [showThousandSeparator] : afficher les séparateurs de milliers
+  /// (par défaut false).
   ///
-  /// This wraps `CurrencyFormatter.format` so the rest of the app can call a
-  /// single helper and change formatting rules in one place.
+  /// Enveloppe `CurrencyFormatter.format` afin que le reste de l'application
+  /// puisse appeler un helper unique et modifier les règles de formatage en
+  /// un seul endroit.
   static String currency(
     num amount, {
     CurrencyFormat currency = CurrencyFormat.eur,
