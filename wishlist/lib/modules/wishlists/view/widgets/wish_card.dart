@@ -1,4 +1,3 @@
-import 'package:currency_formatter/currency_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
