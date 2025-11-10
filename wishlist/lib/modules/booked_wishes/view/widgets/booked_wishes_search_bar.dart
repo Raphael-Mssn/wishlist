@@ -17,6 +17,9 @@ class BookedWishesSearchBar extends StatelessWidget {
     required this.onClearFocus,
   });
 
+  static const double _horizontalPadding = 16;
+  static const double _verticalPadding = 12;
+
   final TextEditingController searchController;
   final FocusNode searchFocusNode;
   final String searchQuery;
@@ -30,7 +33,10 @@ class BookedWishesSearchBar extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      padding: const EdgeInsets.symmetric(
+        horizontal: _horizontalPadding,
+        vertical: _verticalPadding,
+      ),
       decoration: const BoxDecoration(
         color: AppColors.gainsboro,
         borderRadius: BorderRadius.all(Radius.circular(24)),
