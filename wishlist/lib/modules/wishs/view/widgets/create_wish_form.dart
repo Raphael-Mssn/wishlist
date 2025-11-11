@@ -110,8 +110,9 @@ class CreateWishFormState extends State<CreateWishForm> {
 
   Future<void> _pasteLink(BuildContext context) async {
     final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
-    if (clipboardData?.text != null) {
-      widget.linkController.text = clipboardData!.text!;
+    final text = clipboardData?.text;
+    if (text != null) {
+      widget.linkController.text = text;
     }
   }
 
