@@ -2,7 +2,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 
-/// Interface pour écouter les changements en temps réel sur les wishs (souhaits)
+/// Interface pour écouter les changements en temps réel sur les wishs
+/// (souhaits)
 abstract class WishStreamRepository {
   /// Écoute tous les changements sur les wishs d'une wishlist
   ///

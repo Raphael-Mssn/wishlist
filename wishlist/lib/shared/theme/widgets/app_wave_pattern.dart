@@ -7,7 +7,7 @@ import 'package:wishlist/shared/theme/widgets/enhanced_wave_painter.dart';
 enum WaveRotationType {
   none, // Pas de rotation
   fixed, // Rotation fixe
-  deterministic, // Rotation déterminée basée sur un ID (north, east, south, west)
+  deterministic, // Rotation déterminée basée sur un ID (nord, est, sud, ouest)
 }
 
 /// Presets prédéfinis pour différents contextes

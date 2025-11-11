@@ -25,6 +25,7 @@ class SupabaseWishTakenByUserStreamRepository
       return existingController.stream as Stream<IList<WishTakenByUser>>;
     }
 
+    // ignore: close_sinks
     final controller = StreamController<IList<WishTakenByUser>>.broadcast(
       onCancel: () => _cleanupStream(key),
     );
@@ -91,6 +92,7 @@ class SupabaseWishTakenByUserStreamRepository
       return existingController.stream as Stream<IList<WishTakenByUser>>;
     }
 
+    // ignore: close_sinks
     final controller = StreamController<IList<WishTakenByUser>>.broadcast(
       onCancel: () => _cleanupStream(key),
     );
@@ -156,9 +158,7 @@ class SupabaseWishTakenByUserStreamRepository
 
   @override
   void dispose() {
-    for (final channel in _channels.values) {
-      _client.removeChannel(channel);
-    }
+    _channels.values.forEach(_client.removeChannel);
     for (final controller in _controllers.values) {
       controller.close();
     }

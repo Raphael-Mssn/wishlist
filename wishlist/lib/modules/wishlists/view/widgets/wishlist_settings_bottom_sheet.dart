@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_toggle_switch.dart';
-import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wish_service.dart';
 import 'package:wishlist/shared/infra/wishlist_mutations_provider.dart';
 import 'package:wishlist/shared/infra/wishlist_service.dart';
