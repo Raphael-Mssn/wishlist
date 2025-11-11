@@ -22,6 +22,7 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
   final Map<String, StreamController<IList<Wish>>> _controllers = {};
   final Map<String, StreamController<IList<BookedWishWithDetails>>>
       _bookedWishControllers = {};
+  final Map<String, StreamController<Wish>> _singleWishControllers = {};
 
   @override
   Stream<IList<Wish>> watchWishsFromWishlist(int wishlistId) {
@@ -63,6 +64,60 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
             // Quand une réservation change, recharger tous les wishs
             // pour récupérer les données à jour avec le JOIN
             _handleWishChange(wishlistId, controller);
+          },
+        )
+        .subscribe();
+
+    _channels[key] = channel;
+
+    return controller.stream;
+  }
+
+  @override
+  Stream<Wish> watchWishById(int wishId) {
+    final key = 'wish_$wishId';
+
+    // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupSingleWishStream
+    final existingController = _singleWishControllers[key];
+    if (existingController != null) {
+      return existingController.stream;
+    }
+
+    final controller = StreamController<Wish>.broadcast(
+      onCancel: () => _cleanupSingleWishStream(key),
+    );
+    _singleWishControllers[key] = controller;
+
+    _loadInitialWish(wishId, controller);
+
+    final channel = _client
+        .channel('wish_$wishId')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: _wishsTableName,
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq,
+            column: 'id',
+            value: wishId,
+          ),
+          callback: (payload) => _handleSingleWishChange(wishId, controller),
+        )
+        // Écouter aussi les changements sur wish_taken_by_user
+        // pour mettre à jour les réservations en temps réel
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'wish_taken_by_user',
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq,
+            column: 'wish_id',
+            value: wishId,
+          ),
+          callback: (payload) {
+            // Quand une réservation change, recharger le wish
+            // pour récupérer les données à jour avec le JOIN
+            _handleSingleWishChange(wishId, controller);
           },
         )
         .subscribe();
@@ -203,11 +258,50 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
     _bookedWishControllers.remove(key);
   }
 
+  Future<void> _loadInitialWish(
+    int wishId,
+    StreamController<Wish> controller,
+  ) async {
+    try {
+      final wish = await _wishRepository.getWishById(wishId);
+      if (!controller.isClosed) {
+        controller.add(wish);
+      }
+    } catch (e) {
+      if (!controller.isClosed) {
+        controller.addError(e);
+      }
+    }
+  }
+
+  Future<void> _handleSingleWishChange(
+    int wishId,
+    StreamController<Wish> controller,
+  ) async {
+    try {
+      final wish = await _wishRepository.getWishById(wishId);
+      if (!controller.isClosed) {
+        controller.add(wish);
+      }
+    } catch (e) {
+      if (!controller.isClosed) {
+        controller.addError(e);
+      }
+    }
+  }
+
   void _cleanupStream(String key) {
     _channels[key]?.unsubscribe();
     _channels.remove(key);
     _controllers[key]?.close();
     _controllers.remove(key);
+  }
+
+  void _cleanupSingleWishStream(String key) {
+    _channels[key]?.unsubscribe();
+    _channels.remove(key);
+    _singleWishControllers[key]?.close();
+    _singleWishControllers.remove(key);
   }
 
   @override
@@ -226,5 +320,10 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
       await controller.close();
     }
     _bookedWishControllers.clear();
+
+    for (final controller in _singleWishControllers.values) {
+      await controller.close();
+    }
+    _singleWishControllers.clear();
   }
 }
