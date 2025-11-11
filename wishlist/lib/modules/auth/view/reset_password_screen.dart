@@ -4,9 +4,9 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
+import 'package:wishlist/shared/theme/widgets/app_app_bar.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
-import 'package:wishlist/shared/widgets/page_layout.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_password.dart';
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
@@ -91,41 +91,46 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return PageLayout(
-      title: l10n.resetPasswordTitle,
-      child: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.disabled,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            InputPassword(
-              autofillHints: AutofillHints.newPassword,
-              controller: _newPasswordController,
-              label: l10n.newPasswordField,
-              textInputAction: TextInputAction.next,
-            ),
-            const Gap(16),
-            InputPassword(
-              autofillHints: AutofillHints.newPassword,
-              controller: _confirmPasswordController,
-              label: l10n.confirmNewPasswordField,
-              textInputAction: TextInputAction.done,
-              additionalValidator: (value) {
-                if (value != _newPasswordController.text) {
-                  return l10n.passwordsDoNotMatch;
-                }
-                return null;
-              },
-            ),
-            const Gap(32),
-            PrimaryButton(
-              text: l10n.resetPasswordConfirm,
-              onPressed: _onPressed,
-              isLoading: _isLoading,
-              style: BaseButtonStyle.large,
-            ),
-          ],
+    return Scaffold(
+      appBar: AppAppBar(
+        title: l10n.resetPasswordTitle,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.disabled,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              InputPassword(
+                autofillHints: AutofillHints.newPassword,
+                controller: _newPasswordController,
+                label: l10n.newPasswordField,
+                textInputAction: TextInputAction.next,
+              ),
+              const Gap(16),
+              InputPassword(
+                autofillHints: AutofillHints.newPassword,
+                controller: _confirmPasswordController,
+                label: l10n.confirmNewPasswordField,
+                textInputAction: TextInputAction.done,
+                additionalValidator: (value) {
+                  if (value != _newPasswordController.text) {
+                    return l10n.passwordsDoNotMatch;
+                  }
+                  return null;
+                },
+              ),
+              const Gap(32),
+              PrimaryButton(
+                text: l10n.resetPasswordConfirm,
+                onPressed: _onPressed,
+                isLoading: _isLoading,
+                style: BaseButtonStyle.large,
+              ),
+            ],
+          ),
         ),
       ),
     );
