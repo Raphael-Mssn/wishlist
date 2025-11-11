@@ -1,6 +1,6 @@
 class EnvironmentService {
   static const appEnv = String.fromEnvironment(
     'APP_ENV',
-    defaultValue: 'dev',
+    defaultValue: 'prod',
   );
 }
