@@ -16,6 +16,8 @@ class WishCard extends ConsumerWidget {
     required this.onFavoriteToggle,
     required this.isMyWishlist,
     required this.cardType,
+    this.subtitle,
+    this.quantityOverride,
   });
 
   final Wish wish;
@@ -23,17 +25,21 @@ class WishCard extends ConsumerWidget {
   final void Function() onFavoriteToggle;
   final bool isMyWishlist;
   final WishlistStatsCardType cardType;
+  final String? subtitle;
+  final int? quantityOverride;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final price = wish.price;
+    final hasSubtitle = subtitle != null;
+    final hasPrice = price != null;
     final shouldDisplayFavouriteIcon =
         isMyWishlist || (!isMyWishlist && wish.isFavourite);
 
     final borderRadius = BorderRadius.circular(24);
 
     // Calculer la quantité à afficher selon le contexte
-    final quantityToDisplay = _getQuantityToDisplay();
+    final quantityToDisplay = quantityOverride ?? _getQuantityToDisplay();
 
     return Material(
       color: Colors.transparent,
@@ -74,35 +80,69 @@ class WishCard extends ConsumerWidget {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           wish.name,
-                          maxLines: 1,
+                          maxLines: hasSubtitle ? 2 : 1,
                           overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.small.copyWith(
                             color: AppColors.darkGrey,
-                            height: 1,
+                            fontWeight: hasSubtitle
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            height: hasSubtitle ? 1.2 : 1,
                           ),
                         ),
-                        const Gap(8),
-                        if (price != null)
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                Formatters.currency(
-                                  price,
+                        if (hasSubtitle || hasPrice) ...[
+                          if (!hasSubtitle) const Gap(8),
+                          if (hasSubtitle)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    subtitle!,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppTextStyles.smaller.copyWith(
+                                      color: AppColors.makara,
+                                      fontWeight: FontWeight.normal,
+                                      height: 1.2,
+                                    ),
+                                  ),
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyles.small.copyWith(
-                                  color: AppColors.darkGrey,
-                                  height: 1,
+                                if (hasPrice) ...[
+                                  const Gap(8),
+                                  Text(
+                                    Formatters.currency(price),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppTextStyles.small.copyWith(
+                                      color: AppColors.darkGrey,
+                                      height: 1,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            )
+                          else if (hasPrice)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  Formatters.currency(price),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTextStyles.small.copyWith(
+                                    color: AppColors.darkGrey,
+                                    height: 1,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                        ],
                       ],
                     ),
                   ),
