@@ -13,6 +13,7 @@ import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
+import 'package:wishlist/shared/utils/formatters.dart';
 import 'package:wishlist/shared/widgets/dialogs/quantity_selection_dialog.dart';
 
 class ConsultWishInfoContainer extends ConsumerWidget {
@@ -87,6 +88,8 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     final shouldShowCancelButton = isWishBooked && isWishTakenByMe;
     final shouldShowGiveItButton = !isWishBooked && wish.availableQuantity > 0;
 
+    final price = wish.price;
+
     return ConstrainedBox(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height / 1.8,
@@ -126,11 +129,11 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                   ),
                 ],
               ),
-              if (wish.price != null)
+              if (price != null)
                 SizedBox(
                   width: double.infinity,
                   child: Text(
-                    wish.price.toString(),
+                    Formatters.currency(price),
                     style: AppTextStyles.small,
                   ),
                 ),
