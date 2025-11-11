@@ -29,6 +29,8 @@ class _DialogLayout extends StatefulWidget {
 }
 
 class _DialogLayoutState extends State<_DialogLayout> {
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -37,10 +39,13 @@ class _DialogLayoutState extends State<_DialogLayout> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     Future<void> Function()? confirmHandler() {
-      if (onConfirm == null) {
+      if (onConfirm == null || _isLoading) {
         return null;
       }
       return () async {
+        setState(() {
+          _isLoading = true;
+        });
         try {
           await onConfirm();
 
@@ -49,6 +54,9 @@ class _DialogLayoutState extends State<_DialogLayout> {
           }
         } catch (e) {
           if (context.mounted) {
+            setState(() {
+              _isLoading = false;
+            });
             scaffoldMessenger.showGenericError();
           }
         }
@@ -90,6 +98,7 @@ class _DialogLayoutState extends State<_DialogLayout> {
                   text: widget.confirmLabel,
                   onPressed: confirmHandler(),
                   style: BaseButtonStyle.medium,
+                  isLoading: _isLoading,
                 )
               else
                 ValueListenableBuilder<bool>(
@@ -97,8 +106,10 @@ class _DialogLayoutState extends State<_DialogLayout> {
                   builder: (context, enabled, child) {
                     return PrimaryButton(
                       text: widget.confirmLabel,
-                      onPressed: enabled ? confirmHandler() : null,
+                      onPressed:
+                          enabled && !_isLoading ? confirmHandler() : null,
                       style: BaseButtonStyle.medium,
+                      isLoading: _isLoading,
                     );
                   },
                 ),
