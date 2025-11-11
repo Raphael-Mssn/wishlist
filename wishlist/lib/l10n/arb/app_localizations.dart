@@ -656,6 +656,12 @@ abstract class AppLocalizations {
   /// **'Annuler la réservation'**
   String get cancelBooking;
 
+  /// No description provided for @noDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune description'**
+  String get noDescription;
+
   /// No description provided for @wishlistVisibility.
   ///
   /// In fr, this message translates to:

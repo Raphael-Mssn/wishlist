@@ -322,6 +322,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelBooking => 'Cancel booking';
 
   @override
+  String get noDescription => 'No description';
+
+  @override
   String get wishlistVisibility => 'Wishlist visibility';
 
   @override
