@@ -34,6 +34,24 @@ class SupabaseWishRepository implements WishRepository {
   }
 
   @override
+  Future<Wish> getWishById(int wishId) async {
+    return executeSafely(
+      () async {
+        final wishJson = await _client
+            .from(_wishsTableName)
+            .select(
+              '*, taken_by_user:$_wishTakenByUserTableName(*)',
+            )
+            .eq('id', wishId)
+            .single();
+
+        return Wish.fromJson(wishJson);
+      },
+      errorMessage: 'Failed to get wish by id',
+    );
+  }
+
+  @override
   Future<int> getNbWishsByUser(String userId) async {
     return executeSafely(
       () async {

@@ -9,8 +9,6 @@ import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wish_card.dar
 import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wishes_search_bar.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wishes_stats.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/user_group_header.dart';
-import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
-import 'package:wishlist/modules/wishs/view/widgets/consult_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/booked_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/models/booked_wish_sort_type.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
@@ -393,12 +391,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   }
 
   void _onWishTap(BookedWishWithDetails bookedWish) {
-    showConsultWishBottomSheet(
-      context,
-      bookedWish.wish,
-      cardType: WishlistStatsCardType.booked,
-      onWishUpdated: _refreshBookedWishes,
-    );
+    ConsultWishRoute(bookedWish.wish.id).push(context);
   }
 
   void _onUserTap(String userId) {

@@ -6,6 +6,7 @@ import 'package:wishlist/shared/models/wish/wish.dart';
 
 abstract class WishRepository {
   Future<IList<Wish>> getWishsFromWishlist(int wishlistId);
+  Future<Wish> getWishById(int wishId);
   Future<int> getNbWishsByUser(String userId);
   Future<IList<BookedWishWithDetails>> getBookedWishesByUser(String userId);
   Future<Wish> createWish(WishCreateRequest wishlist);

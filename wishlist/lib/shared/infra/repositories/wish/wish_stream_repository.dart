@@ -16,6 +16,11 @@ abstract class WishStreamRepository {
   /// wishs, wishlists ou profiles
   Stream<IList<BookedWishWithDetails>> watchBookedWishesByUser(String userId);
 
+  /// Écoute les changements sur un wish spécifique
+  ///
+  /// Émet le wish mis à jour à chaque changement
+  Stream<Wish> watchWishById(int wishId);
+
   /// Ferme tous les streams et libère les ressources
   Future<void> dispose();
 }
