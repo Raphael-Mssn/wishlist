@@ -45,6 +45,11 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final suffixButtons = widget.suffixButtons ?? const <Widget>[];
+    final hasSuffixButtons = suffixButtons.isNotEmpty;
+    final contentPadding = const EdgeInsets.symmetric(vertical: 12)
+        .copyWith(right: hasSuffixButtons ? 8 : 0);
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.gainsboro,
@@ -109,21 +114,11 @@ class _AppTextFieldState extends State<AppTextField> {
                   errorBorder: InputBorder.none,
                   focusedErrorBorder: InputBorder.none,
                   errorStyle: const TextStyle(fontSize: 0),
-                  contentPadding: EdgeInsets.only(
-                    top: 12,
-                    bottom: 12,
-                    right: widget.suffixButtons != null &&
-                            widget.suffixButtons!.isNotEmpty
-                        ? 8
-                        : 0,
-                  ),
+                  contentPadding: contentPadding,
                 ),
               ),
             ),
-            if (widget.suffixButtons != null &&
-                widget.suffixButtons!.isNotEmpty) ...[
-              ...widget.suffixButtons!,
-            ],
+            if (hasSuffixButtons) ...suffixButtons,
           ],
         ),
       ),
