@@ -45,27 +45,30 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final errorBorder =
+        _hasError ? Border.all(color: Colors.red, width: 2) : null;
     final suffixButtons = widget.suffixButtons ?? const <Widget>[];
     final hasSuffixButtons = suffixButtons.isNotEmpty;
     final contentPadding = const EdgeInsets.symmetric(vertical: 12)
         .copyWith(right: hasSuffixButtons ? 8 : 0);
+    final isMultiline = (widget.maxLines ?? 1) > 1;
 
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.gainsboro,
         borderRadius: BorderRadius.circular(16),
-        border: _hasError ? Border.all(color: Colors.red, width: 2) : null,
+        border: errorBorder,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Row(
-          crossAxisAlignment: widget.maxLines != null && widget.maxLines! > 1
+          crossAxisAlignment: isMultiline
               ? CrossAxisAlignment.start
               : CrossAxisAlignment.center,
           children: [
             Padding(
               padding: EdgeInsets.only(
-                top: widget.maxLines != null && widget.maxLines! > 1 ? 12 : 0,
+                top: isMultiline ? 12 : 0,
               ),
               child: Icon(
                 widget.icon,
@@ -106,8 +109,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   labelStyle: AppTextStyles.small.copyWith(
                     color: AppColors.makara,
                   ),
-                  alignLabelWithHint:
-                      widget.maxLines != null && widget.maxLines! > 1,
+                  alignLabelWithHint: isMultiline,
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
