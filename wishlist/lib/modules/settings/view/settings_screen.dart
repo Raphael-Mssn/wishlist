@@ -13,6 +13,7 @@ import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/avatar/editable_avatar.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
@@ -42,6 +43,29 @@ class SettingsScreen extends ConsumerWidget {
       explanation: l10n.settingsScreenDisconnectDialogExplanation,
       onConfirm: () async {
         await ref.read(authServiceProvider).signOut(context, ref);
+      },
+    );
+  }
+
+  void _onDeleteAccountTap(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+
+    showConfirmDialog(
+      context,
+      title: l10n.settingsScreenDeleteAccountDialogTitle,
+      explanation: l10n.settingsScreenDeleteAccountDialogExplanation,
+      onConfirm: () async {
+        try {
+          await ref.read(authServiceProvider).deleteAccount();
+        } catch (e) {
+          if (context.mounted) {
+            showAppSnackBar(
+              context,
+              l10n.genericError,
+              type: SnackBarType.error,
+            );
+          }
+        }
       },
     );
   }
@@ -102,6 +126,12 @@ class SettingsScreen extends ConsumerWidget {
                     title: l10n.settingsScreenPasswordModify,
                     onTap: () {
                       ChangePasswordRoute().push(context);
+                    },
+                  ),
+                  SettingsLine(
+                    title: l10n.settingsScreenDeleteAccount,
+                    onTap: () {
+                      _onDeleteAccountTap(context, ref);
                     },
                   ),
                 ],

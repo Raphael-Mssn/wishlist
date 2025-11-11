@@ -106,6 +106,31 @@ class AuthService {
       );
     }
   }
+
+  Future<void> deleteAccount() async {
+    try {
+      // Appeler une fonction RPC pour supprimer le compte utilisateur
+      // Cette fonction doit supprimer l'utilisateur de auth.users
+      // Si les contraintes ON DELETE CASCADE sont bien configurées,
+      // toutes les données associées seront supprimées automatiquement
+      await supabase.rpc('delete_user_account');
+
+      // Déconnecter l'utilisateur après la suppression
+      await supabase.auth.signOut();
+    } catch (e) {
+      if (e is AuthException) {
+        final statusCode = e.statusCode;
+        throw AppException(
+          statusCode: statusCode != null ? int.parse(statusCode) : 500,
+          message: e.message,
+        );
+      }
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to delete account',
+      );
+    }
+  }
 }
 
 final authServiceProvider = Provider((ref) => AuthService.instance);
