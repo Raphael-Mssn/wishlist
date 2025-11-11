@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
@@ -7,7 +6,7 @@ import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
 import 'package:wishlist/shared/widgets/wish_image.dart';
 
-class BookedWishCard extends ConsumerWidget {
+class BookedWishCard extends StatelessWidget {
   const BookedWishCard({
     super.key,
     required this.bookedWish,
@@ -18,7 +17,7 @@ class BookedWishCard extends ConsumerWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final wish = bookedWish.wish;
     final price = wish.price;
 
