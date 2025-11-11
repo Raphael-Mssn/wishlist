@@ -14,7 +14,7 @@ import 'package:wishlist/shared/widgets/text_form_fields/formatters/decimal_text
 import 'package:wishlist/shared/widgets/text_form_fields/validators/not_null_validator.dart';
 
 const _smallGap = Gap(8);
-const _mediumGap = Gap(16);
+const _columnSpacing = 16.0;
 
 /// Formulaire de création de wish
 class CreateWishForm extends StatefulWidget {
@@ -150,6 +150,7 @@ class CreateWishFormState extends State<CreateWishForm> {
       key: widget.formKey,
       autovalidateMode: _autovalidateMode,
       child: Column(
+        spacing: _columnSpacing,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _smallGap,
@@ -159,7 +160,6 @@ class CreateWishFormState extends State<CreateWishForm> {
             icon: Icons.sell_outlined,
             validator: (value) => notNullValidator(value, l10n),
           ),
-          _mediumGap,
           Row(
             children: [
               Expanded(
@@ -186,7 +186,6 @@ class CreateWishFormState extends State<CreateWishForm> {
               ),
             ],
           ),
-          _mediumGap,
           AppTextField(
             controller: widget.linkController,
             label: l10n.wishLinkLabel,
@@ -226,7 +225,6 @@ class CreateWishFormState extends State<CreateWishForm> {
               ),
             ],
           ),
-          _mediumGap,
           AppTextField(
             controller: widget.descriptionController,
             label: l10n.wishDescriptionLabel,
@@ -234,7 +232,6 @@ class CreateWishFormState extends State<CreateWishForm> {
             maxLines: 4,
             minLines: 4,
           ),
-          _mediumGap,
           ImageUploadField(
             imageFile: _selectedImage,
             onTap: _showImageOptions,
