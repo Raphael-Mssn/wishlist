@@ -91,6 +91,8 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     final price = wish.price;
     final hasLinkUrl = linkUrl != null && linkUrl.isNotEmpty;
 
+    const spacing = 12.0;
+
     return ConstrainedBox(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height / 1.8,
@@ -138,7 +140,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                     style: AppTextStyles.small,
                   ),
                 ),
-              const Gap(12),
+              const Gap(spacing),
               SizedBox(
                 width: double.infinity,
                 child: Text(
@@ -148,7 +150,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                   ),
                 ),
               ),
-              const Gap(12),
+              const Gap(spacing),
               Flexible(
                 child: Container(
                   padding: const EdgeInsets.all(12),
@@ -173,9 +175,10 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                   ),
                 ),
               ),
-              const Gap(32),
+              const Gap(spacing * 3),
               Column(
                 mainAxisSize: MainAxisSize.min,
+                spacing: spacing,
                 children: [
                   if (hasLinkUrl) ...[
                     SecondaryButton(
@@ -184,7 +187,6 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                       text: l10n.openLink,
                       isStretched: true,
                     ),
-                    const Gap(12),
                   ],
                   if (shouldShowGiveItButton)
                     PrimaryButton(
