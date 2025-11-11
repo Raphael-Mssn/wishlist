@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
+import 'package:wishlist/shared/widgets/wish_image_widget.dart';
 
-class BookedWishCard extends StatelessWidget {
+class BookedWishCard extends ConsumerWidget {
   const BookedWishCard({
     super.key,
     required this.bookedWish,
@@ -16,10 +18,9 @@ class BookedWishCard extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final wish = bookedWish.wish;
     final price = wish.price;
-    const iconDimension = 64.0;
 
     final borderRadius = BorderRadius.circular(24);
 
@@ -39,25 +40,21 @@ class BookedWishCard extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  Container(
-                    width: iconDimension,
-                    height: iconDimension,
-                    decoration: BoxDecoration(
-                      color: AppColors.gainsboro,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+                  WishImage(
+                    iconUrl: wish.iconUrl,
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Text(
-                      'x${bookedWish.bookedQuantity}',
-                      style: AppTextStyles.small.copyWith(
-                        color: AppColors.makara,
-                        height: 1,
+                  if (bookedWish.bookedQuantity > 1)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Text(
+                        'x${bookedWish.bookedQuantity}',
+                        style: AppTextStyles.small.copyWith(
+                          color: AppColors.makara,
+                          height: 1,
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
               const Gap(16),

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
-import 'package:wishlist/shared/infra/wish_image_url_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
+import 'package:wishlist/shared/widgets/wish_image_widget.dart';
 
 class WishCard extends ConsumerWidget {
   const WishCard({
@@ -27,7 +27,6 @@ class WishCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final price = wish.price;
-    const iconDimension = 64.0;
     final shouldDisplayFavouriteIcon =
         isMyWishlist || (!isMyWishlist && wish.isFavourite);
 
@@ -35,10 +34,6 @@ class WishCard extends ConsumerWidget {
 
     // Calculer la quantité à afficher selon le contexte
     final quantityToDisplay = _getQuantityToDisplay();
-
-    final wishImageUrl = ref.watch(
-      wishImageUrlProvider((imagePath: wish.iconUrl, thumbnail: true)),
-    );
 
     return Material(
       color: Colors.transparent,
@@ -58,26 +53,8 @@ class WishCard extends ConsumerWidget {
                 children: [
                   Stack(
                     children: [
-                      Container(
-                        width: iconDimension,
-                        height: iconDimension,
-                        decoration: BoxDecoration(
-                          color: AppColors.gainsboro,
-                          borderRadius: BorderRadius.circular(20),
-                          image: wishImageUrl.isNotEmpty
-                              ? DecorationImage(
-                                  image: NetworkImage(wishImageUrl),
-                                  fit: BoxFit.cover,
-                                )
-                              : null,
-                        ),
-                        child: wishImageUrl.isEmpty
-                            ? Icon(
-                                Icons.card_giftcard,
-                                size: 32,
-                                color: AppColors.makara.withValues(alpha: 0.3),
-                              )
-                            : null,
+                      WishImage(
+                        iconUrl: wish.iconUrl,
                       ),
                       if (quantityToDisplay > 1)
                         Positioned(
