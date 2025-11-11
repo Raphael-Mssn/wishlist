@@ -10,6 +10,7 @@ import 'package:wishlist/modules/settings/change_pseudo/view/change_pseudo_scree
 import 'package:wishlist/modules/settings/view/settings_screen.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
 import 'package:wishlist/modules/wishs/view/create_wish_screen.dart';
+import 'package:wishlist/modules/wishs/view/screens/consult_wish_screen.dart';
 import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 
 part 'routes.g.dart';
@@ -132,4 +133,16 @@ class CreateWishRoute extends GoRouteData {
       wishlistId: wishlistId,
     );
   }
+}
+
+@TypedGoRoute<ConsultWishRoute>(
+  path: '/wish/:wishId',
+)
+class ConsultWishRoute extends GoRouteData {
+  ConsultWishRoute(this.wishId);
+  final int wishId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      ConsultWishScreen(wishId: wishId);
 }

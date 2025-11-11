@@ -79,7 +79,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     if (isMyWishlist) {
       showEditWishBottomSheet(context, wish);
     } else {
-      showConsultWishBottomSheet(context, wish, cardType: cardType);
+      ConsultWishRoute(wish.id).push(context);
     }
   }
 
