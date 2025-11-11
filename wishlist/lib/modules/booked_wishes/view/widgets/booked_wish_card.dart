@@ -5,7 +5,7 @@ import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
-import 'package:wishlist/shared/widgets/wish_image_widget.dart';
+import 'package:wishlist/shared/widgets/wish_image.dart';
 
 class BookedWishCard extends ConsumerWidget {
   const BookedWishCard({
