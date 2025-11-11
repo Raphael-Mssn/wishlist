@@ -89,6 +89,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     final shouldShowGiveItButton = !isWishBooked && wish.availableQuantity > 0;
 
     final price = wish.price;
+    final hasLinkUrl = linkUrl != null && linkUrl.isNotEmpty;
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -176,7 +177,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (linkUrl != null && linkUrl.isNotEmpty) ...[
+                  if (hasLinkUrl) ...[
                     SecondaryButton(
                       style: BaseButtonStyle.medium,
                       onPressed: () => _onOpenLinkTap(linkUrl),
