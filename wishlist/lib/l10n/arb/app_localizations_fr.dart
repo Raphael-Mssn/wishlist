@@ -287,6 +287,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get openLink => 'Ouvrir le lien';
 
   @override
+  String get paste => 'Coller';
+
+  @override
   String get linkNotValid => 'Le lien n\'est pas valide';
 
   @override

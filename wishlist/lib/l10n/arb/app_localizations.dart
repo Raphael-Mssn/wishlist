@@ -602,6 +602,12 @@ abstract class AppLocalizations {
   /// **'Ouvrir le lien'**
   String get openLink;
 
+  /// No description provided for @paste.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coller'**
+  String get paste;
+
   /// No description provided for @linkNotValid.
   ///
   /// In fr, this message translates to:

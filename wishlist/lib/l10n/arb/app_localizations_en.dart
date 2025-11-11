@@ -286,6 +286,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openLink => 'Open link';
 
   @override
+  String get paste => 'Paste';
+
+  @override
   String get linkNotValid => 'The link is not valid';
 
   @override

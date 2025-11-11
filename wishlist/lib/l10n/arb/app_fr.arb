@@ -84,6 +84,7 @@
   "invalidNumber": "Nombre invalide",
   "numberRangeError": "Saisissez un nombre entre {min} et {max}",
   "openLink": "Ouvrir le lien",
+  "paste": "Coller",
   "linkNotValid": "Le lien n'est pas valide",
   "iWantToGiveIt": "Je veux l'offrir",
   "cancelBooking": "Annuler la réservation",
