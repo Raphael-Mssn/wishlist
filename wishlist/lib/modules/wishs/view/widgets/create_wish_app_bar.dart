@@ -55,11 +55,6 @@ class CreateWishAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onTap: onFavouriteTap,
               ),
             ],
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(32),
-              ),
-            ),
           ),
         ),
       ),
