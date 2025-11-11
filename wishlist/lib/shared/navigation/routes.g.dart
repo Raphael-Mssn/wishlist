@@ -17,6 +17,7 @@ List<RouteBase> get $appRoutes => [
       $friendDetailsRoute,
       $forgotPasswordRoute,
       $resetPasswordRoute,
+      $createWishRoute,
     ];
 
 RouteBase get $homeRoute => GoRouteData.$route(
@@ -236,6 +237,30 @@ extension $ResetPasswordRouteExtension on ResetPasswordRoute {
 
   String get location => GoRouteData.$location(
         '/reset-password',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $createWishRoute => GoRouteData.$route(
+      path: '/wishlist/:wishlistId/create-wish',
+      factory: $CreateWishRouteExtension._fromState,
+    );
+
+extension $CreateWishRouteExtension on CreateWishRoute {
+  static CreateWishRoute _fromState(GoRouterState state) => CreateWishRoute(
+        wishlistId: int.parse(state.pathParameters['wishlistId']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/wishlist/${Uri.encodeComponent(wishlistId.toString())}/create-wish',
       );
 
   void go(BuildContext context) => context.go(location);

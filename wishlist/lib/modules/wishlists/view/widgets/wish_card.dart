@@ -1,13 +1,15 @@
 import 'package:currency_formatter/currency_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
+import 'package:wishlist/shared/infra/wish_image_url_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
 
-class WishCard extends StatelessWidget {
+class WishCard extends ConsumerWidget {
   const WishCard({
     super.key,
     required this.wish,
@@ -24,7 +26,7 @@ class WishCard extends StatelessWidget {
   final WishlistStatsCardType cardType;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final price = wish.price;
     const iconDimension = 64.0;
     final shouldDisplayFavouriteIcon =
@@ -34,6 +36,10 @@ class WishCard extends StatelessWidget {
 
     // Calculer la quantité à afficher selon le contexte
     final quantityToDisplay = _getQuantityToDisplay();
+
+    final wishImageUrl = ref.watch(
+      wishImageUrlProvider((imagePath: wish.iconUrl, thumbnail: true)),
+    );
 
     return Material(
       color: Colors.transparent,
@@ -59,7 +65,20 @@ class WishCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppColors.gainsboro,
                           borderRadius: BorderRadius.circular(20),
+                          image: wishImageUrl.isNotEmpty
+                              ? DecorationImage(
+                                  image: NetworkImage(wishImageUrl),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
                         ),
+                        child: wishImageUrl.isEmpty
+                            ? Icon(
+                                Icons.card_giftcard,
+                                size: 32,
+                                color: AppColors.makara.withValues(alpha: 0.3),
+                              )
+                            : null,
                       ),
                       if (quantityToDisplay > 1)
                         Positioned(

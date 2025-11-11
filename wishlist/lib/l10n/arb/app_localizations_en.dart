@@ -287,6 +287,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wishDescriptionLabel => 'Description';
 
   @override
+  String get wishImageLabel => 'Wish image';
+
+  @override
+  String get uploadImage => 'Upload Image';
+
+  @override
   String get wishNameError => 'Wish name is required';
 
   @override
@@ -302,6 +308,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get openLink => 'Open link';
+
+  @override
+  String get paste => 'Paste';
 
   @override
   String get linkNotValid => 'The link is not valid';
@@ -397,11 +406,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get takePhoto => 'Take a photo';
 
   @override
-  String get removeAvatar => 'Remove avatar';
+  String get imageOptions => 'Image upload';
 
   @override
-  String get removeAvatarConfirmation =>
-      'Are you sure you want to remove your avatar?';
+  String get removeImage => 'Remove image';
+
+  @override
+  String get removeImageConfirmation =>
+      'Are you sure you want to remove this image?';
 
   @override
   String get avatarLoadError => 'Error loading image';

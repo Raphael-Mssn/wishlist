@@ -9,6 +9,7 @@ import 'package:wishlist/modules/settings/change_password/view/change_password_s
 import 'package:wishlist/modules/settings/change_pseudo/view/change_pseudo_screen.dart';
 import 'package:wishlist/modules/settings/view/settings_screen.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
+import 'package:wishlist/modules/wishs/view/create_wish_screen.dart';
 import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 
 part 'routes.g.dart';
@@ -113,4 +114,22 @@ class ResetPasswordRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const ResetPasswordScreen();
+}
+
+@TypedGoRoute<CreateWishRoute>(
+  path: '/wishlist/:wishlistId/create-wish',
+)
+class CreateWishRoute extends GoRouteData {
+  CreateWishRoute({
+    required this.wishlistId,
+  });
+
+  final int wishlistId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return CreateWishScreen(
+      wishlistId: wishlistId,
+    );
+  }
 }

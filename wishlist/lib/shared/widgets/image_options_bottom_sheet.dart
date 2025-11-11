@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/shared/infra/current_user_avatar_provider.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/app_list_tile.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 
-class _AvatarOptionsBottomSheet extends ConsumerWidget {
-  const _AvatarOptionsBottomSheet({
-    required this.hasAvatar,
+class _ImageOptionsBottomSheet extends StatelessWidget {
+  const _ImageOptionsBottomSheet({
+    required this.title,
+    required this.hasImage,
+    required this.onPickFromGallery,
+    required this.onTakePhoto,
+    required this.onRemoveImage,
+    required this.removeImageTitle,
+    required this.removeImageConfirmation,
   });
 
-  final bool hasAvatar;
+  final String title;
+  final bool hasImage;
+  final VoidCallback onPickFromGallery;
+  final VoidCallback onTakePhoto;
+  final VoidCallback onRemoveImage;
+  final String removeImageTitle;
+  final String removeImageConfirmation;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
 
     return Column(
@@ -25,7 +35,7 @@ class _AvatarOptionsBottomSheet extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
-            l10n.avatarOptions,
+            title,
             style: AppTextStyles.medium.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -36,7 +46,7 @@ class _AvatarOptionsBottomSheet extends ConsumerWidget {
           title: l10n.chooseFromGallery,
           onTap: () {
             Navigator.pop(context);
-            ref.read(currentUserAvatarProvider.notifier).pickAndUploadAvatar();
+            onPickFromGallery();
           },
         ),
         AppListTile(
@@ -44,23 +54,21 @@ class _AvatarOptionsBottomSheet extends ConsumerWidget {
           title: l10n.takePhoto,
           onTap: () {
             Navigator.pop(context);
-            ref.read(currentUserAvatarProvider.notifier).takePhotoAndUpload();
+            onTakePhoto();
           },
         ),
-        if (hasAvatar)
+        if (hasImage)
           AppListTile(
             icon: Icons.delete,
-            title: l10n.removeAvatar,
+            title: removeImageTitle,
             onTap: () {
               Navigator.pop(context);
-              final avatarNotifier =
-                  ref.read(currentUserAvatarProvider.notifier);
               showConfirmDialog(
                 context,
-                title: l10n.removeAvatar,
-                explanation: l10n.removeAvatarConfirmation,
+                title: removeImageTitle,
+                explanation: removeImageConfirmation,
                 onConfirm: () async {
-                  await avatarNotifier.deleteAvatar();
+                  onRemoveImage();
                 },
               );
             },
@@ -71,15 +79,27 @@ class _AvatarOptionsBottomSheet extends ConsumerWidget {
   }
 }
 
-Future<void> showAvatarOptionsBottomSheet(
+Future<void> showImageOptionsBottomSheet(
   BuildContext context, {
-  required bool hasAvatar,
+  required String title,
+  required bool hasImage,
+  required VoidCallback onPickFromGallery,
+  required VoidCallback onTakePhoto,
+  required VoidCallback onRemoveImage,
+  required String removeImageTitle,
+  required String removeImageConfirmation,
 }) async {
   await showAppBottomSheet(
     context,
     expandToFillHeight: false,
-    body: _AvatarOptionsBottomSheet(
-      hasAvatar: hasAvatar,
+    body: _ImageOptionsBottomSheet(
+      title: title,
+      hasImage: hasImage,
+      onPickFromGallery: onPickFromGallery,
+      onTakePhoto: onTakePhoto,
+      onRemoveImage: onRemoveImage,
+      removeImageTitle: removeImageTitle,
+      removeImageConfirmation: removeImageConfirmation,
     ),
   );
 }

@@ -590,6 +590,18 @@ abstract class AppLocalizations {
   /// **'Description'**
   String get wishDescriptionLabel;
 
+  /// No description provided for @wishImageLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Image du wish'**
+  String get wishImageLabel;
+
+  /// No description provided for @uploadImage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une image'**
+  String get uploadImage;
+
   /// No description provided for @wishNameError.
   ///
   /// In fr, this message translates to:
@@ -619,6 +631,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ouvrir le lien'**
   String get openLink;
+
+  /// No description provided for @paste.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coller'**
+  String get paste;
 
   /// No description provided for @linkNotValid.
   ///
@@ -800,17 +818,23 @@ abstract class AppLocalizations {
   /// **'Prendre une photo'**
   String get takePhoto;
 
-  /// No description provided for @removeAvatar.
+  /// No description provided for @imageOptions.
   ///
   /// In fr, this message translates to:
-  /// **'Supprimer l\'avatar'**
-  String get removeAvatar;
+  /// **'Ajout de l\'image'**
+  String get imageOptions;
 
-  /// No description provided for @removeAvatarConfirmation.
+  /// No description provided for @removeImage.
   ///
   /// In fr, this message translates to:
-  /// **'Êtes-vous sûr de vouloir supprimer votre avatar?'**
-  String get removeAvatarConfirmation;
+  /// **'Supprimer l\'image'**
+  String get removeImage;
+
+  /// No description provided for @removeImageConfirmation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir supprimer cette image ?'**
+  String get removeImageConfirmation;
 
   /// No description provided for @avatarLoadError.
   ///

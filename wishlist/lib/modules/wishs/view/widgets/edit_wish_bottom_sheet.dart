@@ -129,7 +129,10 @@ class _EditWishBottomSheetState extends ConsumerState<_EditWishBottomSheet> {
       confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
       onConfirm: () async {
         try {
-          await ref.read(wishMutationsProvider.notifier).delete(widget.wish.id);
+          await ref.read(wishMutationsProvider.notifier).delete(
+                widget.wish.id,
+                iconUrl: widget.wish.iconUrl,
+              );
 
           if (mounted) {
             showAppSnackBar(

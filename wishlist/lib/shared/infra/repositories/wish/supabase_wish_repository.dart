@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/shared/infra/repositories/wish/wish_repository.dart';
@@ -11,6 +12,7 @@ class SupabaseWishRepository implements WishRepository {
   final SupabaseClient _client;
   static const _wishsTableName = 'wishs';
   static const _wishTakenByUserTableName = 'wish_taken_by_user';
+  static const _wishImagesBucket = 'wish-images';
 
   @override
   Future<IList<Wish>> getWishsFromWishlist(int wishlistId) async {
@@ -134,6 +136,56 @@ class SupabaseWishRepository implements WishRepository {
         await _client.from(_wishsTableName).delete().eq('id', wishId);
       },
       errorMessage: 'Failed to delete wish',
+    );
+  }
+
+  @override
+  Future<String> uploadWishImage({
+    required int wishId,
+    required Uint8List imageData,
+    required String fileName,
+  }) async {
+    return executeSafely(
+      () async {
+        final filePath = '$wishId/$fileName';
+
+        try {
+          await _client.storage
+              .from(_wishImagesBucket)
+              .uploadBinary(filePath, imageData);
+
+          return filePath;
+        } on StorageException catch (e) {
+          // Si le fichier existe déjà (409), essayons avec upsert
+          if (e.statusCode == '409') {
+            await _client.storage.from(_wishImagesBucket).uploadBinary(
+                  filePath,
+                  imageData,
+                  fileOptions: const FileOptions(upsert: true),
+                );
+
+            return filePath;
+          }
+
+          rethrow;
+        }
+      },
+      errorMessage: 'Failed to upload wish image to bucket $_wishImagesBucket',
+    );
+  }
+
+  @override
+  String getWishImageUrl(String imagePath) {
+    return _client.storage.from(_wishImagesBucket).getPublicUrl(imagePath);
+  }
+
+  @override
+  Future<void> deleteWishImage(String imagePath) async {
+    return executeSafely(
+      () async {
+        await _client.storage.from(_wishImagesBucket).remove([imagePath]);
+      },
+      errorMessage: 'Failed to delete wish image',
     );
   }
 }

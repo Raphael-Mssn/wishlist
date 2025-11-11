@@ -8,13 +8,13 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_section.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_wish_bottom_sheet.dart';
-import 'package:wishlist/modules/wishs/view/widgets/create_wish_bottom_sheet.dart';
 import 'package:wishlist/modules/wishs/view/widgets/edit_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
@@ -67,7 +67,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
   }
 
   void onAddWish(BuildContext context, Wishlist wishlist) {
-    showCreateWishBottomSheet(context, wishlist);
+    CreateWishRoute(wishlistId: wishlist.id).push(context);
   }
 
   void onTapWish(
