@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
+import 'package:wishlist/shared/theme/widgets/favourite_button.dart';
 
 /// AppBar personnalisé pour l'écran de création de wish
 class CreateWishAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -50,20 +50,9 @@ class CreateWishAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             centerTitle: true,
             actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: LikeButton(
-                  isLiked: isFavourite,
-                  size: 32,
-                  likeBuilder: (isLiked) {
-                    return Icon(
-                      isLiked ? Icons.favorite : Icons.favorite_border,
-                      color: AppColors.background,
-                      size: 32,
-                    );
-                  },
-                  onTap: (isLiked) => onFavouriteTap(isLiked: isLiked),
-                ),
+              FavouriteButton(
+                isLiked: isFavourite,
+                onTap: onFavouriteTap,
               ),
             ],
             shape: const RoundedRectangleBorder(
