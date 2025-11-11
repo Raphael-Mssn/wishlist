@@ -129,57 +129,69 @@ class _CreateWishScreenState extends ConsumerState<CreateWishScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final wishlistTheme = ref.watch(
+    final wishlistThemeAsync = ref.watch(
       wishlistThemeProvider(
         widget.wishlistId,
       ),
     );
 
-    return Theme(
-      data: wishlistTheme,
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        appBar: CreateWishAppBar(
-          title: l10n.createWishBottomSheetTitle,
-          backgroundColor: wishlistTheme.primaryColor,
-          isFavourite: _isFavourite,
-          onFavouriteTap: ({required isLiked}) async {
-            setState(() {
-              _isFavourite = !isLiked;
-            });
-            return !isLiked;
-          },
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20).copyWith(top: 0),
-                  child: CreateWishForm(
-                    key: _createWishFormKey,
-                    formKey: _formKey,
-                    nameController: _nameInputController,
-                    priceController: _priceInputController,
-                    quantityController: _quantityInputController,
-                    linkController: _linkInputController,
-                    descriptionController: _descriptionInputController,
-                    onImageSelected: _onImageSelected,
+    return wishlistThemeAsync.when(
+      data: (wishlistTheme) {
+        return Theme(
+          data: wishlistTheme,
+          child: Scaffold(
+            backgroundColor: AppColors.background,
+            appBar: CreateWishAppBar(
+              title: l10n.createWishBottomSheetTitle,
+              backgroundColor: wishlistTheme.primaryColor,
+              isFavourite: _isFavourite,
+              onFavouriteTap: ({required isLiked}) async {
+                setState(() {
+                  _isFavourite = !isLiked;
+                });
+                return !isLiked;
+              },
+            ),
+            body: SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(20).copyWith(top: 0),
+                      child: CreateWishForm(
+                        key: _createWishFormKey,
+                        formKey: _formKey,
+                        nameController: _nameInputController,
+                        priceController: _priceInputController,
+                        quantityController: _quantityInputController,
+                        linkController: _linkInputController,
+                        descriptionController: _descriptionInputController,
+                        onImageSelected: _onImageSelected,
+                      ),
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: PrimaryButton(
+                      text: l10n.createButton,
+                      onPressed: _isLoading ? null : _onCreateWish,
+                      style: BaseButtonStyle.large,
+                      isStretched: true,
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: PrimaryButton(
-                  text: l10n.createButton,
-                  onPressed: _isLoading ? null : _onCreateWish,
-                  style: BaseButtonStyle.large,
-                  isStretched: true,
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+        );
+      },
+      loading: () => const Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (_, __) => const Scaffold(
+        backgroundColor: AppColors.background,
+        body: SizedBox.shrink(),
       ),
     );
   }

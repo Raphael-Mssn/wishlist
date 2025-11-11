@@ -24,37 +24,49 @@ class ConsultWishScreen extends ConsumerWidget {
 
     return wish.when(
       data: (wishData) {
-        final wishlistTheme =
+        final wishlistThemeAsync =
             ref.watch(wishlistThemeProvider(wishData.wishlistId));
 
-        final descriptionText = wishData.description.isNotEmpty
-            ? wishData.description
-            : l10n.noDescription;
+        return wishlistThemeAsync.when(
+          data: (wishlistTheme) {
+            final descriptionText = wishData.description.isNotEmpty
+                ? wishData.description
+                : l10n.noDescription;
 
-        return AnimatedTheme(
-          data: wishlistTheme,
-          child: Scaffold(
-            backgroundColor: AppColors.gainsboro,
-            body: Stack(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      const Gap(64),
-                      const ConsultWishBackButton(),
-                      const Gap(16),
-                      ConsultWishImage(wish: wishData),
-                      const Gap(32),
-                      ConsultWishInfoContainer(
-                        wish: wishData,
-                        descriptionText: descriptionText,
+            return AnimatedTheme(
+              data: wishlistTheme,
+              child: Scaffold(
+                backgroundColor: AppColors.gainsboro,
+                body: Stack(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        children: [
+                          const Gap(64),
+                          const ConsultWishBackButton(),
+                          const Gap(16),
+                          ConsultWishImage(wish: wishData),
+                          const Gap(32),
+                          ConsultWishInfoContainer(
+                            wish: wishData,
+                            descriptionText: descriptionText,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            );
+          },
+          loading: () => const Scaffold(
+            backgroundColor: AppColors.gainsboro,
+            body: Center(child: CircularProgressIndicator()),
+          ),
+          error: (_, __) => const Scaffold(
+            backgroundColor: AppColors.gainsboro,
+            body: SizedBox.shrink(),
           ),
         );
       },
