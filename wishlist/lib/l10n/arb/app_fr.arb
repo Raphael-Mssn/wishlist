@@ -100,6 +100,8 @@
   "linkNotValid": "Le lien n'est pas valide",
   "iWantToGiveIt": "Je veux l'offrir",
   "cancelBooking": "Annuler la réservation",
+  "cancelBookingDialogTitle": "Annuler la réservation",
+  "cancelBookingDialogExplanation": "Es-tu sûr(e) de vouloir annuler cette réservation ?",
   "noDescription": "Aucune description",
   "wishlistVisibility": "Visibilité de la wishlist",
   "private": "Privée",

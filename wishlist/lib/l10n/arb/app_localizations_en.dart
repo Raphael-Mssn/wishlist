@@ -322,6 +322,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelBooking => 'Cancel booking';
 
   @override
+  String get cancelBookingDialogTitle => 'Cancel booking';
+
+  @override
+  String get cancelBookingDialogExplanation =>
+      'Are you sure you want to cancel this booking?';
+
+  @override
   String get noDescription => 'No description';
 
   @override

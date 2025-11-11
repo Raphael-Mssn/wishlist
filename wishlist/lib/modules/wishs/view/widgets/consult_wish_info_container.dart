@@ -14,6 +14,7 @@ import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
+import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:wishlist/shared/widgets/dialogs/quantity_selection_dialog.dart';
 
 class ConsultWishInfoContainer extends ConsumerWidget {
@@ -60,17 +61,26 @@ class ConsultWishInfoContainer extends ConsumerWidget {
   }
 
   Future<void> _onCancelGiveItTap(BuildContext context, WidgetRef ref) async {
-    try {
-      await ref.read(wishTakenByUserServiceProvider).cancelWishTaken(wish);
+    final l10n = context.l10n;
 
-      if (context.mounted) {
-        context.pop();
-      }
-    } catch (e) {
-      if (context.mounted) {
-        showGenericError(context);
-      }
-    }
+    await showConfirmDialog(
+      context,
+      title: l10n.cancelBookingDialogTitle,
+      explanation: l10n.cancelBookingDialogExplanation,
+      onConfirm: () async {
+        try {
+          await ref.read(wishTakenByUserServiceProvider).cancelWishTaken(wish);
+
+          if (context.mounted) {
+            context.pop();
+          }
+        } catch (e) {
+          if (context.mounted) {
+            showGenericError(context);
+          }
+        }
+      },
+    );
   }
 
   @override
