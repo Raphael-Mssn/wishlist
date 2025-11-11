@@ -169,7 +169,7 @@ class _CreateWishScreenState extends ConsumerState<CreateWishScreen> {
                 children: [
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20).copyWith(top: 0),
                       child: CreateWishForm(
                         key: _createWishFormKey,
                         formKey: _formKey,
