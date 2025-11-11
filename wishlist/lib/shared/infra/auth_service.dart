@@ -109,11 +109,9 @@ class AuthService {
 
   Future<void> deleteAccount() async {
     try {
-      // Appeler une fonction RPC pour supprimer le compte utilisateur
-      // Cette fonction doit supprimer l'utilisateur de auth.users
-      // Si les contraintes ON DELETE CASCADE sont bien configurées,
-      // toutes les données associées seront supprimées automatiquement
-      await supabase.rpc('delete_user_account');
+      // Appeler une Edge Function qui gère toute la suppression côté serveur
+      // (fichiers du storage + suppression de l'utilisateur)
+      await supabase.functions.invoke('delete-user-account');
 
       // Déconnecter l'utilisateur après la suppression
       await supabase.auth.signOut();
