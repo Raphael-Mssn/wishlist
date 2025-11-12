@@ -73,6 +73,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               l10n.invalidLoginCredentials,
               type: SnackBarType.error,
             );
+          case 404:
+            showAppSnackBar(
+              context,
+              l10n.invalidLoginCredentials,
+              type: SnackBarType.error,
+            );
         }
       } else {
         showGenericError(context);
