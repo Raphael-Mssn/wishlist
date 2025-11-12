@@ -24,34 +24,52 @@ abstract class BaseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textWidget = Text(
+      text,
+      style: style.textStyle.copyWith(
+        color: textColor(context),
+        fontWeight: FontWeight.bold,
+      ),
+    );
+
     return SizedBox(
       width: isStretched ? double.infinity : null,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor(context),
+          disabledBackgroundColor: backgroundColor(context),
+          disabledForegroundColor: textColor(context),
           padding: style.padding,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           elevation: 2,
         ),
-        onPressed: onPressed,
-        child: isLoading
-            ? Container(
-                padding: const EdgeInsets.all(4),
-                height: 40,
-                width: 40,
-                child: const CircularProgressIndicator(
-                  color: Colors.black,
-                ),
-              )
-            : Text(
-                text,
-                style: style.textStyle.copyWith(
-                  color: textColor(context),
-                  fontWeight: FontWeight.bold,
-                ),
+        onPressed: isLoading ? null : onPressed,
+        child: IntrinsicHeight(
+          child: Stack(
+            children: [
+              // Texte invisible pour maintenir la hauteur
+              Opacity(
+                opacity: 0,
+                child: textWidget,
               ),
+              // Contenu visible (texte ou loader)
+              if (isLoading)
+                Positioned.fill(
+                  child: Center(
+                    child: FittedBox(
+                      child: CircularProgressIndicator(
+                        color: textColor(context),
+                      ),
+                    ),
+                  ),
+                )
+              else
+                textWidget,
+            ],
+          ),
+        ),
       ),
     );
   }

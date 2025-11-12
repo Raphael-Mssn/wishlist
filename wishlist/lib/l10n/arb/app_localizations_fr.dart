@@ -144,6 +144,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsScreenDeleteAccount => 'Supprimer mon compte';
 
   @override
+  String get settingsScreenDeleteAccountDialogTitle => 'Supprimer mon compte';
+
+  @override
+  String get settingsScreenDeleteAccountDialogExplanation =>
+      'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et toutes vos données seront définitivement supprimées.';
+
+  @override
+  String get deleteAccountSuccess => 'Compte supprimé avec succès';
+
+  @override
   String get confirmDialogConfirmButtonLabel => 'OK';
 
   @override

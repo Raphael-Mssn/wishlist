@@ -344,6 +344,24 @@ abstract class AppLocalizations {
   /// **'Supprimer mon compte'**
   String get settingsScreenDeleteAccount;
 
+  /// No description provided for @settingsScreenDeleteAccountDialogTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer mon compte'**
+  String get settingsScreenDeleteAccountDialogTitle;
+
+  /// No description provided for @settingsScreenDeleteAccountDialogExplanation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et toutes vos données seront définitivement supprimées.'**
+  String get settingsScreenDeleteAccountDialogExplanation;
+
+  /// No description provided for @deleteAccountSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte supprimé avec succès'**
+  String get deleteAccountSuccess;
+
   /// No description provided for @confirmDialogConfirmButtonLabel.
   ///
   /// In fr, this message translates to:

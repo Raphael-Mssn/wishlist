@@ -106,6 +106,29 @@ class AuthService {
       );
     }
   }
+
+  Future<void> deleteAccount() async {
+    try {
+      // Appeler une Edge Function qui gère toute la suppression côté serveur
+      // (fichiers du storage + suppression de l'utilisateur)
+      await supabase.functions.invoke('delete-user-account');
+
+      // Déconnecter l'utilisateur après la suppression
+      await supabase.auth.signOut();
+    } catch (e) {
+      if (e is AuthException) {
+        final statusCode = e.statusCode;
+        throw AppException(
+          statusCode: statusCode != null ? int.parse(statusCode) : 500,
+          message: e.message,
+        );
+      }
+      throw AppException(
+        statusCode: 500,
+        message: 'Failed to delete account',
+      );
+    }
+  }
 }
 
 final authServiceProvider = Provider((ref) => AuthService.instance);
