@@ -5,11 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_box_shadow.dart';
-import 'package:wishlist/modules/wishs/view/widgets/edit_wish_bottom_sheet.dart';
 import 'package:wishlist/modules/wishs/view/widgets/scrollable_content_with_indicator.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wish_taken_by_user_service.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
@@ -196,7 +196,8 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                   if (isMyWishlist)
                     PrimaryButton(
                       style: BaseButtonStyle.medium,
-                      onPressed: () => showEditWishBottomSheet(context, wish),
+                      onPressed: () =>
+                          EditWishRoute(wishId: wish.id).push(context),
                       text: l10n.editButton,
                       isStretched: true,
                     ),

@@ -16,9 +16,9 @@ import 'package:wishlist/shared/widgets/text_form_fields/validators/not_null_val
 const _smallGap = Gap(8);
 const _columnSpacing = 16.0;
 
-/// Formulaire de création de wish
-class CreateWishForm extends StatefulWidget {
-  const CreateWishForm({
+/// Formulaire de création/édition de wish
+class WishFormFields extends StatefulWidget {
+  const WishFormFields({
     super.key,
     required this.formKey,
     required this.nameController,
@@ -38,10 +38,10 @@ class CreateWishForm extends StatefulWidget {
   final ValueChanged<File?> onImageSelected;
 
   @override
-  State<CreateWishForm> createState() => CreateWishFormState();
+  State<WishFormFields> createState() => WishFormFieldsState();
 }
 
-class CreateWishFormState extends State<CreateWishForm> {
+class WishFormFieldsState extends State<WishFormFields> {
   File? _selectedImage;
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
