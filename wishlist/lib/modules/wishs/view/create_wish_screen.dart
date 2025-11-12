@@ -9,7 +9,7 @@ import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_streams_pro
 import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
 import 'package:wishlist/shared/theme/colors.dart';
-import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
+import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 
@@ -129,26 +129,14 @@ class _CreateWishScreenState extends ConsumerState<CreateWishScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final wishlistAsync =
-        ref.watch(watchWishlistByIdProvider(widget.wishlistId));
-
-    return wishlistAsync.when(
-      loading: () => const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
+    final wishlistThemeAsync = ref.watch(
+      wishlistThemeProvider(
+        widget.wishlistId,
       ),
-      error: (error, stackTrace) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.background,
-        ),
-        body: Center(
-          child: Text(l10n.genericError),
-        ),
-      ),
-      data: (wishlist) {
-        final wishlistTheme = getWishlistTheme(context, wishlist);
+    );
 
+    return wishlistThemeAsync.when(
+      data: (wishlistTheme) {
         return Theme(
           data: wishlistTheme,
           child: Scaffold(
@@ -197,6 +185,14 @@ class _CreateWishScreenState extends ConsumerState<CreateWishScreen> {
           ),
         );
       },
+      loading: () => const Scaffold(
+        backgroundColor: AppColors.background,
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (_, __) => const Scaffold(
+        backgroundColor: AppColors.background,
+        body: SizedBox.shrink(),
+      ),
     );
   }
 }

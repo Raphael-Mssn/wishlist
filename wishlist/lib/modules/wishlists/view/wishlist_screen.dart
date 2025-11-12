@@ -7,7 +7,6 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_search_bar.dart
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_section.dart';
-import 'package:wishlist/modules/wishs/view/widgets/consult_wish_bottom_sheet.dart';
 import 'package:wishlist/modules/wishs/view/widgets/edit_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
@@ -16,6 +15,7 @@ import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
@@ -79,7 +79,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     if (isMyWishlist) {
       showEditWishBottomSheet(context, wish);
     } else {
-      showConsultWishBottomSheet(context, wish, cardType: cardType);
+      ConsultWishRoute(wish.id).push(context);
     }
   }
 
@@ -130,6 +130,14 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     await Future.delayed(const Duration(milliseconds: 300));
   }
 
+  void _updateWishlistTheme(WidgetRef ref, Wishlist wishlist) {
+    final wishlistTheme = getWishlistTheme(context, wishlist);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(wishlistThemeCacheProvider(wishlist.id).notifier).state =
+          wishlistTheme;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final wishlistScreenData =
@@ -142,7 +150,8 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         final isMyWishlist = wishlist.idOwner ==
             ref.read(userServiceProvider).getCurrentUserId();
 
-        // Appliquer le thème de la wishlist à tout l'écran
+        _updateWishlistTheme(ref, wishlist);
+
         return AnimatedTheme(
           data: wishlistTheme,
           child: Builder(

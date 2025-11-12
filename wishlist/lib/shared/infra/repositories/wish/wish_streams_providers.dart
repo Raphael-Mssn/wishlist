@@ -8,3 +8,9 @@ final watchWishsFromWishlistProvider =
   final repository = ref.watch(wishStreamRepositoryProvider);
   return repository.watchWishsFromWishlist(wishlistId);
 });
+
+final watchWishByIdProvider =
+    StreamProvider.autoDispose.family<Wish, int>((ref, wishId) {
+  final repository = ref.watch(wishStreamRepositoryProvider);
+  return repository.watchWishById(wishId);
+});

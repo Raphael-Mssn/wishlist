@@ -144,9 +144,9 @@ class WishService {
     final compressedFile = await FlutterImageCompress.compressWithFile(
       imageFile.absolute.path,
       format: CompressFormat.webp,
-      quality: 85,
-      minWidth: 512,
-      minHeight: 512,
+      quality: 90,
+      minWidth: 1024,
+      minHeight: 1024,
     );
 
     if (compressedFile == null) {
@@ -162,8 +162,8 @@ class WishService {
       imageFile.absolute.path,
       format: CompressFormat.webp,
       quality: 80,
-      minWidth: 128,
-      minHeight: 128,
+      minWidth: 256,
+      minHeight: 256,
     );
 
     if (compressedFile == null) {

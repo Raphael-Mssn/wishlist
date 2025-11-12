@@ -323,6 +323,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cancelBooking => 'Annuler la réservation';
 
   @override
+  String get cancelBookingDialogTitle => 'Annuler la réservation';
+
+  @override
+  String get cancelBookingDialogExplanation =>
+      'Es-tu sûr(e) de vouloir annuler cette réservation ?';
+
+  @override
+  String get noDescription => 'Aucune description';
+
+  @override
   String get wishlistVisibility => 'Visibilité de la wishlist';
 
   @override
