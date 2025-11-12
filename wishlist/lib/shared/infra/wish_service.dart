@@ -84,6 +84,55 @@ class WishService {
     return createdWish;
   }
 
+  /// Met à jour un wish avec gestion optionnelle de l'image
+  /// - Si [imageFile] est fourni : upload de la nouvelle image
+  /// - Si [deleteImage] est true : suppression de l'image existante
+  /// - Sinon : mise à jour sans changement d'image
+  Future<Wish> updateWishWithImage({
+    required Wish wish,
+    File? imageFile,
+    bool deleteImage = false,
+  }) async {
+    if (deleteImage && imageFile == null) {
+      // Supprimer l'image si elle existe
+      if (wish.iconUrl != null && wish.iconUrl!.isNotEmpty) {
+        await _wishRepository.deleteWishImage(wish.iconUrl!);
+        // Supprimer aussi la miniature
+        final thumbnailPath = wish.iconUrl!.replaceAll('.webp', '_thumb.webp');
+        await _wishRepository.deleteWishImage(thumbnailPath);
+      }
+
+      // Mise à jour du wish avec iconUrl vide (équivalent à null)
+      final updatedWish = await _wishRepository.updateWish(
+        wish.copyWith(iconUrl: ''),
+      );
+
+      return updatedWish;
+    }
+
+    if (imageFile != null) {
+      // Supprimer l'ancienne image si elle existe
+      if (wish.iconUrl != null && wish.iconUrl!.isNotEmpty) {
+        await _wishRepository.deleteWishImage(wish.iconUrl!);
+        // Supprimer aussi la miniature
+        final thumbnailPath = wish.iconUrl!.replaceAll('.webp', '_thumb.webp');
+        await _wishRepository.deleteWishImage(thumbnailPath);
+      }
+
+      // Upload de la nouvelle image
+      final imagePath = await uploadWishImage(imageFile, wish.id);
+
+      // Mise à jour du wish avec la nouvelle URL
+      final updatedWish = await _wishRepository.updateWish(
+        wish.copyWith(iconUrl: imagePath),
+      );
+
+      return updatedWish;
+    }
+
+    return _wishRepository.updateWish(wish);
+  }
+
   /// Upload une image pour un wish
   Future<String> uploadWishImage(File imageFile, int wishId) async {
     // Compression de l'image principale

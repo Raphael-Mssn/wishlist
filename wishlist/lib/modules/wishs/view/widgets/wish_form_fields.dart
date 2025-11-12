@@ -27,6 +27,7 @@ class WishFormFields extends StatefulWidget {
     required this.linkController,
     required this.descriptionController,
     required this.onImageSelected,
+    this.existingImageUrl,
   });
 
   final GlobalKey<FormState> formKey;
@@ -36,6 +37,7 @@ class WishFormFields extends StatefulWidget {
   final TextEditingController linkController;
   final TextEditingController descriptionController;
   final ValueChanged<File?> onImageSelected;
+  final String? existingImageUrl;
 
   @override
   State<WishFormFields> createState() => WishFormFieldsState();
@@ -43,7 +45,10 @@ class WishFormFields extends StatefulWidget {
 
 class WishFormFieldsState extends State<WishFormFields> {
   File? _selectedImage;
+  bool _hasRemovedExistingImage = false;
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+
+  bool get hasRemovedExistingImage => _hasRemovedExistingImage;
 
   void enableAutovalidation() {
     if (_autovalidateMode != AutovalidateMode.onUserInteraction) {
@@ -55,10 +60,15 @@ class WishFormFieldsState extends State<WishFormFields> {
 
   Future<void> _showImageOptions() async {
     final l10n = context.l10n;
+    final hasImage = _selectedImage != null ||
+        (!_hasRemovedExistingImage &&
+            widget.existingImageUrl != null &&
+            widget.existingImageUrl!.isNotEmpty);
+
     await showImageOptionsBottomSheet(
       context,
       title: l10n.imageOptions,
-      hasImage: _selectedImage != null,
+      hasImage: hasImage,
       onPickFromGallery: _pickImageFromGallery,
       onTakePhoto: _takePhoto,
       onRemoveImage: _removeImage,
@@ -104,6 +114,7 @@ class WishFormFieldsState extends State<WishFormFields> {
   void _removeImage() {
     setState(() {
       _selectedImage = null;
+      _hasRemovedExistingImage = true;
     });
     widget.onImageSelected(null);
   }
@@ -235,6 +246,8 @@ class WishFormFieldsState extends State<WishFormFields> {
           ),
           ImageUploadField(
             imageFile: _selectedImage,
+            existingImageUrl:
+                _hasRemovedExistingImage ? null : widget.existingImageUrl,
             onTap: _showImageOptions,
           ),
         ],
