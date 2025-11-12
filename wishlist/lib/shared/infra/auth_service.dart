@@ -30,9 +30,9 @@ class AuthService {
           .maybeSingle();
 
       if (response == null || response['email'] == null) {
-        throw AppException(
-          statusCode: 404,
-          message: 'User not found',
+        throw const AuthException(
+          'User not found',
+          statusCode: '404',
         );
       }
 
