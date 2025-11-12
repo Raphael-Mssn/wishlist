@@ -13,9 +13,11 @@ class ConsultWishScreen extends ConsumerWidget {
   const ConsultWishScreen({
     super.key,
     required this.wishId,
+    this.isMyWishlist = false,
   });
 
   final int wishId;
+  final bool isMyWishlist;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,6 +53,7 @@ class ConsultWishScreen extends ConsumerWidget {
                           ConsultWishInfoContainer(
                             wish: wishData,
                             descriptionText: descriptionText,
+                            isMyWishlist: isMyWishlist,
                           ),
                         ],
                       ),
