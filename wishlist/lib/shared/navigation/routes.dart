@@ -9,8 +9,9 @@ import 'package:wishlist/modules/settings/change_password/view/change_password_s
 import 'package:wishlist/modules/settings/change_pseudo/view/change_pseudo_screen.dart';
 import 'package:wishlist/modules/settings/view/settings_screen.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
-import 'package:wishlist/modules/wishs/view/create_wish_screen.dart';
 import 'package:wishlist/modules/wishs/view/screens/consult_wish_screen.dart';
+import 'package:wishlist/modules/wishs/view/screens/edit_wish_screen.dart';
+import 'package:wishlist/modules/wishs/view/wish_form_screen.dart';
 import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 
 part 'routes.g.dart';
@@ -129,9 +130,25 @@ class CreateWishRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return CreateWishScreen(
+    return WishFormScreen(
       wishlistId: wishlistId,
     );
+  }
+}
+
+@TypedGoRoute<EditWishRoute>(
+  path: '/wish/:wishId/edit',
+)
+class EditWishRoute extends GoRouteData {
+  EditWishRoute({
+    required this.wishId,
+  });
+
+  final int wishId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return EditWishScreen(wishId: wishId);
   }
 }
 

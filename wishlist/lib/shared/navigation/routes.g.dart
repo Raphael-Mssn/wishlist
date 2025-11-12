@@ -18,6 +18,7 @@ List<RouteBase> get $appRoutes => [
       $forgotPasswordRoute,
       $resetPasswordRoute,
       $createWishRoute,
+      $editWishRoute,
       $consultWishRoute,
     ];
 
@@ -262,6 +263,30 @@ extension $CreateWishRouteExtension on CreateWishRoute {
 
   String get location => GoRouteData.$location(
         '/wishlist/${Uri.encodeComponent(wishlistId.toString())}/create-wish',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $editWishRoute => GoRouteData.$route(
+      path: '/wish/:wishId/edit',
+      factory: $EditWishRouteExtension._fromState,
+    );
+
+extension $EditWishRouteExtension on EditWishRoute {
+  static EditWishRoute _fromState(GoRouterState state) => EditWishRoute(
+        wishId: int.parse(state.pathParameters['wishId']!),
+      );
+
+  String get location => GoRouteData.$location(
+        '/wish/${Uri.encodeComponent(wishId.toString())}/edit',
       );
 
   void go(BuildContext context) => context.go(location);
