@@ -5,10 +5,11 @@ import 'package:gap/gap.dart';
 import 'package:implicitly_animated_list/implicitly_animated_list.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wish_card.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wishes_search_bar.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wishes_stats.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/user_group_header.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wish_card.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/shared/infra/booked_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/models/booked_wish_sort_type.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
@@ -323,9 +324,14 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
           Column(
             spacing: 8,
             children: ownerWishes.map((bookedWish) {
-              return BookedWishCard(
-                bookedWish: bookedWish,
+              return WishCard(
+                wish: bookedWish.wish,
                 onTap: () => _onWishTap(bookedWish),
+                onFavoriteToggle: () {}, // Non-cliquable pour booked wishes
+                isMyWishlist: false,
+                cardType: WishlistStatsCardType.booked,
+                subtitle: bookedWish.wishlistName,
+                quantityOverride: bookedWish.bookedQuantity,
               );
             }).toList(),
           ),
