@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/modules/wishs/view/widgets/create_wish_app_bar.dart';
+import 'package:wishlist/modules/wishs/view/widgets/wish_form_app_bar.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form_fields.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_streams_providers.dart';
 import 'package:wishlist/shared/infra/wish_image_url_provider.dart';
@@ -316,7 +316,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
           data: wishlistTheme,
           child: Scaffold(
             backgroundColor: AppColors.background,
-            appBar: CreateWishAppBar(
+            appBar: WishFormAppBar(
               title: widget.isEditMode
                   ? l10n.editWishBottomSheetTitle
                   : l10n.createWishBottomSheetTitle,
