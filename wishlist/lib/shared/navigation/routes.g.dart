@@ -282,10 +282,16 @@ RouteBase get $consultWishRoute => GoRouteData.$route(
 extension $ConsultWishRouteExtension on ConsultWishRoute {
   static ConsultWishRoute _fromState(GoRouterState state) => ConsultWishRoute(
         int.parse(state.pathParameters['wishId']!),
+        isMyWishlist: _$convertMapValue(
+                'is-my-wishlist', state.uri.queryParameters, _$boolConverter) ??
+            false,
       );
 
   String get location => GoRouteData.$location(
         '/wish/${Uri.encodeComponent(wishId.toString())}',
+        queryParams: {
+          if (isMyWishlist != false) 'is-my-wishlist': isMyWishlist.toString(),
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -296,4 +302,24 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
       context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
+}
+
+T? _$convertMapValue<T>(
+  String key,
+  Map<String, String> map,
+  T Function(String) converter,
+) {
+  final value = map[key];
+  return value == null ? null : converter(value);
+}
+
+bool _$boolConverter(String value) {
+  switch (value) {
+    case 'true':
+      return true;
+    case 'false':
+      return false;
+    default:
+      throw UnsupportedError('Cannot convert "$value" into a bool.');
+  }
 }

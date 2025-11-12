@@ -139,10 +139,11 @@ class CreateWishRoute extends GoRouteData {
   path: '/wish/:wishId',
 )
 class ConsultWishRoute extends GoRouteData {
-  ConsultWishRoute(this.wishId);
+  ConsultWishRoute(this.wishId, {this.isMyWishlist = false});
   final int wishId;
+  final bool isMyWishlist;
 
   @override
   Widget build(BuildContext context, GoRouterState state) =>
-      ConsultWishScreen(wishId: wishId);
+      ConsultWishScreen(wishId: wishId, isMyWishlist: isMyWishlist);
 }
