@@ -10,33 +10,50 @@ class ImageUploadField extends StatelessWidget {
     super.key,
     this.onTap,
     this.imageFile,
+    this.existingImageUrl,
   });
 
   final VoidCallback? onTap;
   final File? imageFile;
+  final String? existingImageUrl;
+
+  bool get _hasImage =>
+      imageFile != null ||
+      (existingImageUrl != null && existingImageUrl!.isNotEmpty);
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    DecorationImage? backgroundImage;
+
+    if (imageFile != null) {
+      // Priorité à l'image locale (nouveau fichier sélectionné)
+      backgroundImage = DecorationImage(
+        image: FileImage(imageFile!),
+        fit: BoxFit.cover,
+      );
+    } else if (existingImageUrl != null && existingImageUrl!.isNotEmpty) {
+      // Sinon, afficher l'image existante du serveur
+      backgroundImage = DecorationImage(
+        image: NetworkImage(existingImageUrl!),
+        fit: BoxFit.cover,
+      );
+    }
 
     return Container(
       height: 180,
       decoration: BoxDecoration(
         color: AppColors.gainsboro,
         borderRadius: BorderRadius.circular(16),
-        image: imageFile != null
-            ? DecorationImage(
-                image: FileImage(imageFile!),
-                fit: BoxFit.cover,
-              )
-            : null,
+        image: backgroundImage,
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: onTap,
-          child: imageFile == null
+          child: !_hasImage
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

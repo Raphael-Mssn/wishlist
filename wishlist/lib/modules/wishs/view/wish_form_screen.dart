@@ -6,10 +6,10 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/create_wish_app_bar.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form_fields.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_streams_providers.dart';
+import 'package:wishlist/shared/infra/wish_image_url_provider.dart';
 import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
-import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -213,7 +213,20 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
     );
 
     try {
-      await ref.read(wishMutationsProvider.notifier).update(wishToUpdate);
+      final hasRemovedImage =
+          _wishFormFieldsKey.currentState?.hasRemovedExistingImage ?? false;
+
+      // Utiliser updateWithImage pour tous les cas où l'image change
+      if (_selectedImage != null || hasRemovedImage) {
+        await ref.read(wishMutationsProvider.notifier).updateWithImage(
+              wish: wishToUpdate,
+              imageFile: _selectedImage,
+              deleteImage: hasRemovedImage && _selectedImage == null,
+            );
+      } else {
+        // Sinon, update sans changement d'image
+        await ref.read(wishMutationsProvider.notifier).update(wishToUpdate);
+      }
 
       if (mounted) {
         showAppSnackBar(
@@ -251,8 +264,6 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
               );
 
           if (mounted) {
-            WishlistRoute(wishlistId: widget.wishlistId).go(context);
-
             showAppSnackBar(
               context,
               l10n.deleteWishSuccess,
@@ -288,6 +299,16 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
         widget.wishlistId,
       ),
     );
+    final wishImageUrl = widget.isEditMode
+        ? ref.watch(
+            wishImageUrlProvider(
+              (
+                imagePath: widget.wish!.iconUrl,
+                thumbnail: false,
+              ),
+            ),
+          )
+        : null;
 
     return wishlistThemeAsync.when(
       data: (wishlistTheme) {
@@ -323,6 +344,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
                         linkController: _linkInputController,
                         descriptionController: _descriptionInputController,
                         onImageSelected: _onImageSelected,
+                        existingImageUrl: wishImageUrl,
                       ),
                     ),
                   ),

@@ -47,6 +47,23 @@ class WishMutations extends _$WishMutations with Mutation<void> {
     );
   }
 
+  Future<void> updateWithImage({
+    required Wish wish,
+    File? imageFile,
+    bool deleteImage = false,
+  }) async {
+    await mutate(
+      () async {
+        final service = ref.read(wishServiceProvider);
+        await service.updateWishWithImage(
+          wish: wish,
+          imageFile: imageFile,
+          deleteImage: deleteImage,
+        );
+      },
+    );
+  }
+
   Future<void> delete(int wishId, {String? iconUrl}) async {
     await mutate(
       () async {
