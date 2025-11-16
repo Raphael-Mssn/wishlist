@@ -13,11 +13,10 @@ import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
-import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/double_extension.dart';
-import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
+import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 
 class WishFormScreen extends ConsumerStatefulWidget {
   const WishFormScreen({
@@ -247,16 +246,10 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
   void _onDeleteWish(BuildContext context) {
     final l10n = context.l10n;
 
-    showAppDialog(
+    showConfirmDialog(
       context,
       title: l10n.deleteWish,
-      content: Text(
-        l10n.deleteWishConfirmationMessage,
-        style: AppTextStyles.small.copyWith(
-          color: AppColors.makara,
-        ),
-      ),
-      confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
+      explanation: l10n.deleteWishConfirmationMessage,
       onConfirm: () async {
         try {
           await ref.read(wishMutationsProvider.notifier).delete(
@@ -278,7 +271,6 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
           }
         }
       },
-      onCancel: () {},
     );
   }
 
