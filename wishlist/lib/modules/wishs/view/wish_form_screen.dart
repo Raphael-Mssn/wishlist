@@ -10,6 +10,7 @@ import 'package:wishlist/shared/infra/wish_image_url_provider.dart';
 import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -269,6 +270,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
               l10n.deleteWishSuccess,
               type: SnackBarType.success,
             );
+            WishlistRoute(wishlistId: widget.wishlistId).go(context);
           }
         } catch (e) {
           if (mounted) {

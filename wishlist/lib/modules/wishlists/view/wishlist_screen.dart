@@ -75,7 +75,8 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     required bool isMyWishlist,
     WishlistStatsCardType? cardType,
   }) {
-    ConsultWishRoute(wish.id, isMyWishlist: isMyWishlist).push(context);
+    ConsultWishRoute(wish.wishlistId, wish.id, isMyWishlist: isMyWishlist)
+        .push(context);
   }
 
   void onTapStatCard(WishlistStatsCardType type) {
