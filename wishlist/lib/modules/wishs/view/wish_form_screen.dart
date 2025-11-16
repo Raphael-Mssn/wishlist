@@ -359,9 +359,8 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
                             ),
                           ),
                         PrimaryButton(
-                          text: widget.isEditMode
-                              ? l10n.editButton
-                              : l10n.createButton,
+                          text:
+                              widget.isEditMode ? l10n.save : l10n.createButton,
                           onPressed: _isLoading ? null : _onSubmit,
                           style: BaseButtonStyle.large,
                           isStretched: true,
