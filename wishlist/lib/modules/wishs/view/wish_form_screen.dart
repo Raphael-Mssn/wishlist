@@ -244,7 +244,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
     }
   }
 
-  void _onDeleteWish() {
+  void _onDeleteWish(BuildContext context) {
     final l10n = context.l10n;
 
     showAppDialog(
@@ -264,7 +264,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
                 iconUrl: widget.wish!.iconUrl,
               );
 
-          if (mounted) {
+          if (context.mounted) {
             showAppSnackBar(
               context,
               l10n.deleteWishSuccess,
@@ -273,7 +273,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
             WishlistRoute(wishlistId: widget.wishlistId).go(context);
           }
         } catch (e) {
-          if (mounted) {
+          if (context.mounted) {
             showGenericError(context);
           }
         }
@@ -356,11 +356,15 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
                       spacing: 12,
                       children: [
                         if (widget.isEditMode)
-                          SecondaryButton(
-                            text: l10n.deleteWish,
-                            onPressed: _isLoading ? null : _onDeleteWish,
-                            style: BaseButtonStyle.large,
-                            isStretched: true,
+                          Builder(
+                            builder: (dialogContext) => SecondaryButton(
+                              text: l10n.deleteWish,
+                              onPressed: _isLoading
+                                  ? null
+                                  : () => _onDeleteWish(dialogContext),
+                              style: BaseButtonStyle.large,
+                              isStretched: true,
+                            ),
                           ),
                         PrimaryButton(
                           text: widget.isEditMode
