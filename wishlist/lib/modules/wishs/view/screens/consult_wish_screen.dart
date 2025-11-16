@@ -9,21 +9,82 @@ import 'package:wishlist/shared/infra/repositories/wish/wish_streams_providers.d
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 
-class ConsultWishScreen extends ConsumerWidget {
+class ConsultWishScreen extends ConsumerStatefulWidget {
   const ConsultWishScreen({
     super.key,
     required this.wishId,
     this.isMyWishlist = false,
+    this.wishIds,
+    this.initialIndex,
   });
 
   final int wishId;
   final bool isMyWishlist;
+  final List<int>? wishIds;
+  final int? initialIndex;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-    final wish = ref.watch(watchWishByIdProvider(wishId));
+  ConsumerState<ConsultWishScreen> createState() => _ConsultWishScreenState();
+}
 
+class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
+  late PageController _pageController;
+  late int _currentWishId;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentWishId = widget.wishId;
+    _pageController = PageController(
+      initialPage: widget.initialIndex ?? 0,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onPageChanged(int index) {
+    if (widget.wishIds != null && index < widget.wishIds!.length) {
+      setState(() {
+        _currentWishId = widget.wishIds![index];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final wish = ref.watch(watchWishByIdProvider(_currentWishId));
+
+    // Si on a une liste de wishIds, on utilise un PageView
+    if (widget.wishIds != null && widget.wishIds!.isNotEmpty) {
+      return _buildPageView(l10n);
+    }
+
+    // Sinon, affichage simple (comportement actuel)
+    return _buildSingleWish(wish, l10n);
+  }
+
+  Widget _buildPageView(AppLocalizations l10n) {
+    return PageView.builder(
+      controller: _pageController,
+      onPageChanged: _onPageChanged,
+      itemCount: widget.wishIds!.length,
+      itemBuilder: (context, index) {
+        final wishId = widget.wishIds![index];
+        final wish = ref.watch(watchWishByIdProvider(wishId));
+        return _buildSingleWish(wish, l10n);
+      },
+    );
+  }
+
+  Widget _buildSingleWish(
+    AsyncValue wish,
+    AppLocalizations l10n,
+  ) {
     return wish.when(
       data: (wishData) {
         final wishlistThemeAsync =
@@ -53,7 +114,7 @@ class ConsultWishScreen extends ConsumerWidget {
                           ConsultWishInfoContainer(
                             wish: wishData,
                             descriptionText: descriptionText,
-                            isMyWishlist: isMyWishlist,
+                            isMyWishlist: widget.isMyWishlist,
                           ),
                         ],
                       ),

@@ -73,10 +73,19 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     BuildContext context,
     Wish wish, {
     required bool isMyWishlist,
+    required IList<Wish> wishsToDisplay,
     WishlistStatsCardType? cardType,
   }) {
-    ConsultWishRoute(wish.wishlistId, wish.id, isMyWishlist: isMyWishlist)
-        .push(context);
+    final wishIds = wishsToDisplay.map((w) => w.id).toList();
+    final initialIndex = wishsToDisplay.indexWhere((w) => w.id == wish.id);
+
+    ConsultWishRoute(
+      wish.wishlistId,
+      wish.id,
+      isMyWishlist: isMyWishlist,
+      wishIds: wishIds,
+      initialIndex: initialIndex >= 0 ? initialIndex : 0,
+    ).push(context);
   }
 
   void onTapStatCard(WishlistStatsCardType type) {
