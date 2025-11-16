@@ -7,7 +7,7 @@ import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
-import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
+import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 
 enum FriendDetailsAppBarAction { remove }
 
@@ -46,18 +46,11 @@ class FriendDetailsAppBar extends ConsumerWidget
   ) async {
     final l10n = context.l10n;
 
-    await showAppDialog(
+    await showConfirmDialog(
       context,
       title: l10n.friendDetailsRemove,
-      content: Text(
-        l10n.removeFriendConfirmation,
-        style: AppTextStyles.small.copyWith(
-          color: AppColors.makara,
-        ),
-      ),
-      confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
+      explanation: l10n.removeFriendConfirmation,
       onConfirm: () => _deleteFriend(context, ref),
-      onCancel: () {},
     );
   }
 
