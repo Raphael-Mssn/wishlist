@@ -338,6 +338,12 @@ abstract class AppLocalizations {
   /// **'Pseudo modifié avec succès !'**
   String get changePseudoSuccess;
 
+  /// No description provided for @changePasswordSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe changé avec succès !'**
+  String get changePasswordSuccess;
+
   /// No description provided for @settingsScreenDeleteAccount.
   ///
   /// In fr, this message translates to:

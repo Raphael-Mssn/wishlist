@@ -140,6 +140,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changePseudoSuccess => 'Pseudo changed successfully!';
 
   @override
+  String get changePasswordSuccess => 'Password changed successfully!';
+
+  @override
   String get settingsScreenDeleteAccount => 'Delete my account';
 
   @override
