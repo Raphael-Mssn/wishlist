@@ -102,14 +102,26 @@ class CreateWishRoute extends GoRouteData {
 }
 
 class ConsultWishRoute extends GoRouteData {
-  ConsultWishRoute(this.wishlistId, this.wishId, {this.isMyWishlist = false});
+  ConsultWishRoute(
+    this.wishlistId,
+    this.wishId, {
+    this.isMyWishlist = false,
+    this.wishIds,
+    this.initialIndex,
+  });
   final int wishlistId;
   final int wishId;
   final bool isMyWishlist;
+  final List<int>? wishIds;
+  final int? initialIndex;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      ConsultWishScreen(wishId: wishId, isMyWishlist: isMyWishlist);
+  Widget build(BuildContext context, GoRouterState state) => ConsultWishScreen(
+        wishId: wishId,
+        isMyWishlist: isMyWishlist,
+        wishIds: wishIds,
+        initialIndex: initialIndex,
+      );
 }
 
 class EditWishRoute extends GoRouteData {

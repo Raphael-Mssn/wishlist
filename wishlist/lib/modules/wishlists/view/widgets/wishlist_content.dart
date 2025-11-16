@@ -39,6 +39,7 @@ class WishlistContent extends StatelessWidget {
     BuildContext,
     Wish, {
     required bool isMyWishlist,
+    required IList<Wish> wishsToDisplay,
     WishlistStatsCardType? cardType,
   }) onTapWish;
   final Function(BuildContext, Wishlist) onAddWish;
@@ -119,6 +120,7 @@ class _WishList extends StatelessWidget {
     BuildContext,
     Wish, {
     required bool isMyWishlist,
+    required IList<Wish> wishsToDisplay,
     WishlistStatsCardType? cardType,
   }) onTapWish;
   final Function(Wish) onFavoriteToggle;
@@ -141,6 +143,7 @@ class _WishList extends StatelessWidget {
               context,
               wish,
               isMyWishlist: isMyWishlist,
+              wishsToDisplay: wishsToDisplay,
               cardType: statCardSelected,
             ),
             onFavoriteToggle: () => onFavoriteToggle(wish),

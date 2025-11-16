@@ -192,12 +192,19 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
         isMyWishlist: _$convertMapValue(
                 'is-my-wishlist', state.uri.queryParameters, _$boolConverter) ??
             false,
+        wishIds:
+            state.uri.queryParametersAll['wish-ids']?.map(int.parse).toList(),
+        initialIndex: _$convertMapValue(
+            'initial-index', state.uri.queryParameters, int.parse),
       );
 
   String get location => GoRouteData.$location(
         '/wishlist/${Uri.encodeComponent(wishlistId.toString())}/wish/${Uri.encodeComponent(wishId.toString())}',
         queryParams: {
           if (isMyWishlist != false) 'is-my-wishlist': isMyWishlist.toString(),
+          if (wishIds != null)
+            'wish-ids': wishIds?.map((e) => e.toString()).toList(),
+          if (initialIndex != null) 'initial-index': initialIndex!.toString(),
         },
       );
 
