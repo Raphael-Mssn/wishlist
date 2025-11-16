@@ -141,6 +141,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get changePseudoSuccess => 'Pseudo modifié avec succès !';
 
   @override
+  String get changePasswordSuccess => 'Mot de passe changé avec succès !';
+
+  @override
   String get settingsScreenDeleteAccount => 'Supprimer mon compte';
 
   @override

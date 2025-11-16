@@ -47,6 +47,7 @@
   "newPseudoField": "Nouveau pseudo",
   "changePseudoConfirm": "Modifier",
   "changePseudoSuccess": "Pseudo modifié avec succès !",
+  "changePasswordSuccess": "Mot de passe changé avec succès !",
   "settingsScreenDeleteAccount": "Supprimer mon compte",
   "settingsScreenDeleteAccountDialogTitle": "Supprimer mon compte",
   "settingsScreenDeleteAccountDialogExplanation": "Es-tu sûr de vouloir supprimer ton compte ? Cette action est irréversible et toutes tes données seront définitivement supprimées.",
