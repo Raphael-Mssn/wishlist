@@ -93,12 +93,14 @@ class WishService {
     File? imageFile,
     bool deleteImage = false,
   }) async {
+    final iconUrl = wish.iconUrl;
+
     if (deleteImage && imageFile == null) {
       // Supprimer l'image si elle existe
-      if (wish.iconUrl != null && wish.iconUrl!.isNotEmpty) {
-        await _wishRepository.deleteWishImage(wish.iconUrl!);
+      if (iconUrl != null && iconUrl.isNotEmpty) {
+        await _wishRepository.deleteWishImage(iconUrl);
         // Supprimer aussi la miniature
-        final thumbnailPath = wish.iconUrl!.replaceAll('.webp', '_thumb.webp');
+        final thumbnailPath = iconUrl.replaceAll('.webp', '_thumb.webp');
         await _wishRepository.deleteWishImage(thumbnailPath);
       }
 
@@ -112,10 +114,10 @@ class WishService {
 
     if (imageFile != null) {
       // Supprimer l'ancienne image si elle existe
-      if (wish.iconUrl != null && wish.iconUrl!.isNotEmpty) {
-        await _wishRepository.deleteWishImage(wish.iconUrl!);
+      if (iconUrl != null && iconUrl.isNotEmpty) {
+        await _wishRepository.deleteWishImage(iconUrl);
         // Supprimer aussi la miniature
-        final thumbnailPath = wish.iconUrl!.replaceAll('.webp', '_thumb.webp');
+        final thumbnailPath = iconUrl.replaceAll('.webp', '_thumb.webp');
         await _wishRepository.deleteWishImage(thumbnailPath);
       }
 

@@ -47,9 +47,10 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
   }
 
   void _onPageChanged(int index) {
-    if (widget.wishIds != null && index < widget.wishIds!.length) {
+    final wishIds = widget.wishIds;
+    if (wishIds != null && index < wishIds.length) {
       setState(() {
-        _currentWishId = widget.wishIds![index];
+        _currentWishId = wishIds[index];
       });
     }
   }
@@ -58,9 +59,10 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final wish = ref.watch(watchWishByIdProvider(_currentWishId));
+    final wishIds = widget.wishIds;
 
     // Si on a une liste de wishIds, on utilise un PageView
-    if (widget.wishIds != null && widget.wishIds!.isNotEmpty) {
+    if (wishIds != null && wishIds.isNotEmpty) {
       return _buildPageView(l10n);
     }
 
@@ -69,12 +71,17 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
   }
 
   Widget _buildPageView(AppLocalizations l10n) {
+    final wishIds = widget.wishIds;
+    if (wishIds == null) {
+      return const SizedBox.shrink();
+    }
+
     return PageView.builder(
       controller: _pageController,
       onPageChanged: _onPageChanged,
-      itemCount: widget.wishIds!.length,
+      itemCount: wishIds.length,
       itemBuilder: (context, index) {
-        final wishId = widget.wishIds![index];
+        final wishId = wishIds[index];
         final wish = ref.watch(watchWishByIdProvider(wishId));
         return _buildSingleWish(wish, l10n);
       },

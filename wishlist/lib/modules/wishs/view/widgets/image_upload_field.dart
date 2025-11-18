@@ -17,26 +17,29 @@ class ImageUploadField extends StatelessWidget {
   final File? imageFile;
   final String? existingImageUrl;
 
-  bool get _hasImage =>
-      imageFile != null ||
-      (existingImageUrl != null && existingImageUrl!.isNotEmpty);
+  bool get _hasImage {
+    final existingUrl = existingImageUrl;
+    return imageFile != null || (existingUrl != null && existingUrl.isNotEmpty);
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final existingUrl = existingImageUrl;
+    final image = imageFile;
 
     DecorationImage? backgroundImage;
 
-    if (imageFile != null) {
+    if (image != null) {
       // Priorité à l'image locale (nouveau fichier sélectionné)
       backgroundImage = DecorationImage(
-        image: FileImage(imageFile!),
+        image: FileImage(image),
         fit: BoxFit.cover,
       );
-    } else if (existingImageUrl != null && existingImageUrl!.isNotEmpty) {
+    } else if (existingUrl != null && existingUrl.isNotEmpty) {
       // Sinon, afficher l'image existante du serveur
       backgroundImage = DecorationImage(
-        image: NetworkImage(existingImageUrl!),
+        image: NetworkImage(existingUrl),
         fit: BoxFit.cover,
       );
     }
