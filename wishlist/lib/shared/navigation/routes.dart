@@ -105,23 +105,29 @@ class ConsultWishRoute extends GoRouteData {
   ConsultWishRoute(
     this.wishlistId,
     this.wishId, {
-    this.isMyWishlist = false,
     this.wishIds,
-    this.initialIndex,
+    this.isMyWishlist = false,
   });
   final int wishlistId;
   final int wishId;
-  final bool isMyWishlist;
   final List<int>? wishIds;
-  final int? initialIndex;
+  final bool isMyWishlist;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => ConsultWishScreen(
-        wishId: wishId,
-        isMyWishlist: isMyWishlist,
-        wishIds: wishIds,
-        initialIndex: initialIndex,
-      );
+  Widget build(BuildContext context, GoRouterState state) {
+    // Si wishIds est fourni, on l'utilise pour la navigation par swipe
+    // Sinon, on crée une liste avec un seul wish
+    final effectiveWishIds = wishIds ?? [wishId];
+    // On calcule l'index du wishId dans la liste (0 si non trouvé)
+    final initialIndex =
+        effectiveWishIds.indexOf(wishId).clamp(0, effectiveWishIds.length - 1);
+
+    return ConsultWishScreen(
+      wishIds: effectiveWishIds,
+      initialIndex: initialIndex,
+      isMyWishlist: isMyWishlist,
+    );
+  }
 }
 
 class EditWishRoute extends GoRouteData {

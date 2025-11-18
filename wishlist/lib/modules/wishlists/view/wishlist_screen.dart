@@ -77,16 +77,12 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     WishlistStatsCardType? cardType,
   }) {
     final wishIds = wishsToDisplay.map((wish) => wish.id).toList();
-    final initialIndex =
-        wishsToDisplay.indexWhere((wish) => wish.id == wish.id);
-    final validInitialIndex = initialIndex >= 0 ? initialIndex : 0;
 
     ConsultWishRoute(
       wish.wishlistId,
       wish.id,
-      isMyWishlist: isMyWishlist,
       wishIds: wishIds,
-      initialIndex: validInitialIndex,
+      isMyWishlist: isMyWishlist,
     ).push(context);
   }
 
