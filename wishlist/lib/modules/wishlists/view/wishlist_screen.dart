@@ -76,8 +76,9 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     required IList<Wish> wishsToDisplay,
     WishlistStatsCardType? cardType,
   }) {
-    final wishIds = wishsToDisplay.map((w) => w.id).toList();
-    final initialIndex = wishsToDisplay.indexWhere((w) => w.id == wish.id);
+    final wishIds = wishsToDisplay.map((wish) => wish.id).toList();
+    final initialIndex =
+        wishsToDisplay.indexWhere((wish) => wish.id == wish.id);
 
     ConsultWishRoute(
       wish.wishlistId,
