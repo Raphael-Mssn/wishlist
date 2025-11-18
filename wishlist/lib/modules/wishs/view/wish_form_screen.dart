@@ -293,11 +293,12 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
         widget.wishlistId,
       ),
     );
-    final wishImageUrl = widget.isEditMode
+    final wish = widget.wish;
+    final wishImageUrl = widget.isEditMode && wish != null
         ? ref.watch(
             wishImageUrlProvider(
               (
-                imagePath: widget.wish!.iconUrl,
+                imagePath: wish.iconUrl,
                 thumbnail: false,
               ),
             ),

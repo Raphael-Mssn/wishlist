@@ -60,10 +60,11 @@ class WishFormFieldsState extends State<WishFormFields> {
 
   Future<void> _showImageOptions() async {
     final l10n = context.l10n;
+    final existingUrl = widget.existingImageUrl;
     final hasImage = _selectedImage != null ||
         (!_hasRemovedExistingImage &&
-            widget.existingImageUrl != null &&
-            widget.existingImageUrl!.isNotEmpty);
+            existingUrl != null &&
+            existingUrl.isNotEmpty);
 
     await showImageOptionsBottomSheet(
       context,
