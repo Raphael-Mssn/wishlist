@@ -197,8 +197,9 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                     PrimaryButton(
                       style: BaseButtonStyle.medium,
                       onPressed: () => EditWishRoute(
-                              wishlistId: wish.wishlistId, wishId: wish.id)
-                          .push(context),
+                        wishlistId: wish.wishlistId,
+                        wishId: wish.id,
+                      ).push(context),
                       text: l10n.editButton,
                       isStretched: true,
                     ),
