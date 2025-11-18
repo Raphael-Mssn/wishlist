@@ -88,7 +88,11 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
       return true;
     }
 
-    final wish = widget.wish!;
+    final wish = widget.wish;
+    if (wish == null) {
+      return true;
+    }
+
     // La quantité ne peut pas être inférieure à la quantité déjà réservée
     if (quantity < wish.totalBookedQuantity) {
       showAppSnackBar(
@@ -201,7 +205,10 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
     String link,
     String description,
   ) async {
-    final wish = widget.wish!;
+    final wish = widget.wish;
+    if (wish == null) {
+      return;
+    }
 
     final wishToUpdate = wish.copyWith(
       name: name,
@@ -245,6 +252,10 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
 
   void _onDeleteWish(BuildContext context) {
     final l10n = context.l10n;
+    final wish = widget.wish;
+    if (wish == null) {
+      return;
+    }
 
     showConfirmDialog(
       context,
@@ -253,8 +264,8 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
       onConfirm: () async {
         try {
           await ref.read(wishMutationsProvider.notifier).delete(
-                widget.wish!.id,
-                iconUrl: widget.wish!.iconUrl,
+                wish.id,
+                iconUrl: wish.iconUrl,
               );
 
           if (context.mounted) {
