@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
-import 'package:implicitly_animated_list/implicitly_animated_list.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/booked_wishes/view/widgets/booked_wishes_search_bar.dart';
@@ -19,6 +17,7 @@ import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/utils/booked_wish_sort_utils.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/utils/string_utils.dart';
+import 'package:wishlist/shared/widgets/animated_list_view.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 
 class BookedWishesScreen extends ConsumerStatefulWidget {
@@ -34,9 +33,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   static const double _listBottomPadding = 110;
   static const EdgeInsets _headerPadding =
       EdgeInsets.fromLTRB(_contentPadding, _contentPadding, _contentPadding, 8);
-  static const int _animationDurationMs = 375;
-  static const int _staggeredAnimationDelay = 20;
-  static const int _staggeredAnimationMargin = 200;
+  static const int _estimatedMaxItems = 10;
 
   BookedWishSort _sort = const BookedWishSort(
     type: BookedWishSortType.alphabetical,
@@ -46,13 +43,11 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
   String _searchQuery = '';
-  bool _isInitialLoad = true;
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
-    _scheduleInitialLoadCompletion();
   }
 
   @override
@@ -62,21 +57,6 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
       ..dispose();
     _searchFocusNode.dispose();
     super.dispose();
-  }
-
-  void _scheduleInitialLoadCompletion() {
-    // Calculer la durée totale basée sur le nombre potentiel d'éléments
-    // On estime un maximum raisonnable pour éviter d'attendre trop longtemps
-    const estimatedMaxItems = 10;
-    const totalDuration = _animationDurationMs +
-        (estimatedMaxItems * _staggeredAnimationDelay) +
-        _staggeredAnimationMargin;
-
-    Future.delayed(const Duration(milliseconds: totalDuration), () {
-      if (mounted) {
-        setState(() => _isInitialLoad = false);
-      }
-    });
   }
 
   void _onSearchChanged() {
@@ -219,9 +199,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
           Positioned.fill(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: _contentPadding),
-              child: _isInitialLoad
-                  ? _buildStaggeredListView(groupedWishes)
-                  : _buildImplicitlyAnimatedList(groupedWishes),
+              child: _buildAnimatedListView(groupedWishes),
             ),
           ),
           // Header fixe avec stats + searchbar
@@ -276,21 +254,36 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
     );
   }
 
-  Widget _buildStaggeredUserGroup(
-    List<BookedWishWithDetails> ownerWishes,
-    int position,
+  Widget _buildAnimatedListView(
+    Map<String, List<BookedWishWithDetails>> groupedWishes,
   ) {
-    final firstWish = ownerWishes.first;
+    // Convertir la Map en List pour AnimatedListView
+    final groupsList =
+        groupedWishes.entries.map((entry) => entry.value).toList();
 
-    return AnimationConfiguration.staggeredList(
-      position: position,
-      duration: const Duration(milliseconds: _animationDurationMs),
-      child: SlideAnimation(
-        verticalOffset: 50,
-        child: FadeInAnimation(
-          child: _buildUserGroupCard(ownerWishes, firstWish),
-        ),
+    return AnimatedListView<List<BookedWishWithDetails>>(
+      items: groupsList,
+      padding: const EdgeInsets.only(
+        top: 140,
+        bottom: _listBottomPadding,
       ),
+      itemSpacing: _itemSpacing,
+      estimatedMaxItems: _estimatedMaxItems,
+      verticalOffset: 50,
+      separatorBuilder: (context, index) => const Gap(_itemSpacing),
+      itemEquality: (oldItem, newItem) {
+        // Comparer par l'ID du propriétaire (premier wish du groupe)
+        return oldItem.isNotEmpty &&
+            newItem.isNotEmpty &&
+            oldItem.first.ownerId == newItem.first.ownerId;
+      },
+      itemBuilder: (context, ownerWishes, index) {
+        if (ownerWishes.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        final firstWish = ownerWishes.first;
+        return _buildUserGroupCard(ownerWishes, firstWish);
+      },
     );
   }
 
@@ -337,62 +330,6 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildStaggeredListView(
-    Map<String, List<BookedWishWithDetails>> groupedWishes,
-  ) {
-    return AnimationLimiter(
-      child: ListView.separated(
-        padding: const EdgeInsets.only(
-          top: 140,
-          bottom: _listBottomPadding,
-        ),
-        itemCount: groupedWishes.length,
-        separatorBuilder: (context, index) => const Gap(_itemSpacing),
-        itemBuilder: (context, index) {
-          final entry = groupedWishes.entries.elementAt(index);
-          return _buildStaggeredUserGroup(entry.value, index);
-        },
-      ),
-    );
-  }
-
-  Widget _buildImplicitlyAnimatedList(
-    Map<String, List<BookedWishWithDetails>> groupedWishes,
-  ) {
-    // Convertir la Map en List pour ImplicitlyAnimatedList
-    final groupsList =
-        groupedWishes.entries.map((entry) => entry.value).toList();
-
-    return ImplicitlyAnimatedList<List<BookedWishWithDetails>>(
-      padding: const EdgeInsets.only(
-        top: 140,
-        bottom: _listBottomPadding,
-      ),
-      itemData: groupsList,
-      itemEquality: (oldItem, newItem) {
-        // Comparer par l'ID du propriétaire (premier wish du groupe)
-        return oldItem.isNotEmpty &&
-            newItem.isNotEmpty &&
-            oldItem.first.ownerId == newItem.first.ownerId;
-      },
-      initialAnimation: false,
-      itemBuilder: (context, ownerWishes) {
-        if (ownerWishes.isEmpty) {
-          return const SizedBox.shrink();
-        }
-        final firstWish = ownerWishes.first;
-        final index = groupsList.indexOf(ownerWishes);
-
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: index < groupsList.length - 1 ? _itemSpacing : 0,
-          ),
-          child: _buildUserGroupCard(ownerWishes, firstWish),
-        );
-      },
     );
   }
 
