@@ -9,6 +9,7 @@ import 'package:wishlist/shared/infra/friendships_realtime_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
+import 'package:wishlist/shared/widgets/animated_list_view.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 
 class FriendsScreen extends ConsumerWidget {
@@ -91,37 +92,33 @@ class FriendsScreen extends ConsumerWidget {
           : PageLayout(
               title: l10n.fiendsScreenTitle,
               onRefresh: refreshFriends,
-              child: ListView.builder(
-                itemCount: data.totalCount,
-                itemBuilder: (context, index) {
+              child: Builder(
+                builder: (context) {
                   final combinedList = _buildCombinedList(data);
-                  final item = combinedList[index];
-                  final isLastItem = index == combinedList.length - 1;
-
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      bottom: isLastItem ? 48 : 8,
-                    ),
-                    child: Builder(
-                      builder: (context) {
-                        switch (item.type) {
-                          case requestedType:
-                            return UserPill(
-                              appUser: item.user,
-                              isRequest: true,
-                            );
-                          case pendingType:
-                            return UserPill(
-                              appUser: item.user,
-                            );
-                          case friendType:
-                            return FriendPill(appUser: item.user);
-                          default:
-                            return const SizedBox
-                                .shrink(); // Should never happen
-                        }
-                      },
-                    ),
+                  return AnimatedListView<_FriendItem>(
+                    items: combinedList,
+                    itemEquality: (oldItem, newItem) =>
+                        oldItem.user.user.id == newItem.user.user.id &&
+                        oldItem.type == newItem.type,
+                    itemSpacing: 8,
+                    padding: const EdgeInsets.only(bottom: 48),
+                    itemBuilder: (context, item, index) {
+                      switch (item.type) {
+                        case requestedType:
+                          return UserPill(
+                            appUser: item.user,
+                            isRequest: true,
+                          );
+                        case pendingType:
+                          return UserPill(
+                            appUser: item.user,
+                          );
+                        case friendType:
+                          return FriendPill(appUser: item.user);
+                        default:
+                          return const SizedBox.shrink(); // Should never happen
+                      }
+                    },
                   );
                 },
               ),
