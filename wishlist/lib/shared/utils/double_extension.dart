@@ -1,10 +1,14 @@
 extension DoubleExtension on double {
   /// Returns the integer part of the double as a string
   /// if the decimal part is 0.
+  /// Uses comma as decimal separator for French locale.
   ///
   /// Basic toString() returns 22 as 22.0
   String toStringWithout0() {
-    return this % 1 == 0 ? toInt().toString() : toString();
+    if (this % 1 == 0) {
+      return toInt().toString();
+    }
+    return toString().replaceAll('.', ',');
   }
 }
 
