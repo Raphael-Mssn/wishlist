@@ -337,6 +337,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
     ConsultWishRoute(
       bookedWish.wish.wishlistId,
       bookedWish.wish.id,
+      wishIds: [bookedWish.wish.id],
     ).push(context);
   }
 
