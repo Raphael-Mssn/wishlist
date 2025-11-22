@@ -9,6 +9,7 @@ import 'package:wishlist/modules/wishs/view/widgets/scrollable_content_with_indi
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wish_taken_by_user_service.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
@@ -22,10 +23,12 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     super.key,
     required this.wish,
     required this.descriptionText,
+    this.isMyWishlist = false,
   });
 
   final Wish wish;
   final String descriptionText;
+  final bool isMyWishlist;
 
   void _onOpenLinkTap(String linkUrl) {
     launchUrl(Uri.parse(linkUrl));
@@ -190,6 +193,16 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 spacing: spacing,
                 children: [
+                  if (isMyWishlist)
+                    PrimaryButton(
+                      style: BaseButtonStyle.medium,
+                      onPressed: () => EditWishRoute(
+                        wishlistId: wish.wishlistId,
+                        wishId: wish.id,
+                      ).push(context),
+                      text: l10n.editButton,
+                      isStretched: true,
+                    ),
                   if (hasLinkUrl) ...[
                     SecondaryButton(
                       style: BaseButtonStyle.medium,
@@ -198,14 +211,14 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                       isStretched: true,
                     ),
                   ],
-                  if (shouldShowGiveItButton)
+                  if (!isMyWishlist && shouldShowGiveItButton)
                     PrimaryButton(
                       style: BaseButtonStyle.medium,
                       onPressed: () => _onGiveItTap(context, ref),
                       text: l10n.iWantToGiveIt,
                       isStretched: true,
                     )
-                  else if (shouldShowCancelButton)
+                  else if (!isMyWishlist && shouldShowCancelButton)
                     PrimaryButton(
                       style: BaseButtonStyle.medium,
                       onPressed: () => _onCancelGiveItTap(context, ref),

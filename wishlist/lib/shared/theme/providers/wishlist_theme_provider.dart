@@ -24,7 +24,8 @@ final wishlistThemeProvider = Provider.family<AsyncValue<ThemeData>, int>(
     final wishlistAsync = ref.watch(watchWishlistByIdProvider(wishlistId));
     return wishlistAsync.when(
       data: (wishlist) {
-        // Générer le thème depuis la wishlist (sans context, on utilise le thème de base)
+        // Générer le thème depuis la wishlist (sans context, on utilise le
+        // thème de base)
         // getWishlistTheme accepte BuildContext? donc null est valide
         return AsyncValue.data(getWishlistTheme(null, wishlist));
       },

@@ -43,7 +43,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get userAlreadyRegistered => 'Cet email est déjà enregistré';
 
   @override
-  String get genericError => 'Une erreur est survenue, veuillez réessayer';
+  String get genericError => 'Une erreur est survenue, veuillez réessayer.';
 
   @override
   String get pseudoField => 'Pseudo';
@@ -95,7 +95,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsScreenDisconnectDialogExplanation =>
-      'Êtes-vous sûr de vouloir vous déconnecter ?';
+      'Es-tu sûr de vouloir te déconnecter ?';
 
   @override
   String get settingsScreenPasswordModify => 'Modifier mon mot de passe';
@@ -119,14 +119,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get passwordsDoNotMatch => 'Les mots de passe ne correspondent pas';
 
   @override
-  String get oldPasswordIncorrect => 'Ancien mot de passe incorrect';
+  String get oldPasswordIncorrect => 'Ancien mot de passe incorrect.';
 
   @override
   String get changePasswordConfirm => 'Modifier';
 
   @override
   String get newPasswordShouldBeDifferent =>
-      'Le nouveau mot de passe doit être différent de l\'ancien';
+      'Le nouveau mot de passe doit être différent de l\'ancien.';
 
   @override
   String get changePseudoScreenTitle => 'Pseudo';
@@ -138,7 +138,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get changePseudoConfirm => 'Modifier';
 
   @override
-  String get changePseudoSuccess => 'Pseudo modifié avec succès';
+  String get changePseudoSuccess => 'Pseudo modifié avec succès !';
+
+  @override
+  String get changePasswordSuccess => 'Mot de passe changé avec succès !';
 
   @override
   String get settingsScreenDeleteAccount => 'Supprimer mon compte';
@@ -148,10 +151,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsScreenDeleteAccountDialogExplanation =>
-      'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et toutes vos données seront définitivement supprimées.';
+      'Es-tu sûr de vouloir supprimer ton compte ? Cette action est irréversible et toutes tes données seront définitivement supprimées.';
 
   @override
-  String get deleteAccountSuccess => 'Compte supprimé avec succès';
+  String get deleteAccountSuccess => 'Compte supprimé avec succès !';
 
   @override
   String get confirmDialogConfirmButtonLabel => 'OK';
@@ -194,10 +197,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get removeFriendConfirmation =>
-      'Es-tu sûr(e) de vouloir supprimer cet ami ?';
+      'Es-tu sûr de vouloir supprimer cet ami ?';
 
   @override
-  String get removeFriendSuccess => 'Ami supprimé avec succès';
+  String get removeFriendSuccess => 'Ami supprimé avec succès !';
 
   @override
   String numberOfWishlists(num count) {
@@ -245,7 +248,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get wishlistSearchHint => 'Rechercher un wish...';
 
   @override
-  String get bookedWishesSearchHint => 'Rechercher un wish ou un pseudo...';
+  String get bookedWishesSearchHint => 'Par wish ou pseudo...';
 
   @override
   String get wishlistNoWish => 'Aucun wish';
@@ -255,7 +258,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get wishlistNoWishBookedDisplayed =>
-      'Vous avez choisi de ne pas afficher les wishs réservés';
+      'Tu as choisi de ne pas afficher les wishs réservés';
 
   @override
   String get wishlistAddWish => 'Ajouter un wish';
@@ -264,7 +267,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get createWishBottomSheetTitle => 'Créer un wish';
 
   @override
-  String get createWishSuccess => 'Wish créé avec succès';
+  String get createWishSuccess => 'Wish créé avec succès !';
 
   @override
   String get editWishBottomSheetTitle => 'Modifier un wish';
@@ -274,10 +277,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get deleteWishConfirmationMessage =>
-      'Es-tu sûr(e) de vouloir supprimer ce wish ?';
+      'Es-tu sûr de vouloir supprimer ce wish ?';
 
   @override
-  String get deleteWishSuccess => 'Wish supprimé avec succès';
+  String get deleteWishSuccess => 'Wish supprimé avec succès !';
 
   @override
   String get editButton => 'Modifier';
@@ -314,7 +317,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String numberRangeError(Object max, Object min) {
-    return 'Saisissez un nombre entre $min et $max';
+    return 'Saisis un nombre entre $min et $max';
   }
 
   @override
@@ -324,7 +327,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get paste => 'Coller';
 
   @override
-  String get linkNotValid => 'Le lien n\'est pas valide';
+  String get linkNotValid => 'Le lien n\'est pas valide !';
 
   @override
   String get iWantToGiveIt => 'Je veux l\'offrir';
@@ -337,7 +340,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get cancelBookingDialogExplanation =>
-      'Es-tu sûr(e) de vouloir annuler cette réservation ?';
+      'Es-tu sûr de vouloir annuler cette réservation ?';
 
   @override
   String get noDescription => 'Aucune description';
@@ -370,21 +373,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String get save => 'Enregistrer';
 
   @override
-  String get updateSuccess => 'Mise à jour effectuée avec succès';
+  String get updateSuccess => 'Mise à jour effectuée avec succès !';
 
   @override
   String get deleteWishlist => 'Supprimer ma wishlist';
 
   @override
   String get deleteWishlistConfirmation =>
-      'Es-tu sûr(e) de vouloir supprimer cette wishlist ?';
+      'Es-tu sûr de vouloir supprimer cette wishlist ?';
 
   @override
   String get deleteWishlistWishesWarning =>
       'Les wishs seront également supprimés.';
 
   @override
-  String get deleteWishlistSuccess => 'Wishlist supprimée avec succès';
+  String get deleteWishlistSuccess => 'Wishlist supprimée avec succès !';
 
   @override
   String get wishlistColor => 'Couleur de la wishlist';
@@ -408,7 +411,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sortByBookingCount => 'Par nombre de réservations';
 
   @override
-  String get selectQuantityToGive => 'Quelle quantité souhaitez-vous offrir ?';
+  String get selectQuantityToGive => 'Quelle quantité souhaites-tu offrir ?';
 
   @override
   String get wishReservedSuccess => 'Wish réservé avec succès !';
@@ -435,7 +438,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get removeImageConfirmation =>
-      'Êtes-vous sûr de vouloir supprimer cette image ?';
+      'Es-tu sûr de vouloir supprimer cette image ?';
 
   @override
   String get avatarLoadError => 'Erreur lors du chargement de l\'image';

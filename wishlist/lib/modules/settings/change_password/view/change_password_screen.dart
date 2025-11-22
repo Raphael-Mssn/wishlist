@@ -39,6 +39,11 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       setState(() {
         _isLoading = false;
       });
+      showAppSnackBar(
+        context,
+        context.l10n.changePasswordSuccess,
+        type: SnackBarType.success,
+      );
       context.pop();
     }
   }

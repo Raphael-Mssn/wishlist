@@ -42,7 +42,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get userAlreadyRegistered => 'This email is already registered';
 
   @override
-  String get genericError => 'An error occurred, please try again';
+  String get genericError => 'An error occurred, please try again!';
 
   @override
   String get pseudoField => 'Pseudo';
@@ -118,14 +118,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordsDoNotMatch => 'Passwords do not match';
 
   @override
-  String get oldPasswordIncorrect => 'Incorrect old password';
+  String get oldPasswordIncorrect => 'Incorrect old password.';
 
   @override
   String get changePasswordConfirm => 'Change';
 
   @override
   String get newPasswordShouldBeDifferent =>
-      'New password should be different from the old one';
+      'New password should be different from the old one.';
 
   @override
   String get changePseudoScreenTitle => 'Pseudo';
@@ -137,7 +137,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changePseudoConfirm => 'Change';
 
   @override
-  String get changePseudoSuccess => 'Pseudo changed successfully';
+  String get changePseudoSuccess => 'Pseudo changed successfully!';
+
+  @override
+  String get changePasswordSuccess => 'Password changed successfully!';
 
   @override
   String get settingsScreenDeleteAccount => 'Delete my account';
@@ -150,7 +153,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Are you sure you want to delete your account? This action is irreversible and all your data will be permanently deleted.';
 
   @override
-  String get deleteAccountSuccess => 'Account deleted successfully';
+  String get deleteAccountSuccess => 'Account deleted successfully!';
 
   @override
   String get confirmDialogConfirmButtonLabel => 'OK';
@@ -196,7 +199,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Are you sure you want to remove this friend?';
 
   @override
-  String get removeFriendSuccess => 'Friend removed successfully';
+  String get removeFriendSuccess => 'Friend removed successfully!';
 
   @override
   String numberOfWishlists(num count) {
@@ -244,7 +247,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wishlistSearchHint => 'Search for a wish...';
 
   @override
-  String get bookedWishesSearchHint => 'Search for a wish or a pseudo...';
+  String get bookedWishesSearchHint => 'By wish or pseudo...';
 
   @override
   String get wishlistNoWish => 'No wish';
@@ -263,7 +266,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createWishBottomSheetTitle => 'Create a wish';
 
   @override
-  String get createWishSuccess => 'Wish created successfully';
+  String get createWishSuccess => 'Wish created successfully!';
 
   @override
   String get editWishBottomSheetTitle => 'Edit a wish';
@@ -276,7 +279,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Are you sure you want to delete this wish?';
 
   @override
-  String get deleteWishSuccess => 'Wish deleted successfully';
+  String get deleteWishSuccess => 'Wish deleted successfully!';
 
   @override
   String get editButton => 'Edit';
@@ -323,7 +326,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paste => 'Paste';
 
   @override
-  String get linkNotValid => 'The link is not valid';
+  String get linkNotValid => 'The link is not valid!';
 
   @override
   String get iWantToGiveIt => 'I want to give it';
@@ -369,7 +372,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get save => 'Save';
 
   @override
-  String get updateSuccess => 'Update successfully completed';
+  String get updateSuccess => 'Update successfully completed!';
 
   @override
   String get deleteWishlist => 'Delete my wishlist';
@@ -382,7 +385,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteWishlistWishesWarning => 'Wishes will also be deleted.';
 
   @override
-  String get deleteWishlistSuccess => 'Wishlist successfully deleted';
+  String get deleteWishlistSuccess => 'Wishlist successfully deleted!';
 
   @override
   String get wishlistColor => 'Wishlist color';

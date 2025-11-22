@@ -41,6 +41,7 @@ class WishlistContent extends ConsumerWidget {
     BuildContext,
     Wish, {
     required bool isMyWishlist,
+    required IList<Wish> wishsToDisplay,
     WishlistStatsCardType? cardType,
   }) onTapWish;
   final Function(BuildContext, Wishlist) onAddWish;
@@ -121,6 +122,7 @@ class _WishList extends ConsumerStatefulWidget {
     BuildContext,
     Wish, {
     required bool isMyWishlist,
+    required IList<Wish> wishsToDisplay,
     WishlistStatsCardType? cardType,
   }) onTapWish;
   final Function(Wish) onFavoriteToggle;
@@ -191,6 +193,7 @@ class _WishListState extends ConsumerState<_WishList> {
                       context,
                       wish,
                       isMyWishlist: widget.isMyWishlist,
+                      wishsToDisplay: widget.wishsToDisplay,
                       cardType: widget.statCardSelected,
                     ),
                     onFavoriteToggle: () => widget.onFavoriteToggle(wish),
@@ -227,6 +230,7 @@ class _WishListState extends ConsumerState<_WishList> {
               context,
               wish,
               isMyWishlist: widget.isMyWishlist,
+              wishsToDisplay: widget.wishsToDisplay,
               cardType: widget.statCardSelected,
             ),
             onFavoriteToggle: () => widget.onFavoriteToggle(wish),
