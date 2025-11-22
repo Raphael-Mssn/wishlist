@@ -190,7 +190,8 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
         int.parse(state.pathParameters['wishlistId']!),
         int.parse(state.pathParameters['wishId']!),
         wishIds:
-            state.uri.queryParametersAll['wish-ids']?.map(int.parse).toList(),
+            state.uri.queryParametersAll['wish-ids']?.map(int.parse).toList() ??
+                const [],
         isMyWishlist: _$convertMapValue(
                 'is-my-wishlist', state.uri.queryParameters, _$boolConverter) ??
             false,
@@ -199,8 +200,7 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
   String get location => GoRouteData.$location(
         '/wishlist/${Uri.encodeComponent(wishlistId.toString())}/wish/${Uri.encodeComponent(wishId.toString())}',
         queryParams: {
-          if (wishIds != null)
-            'wish-ids': wishIds?.map((e) => e.toString()).toList(),
+          'wish-ids': wishIds.map((e) => e.toString()).toList(),
           if (isMyWishlist != false) 'is-my-wishlist': isMyWishlist.toString(),
         },
       );
