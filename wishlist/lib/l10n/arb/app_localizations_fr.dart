@@ -422,6 +422,23 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get deleteSelectedWishes => 'Supprimer les wishs';
+
+  @override
+  String get deleteSelectedWishConfirmation =>
+      'Voulez-vous vraiment supprimer ce wish ?';
+
+  @override
+  String deleteSelectedWishesConfirmation(int count) {
+    return 'Voulez-vous vraiment supprimer ces $count wishs ?';
+  }
+
+  @override
+  String wishesDeleted(int count) {
+    return '$count wishs supprimés avec succès !';
+  }
+
+  @override
   String get avatarOptions => 'Modification de l\'avatar';
 
   @override
