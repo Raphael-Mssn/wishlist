@@ -961,6 +961,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Politique de confidentialité'**
   String get settingsPrivacyPolicy;
+
+  /// No description provided for @comingSoonTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bientôt disponible'**
+  String get comingSoonTitle;
+
+  /// No description provided for @comingSoonMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette fonctionnalité arrivera prochainement !'**
+  String get comingSoonMessage;
 }
 
 class _AppLocalizationsDelegate
