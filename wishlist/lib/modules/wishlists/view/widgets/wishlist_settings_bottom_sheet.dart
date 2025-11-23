@@ -121,7 +121,22 @@ class _WishlistSettingsBottomSheetState
     );
   }
 
-  void onAddCollaborator() {}
+  void onAddCollaborator() {
+    final l10n = context.l10n;
+
+    showAppDialog(
+      context,
+      title: l10n.comingSoonTitle,
+      content: Text(
+        l10n.comingSoonMessage,
+        style: AppTextStyles.small.copyWith(
+          color: AppColors.makara,
+        ),
+      ),
+      confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
+      onConfirm: () async {},
+    );
+  }
 
   Future onDeleteWishlist() async {
     final l10n = context.l10n;
