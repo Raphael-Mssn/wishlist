@@ -44,7 +44,11 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
         context.l10n.changePasswordSuccess,
         type: SnackBarType.success,
       );
-      context.pop();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          context.pop();
+        }
+      });
     }
   }
 
@@ -91,9 +95,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
             newPassword: _newPasswordController.text,
           );
 
-      if (mounted) {
-        onSuccess();
-      }
+      onSuccess();
     } on AppException catch (appException) {
       onError(appException);
     }
