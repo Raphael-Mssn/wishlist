@@ -49,6 +49,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
   String _searchQuery = '';
+  late final PageController _pageController;
 
   bool _isSelectionMode = false;
   final Set<int> _selectedWishIds = {};
@@ -56,6 +57,9 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
   @override
   void initState() {
     super.initState();
+    _pageController = PageController(
+      initialPage: statCardSelected == WishlistStatsCardType.pending ? 0 : 1,
+    );
     _searchController.addListener(() {
       setState(() {
         _searchQuery = normalizeString(_searchController.text);
@@ -67,6 +71,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
   void dispose() {
     _searchController.dispose();
     _searchFocusNode.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -163,6 +168,11 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     setState(() {
       statCardSelected = type;
     });
+    _pageController.animateToPage(
+      type == WishlistStatsCardType.pending ? 0 : 1,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   void onSortChanged(WishSort sort) {
@@ -410,23 +420,11 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         wishs.where((wish) => wish.totalBookedQuantity > 0).toIList();
     final isWishsBookedHidden = !wishlist.canOwnerSeeTakenWish && isMyWishlist;
 
-    final wishsToDisplay = isWishsBookedHidden
-        ? wishs
-        : statCardSelected == WishlistStatsCardType.pending
-            ? wishsPending
-            : wishsBooked;
-
     final nbWishsPending = wishsPending.length;
     final nbWishsBooked = wishsBooked.length;
 
     final hasWishsPending = nbWishsPending > 0;
     final hasWishsBooked = nbWishsBooked > 0;
-
-    final shouldDisplayWishs =
-        hasWishsPending && statCardSelected == WishlistStatsCardType.pending ||
-            hasWishsBooked &&
-                !isWishsBookedHidden &&
-                statCardSelected == WishlistStatsCardType.booked;
 
     return Column(
       children: [
@@ -446,20 +444,49 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
           onSortChanged: onSortChanged,
           onClearFocus: _clearFocusHistory,
         ),
-        WishlistContent(
-          wishlist: wishlist,
-          wishsToDisplay: wishsToDisplay,
-          shouldDisplayWishs: shouldDisplayWishs,
-          statCardSelected: statCardSelected,
-          isWishsBookedHidden: isWishsBookedHidden,
-          isMyWishlist: isMyWishlist,
-          onTapWish: onTapWish,
-          onAddWish: onAddWish,
-          onFavoriteToggle: onFavoriteToggle,
-          onRefresh: refreshWishlistScreen,
-          isSelectionMode: _isSelectionMode,
-          selectedWishIds: _selectedWishIds,
-          onLongPressWish: isMyWishlist ? _enableSelectionMode : null,
+        Expanded(
+          child: PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                statCardSelected = index == 0
+                    ? WishlistStatsCardType.pending
+                    : WishlistStatsCardType.booked;
+              });
+            },
+            children: [
+              WishlistContent(
+                wishlist: wishlist,
+                wishsToDisplay: wishsPending,
+                shouldDisplayWishs: hasWishsPending,
+                statCardSelected: WishlistStatsCardType.pending,
+                isWishsBookedHidden: isWishsBookedHidden,
+                isMyWishlist: isMyWishlist,
+                onTapWish: onTapWish,
+                onAddWish: onAddWish,
+                onFavoriteToggle: onFavoriteToggle,
+                onRefresh: refreshWishlistScreen,
+                isSelectionMode: _isSelectionMode,
+                selectedWishIds: _selectedWishIds,
+                onLongPressWish: isMyWishlist ? _enableSelectionMode : null,
+              ),
+              WishlistContent(
+                wishlist: wishlist,
+                wishsToDisplay: wishsBooked,
+                shouldDisplayWishs: hasWishsBooked && !isWishsBookedHidden,
+                statCardSelected: WishlistStatsCardType.booked,
+                isWishsBookedHidden: isWishsBookedHidden,
+                isMyWishlist: isMyWishlist,
+                onTapWish: onTapWish,
+                onAddWish: onAddWish,
+                onFavoriteToggle: onFavoriteToggle,
+                onRefresh: refreshWishlistScreen,
+                isSelectionMode: _isSelectionMode,
+                selectedWishIds: _selectedWishIds,
+                onLongPressWish: isMyWishlist ? _enableSelectionMode : null,
+              ),
+            ],
+          ),
         ),
       ],
     );
