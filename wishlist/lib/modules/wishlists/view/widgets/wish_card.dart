@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
 import 'package:wishlist/shared/widgets/wish_image.dart';
@@ -18,6 +19,8 @@ class WishCard extends ConsumerWidget {
     required this.cardType,
     this.subtitle,
     this.quantityOverride,
+    this.onLongPress,
+    this.isSelected = false,
   });
 
   final Wish wish;
@@ -27,6 +30,8 @@ class WishCard extends ConsumerWidget {
   final WishlistStatsCardType cardType;
   final String? subtitle;
   final int? quantityOverride;
+  final VoidCallback? onLongPress;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,19 +46,32 @@ class WishCard extends ConsumerWidget {
     // Calculer la quantité à afficher selon le contexte
     final quantityToDisplay = quantityOverride ?? _getQuantityToDisplay();
 
+    final wishlistTheme = ref.watch(wishlistThemeProvider(wish.wishlistId));
+    final selectionColor = wishlistTheme.maybeWhen(
+      data: (theme) => theme.primaryColor,
+      orElse: () => AppColors.primary,
+    );
+
     return Material(
       color: Colors.transparent,
       borderRadius: borderRadius,
       child: InkWell(
         borderRadius: borderRadius,
         onTap: onTap,
+        onLongPress: onLongPress,
         child: Stack(
           children: [
             Ink(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(isSelected ? 9 : 12),
               decoration: BoxDecoration(
                 color: AppColors.background,
                 borderRadius: BorderRadius.circular(24),
+                border: isSelected
+                    ? Border.all(
+                        color: selectionColor,
+                        width: 3,
+                      )
+                    : null,
               ),
               child: Row(
                 children: [
@@ -149,6 +167,28 @@ class WishCard extends ConsumerWidget {
                 ],
               ),
             ),
+            if (isSelected)
+              Positioned(
+                top: 8,
+                left: 8,
+                child: Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: selectionColor,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.background,
+                      width: 2,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.check,
+                    color: AppColors.background,
+                    size: 16,
+                  ),
+                ),
+              ),
             if (shouldDisplayFavouriteIcon)
               Positioned(
                 top: 4,

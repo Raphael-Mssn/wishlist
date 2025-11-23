@@ -25,6 +25,9 @@ class WishlistContent extends StatelessWidget {
     required this.onAddWish,
     required this.onFavoriteToggle,
     required this.onRefresh,
+    this.isSelectionMode = false,
+    this.selectedWishIds = const {},
+    this.onLongPressWish,
   });
 
   static const double _verticalPadding = 16;
@@ -45,6 +48,9 @@ class WishlistContent extends StatelessWidget {
   final Function(BuildContext, Wishlist) onAddWish;
   final Function(Wish) onFavoriteToggle;
   final Future<void> Function() onRefresh;
+  final bool isSelectionMode;
+  final Set<int> selectedWishIds;
+  final Function(int)? onLongPressWish;
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +89,9 @@ class WishlistContent extends StatelessWidget {
                     onTapWish: onTapWish,
                     onFavoriteToggle: onFavoriteToggle,
                     onRefresh: onRefresh,
+                    isSelectionMode: isSelectionMode,
+                    selectedWishIds: selectedWishIds,
+                    onLongPressWish: onLongPressWish,
                   )
                 : _EmptyState(
                     constraints: constraints,
@@ -107,6 +116,9 @@ class _WishList extends StatelessWidget {
     required this.onTapWish,
     required this.onFavoriteToggle,
     required this.onRefresh,
+    this.isSelectionMode = false,
+    this.selectedWishIds = const {},
+    this.onLongPressWish,
   });
 
   static const double _bottomPadding = 120;
@@ -125,6 +137,9 @@ class _WishList extends StatelessWidget {
   }) onTapWish;
   final Function(Wish) onFavoriteToggle;
   final Future<void> Function() onRefresh;
+  final bool isSelectionMode;
+  final Set<int> selectedWishIds;
+  final Function(int)? onLongPressWish;
 
   @override
   Widget build(BuildContext context) {
@@ -149,6 +164,10 @@ class _WishList extends StatelessWidget {
             onFavoriteToggle: () => onFavoriteToggle(wish),
             isMyWishlist: isMyWishlist,
             cardType: statCardSelected,
+            onLongPress: onLongPressWish != null
+                ? () => onLongPressWish!(wish.id)
+                : null,
+            isSelected: selectedWishIds.contains(wish.id),
           );
         },
       ),
