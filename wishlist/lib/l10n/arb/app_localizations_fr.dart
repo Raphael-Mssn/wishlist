@@ -486,4 +486,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsPrivacyPolicy => 'Politique de confidentialité';
+
+  @override
+  String get comingSoonTitle => 'Bientôt disponible';
+
+  @override
+  String get comingSoonMessage =>
+      'Cette fonctionnalité arrivera prochainement !';
 }

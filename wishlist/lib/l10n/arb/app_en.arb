@@ -150,5 +150,7 @@
   "settingsGeneral": "General",
   "settingsAbout": "About",
   "settingsTermsOfUse": "Terms of use",
-  "settingsPrivacyPolicy": "Privacy policy"
+  "settingsPrivacyPolicy": "Privacy policy",
+  "comingSoonTitle": "Coming Soon",
+  "comingSoonMessage": "This feature is coming soon!"
 }
