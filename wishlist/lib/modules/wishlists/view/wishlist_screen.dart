@@ -446,6 +446,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         ),
         Expanded(
           child: PageView(
+            physics: const ClampingScrollPhysics(),
             controller: _pageController,
             onPageChanged: (index) {
               setState(() {

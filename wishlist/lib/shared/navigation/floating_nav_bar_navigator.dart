@@ -121,6 +121,7 @@ class _FloatingNavBarNavigatorState
         tabController: _tabController,
       ),
       body: PageView(
+        physics: const ClampingScrollPhysics(),
         controller: _pageController,
         onPageChanged: _onPageChanged,
         children: const [
