@@ -101,12 +101,14 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     final count = _selectedWishIds.length;
     final l10n = context.l10n;
 
+    final explanation = count == 1
+        ? l10n.deleteSelectedWishConfirmation
+        : l10n.deleteSelectedWishesConfirmation(count);
+
     await showConfirmDialog(
       context,
       title: l10n.deleteSelectedWishes,
-      explanation: count == 1
-          ? l10n.deleteSelectedWishConfirmation
-          : l10n.deleteSelectedWishesConfirmation(count),
+      explanation: explanation,
       onConfirm: () async {
         try {
           for (final wishId in _selectedWishIds) {
