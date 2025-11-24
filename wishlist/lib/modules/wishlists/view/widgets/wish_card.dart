@@ -182,23 +182,7 @@ class WishCard extends ConsumerWidget {
               Positioned(
                 top: 8,
                 left: 8,
-                child: Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    color: selectionColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.background,
-                      width: 2,
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.check,
-                    color: AppColors.background,
-                    size: 16,
-                  ),
-                ),
+                child: _SelectionCheckIcon(color: selectionColor),
               ),
             if (shouldDisplayFavouriteIcon)
               Positioned(
@@ -241,5 +225,34 @@ class WishCard extends ConsumerWidget {
       case WishlistStatsCardType.booked:
         return wish.totalBookedQuantity;
     }
+  }
+}
+
+class _SelectionCheckIcon extends StatelessWidget {
+  const _SelectionCheckIcon({
+    required this.color,
+  });
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: AppColors.background,
+          width: 2,
+        ),
+      ),
+      child: const Icon(
+        Icons.check,
+        color: AppColors.background,
+        size: 16,
+      ),
+    );
   }
 }
