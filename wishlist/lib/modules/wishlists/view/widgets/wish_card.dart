@@ -23,6 +23,9 @@ class WishCard extends ConsumerWidget {
     this.isSelected = false,
   });
 
+  static const double _cardPadding = 12;
+  static const double _selectionBorderWidth = 3;
+
   final Wish wish;
   final void Function() onTap;
   final void Function() onFavoriteToggle;
@@ -57,6 +60,9 @@ class WishCard extends ConsumerWidget {
     // Calculer la quantité à afficher selon le contexte
     final quantityToDisplay = quantityOverride ?? _getQuantityToDisplay();
 
+    final cardPadding =
+        isSelected ? _cardPadding - _selectionBorderWidth : _cardPadding;
+
     return Material(
       color: Colors.transparent,
       borderRadius: borderRadius,
@@ -67,14 +73,14 @@ class WishCard extends ConsumerWidget {
         child: Stack(
           children: [
             Ink(
-              padding: EdgeInsets.all(isSelected ? 9 : 12),
+              padding: EdgeInsets.all(cardPadding),
               decoration: BoxDecoration(
                 color: AppColors.background,
                 borderRadius: BorderRadius.circular(24),
                 border: isSelected
                     ? Border.all(
                         color: selectionColor,
-                        width: 3,
+                        width: _selectionBorderWidth,
                       )
                     : null,
               ),
