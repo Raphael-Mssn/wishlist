@@ -92,6 +92,8 @@ class NavBarAddButton extends StatelessWidget {
         iconSize = size == NavBarButtonSize.large ? 46.0 : 36.0;
       case Icons.person_add_alt_1:
         iconSize = size == NavBarButtonSize.large ? 36.0 : 26.0;
+      case Icons.delete:
+        iconSize = size == NavBarButtonSize.large ? 36.0 : 26.0;
       default:
         iconSize = size == NavBarButtonSize.large ? 46.0 : 36.0;
     }
