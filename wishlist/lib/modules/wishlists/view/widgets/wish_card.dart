@@ -50,7 +50,8 @@ class WishCard extends ConsumerWidget {
 
   Widget _buildCard(BuildContext context, Color selectionColor) {
     final price = wish.price;
-    final hasSubtitle = subtitle != null;
+    final subtitle = this.subtitle;
+    final hasSubtitle = subtitle != null && subtitle.isNotEmpty;
     final hasPrice = price != null;
     final shouldDisplayFavouriteIcon =
         isMyWishlist || (!isMyWishlist && wish.isFavourite);
@@ -131,7 +132,7 @@ class WishCard extends ConsumerWidget {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    subtitle!,
+                                    subtitle,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: AppTextStyles.smaller.copyWith(
