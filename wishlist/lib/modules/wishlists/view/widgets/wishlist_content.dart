@@ -1,8 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:implicitly_animated_list/implicitly_animated_list.dart';
 import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wish_card.dart';
@@ -13,8 +10,9 @@ import 'package:wishlist/shared/page_layout_empty/page_layout_empty_content.dart
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/app_refresh_indicator.dart';
+import 'package:wishlist/shared/widgets/animated_list_view.dart';
 
-class WishlistContent extends ConsumerWidget {
+class WishlistContent extends StatelessWidget {
   const WishlistContent({
     super.key,
     required this.wishlist,
@@ -48,7 +46,7 @@ class WishlistContent extends ConsumerWidget {
   final Future<void> Function() onRefresh;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
 
     final pageLayoutEmptyContentTitle =
@@ -99,7 +97,7 @@ class WishlistContent extends ConsumerWidget {
   }
 }
 
-class _WishList extends ConsumerStatefulWidget {
+class _WishList extends StatelessWidget {
   const _WishList({
     required this.wishlist,
     required this.wishsToDisplay,
@@ -127,114 +125,30 @@ class _WishList extends ConsumerStatefulWidget {
   final Future<void> Function() onRefresh;
 
   @override
-  ConsumerState<_WishList> createState() => _WishListState();
-}
-
-class _WishListState extends ConsumerState<_WishList> {
-  static const _staggeredAnimationDuration = 500;
-  static const _staggeredAnimationDelay = 20;
-  static const _staggeredAnimationMargin = 200;
-
-  bool _isInitialLoad = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _scheduleInitialLoadCompletion();
-  }
-
-  void _scheduleInitialLoadCompletion() {
-    final totalDuration = _staggeredAnimationDuration +
-        (widget.wishsToDisplay.length * _staggeredAnimationDelay) +
-        _staggeredAnimationMargin;
-
-    Future.delayed(Duration(milliseconds: totalDuration), () {
-      if (mounted) {
-        setState(() => _isInitialLoad = false);
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return AppRefreshIndicator(
-      onRefresh: widget.onRefresh,
-      child: _isInitialLoad
-          ? _buildStaggeredListView()
-          : _buildImplicitlyAnimatedList(),
-    );
-  }
-
-  // Animates the list when the wishs are loaded
-  Widget _buildStaggeredListView() {
-    return AnimationLimiter(
-      child: ListView.builder(
+      onRefresh: onRefresh,
+      child: AnimatedListView<Wish>(
+        items: wishsToDisplay.toList(),
         padding: const EdgeInsets.only(bottom: _WishList._bottomPadding),
-        itemCount: widget.wishsToDisplay.length,
-        itemBuilder: (context, index) {
-          final wish = widget.wishsToDisplay[index];
-          return AnimationConfiguration.staggeredList(
-            position: index,
-            duration: const Duration(milliseconds: _staggeredAnimationDuration),
-            child: SlideAnimation(
-              verticalOffset: _staggeredAnimationDelay.toDouble(),
-              child: FadeInAnimation(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: index < widget.wishsToDisplay.length - 1
-                        ? _WishList._itemSpacing
-                        : 0,
-                  ),
-                  child: WishCard(
-                    wish: wish,
-                    onTap: () => widget.onTapWish(
-                      context,
-                      wish,
-                      isMyWishlist: widget.isMyWishlist,
-                      cardType: widget.statCardSelected,
-                    ),
-                    onFavoriteToggle: () => widget.onFavoriteToggle(wish),
-                    isMyWishlist: widget.isMyWishlist,
-                    cardType: widget.statCardSelected,
-                  ),
-                ),
-              ),
+        animationDuration: const Duration(milliseconds: 500),
+        itemSpacing: _WishList._itemSpacing,
+        itemEquality: (oldItem, newItem) => oldItem.id == newItem.id,
+        itemBuilder: (context, wish, index) {
+          return WishCard(
+            wish: wish,
+            onTap: () => onTapWish(
+              context,
+              wish,
+              isMyWishlist: isMyWishlist,
+              cardType: statCardSelected,
             ),
+            onFavoriteToggle: () => onFavoriteToggle(wish),
+            isMyWishlist: isMyWishlist,
+            cardType: statCardSelected,
           );
         },
       ),
-    );
-  }
-
-  // Animates the list when the wishs are reordered
-  Widget _buildImplicitlyAnimatedList() {
-    return ImplicitlyAnimatedList<Wish>(
-      padding: const EdgeInsets.only(bottom: _WishList._bottomPadding),
-      itemData: widget.wishsToDisplay.toList(),
-      itemEquality: (oldItem, newItem) => oldItem.id == newItem.id,
-      initialAnimation: false,
-      itemBuilder: (context, wish) {
-        final index = widget.wishsToDisplay.indexOf(wish);
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: index < widget.wishsToDisplay.length - 1
-                ? _WishList._itemSpacing
-                : 0,
-          ),
-          child: WishCard(
-            wish: wish,
-            onTap: () => widget.onTapWish(
-              context,
-              wish,
-              isMyWishlist: widget.isMyWishlist,
-              cardType: widget.statCardSelected,
-            ),
-            onFavoriteToggle: () => widget.onFavoriteToggle(wish),
-            isMyWishlist: widget.isMyWishlist,
-            cardType: widget.statCardSelected,
-          ),
-        );
-      },
     );
   }
 }
