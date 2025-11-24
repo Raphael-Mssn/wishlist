@@ -35,6 +35,17 @@ class WishCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final wishlistThemeAsync =
+        ref.watch(wishlistThemeProvider(wish.wishlistId));
+
+    return wishlistThemeAsync.when(
+      data: (wishlistTheme) => _buildCard(context, wishlistTheme.primaryColor),
+      loading: () => _buildCard(context, AppColors.primary),
+      error: (_, __) => _buildCard(context, AppColors.primary),
+    );
+  }
+
+  Widget _buildCard(BuildContext context, Color selectionColor) {
     final price = wish.price;
     final hasSubtitle = subtitle != null;
     final hasPrice = price != null;
@@ -45,12 +56,6 @@ class WishCard extends ConsumerWidget {
 
     // Calculer la quantité à afficher selon le contexte
     final quantityToDisplay = quantityOverride ?? _getQuantityToDisplay();
-
-    final wishlistTheme = ref.watch(wishlistThemeProvider(wish.wishlistId));
-    final selectionColor = wishlistTheme.maybeWhen(
-      data: (theme) => theme.primaryColor,
-      orElse: () => AppColors.primary,
-    );
 
     return Material(
       color: Colors.transparent,
