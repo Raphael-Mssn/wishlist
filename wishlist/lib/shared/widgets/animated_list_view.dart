@@ -3,7 +3,8 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:implicitly_animated_list/implicitly_animated_list.dart';
 
 /// Widget générique qui gère la transition entre une animation staggered
-/// au chargement initial et une ImplicitlyAnimatedList pour les changements ultérieurs.
+/// au chargement initial et une ImplicitlyAnimatedList pour les changements
+/// ultérieurs.
 class AnimatedListView<T> extends StatefulWidget {
   const AnimatedListView({
     super.key,
@@ -32,7 +33,8 @@ class AnimatedListView<T> extends StatefulWidget {
   /// Padding de la liste
   final EdgeInsets? padding;
 
-  /// Espacement entre les items (utilisé uniquement si separatorBuilder est null)
+  /// Espacement entre les items (utilisé uniquement si separatorBuilder est
+  /// null)
   final double itemSpacing;
 
   /// Durée de l'animation staggered
@@ -160,7 +162,8 @@ class _AnimatedListViewState<T> extends State<AnimatedListView<T>> {
         final hasSeparator = widget.separatorBuilder != null;
 
         // Si on a un separatorBuilder, on ajoute le spacing après chaque item
-        // (sauf le dernier) pour simuler le séparateur dans ImplicitlyAnimatedList
+        // (sauf le dernier) pour simuler le séparateur dans
+        // ImplicitlyAnimatedList
         if (hasSeparator && index < widget.items.length - 1) {
           return Padding(
             padding: EdgeInsets.only(bottom: widget.itemSpacing),
