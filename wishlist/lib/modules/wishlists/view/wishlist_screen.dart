@@ -58,7 +58,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(
-      initialPage: statCardSelected == WishlistStatsCardType.pending ? 0 : 1,
+      initialPage: statCardSelected.index,
     );
     _searchController.addListener(() {
       setState(() {
@@ -169,8 +169,8 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
       statCardSelected = type;
     });
     _pageController.animateToPage(
-      type == WishlistStatsCardType.pending ? 0 : 1,
-      duration: const Duration(milliseconds: 500),
+      type.index,
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
@@ -449,9 +449,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
             controller: _pageController,
             onPageChanged: (index) {
               setState(() {
-                statCardSelected = index == 0
-                    ? WishlistStatsCardType.pending
-                    : WishlistStatsCardType.booked;
+                statCardSelected = WishlistStatsCardType.values[index];
               });
             },
             children: [
