@@ -8,7 +8,7 @@ import 'package:wishlist/modules/settings/widgets/settings_line.dart';
 import 'package:wishlist/modules/settings/widgets/settings_section.dart';
 import 'package:wishlist/shared/infra/app_info_provider.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
-import 'package:wishlist/shared/infra/current_user_profile_provider.dart';
+import 'package:wishlist/shared/infra/repositories/user/user_streams_providers.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -75,7 +75,7 @@ class SettingsScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final currentUserEmail =
         ref.read(userServiceProvider).getCurrentUserEmail();
-    final currentUserProfile = ref.watch(currentUserProfileProvider);
+    final currentUserProfile = ref.watch(watchCurrentUserProfileProvider);
     final appInfo = ref.watch(appInfoProvider);
 
     return PageLayout(
@@ -94,9 +94,12 @@ class SettingsScreen extends ConsumerWidget {
                   const Gap(16),
                   currentUserProfile.when(
                     loading: CircularProgressIndicator.new,
-                    data: (currentUser) {
+                    data: (profile) {
+                      if (profile == null) {
+                        return const SizedBox.shrink();
+                      }
                       return Text(
-                        currentUser.profile.pseudo,
+                        profile.pseudo,
                         style: AppTextStyles.small.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
