@@ -4,9 +4,9 @@ import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
 import 'package:wishlist/shared/theme/widgets/favourite_button.dart';
 
-/// AppBar personnalisé pour l'écran de création de wish
-class CreateWishAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CreateWishAppBar({
+/// AppBar personnalisé pour l'écran de formulaire de wish (création/édition)
+class WishFormAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const WishFormAppBar({
     super.key,
     required this.title,
     required this.backgroundColor,

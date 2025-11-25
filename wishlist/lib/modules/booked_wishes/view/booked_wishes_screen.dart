@@ -334,7 +334,11 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   }
 
   void _onWishTap(BookedWishWithDetails bookedWish) {
-    ConsultWishRoute(bookedWish.wish.id).push(context);
+    ConsultWishRoute(
+      bookedWish.wish.wishlistId,
+      bookedWish.wish.id,
+      wishIds: [bookedWish.wish.id],
+    ).push(context);
   }
 
   void _onUserTap(String userId) {

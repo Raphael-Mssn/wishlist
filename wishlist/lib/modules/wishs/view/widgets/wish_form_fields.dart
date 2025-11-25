@@ -16,9 +16,9 @@ import 'package:wishlist/shared/widgets/text_form_fields/validators/not_null_val
 const _smallGap = Gap(8);
 const _columnSpacing = 16.0;
 
-/// Formulaire de création de wish
-class CreateWishForm extends StatefulWidget {
-  const CreateWishForm({
+/// Formulaire de création/édition de wish
+class WishFormFields extends StatefulWidget {
+  const WishFormFields({
     super.key,
     required this.formKey,
     required this.nameController,
@@ -27,6 +27,7 @@ class CreateWishForm extends StatefulWidget {
     required this.linkController,
     required this.descriptionController,
     required this.onImageSelected,
+    this.existingImageUrl,
   });
 
   final GlobalKey<FormState> formKey;
@@ -36,14 +37,18 @@ class CreateWishForm extends StatefulWidget {
   final TextEditingController linkController;
   final TextEditingController descriptionController;
   final ValueChanged<File?> onImageSelected;
+  final String? existingImageUrl;
 
   @override
-  State<CreateWishForm> createState() => CreateWishFormState();
+  State<WishFormFields> createState() => WishFormFieldsState();
 }
 
-class CreateWishFormState extends State<CreateWishForm> {
+class WishFormFieldsState extends State<WishFormFields> {
   File? _selectedImage;
+  bool _hasRemovedExistingImage = false;
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+
+  bool get hasRemovedExistingImage => _hasRemovedExistingImage;
 
   void enableAutovalidation() {
     if (_autovalidateMode != AutovalidateMode.onUserInteraction) {
@@ -55,10 +60,16 @@ class CreateWishFormState extends State<CreateWishForm> {
 
   Future<void> _showImageOptions() async {
     final l10n = context.l10n;
+    final existingUrl = widget.existingImageUrl;
+    final hasImage = _selectedImage != null ||
+        (!_hasRemovedExistingImage &&
+            existingUrl != null &&
+            existingUrl.isNotEmpty);
+
     await showImageOptionsBottomSheet(
       context,
       title: l10n.imageOptions,
-      hasImage: _selectedImage != null,
+      hasImage: hasImage,
       onPickFromGallery: _pickImageFromGallery,
       onTakePhoto: _takePhoto,
       onRemoveImage: _removeImage,
@@ -104,6 +115,7 @@ class CreateWishFormState extends State<CreateWishForm> {
   void _removeImage() {
     setState(() {
       _selectedImage = null;
+      _hasRemovedExistingImage = true;
     });
     widget.onImageSelected(null);
   }
@@ -235,6 +247,8 @@ class CreateWishFormState extends State<CreateWishForm> {
           ),
           ImageUploadField(
             imageFile: _selectedImage,
+            existingImageUrl:
+                _hasRemovedExistingImage ? null : widget.existingImageUrl,
             onTap: _showImageOptions,
           ),
         ],

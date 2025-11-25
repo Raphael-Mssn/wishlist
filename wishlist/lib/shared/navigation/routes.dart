@@ -9,14 +9,55 @@ import 'package:wishlist/modules/settings/change_password/view/change_password_s
 import 'package:wishlist/modules/settings/change_pseudo/view/change_pseudo_screen.dart';
 import 'package:wishlist/modules/settings/view/settings_screen.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
-import 'package:wishlist/modules/wishs/view/create_wish_screen.dart';
 import 'package:wishlist/modules/wishs/view/screens/consult_wish_screen.dart';
+import 'package:wishlist/modules/wishs/view/screens/edit_wish_screen.dart';
+import 'package:wishlist/modules/wishs/view/wish_form_screen.dart';
 import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 
 part 'routes.g.dart';
 
+// Route principale avec navigation bar
 @TypedGoRoute<HomeRoute>(
   path: '/',
+  routes: [
+    // Pseudo (enfant de home)
+    TypedGoRoute<PseudoRoute>(
+      path: 'pseudo',
+    ),
+    // Settings et ses sous-routes
+    TypedGoRoute<SettingsRoute>(
+      path: 'settings',
+      routes: [
+        TypedGoRoute<ChangePasswordRoute>(
+          path: 'change-password',
+        ),
+        TypedGoRoute<ChangePseudoRoute>(
+          path: 'change-pseudo',
+        ),
+      ],
+    ),
+    // Wishlist et ses sous-routes
+    TypedGoRoute<WishlistRoute>(
+      path: 'wishlist/:wishlistId',
+      routes: [
+        TypedGoRoute<CreateWishRoute>(
+          path: 'create-wish',
+        ),
+        TypedGoRoute<ConsultWishRoute>(
+          path: 'wish/:wishId',
+          routes: [
+            TypedGoRoute<EditWishRoute>(
+              path: 'edit',
+            ),
+          ],
+        ),
+      ],
+    ),
+    // Friend details (enfant de home)
+    TypedGoRoute<FriendDetailsRoute>(
+      path: 'friend/:friendId',
+    ),
+  ],
 )
 class HomeRoute extends GoRouteData {
   @override
@@ -24,18 +65,12 @@ class HomeRoute extends GoRouteData {
       const FloatingNavBarNavigator();
 }
 
-@TypedGoRoute<PseudoRoute>(
-  path: '/pseudo',
-)
 class PseudoRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const PseudoScreen();
 }
 
-@TypedGoRoute<WishlistRoute>(
-  path: '/wishlist/:wishlistId',
-)
 class WishlistRoute extends GoRouteData {
   WishlistRoute({
     required this.wishlistId,
@@ -51,44 +86,79 @@ class WishlistRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<SettingsRoute>(
-  path: '/settings',
-)
+class CreateWishRoute extends GoRouteData {
+  CreateWishRoute({
+    required this.wishlistId,
+  });
+
+  final int wishlistId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return WishFormScreen(
+      wishlistId: wishlistId,
+    );
+  }
+}
+
+class ConsultWishRoute extends GoRouteData {
+  ConsultWishRoute(
+    this.wishlistId,
+    this.wishId, {
+    required this.wishIds,
+    this.isMyWishlist = false,
+  });
+  final int wishlistId;
+  final int wishId;
+  final List<int> wishIds;
+  final bool isMyWishlist;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    // On calcule l'index du wishId dans la liste (0 si non trouvé)
+    final initialIndex = wishIds.indexOf(wishId).clamp(0, wishIds.length - 1);
+
+    return ConsultWishScreen(
+      wishIds: wishIds,
+      initialIndex: initialIndex,
+      isMyWishlist: isMyWishlist,
+    );
+  }
+}
+
+class EditWishRoute extends GoRouteData {
+  EditWishRoute({
+    required this.wishlistId,
+    required this.wishId,
+  });
+
+  final int wishlistId;
+  final int wishId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return EditWishScreen(wishId: wishId);
+  }
+}
+
 class SettingsRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const SettingsScreen();
 }
 
-@TypedGoRoute<ChangePasswordRoute>(
-  path: '/change-password',
-)
 class ChangePasswordRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const ChangePasswordScreen();
 }
 
-@TypedGoRoute<ChangePseudoRoute>(
-  path: '/change-pseudo',
-)
 class ChangePseudoRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const ChangePseudoScreen();
 }
 
-@TypedGoRoute<AuthRoute>(
-  path: '/auth',
-)
-class AuthRoute extends GoRouteData {
-  @override
-  Widget build(BuildContext context, GoRouterState state) => const AuthScreen();
-}
-
-@TypedGoRoute<FriendDetailsRoute>(
-  path: '/friend/:friendId',
-)
 class FriendDetailsRoute extends GoRouteData {
   FriendDetailsRoute(this.friendId);
   final String friendId;
@@ -99,50 +169,31 @@ class FriendDetailsRoute extends GoRouteData {
   }
 }
 
-@TypedGoRoute<ForgotPasswordRoute>(
-  path: '/forgot-password',
+// Route auth séparée (hors de la navigation principale)
+@TypedGoRoute<AuthRoute>(
+  path: '/auth',
+  routes: [
+    TypedGoRoute<ForgotPasswordRoute>(
+      path: 'forgot-password',
+    ),
+    TypedGoRoute<ResetPasswordRoute>(
+      path: 'reset-password',
+    ),
+  ],
 )
+class AuthRoute extends GoRouteData {
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const AuthScreen();
+}
+
 class ForgotPasswordRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const ForgotPasswordScreen();
 }
 
-@TypedGoRoute<ResetPasswordRoute>(
-  path: '/reset-password',
-)
 class ResetPasswordRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const ResetPasswordScreen();
-}
-
-@TypedGoRoute<CreateWishRoute>(
-  path: '/wishlist/:wishlistId/create-wish',
-)
-class CreateWishRoute extends GoRouteData {
-  CreateWishRoute({
-    required this.wishlistId,
-  });
-
-  final int wishlistId;
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return CreateWishScreen(
-      wishlistId: wishlistId,
-    );
-  }
-}
-
-@TypedGoRoute<ConsultWishRoute>(
-  path: '/wish/:wishId',
-)
-class ConsultWishRoute extends GoRouteData {
-  ConsultWishRoute(this.wishId);
-  final int wishId;
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      ConsultWishScreen(wishId: wishId);
 }

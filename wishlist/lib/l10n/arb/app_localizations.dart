@@ -167,7 +167,7 @@ abstract class AppLocalizations {
   /// No description provided for @genericError.
   ///
   /// In fr, this message translates to:
-  /// **'Une erreur est survenue, veuillez réessayer'**
+  /// **'Une erreur est survenue, veuillez réessayer.'**
   String get genericError;
 
   /// No description provided for @pseudoField.
@@ -251,7 +251,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsScreenDisconnectDialogExplanation.
   ///
   /// In fr, this message translates to:
-  /// **'Êtes-vous sûr de vouloir vous déconnecter ?'**
+  /// **'Es-tu sûr de vouloir te déconnecter ?'**
   String get settingsScreenDisconnectDialogExplanation;
 
   /// No description provided for @settingsScreenPasswordModify.
@@ -299,7 +299,7 @@ abstract class AppLocalizations {
   /// No description provided for @oldPasswordIncorrect.
   ///
   /// In fr, this message translates to:
-  /// **'Ancien mot de passe incorrect'**
+  /// **'Ancien mot de passe incorrect.'**
   String get oldPasswordIncorrect;
 
   /// No description provided for @changePasswordConfirm.
@@ -311,7 +311,7 @@ abstract class AppLocalizations {
   /// No description provided for @newPasswordShouldBeDifferent.
   ///
   /// In fr, this message translates to:
-  /// **'Le nouveau mot de passe doit être différent de l\'ancien'**
+  /// **'Le nouveau mot de passe doit être différent de l\'ancien.'**
   String get newPasswordShouldBeDifferent;
 
   /// No description provided for @changePseudoScreenTitle.
@@ -335,8 +335,14 @@ abstract class AppLocalizations {
   /// No description provided for @changePseudoSuccess.
   ///
   /// In fr, this message translates to:
-  /// **'Pseudo modifié avec succès'**
+  /// **'Pseudo modifié avec succès !'**
   String get changePseudoSuccess;
+
+  /// No description provided for @changePasswordSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe changé avec succès !'**
+  String get changePasswordSuccess;
 
   /// No description provided for @settingsScreenDeleteAccount.
   ///
@@ -353,13 +359,13 @@ abstract class AppLocalizations {
   /// No description provided for @settingsScreenDeleteAccountDialogExplanation.
   ///
   /// In fr, this message translates to:
-  /// **'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et toutes vos données seront définitivement supprimées.'**
+  /// **'Es-tu sûr de vouloir supprimer ton compte ? Cette action est irréversible et toutes tes données seront définitivement supprimées.'**
   String get settingsScreenDeleteAccountDialogExplanation;
 
   /// No description provided for @deleteAccountSuccess.
   ///
   /// In fr, this message translates to:
-  /// **'Compte supprimé avec succès'**
+  /// **'Compte supprimé avec succès !'**
   String get deleteAccountSuccess;
 
   /// No description provided for @confirmDialogConfirmButtonLabel.
@@ -443,13 +449,13 @@ abstract class AppLocalizations {
   /// No description provided for @removeFriendConfirmation.
   ///
   /// In fr, this message translates to:
-  /// **'Es-tu sûr(e) de vouloir supprimer cet ami ?'**
+  /// **'Es-tu sûr de vouloir supprimer cet ami ?'**
   String get removeFriendConfirmation;
 
   /// No description provided for @removeFriendSuccess.
   ///
   /// In fr, this message translates to:
-  /// **'Ami supprimé avec succès'**
+  /// **'Ami supprimé avec succès !'**
   String get removeFriendSuccess;
 
   /// No description provided for @numberOfWishlists.
@@ -509,7 +515,7 @@ abstract class AppLocalizations {
   /// No description provided for @bookedWishesSearchHint.
   ///
   /// In fr, this message translates to:
-  /// **'Rechercher un wish ou un pseudo...'**
+  /// **'Par wish ou pseudo...'**
   String get bookedWishesSearchHint;
 
   /// No description provided for @wishlistNoWish.
@@ -527,7 +533,7 @@ abstract class AppLocalizations {
   /// No description provided for @wishlistNoWishBookedDisplayed.
   ///
   /// In fr, this message translates to:
-  /// **'Vous avez choisi de ne pas afficher les wishs réservés'**
+  /// **'Tu as choisi de ne pas afficher les wishs réservés'**
   String get wishlistNoWishBookedDisplayed;
 
   /// No description provided for @wishlistAddWish.
@@ -545,7 +551,7 @@ abstract class AppLocalizations {
   /// No description provided for @createWishSuccess.
   ///
   /// In fr, this message translates to:
-  /// **'Wish créé avec succès'**
+  /// **'Wish créé avec succès !'**
   String get createWishSuccess;
 
   /// No description provided for @editWishBottomSheetTitle.
@@ -563,13 +569,13 @@ abstract class AppLocalizations {
   /// No description provided for @deleteWishConfirmationMessage.
   ///
   /// In fr, this message translates to:
-  /// **'Es-tu sûr(e) de vouloir supprimer ce wish ?'**
+  /// **'Es-tu sûr de vouloir supprimer ce wish ?'**
   String get deleteWishConfirmationMessage;
 
   /// No description provided for @deleteWishSuccess.
   ///
   /// In fr, this message translates to:
-  /// **'Wish supprimé avec succès'**
+  /// **'Wish supprimé avec succès !'**
   String get deleteWishSuccess;
 
   /// No description provided for @editButton.
@@ -641,7 +647,7 @@ abstract class AppLocalizations {
   /// No description provided for @numberRangeError.
   ///
   /// In fr, this message translates to:
-  /// **'Saisissez un nombre entre {min} et {max}'**
+  /// **'Saisis un nombre entre {min} et {max}'**
   String numberRangeError(Object max, Object min);
 
   /// No description provided for @openLink.
@@ -659,7 +665,7 @@ abstract class AppLocalizations {
   /// No description provided for @linkNotValid.
   ///
   /// In fr, this message translates to:
-  /// **'Le lien n\'est pas valide'**
+  /// **'Le lien n\'est pas valide !'**
   String get linkNotValid;
 
   /// No description provided for @iWantToGiveIt.
@@ -683,7 +689,7 @@ abstract class AppLocalizations {
   /// No description provided for @cancelBookingDialogExplanation.
   ///
   /// In fr, this message translates to:
-  /// **'Es-tu sûr(e) de vouloir annuler cette réservation ?'**
+  /// **'Es-tu sûr de vouloir annuler cette réservation ?'**
   String get cancelBookingDialogExplanation;
 
   /// No description provided for @noDescription.
@@ -749,7 +755,7 @@ abstract class AppLocalizations {
   /// No description provided for @updateSuccess.
   ///
   /// In fr, this message translates to:
-  /// **'Mise à jour effectuée avec succès'**
+  /// **'Mise à jour effectuée avec succès !'**
   String get updateSuccess;
 
   /// No description provided for @deleteWishlist.
@@ -761,7 +767,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteWishlistConfirmation.
   ///
   /// In fr, this message translates to:
-  /// **'Es-tu sûr(e) de vouloir supprimer cette wishlist ?'**
+  /// **'Es-tu sûr de vouloir supprimer cette wishlist ?'**
   String get deleteWishlistConfirmation;
 
   /// No description provided for @deleteWishlistWishesWarning.
@@ -773,7 +779,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteWishlistSuccess.
   ///
   /// In fr, this message translates to:
-  /// **'Wishlist supprimée avec succès'**
+  /// **'Wishlist supprimée avec succès !'**
   String get deleteWishlistSuccess;
 
   /// No description provided for @wishlistColor.
@@ -821,7 +827,7 @@ abstract class AppLocalizations {
   /// No description provided for @selectQuantityToGive.
   ///
   /// In fr, this message translates to:
-  /// **'Quelle quantité souhaitez-vous offrir ?'**
+  /// **'Quelle quantité souhaites-tu offrir ?'**
   String get selectQuantityToGive;
 
   /// No description provided for @wishReservedSuccess.
@@ -869,7 +875,7 @@ abstract class AppLocalizations {
   /// No description provided for @removeImageConfirmation.
   ///
   /// In fr, this message translates to:
-  /// **'Êtes-vous sûr de vouloir supprimer cette image ?'**
+  /// **'Es-tu sûr de vouloir supprimer cette image ?'**
   String get removeImageConfirmation;
 
   /// No description provided for @avatarLoadError.

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 
 class _ConfirmDialogContent extends StatelessWidget {
@@ -11,7 +13,12 @@ class _ConfirmDialogContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(explanation);
+    return Text(
+      explanation,
+      style: AppTextStyles.small.copyWith(
+        color: AppColors.makara,
+      ),
+    );
   }
 }
 

@@ -7,7 +7,6 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_search_bar.dart
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_section.dart';
-import 'package:wishlist/modules/wishs/view/widgets/edit_wish_bottom_sheet.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
@@ -74,13 +73,17 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     BuildContext context,
     Wish wish, {
     required bool isMyWishlist,
+    required IList<Wish> wishsToDisplay,
     WishlistStatsCardType? cardType,
   }) {
-    if (isMyWishlist) {
-      showEditWishBottomSheet(context, wish);
-    } else {
-      ConsultWishRoute(wish.id).push(context);
-    }
+    final wishIds = wishsToDisplay.map((wish) => wish.id).toList();
+
+    ConsultWishRoute(
+      wish.wishlistId,
+      wish.id,
+      wishIds: wishIds,
+      isMyWishlist: isMyWishlist,
+    ).push(context);
   }
 
   void onTapStatCard(WishlistStatsCardType type) {
