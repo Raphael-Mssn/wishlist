@@ -842,6 +842,30 @@ abstract class AppLocalizations {
   /// **'La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)'**
   String quantityCannotBeLowerThanBooked(Object bookedQuantity);
 
+  /// No description provided for @deleteSelectedWishes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer les wishs'**
+  String get deleteSelectedWishes;
+
+  /// No description provided for @deleteSelectedWishConfirmation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voulez-vous vraiment supprimer ce wish ?'**
+  String get deleteSelectedWishConfirmation;
+
+  /// No description provided for @deleteSelectedWishesConfirmation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voulez-vous vraiment supprimer ces {count} wishs ?'**
+  String deleteSelectedWishesConfirmation(int count);
+
+  /// No description provided for @wishesDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} wishs supprimés avec succès !'**
+  String wishesDeleted(int count);
+
   /// No description provided for @avatarOptions.
   ///
   /// In fr, this message translates to:

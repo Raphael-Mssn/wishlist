@@ -131,6 +131,24 @@
   "selectQuantityToGive": "Quelle quantité souhaites-tu offrir ?",
   "wishReservedSuccess": "Wish réservé avec succès !",
   "quantityCannotBeLowerThanBooked": "La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)",
+  "deleteSelectedWishes": "Supprimer les wishs",
+  "deleteSelectedWishConfirmation": "Voulez-vous vraiment supprimer ce wish ?",
+  "deleteSelectedWishesConfirmation": "Voulez-vous vraiment supprimer ces {count} wishs ?",
+  "@deleteSelectedWishesConfirmation": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "wishesDeleted": "{count} wishs supprimés avec succès !",
+  "@wishesDeleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "avatarOptions": "Modification de l'avatar",
   "chooseFromGallery": "Choisir depuis la galerie",
   "takePhoto": "Prendre une photo",

@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
 import 'package:wishlist/shared/widgets/wish_image.dart';
@@ -18,7 +19,12 @@ class WishCard extends ConsumerWidget {
     required this.cardType,
     this.subtitle,
     this.quantityOverride,
+    this.onLongPress,
+    this.isSelected = false,
   });
+
+  static const double _cardPadding = 12;
+  static const double _selectionBorderWidth = 3;
 
   final Wish wish;
   final void Function() onTap;
@@ -27,9 +33,22 @@ class WishCard extends ConsumerWidget {
   final WishlistStatsCardType cardType;
   final String? subtitle;
   final int? quantityOverride;
+  final VoidCallback? onLongPress;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final wishlistThemeAsync =
+        ref.watch(wishlistThemeProvider(wish.wishlistId));
+
+    return wishlistThemeAsync.when(
+      data: (wishlistTheme) => _buildCard(context, wishlistTheme.primaryColor),
+      loading: () => _buildCard(context, AppColors.primary),
+      error: (_, __) => _buildCard(context, AppColors.primary),
+    );
+  }
+
+  Widget _buildCard(BuildContext context, Color selectionColor) {
     final price = wish.price;
     final hasSubtitle = subtitle != null;
     final hasPrice = price != null;
@@ -41,19 +60,29 @@ class WishCard extends ConsumerWidget {
     // Calculer la quantité à afficher selon le contexte
     final quantityToDisplay = quantityOverride ?? _getQuantityToDisplay();
 
+    final cardPadding =
+        isSelected ? _cardPadding - _selectionBorderWidth : _cardPadding;
+
     return Material(
       color: Colors.transparent,
       borderRadius: borderRadius,
       child: InkWell(
         borderRadius: borderRadius,
         onTap: onTap,
+        onLongPress: onLongPress,
         child: Stack(
           children: [
             Ink(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(cardPadding),
               decoration: BoxDecoration(
                 color: AppColors.background,
                 borderRadius: BorderRadius.circular(24),
+                border: isSelected
+                    ? Border.all(
+                        color: selectionColor,
+                        width: _selectionBorderWidth,
+                      )
+                    : null,
               ),
               child: Row(
                 children: [
@@ -149,6 +178,12 @@ class WishCard extends ConsumerWidget {
                 ],
               ),
             ),
+            if (isSelected)
+              Positioned(
+                top: 8,
+                left: 8,
+                child: _SelectionCheckIcon(color: selectionColor),
+              ),
             if (shouldDisplayFavouriteIcon)
               Positioned(
                 top: 4,
@@ -190,5 +225,34 @@ class WishCard extends ConsumerWidget {
       case WishlistStatsCardType.booked:
         return wish.totalBookedQuantity;
     }
+  }
+}
+
+class _SelectionCheckIcon extends StatelessWidget {
+  const _SelectionCheckIcon({
+    required this.color,
+  });
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: AppColors.background,
+          width: 2,
+        ),
+      ),
+      child: const Icon(
+        Icons.check,
+        color: AppColors.background,
+        size: 16,
+      ),
+    );
   }
 }

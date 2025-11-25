@@ -420,6 +420,23 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get deleteSelectedWishes => 'Delete wishes';
+
+  @override
+  String get deleteSelectedWishConfirmation =>
+      'Are you sure you want to delete this wish?';
+
+  @override
+  String deleteSelectedWishesConfirmation(int count) {
+    return 'Are you sure you want to delete these $count wishes?';
+  }
+
+  @override
+  String wishesDeleted(int count) {
+    return '$count wishes deleted successfully!';
+  }
+
+  @override
   String get avatarOptions => 'Avatar modification';
 
   @override
