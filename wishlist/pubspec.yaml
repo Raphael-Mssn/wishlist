@@ -85,23 +85,25 @@ dev_dependencies:
   json_serializable: ^6.8.0
   riverpod_generator: ^2.4.3
 
-flutter_icons:
+flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icon/icon.png"
   adaptive_icon_background: "assets/icon/background.png"
-  adaptive_icon_foreground: "assets/icon/android12_splash_icon.png"
+  adaptive_icon_foreground: "assets/icon/splash_icon.png"
+  adaptive_icon_monochrome: "assets/icon/splash_icon.png"
+  adaptive_icon_foreground_inset: 22
 
 flutter_native_splash:
-  color: "#2C2C2C"
+  color: "#F7F6F0"
   image: assets/icon/splash_icon.png
+  icon_background_color: "#F7F6F0"
   android: true
   ios: true
   web: false
   android_12:
     image: assets/icon/android12_splash_icon.png
-    color: "#2C2C2C"
-    icon_background_color: "#2C2C2C"
+    color: "#F7F6F0"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
