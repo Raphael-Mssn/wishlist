@@ -84,7 +84,7 @@ class AuthService {
     try {
       await supabase.auth.resetPasswordForEmail(
         email,
-        redirectTo: 'wishlist://com.raphtang.wishlist/reset-password',
+        redirectTo: 'wishy://com.raphtang.wishlist/reset-password',
       );
     } on AuthException catch (e) {
       final statusCode = e.statusCode;
