@@ -45,7 +45,6 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
   late TextEditingController _descriptionInputController;
 
   late bool _isFavourite;
-  bool _isLoading = false;
   File? _selectedImage;
 
   @override
@@ -131,22 +130,10 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      if (widget.isEditMode) {
-        await _updateWish(name, price, quantity, link, description);
-      } else {
-        await _createWish(name, price, quantity, link, description);
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+    if (widget.isEditMode) {
+      await _updateWish(name, price, quantity, link, description);
+    } else {
+      await _createWish(name, price, quantity, link, description);
     }
   }
 
@@ -316,6 +303,8 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
           )
         : null;
 
+    final isLoading = ref.watch(wishMutationsProvider).isLoading;
+
     return wishlistThemeAsync.when(
       data: (wishlistTheme) {
         return Theme(
@@ -363,19 +352,19 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
                           Builder(
                             builder: (dialogContext) => SecondaryButton(
                               text: l10n.deleteWish,
-                              onPressed: _isLoading
-                                  ? null
-                                  : () => _onDeleteWish(dialogContext),
+                              onPressed: () => _onDeleteWish(dialogContext),
                               style: BaseButtonStyle.large,
                               isStretched: true,
+                              isLoading: isLoading,
                             ),
                           ),
                         PrimaryButton(
                           text:
                               widget.isEditMode ? l10n.save : l10n.createButton,
-                          onPressed: _isLoading ? null : _onSubmit,
+                          onPressed: _onSubmit,
                           style: BaseButtonStyle.large,
                           isStretched: true,
+                          isLoading: isLoading,
                         ),
                       ],
                     ),
