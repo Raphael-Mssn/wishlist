@@ -67,41 +67,39 @@ class WishlistContent extends StatelessWidget {
         (!isWishsBookedHidden ||
             statCardSelected == WishlistStatsCardType.pending);
 
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.only(
-          left: _verticalPadding,
-          right: _verticalPadding,
-          top: _verticalPadding,
-        ),
-        decoration: const BoxDecoration(
-          color: AppColors.gainsboro,
-        ),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return shouldDisplayWishs
-                ? _WishList(
-                    wishlist: wishlist,
-                    wishsToDisplay: wishsToDisplay,
-                    isMyWishlist: isMyWishlist,
-                    statCardSelected: statCardSelected,
-                    onTapWish: onTapWish,
-                    onFavoriteToggle: onFavoriteToggle,
-                    onRefresh: onRefresh,
-                    isSelectionMode: isSelectionMode,
-                    selectedWishIds: selectedWishIds,
-                    onLongPressWish: onLongPressWish,
-                  )
-                : _EmptyState(
-                    constraints: constraints,
-                    title: pageLayoutEmptyContentTitle,
-                    shouldShowCallToAction: shouldShowCallToAction,
-                    wishlist: wishlist,
-                    onAddWish: onAddWish,
-                  );
-          },
-        ),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.only(
+        left: _verticalPadding,
+        right: _verticalPadding,
+        top: _verticalPadding,
+      ),
+      decoration: const BoxDecoration(
+        color: AppColors.gainsboro,
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return shouldDisplayWishs
+              ? _WishList(
+                  wishlist: wishlist,
+                  wishsToDisplay: wishsToDisplay,
+                  isMyWishlist: isMyWishlist,
+                  statCardSelected: statCardSelected,
+                  onTapWish: onTapWish,
+                  onFavoriteToggle: onFavoriteToggle,
+                  onRefresh: onRefresh,
+                  isSelectionMode: isSelectionMode,
+                  selectedWishIds: selectedWishIds,
+                  onLongPressWish: onLongPressWish,
+                )
+              : _EmptyState(
+                  constraints: constraints,
+                  title: pageLayoutEmptyContentTitle,
+                  shouldShowCallToAction: shouldShowCallToAction,
+                  wishlist: wishlist,
+                  onAddWish: onAddWish,
+                );
+        },
       ),
     );
   }
