@@ -13,7 +13,7 @@
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleName</key>
-		<string>wishlist</string>
+		<string>wishy</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
@@ -58,7 +58,7 @@
 				<string>com.raphtang.wishlist</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>wishlist</string>
+					<string>wishy</string>
 				</array>
 			</dict>
 		</array>
