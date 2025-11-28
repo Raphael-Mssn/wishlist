@@ -45,7 +45,7 @@ class UserGroupHeader extends StatelessWidget {
                     Expanded(
                       child: Text(
                         pseudo,
-                        style: AppTextStyles.medium.copyWith(
+                        style: AppTextStyles.small.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 1,
@@ -61,7 +61,7 @@ class UserGroupHeader extends StatelessWidget {
         const Gap(8),
         Text(
           l10n.bookedWishCount(wishCount),
-          style: AppTextStyles.small.copyWith(
+          style: AppTextStyles.smaller.copyWith(
             color: AppColors.makara,
           ),
         ),
