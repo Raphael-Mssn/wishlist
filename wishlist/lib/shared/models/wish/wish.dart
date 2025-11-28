@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:wishlist/shared/infra/utils/update_entity.dart';
 import 'package:wishlist/shared/models/wish_taken_by_user/wish_taken_by_user.dart';
+import 'package:wishlist/shared/utils/optional.dart';
 
 part 'wish.freezed.dart';
 part 'wish.g.dart';
@@ -46,7 +47,7 @@ class Wish with _$Wish implements Updatable {
   Wish copyWith({
     String? name,
     String? description,
-    double? price,
+    Optional<double?>? price,
     String? linkUrl,
     String? iconUrl,
     bool? isFavourite,
@@ -61,7 +62,7 @@ class Wish with _$Wish implements Updatable {
       createdAt: createdAt,
       name: name ?? this.name,
       description: description ?? this.description,
-      price: price ?? this.price,
+      price: price.orKeep(this.price),
       linkUrl: linkUrl ?? this.linkUrl,
       iconUrl: iconUrl ?? this.iconUrl,
       isFavourite: isFavourite ?? this.isFavourite,

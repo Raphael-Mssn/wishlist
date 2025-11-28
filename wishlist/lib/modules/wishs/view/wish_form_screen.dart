@@ -16,6 +16,7 @@ import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/double_extension.dart';
+import 'package:wishlist/shared/utils/optional.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 
 class WishFormScreen extends ConsumerStatefulWidget {
@@ -115,7 +116,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
     if (!_formKey.currentState!.validate()) {
       showAppSnackBar(
         context,
-        context.l10n.wishNameError,
+        context.l10n.notNullError,
         type: SnackBarType.error,
       );
       return;
@@ -210,9 +211,12 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
       return;
     }
 
+    final priceValue = price.isEmpty ? null : double.parse(price);
+    final priceOptional = Optional<double?>.value(priceValue);
+
     final wishToUpdate = wish.copyWith(
       name: name,
-      price: double.tryParse(price),
+      price: priceOptional,
       quantity: quantity,
       description: description,
       linkUrl: link,
