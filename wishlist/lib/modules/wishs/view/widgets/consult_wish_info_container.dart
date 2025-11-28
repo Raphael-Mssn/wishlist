@@ -128,7 +128,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Text(
+                    child: SelectableText(
                       wish.name,
                       style: AppTextStyles.medium.copyWith(
                         fontWeight: FontWeight.bold,
@@ -178,7 +178,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                       children: [
                         SizedBox(
                           width: double.infinity,
-                          child: Text(
+                          child: SelectableText(
                             descriptionText,
                             style: AppTextStyles.smaller,
                           ),
