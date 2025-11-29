@@ -259,7 +259,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                       isStretched: true,
                     ),
                   if (!isMyWishlist && shouldShowCancelButton)
-                    DangerButton(
+                    SecondaryButton(
                       style: BaseButtonStyle.medium,
                       onPressed: () => _onCancelGiveItTap(context, ref),
                       text: l10n.cancelBooking,
