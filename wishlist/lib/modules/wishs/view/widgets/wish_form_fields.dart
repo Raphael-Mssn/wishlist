@@ -172,6 +172,7 @@ class WishFormFieldsState extends State<WishFormFields> {
             label: l10n.wishNameLabel,
             icon: Icons.sell_outlined,
             validator: (value) => notNullValidator(value, l10n),
+            textCapitalization: TextCapitalization.sentences,
           ),
           Row(
             children: [
@@ -244,6 +245,7 @@ class WishFormFieldsState extends State<WishFormFields> {
             icon: Icons.description_outlined,
             maxLines: 4,
             minLines: 4,
+            textCapitalization: TextCapitalization.sentences,
           ),
           ImageUploadField(
             imageFile: _selectedImage,

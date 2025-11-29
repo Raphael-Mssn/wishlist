@@ -17,6 +17,7 @@ class AppTextField extends StatefulWidget {
     this.minLines,
     this.suffixButtons,
     this.inputFormatters,
+    this.textCapitalization,
   });
 
   final TextEditingController controller;
@@ -28,6 +29,7 @@ class AppTextField extends StatefulWidget {
   final int? minLines;
   final List<Widget>? suffixButtons;
   final List<TextInputFormatter>? inputFormatters;
+  final TextCapitalization? textCapitalization;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -52,6 +54,8 @@ class _AppTextFieldState extends State<AppTextField> {
     final contentPadding = const EdgeInsets.symmetric(vertical: 12)
         .copyWith(right: hasSuffixButtons ? 8 : 0);
     final isMultiline = (widget.maxLines ?? 1) > 1;
+    final textCapitalization =
+        widget.textCapitalization ?? TextCapitalization.none;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -82,6 +86,7 @@ class _AppTextFieldState extends State<AppTextField> {
                 controller: widget.controller,
                 focusNode: _focusNode,
                 cursorErrorColor: Colors.red,
+                textCapitalization: textCapitalization,
                 validator: (value) {
                   final error = widget.validator?.call(value);
                   WidgetsBinding.instance.addPostFrameCallback((_) {
