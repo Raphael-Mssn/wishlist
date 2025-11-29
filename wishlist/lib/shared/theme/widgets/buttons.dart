@@ -117,27 +117,6 @@ class SecondaryButton extends BaseButton {
   }
 }
 
-class DangerButton extends BaseButton {
-  const DangerButton({
-    super.key,
-    required super.text,
-    required super.onPressed,
-    required super.style,
-    super.isLoading,
-    super.isStretched,
-  });
-
-  @override
-  Color backgroundColor(BuildContext context) {
-    return AppColors.darkGrey;
-  }
-
-  @override
-  Color textColor(BuildContext context) {
-    return Colors.white;
-  }
-}
-
 class BaseButtonStyle {
   const BaseButtonStyle({
     required this.textStyle,
