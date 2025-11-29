@@ -8,7 +8,6 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_toggle_switch.dart';
 import 'package:wishlist/shared/infra/wish_service.dart';
 import 'package:wishlist/shared/infra/wishlist_mutations_provider.dart';
-import 'package:wishlist/shared/infra/wishlist_service.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
@@ -100,8 +99,8 @@ class _WishlistSettingsBottomSheetState
               .copyWith(color: AppColors.getHexValue(selectedColor));
 
           await ref
-              .read(wishlistServiceProvider)
-              .updateWishlist(wishlistUpdated);
+              .read(wishlistMutationsProvider.notifier)
+              .update(wishlistUpdated);
 
           if (mounted) {
             showAppSnackBar(
@@ -244,6 +243,7 @@ class _WishlistSettingsBottomSheetState
     final l10n = context.l10n;
     final wishlist = widget.wishlist;
     final currentTheme = Theme.of(context);
+    final isLoading = ref.watch(wishlistMutationsProvider).isLoading;
 
     return Form(
       key: _formKey,
@@ -424,6 +424,7 @@ class _WishlistSettingsBottomSheetState
               onPressed: _isFormValid ? onSaveSettings : null,
               style: BaseButtonStyle.large,
               isStretched: true,
+              isLoading: isLoading,
             ),
           ],
         ),
