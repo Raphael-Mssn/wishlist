@@ -116,7 +116,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
     if (!_formKey.currentState!.validate()) {
       showAppSnackBar(
         context,
-        context.l10n.notNullError,
+        context.l10n.wishNameError,
         type: SnackBarType.error,
       );
       return;
