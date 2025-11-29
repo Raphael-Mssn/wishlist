@@ -677,8 +677,14 @@ abstract class AppLocalizations {
   /// No description provided for @cancelBooking.
   ///
   /// In fr, this message translates to:
-  /// **'Annuler la réservation'**
+  /// **'Annuler ma réservation'**
   String get cancelBooking;
+
+  /// No description provided for @modifyBooking.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier ma réservation'**
+  String get modifyBooking;
 
   /// No description provided for @cancelBookingDialogTitle.
   ///

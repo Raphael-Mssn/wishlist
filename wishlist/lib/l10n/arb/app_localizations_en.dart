@@ -332,7 +332,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get iWantToGiveIt => 'I want to give it';
 
   @override
-  String get cancelBooking => 'Cancel booking';
+  String get cancelBooking => 'Cancel my booking';
+
+  @override
+  String get modifyBooking => 'Modify my booking';
 
   @override
   String get cancelBookingDialogTitle => 'Cancel booking';
