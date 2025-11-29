@@ -6,6 +6,7 @@ import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/theme/widgets/pill.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
 import 'package:wishlist/shared/widgets/wish_image.dart';
 
@@ -48,7 +49,7 @@ class WishCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildCard(BuildContext context, Color selectionColor) {
+  Widget _buildCard(BuildContext context, Color primaryColor) {
     final price = wish.price;
     final subtitle = this.subtitle;
     final hasSubtitle = subtitle != null && subtitle.isNotEmpty;
@@ -80,7 +81,7 @@ class WishCard extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(24),
                 border: isSelected
                     ? Border.all(
-                        color: selectionColor,
+                        color: primaryColor,
                         width: _selectionBorderWidth,
                       )
                     : null,
@@ -88,19 +89,22 @@ class WishCard extends ConsumerWidget {
               child: Row(
                 children: [
                   Stack(
+                    clipBehavior: Clip.none,
                     children: [
                       WishImage(
                         iconUrl: wish.iconUrl,
                       ),
                       if (quantityToDisplay > 1)
                         Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Text(
-                            'x$quantityToDisplay',
-                            style: AppTextStyles.small.copyWith(
-                              color: AppColors.makara,
-                              height: 1,
+                          bottom: -4,
+                          right: -4,
+                          child: Pill(
+                            text: 'x$quantityToDisplay',
+                            backgroundColor: primaryColor,
+                            textStyle: AppTextStyles.smaller,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 2,
                             ),
                           ),
                         ),
@@ -183,7 +187,7 @@ class WishCard extends ConsumerWidget {
               Positioned(
                 top: 8,
                 left: 8,
-                child: _SelectionCheckIcon(color: selectionColor),
+                child: _SelectionCheckIcon(color: primaryColor),
               ),
             if (shouldDisplayFavouriteIcon)
               Positioned(
