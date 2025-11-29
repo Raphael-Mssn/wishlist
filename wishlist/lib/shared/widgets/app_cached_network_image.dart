@@ -390,7 +390,7 @@ class _AppCachedNetworkImageLayout extends StatelessWidget {
 ///
 /// Mettre à `true` pour simuler un chargement lent lors des tests.
 /// Mettre à `false` en production.
-const bool _enableImageLoadingDelay = true;
+const bool _enableImageLoadingDelay = false;
 
 /// Durée du délai artificiel (en secondes)
 ///
