@@ -49,6 +49,24 @@ class WishTakenByUserService {
   Future<void> cancelWishTaken(Wish wish) async {
     await _repository.cancelWishTaken(wish.id);
   }
+
+  Future<void> updateWishTakenQuantity(
+    Wish wish, {
+    required int newQuantity,
+  }) async {
+    final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
+
+    if (newQuantity > 0) {
+      await _repository.updateWishTakenByUser(
+        wishId: wish.id,
+        userId: currentUserId,
+        newQuantity: newQuantity,
+      );
+    } else {
+      // Si la quantité est 0, annuler la réservation
+      await _repository.cancelWishTaken(wish.id);
+    }
+  }
 }
 
 final wishTakenByUserServiceProvider = Provider(

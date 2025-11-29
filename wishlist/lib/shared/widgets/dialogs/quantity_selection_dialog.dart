@@ -58,9 +58,11 @@ class _QuantitySelectionDialogContent extends StatefulWidget {
     required this.maxQuantity,
     required this.onQuantityChanged,
     required this.onValidationChanged,
+    this.initialQuantity = 1,
   });
 
   final int maxQuantity;
+  final int initialQuantity;
   final ValueChanged<int> onQuantityChanged;
   final ValueChanged<bool> onValidationChanged;
 
@@ -77,7 +79,9 @@ class _QuantitySelectionDialogContentState
   @override
   void initState() {
     super.initState();
-    _quantityController = TextEditingController(text: '1');
+    _quantityController = TextEditingController(
+      text: widget.initialQuantity.toString(),
+    );
     _quantityController.addListener(_onControllerChanged);
   }
 
@@ -222,9 +226,11 @@ Future<void> showQuantitySelectionDialog(
   BuildContext context,
   WidgetRef ref, {
   required Wish wish,
+  int initialQuantity = 1,
+  bool isModifying = false,
 }) async {
   final l10n = context.l10n;
-  var selectedQuantity = 1;
+  var selectedQuantity = initialQuantity;
 
   // Utilisation d'une ValueNotifier pour gérer l'état de validation
   final isValidNotifier = ValueNotifier<bool>(true);
@@ -233,7 +239,8 @@ Future<void> showQuantitySelectionDialog(
     context,
     title: l10n.selectQuantityToGive,
     content: _QuantitySelectionDialogContent(
-      maxQuantity: wish.availableQuantity,
+      maxQuantity: wish.availableQuantity + (isModifying ? initialQuantity : 0),
+      initialQuantity: initialQuantity,
       onQuantityChanged: (quantity) {
         selectedQuantity = quantity;
       },
@@ -245,18 +252,46 @@ Future<void> showQuantitySelectionDialog(
     isConfirmEnabled: isValidNotifier,
     onCancel: () {},
     onConfirm: () async {
-      await ref.read(wishTakenByUserServiceProvider).wishTakenByUser(
-            wish,
-            quantity: selectedQuantity,
-          );
-      if (context.mounted) {
-        context.pop();
-        showAppSnackBar(
-          context,
-          l10n.wishReservedSuccess,
-          type: SnackBarType.success,
-        );
-      }
+      await _handleQuantitySelectionConfirm(
+        context,
+        ref,
+        wish,
+        selectedQuantity,
+        isModifying,
+      );
     },
   );
+}
+
+Future<void> _handleQuantitySelectionConfirm(
+  BuildContext context,
+  WidgetRef ref,
+  Wish wish,
+  int selectedQuantity,
+  bool isModifying,
+) async {
+  final l10n = context.l10n;
+
+  if (isModifying) {
+    // En mode modification, on met à jour directement la quantité
+    await ref.read(wishTakenByUserServiceProvider).updateWishTakenQuantity(
+          wish,
+          newQuantity: selectedQuantity,
+        );
+  } else {
+    // En mode ajout initial, on réserve simplement
+    await ref.read(wishTakenByUserServiceProvider).wishTakenByUser(
+          wish,
+          quantity: selectedQuantity,
+        );
+  }
+
+  if (context.mounted) {
+    context.pop();
+    showAppSnackBar(
+      context,
+      l10n.wishReservedSuccess,
+      type: SnackBarType.success,
+    );
+  }
 }

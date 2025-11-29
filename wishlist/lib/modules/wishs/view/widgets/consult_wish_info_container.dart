@@ -35,13 +35,33 @@ class ConsultWishInfoContainer extends ConsumerWidget {
   }
 
   Future<void> _onGiveItTap(BuildContext context, WidgetRef ref) async {
-    // Si quantité disponible > 1, afficher le dialog de sélection
-    if (wish.availableQuantity > 1) {
-      await showQuantitySelectionDialog(context, ref, wish: wish);
+    final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
+    final isWishTakenByMe = wish.takenByUser.any(
+      (element) => element.userId == currentUserId,
+    );
+
+    var currentQuantity = 0;
+    if (isWishTakenByMe) {
+      final userReservation = wish.takenByUser.firstWhere(
+        (element) => element.userId == currentUserId,
+      );
+      currentQuantity = userReservation.quantity;
+    }
+
+    // Si l'utilisateur a déjà réservé OU si quantité disponible > 1,
+    // afficher le dialog de sélection
+    if (isWishTakenByMe || wish.availableQuantity > 1) {
+      await showQuantitySelectionDialog(
+        context,
+        ref,
+        wish: wish,
+        initialQuantity: isWishTakenByMe ? currentQuantity : 1,
+        isModifying: isWishTakenByMe,
+      );
       return;
     }
 
-    // Si quantité disponible = 1, réserver directement
+    // Si quantité disponible = 1 et pas encore réservé, réserver directement
     try {
       await ref.read(wishTakenByUserServiceProvider).wishTakenByUser(
             wish,
@@ -93,18 +113,43 @@ class ConsultWishInfoContainer extends ConsumerWidget {
 
     final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
 
-    final isWishBooked = wish.takenByUser.isNotEmpty;
     final isWishTakenByMe = wish.takenByUser.any(
       (element) => element.userId == currentUserId,
     );
 
-    final shouldShowCancelButton = isWishBooked && isWishTakenByMe;
-    final shouldShowGiveItButton = !isWishBooked && wish.availableQuantity > 0;
+    final hasQuantity = wish.quantity > 1;
+    final hasAvailableQuantity = wish.availableQuantity > 0;
+
+    // Logique d'affichage des boutons basée sur la réservation de l'utilisateur
+    final shouldShowGiveItButton = !isWishTakenByMe && hasAvailableQuantity;
+    final shouldShowModifyButton = isWishTakenByMe && hasQuantity;
+    final shouldShowCancelButton = isWishTakenByMe;
 
     final price = wish.price;
     final hasLinkUrl = linkUrl != null && linkUrl.isNotEmpty;
 
     const spacing = 12.0;
+
+    late final bool showPrimaryAction;
+    late final VoidCallback? primaryActionOnPressed;
+    late final String primaryActionText;
+
+    if (isMyWishlist) {
+      showPrimaryAction = true;
+      primaryActionOnPressed = () =>
+          EditWishRoute(wishlistId: wish.wishlistId, wishId: wish.id)
+              .push(context);
+      primaryActionText = l10n.editButton;
+    } else if (shouldShowGiveItButton || shouldShowModifyButton) {
+      showPrimaryAction = true;
+      primaryActionOnPressed = () => _onGiveItTap(context, ref);
+      primaryActionText =
+          shouldShowGiveItButton ? l10n.iWantToGiveIt : l10n.modifyBooking;
+    } else {
+      showPrimaryAction = false;
+      primaryActionOnPressed = null;
+      primaryActionText = '';
+    }
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -136,12 +181,25 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                     ),
                   ),
                   const Gap(8),
-                  Icon(
-                    wish.isFavourite ? Icons.favorite : Icons.favorite_border,
-                    color: wish.isFavourite
-                        ? AppColors.favorite
-                        : AppColors.makara,
-                    size: 32,
+                  if (hasLinkUrl)
+                    IconButton(
+                      onPressed: () => _onOpenLinkTap(linkUrl),
+                      icon: const Icon(
+                        Icons.open_in_new,
+                        color: AppColors.makara,
+                        size: 32,
+                      ),
+                      iconSize: 32,
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Icon(
+                      wish.isFavourite ? Icons.favorite : Icons.favorite_border,
+                      color: wish.isFavourite
+                          ? AppColors.favorite
+                          : AppColors.makara,
+                      size: 32,
+                    ),
                   ),
                 ],
               ),
@@ -193,36 +251,18 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 spacing: spacing,
                 children: [
-                  if (isMyWishlist)
-                    PrimaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: () => EditWishRoute(
-                        wishlistId: wish.wishlistId,
-                        wishId: wish.id,
-                      ).push(context),
-                      text: l10n.editButton,
-                      isStretched: true,
-                    ),
-                  if (hasLinkUrl) ...[
+                  if (!isMyWishlist && shouldShowCancelButton)
                     SecondaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: () => _onOpenLinkTap(linkUrl),
-                      text: l10n.openLink,
-                      isStretched: true,
-                    ),
-                  ],
-                  if (!isMyWishlist && shouldShowGiveItButton)
-                    PrimaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: () => _onGiveItTap(context, ref),
-                      text: l10n.iWantToGiveIt,
-                      isStretched: true,
-                    )
-                  else if (!isMyWishlist && shouldShowCancelButton)
-                    PrimaryButton(
                       style: BaseButtonStyle.medium,
                       onPressed: () => _onCancelGiveItTap(context, ref),
                       text: l10n.cancelBooking,
+                      isStretched: true,
+                    ),
+                  if (showPrimaryAction)
+                    PrimaryButton(
+                      style: BaseButtonStyle.medium,
+                      onPressed: primaryActionOnPressed,
+                      text: primaryActionText,
                       isStretched: true,
                     ),
                 ],

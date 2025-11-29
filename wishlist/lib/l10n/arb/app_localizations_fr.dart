@@ -333,7 +333,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get iWantToGiveIt => 'Je veux l\'offrir';
 
   @override
-  String get cancelBooking => 'Annuler la réservation';
+  String get cancelBooking => 'Annuler ma réservation';
+
+  @override
+  String get modifyBooking => 'Modifier ma réservation';
 
   @override
   String get cancelBookingDialogTitle => 'Annuler la réservation';
