@@ -6,6 +6,7 @@ import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/theme/widgets/pill.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
 import 'package:wishlist/shared/widgets/wish_image.dart';
 
@@ -88,19 +89,22 @@ class WishCard extends ConsumerWidget {
               child: Row(
                 children: [
                   Stack(
+                    clipBehavior: Clip.none,
                     children: [
                       WishImage(
                         iconUrl: wish.iconUrl,
                       ),
                       if (quantityToDisplay > 1)
                         Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Text(
-                            'x$quantityToDisplay',
-                            style: AppTextStyles.small.copyWith(
-                              color: AppColors.makara,
-                              height: 1,
+                          bottom: -4,
+                          right: -4,
+                          child: Pill(
+                            text: 'x$quantityToDisplay',
+                            backgroundColor: selectionColor,
+                            textStyle: AppTextStyles.smaller,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 2,
                             ),
                           ),
                         ),
