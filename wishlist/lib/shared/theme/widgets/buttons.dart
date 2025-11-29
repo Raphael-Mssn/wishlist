@@ -45,7 +45,12 @@ abstract class BaseButton extends StatelessWidget {
           ),
           elevation: 2,
         ),
-        onPressed: isLoading ? null : onPressed,
+        onPressed: isLoading
+            ? null
+            : () {
+                FocusScope.of(context).unfocus();
+                onPressed?.call();
+              },
         child: IntrinsicHeight(
           child: Stack(
             children: [
