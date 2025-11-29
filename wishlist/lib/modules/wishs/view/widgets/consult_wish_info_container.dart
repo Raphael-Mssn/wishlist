@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_box_shadow.dart';
 import 'package:wishlist/modules/wishs/view/widgets/scrollable_content_with_indicator.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
@@ -25,13 +24,11 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     required this.wish,
     required this.descriptionText,
     this.isMyWishlist = false,
-    this.cardType,
   });
 
   final Wish wish;
   final String descriptionText;
   final bool isMyWishlist;
-  final WishlistStatsCardType? cardType;
 
   void _onOpenLinkTap(String linkUrl) {
     launchUrl(Uri.parse(linkUrl));
@@ -120,14 +117,13 @@ class ConsultWishInfoContainer extends ConsumerWidget {
       (element) => element.userId == currentUserId,
     );
 
+    final hasQuantity = wish.quantity > 1;
     final hasAvailableQuantity = wish.availableQuantity > 0;
 
-    // Si on vient de l'onglet "réservés", on affiche modifier + annuler
-    final isFromBookedTab = cardType == WishlistStatsCardType.booked;
-    final shouldShowGiveItButton =
-        !isWishTakenByMe && hasAvailableQuantity && !isFromBookedTab;
-    final shouldShowModifyButton = isWishTakenByMe && hasAvailableQuantity;
-    final shouldShowCancelButton = isWishTakenByMe && isFromBookedTab;
+    // Logique d'affichage des boutons basée sur la réservation de l'utilisateur
+    final shouldShowGiveItButton = !isWishTakenByMe && hasAvailableQuantity;
+    final shouldShowModifyButton = isWishTakenByMe && hasQuantity;
+    final shouldShowCancelButton = isWishTakenByMe;
 
     final price = wish.price;
     final hasLinkUrl = linkUrl != null && linkUrl.isNotEmpty;

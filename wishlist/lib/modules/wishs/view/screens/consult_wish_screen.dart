@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
-import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_wish_back_button.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_wish_image.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_wish_info_container.dart';
@@ -17,13 +16,11 @@ class ConsultWishScreen extends ConsumerStatefulWidget {
     required this.wishIds,
     required this.initialIndex,
     this.isMyWishlist = false,
-    this.cardType,
   });
 
   final List<int> wishIds;
   final int initialIndex;
   final bool isMyWishlist;
-  final WishlistStatsCardType? cardType;
 
   @override
   ConsumerState<ConsultWishScreen> createState() => _ConsultWishScreenState();
@@ -101,7 +98,6 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
                             wish: wishData,
                             descriptionText: descriptionText,
                             isMyWishlist: widget.isMyWishlist,
-                            cardType: widget.cardType,
                           ),
                         ],
                       ),
