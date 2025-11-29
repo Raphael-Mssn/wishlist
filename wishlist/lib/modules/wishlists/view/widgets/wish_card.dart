@@ -102,56 +102,31 @@ class WishCard extends ConsumerWidget {
                         ),
                         if (quantityToDisplay > 1)
                           Positioned(
-                            bottom: 0,
-                            right: 0,
+                            bottom: -4,
+                            right: -4,
                             child: Container(
-                              padding: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
-                                color: AppColors.background,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  bottomRight: Radius.circular(12),
-                                ),
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color:
-                                        AppColors.makara.withValues(alpha: 0.2),
-                                  ),
-                                  right: BorderSide(
-                                    color:
-                                        AppColors.makara.withValues(alpha: 0.2),
-                                  ),
-                                ),
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(20),
                                 boxShadow: [
-                                  // shadow only on left side
                                   BoxShadow(
-                                    color:
-                                        AppColors.makara.withValues(alpha: 0.2),
-                                    blurRadius: 3,
-                                    offset: const Offset(-3, 0),
+                                    color: AppColors.darkGrey
+                                        .withValues(alpha: 0.2),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
                                   ),
                                 ],
                               ),
-                              child: RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'x',
-                                      style: AppTextStyles.smallest.copyWith(
-                                        color: AppColors.makara,
-                                        fontWeight: FontWeight.bold,
-                                        height: 1,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: quantityToDisplay.toString(),
-                                      style: AppTextStyles.smaller.copyWith(
-                                        color: AppColors.makara,
-                                        fontWeight: FontWeight.bold,
-                                        height: 1,
-                                      ),
-                                    ),
-                                  ],
+                              child: Text(
+                                'x${wish.quantity}',
+                                style: AppTextStyles.smallest.copyWith(
+                                  color: AppColors.background,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1,
                                 ),
                               ),
                             ),
