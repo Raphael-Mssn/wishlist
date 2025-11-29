@@ -68,22 +68,22 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
     AsyncValue<Wish> wish,
     AppLocalizations l10n,
   ) {
-    return wish.when(
-      data: (wishData) {
-        final wishlistThemeAsync =
-            ref.watch(wishlistThemeProvider(wishData.wishlistId));
+    return Scaffold(
+      backgroundColor: AppColors.gainsboro,
+      body: wish.when(
+        data: (wishData) {
+          final wishlistThemeAsync =
+              ref.watch(wishlistThemeProvider(wishData.wishlistId));
 
-        return wishlistThemeAsync.when(
-          data: (wishlistTheme) {
-            final descriptionText = wishData.description.isNotEmpty
-                ? wishData.description
-                : l10n.noDescription;
+          return wishlistThemeAsync.when(
+            data: (wishlistTheme) {
+              final descriptionText = wishData.description.isNotEmpty
+                  ? wishData.description
+                  : l10n.noDescription;
 
-            return AnimatedTheme(
-              data: wishlistTheme,
-              child: Scaffold(
-                backgroundColor: AppColors.gainsboro,
-                body: Stack(
+              return AnimatedTheme(
+                data: wishlistTheme,
+                child: Stack(
                   children: [
                     SizedBox(
                       width: double.infinity,
@@ -104,26 +104,14 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
                     ),
                   ],
                 ),
-              ),
-            );
-          },
-          loading: () => const Scaffold(
-            backgroundColor: AppColors.gainsboro,
-            body: Center(child: CircularProgressIndicator()),
-          ),
-          error: (_, __) => const Scaffold(
-            backgroundColor: AppColors.gainsboro,
-            body: SizedBox.shrink(),
-          ),
-        );
-      },
-      error: (error, stackTrace) => const Scaffold(
-        backgroundColor: AppColors.gainsboro,
-        body: SizedBox.shrink(),
-      ),
-      loading: () => const Scaffold(
-        backgroundColor: AppColors.gainsboro,
-        body: Center(child: CircularProgressIndicator()),
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (_, __) => const SizedBox.shrink(),
+          );
+        },
+        error: (error, stackTrace) => const SizedBox.shrink(),
+        loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
   }
