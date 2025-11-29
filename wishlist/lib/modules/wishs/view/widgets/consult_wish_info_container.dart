@@ -164,12 +164,25 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                     ),
                   ),
                   const Gap(8),
-                  Icon(
-                    wish.isFavourite ? Icons.favorite : Icons.favorite_border,
-                    color: wish.isFavourite
-                        ? AppColors.favorite
-                        : AppColors.makara,
-                    size: 32,
+                  if (hasLinkUrl)
+                    IconButton(
+                      onPressed: () => _onOpenLinkTap(linkUrl),
+                      icon: const Icon(
+                        Icons.open_in_new,
+                        color: AppColors.makara,
+                        size: 32,
+                      ),
+                      iconSize: 32,
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Icon(
+                      wish.isFavourite ? Icons.favorite : Icons.favorite_border,
+                      color: wish.isFavourite
+                          ? AppColors.favorite
+                          : AppColors.makara,
+                      size: 32,
+                    ),
                   ),
                 ],
               ),
@@ -231,14 +244,6 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                       text: l10n.editButton,
                       isStretched: true,
                     ),
-                  if (hasLinkUrl) ...[
-                    SecondaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: () => _onOpenLinkTap(linkUrl),
-                      text: l10n.openLink,
-                      isStretched: true,
-                    ),
-                  ],
                   if (!isMyWishlist && shouldShowGiveItButton)
                     PrimaryButton(
                       style: BaseButtonStyle.medium,
