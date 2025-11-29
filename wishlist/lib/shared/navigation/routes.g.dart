@@ -195,6 +195,8 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
         isMyWishlist: _$convertMapValue(
                 'is-my-wishlist', state.uri.queryParameters, _$boolConverter) ??
             false,
+        cardType: _$convertMapValue('card-type', state.uri.queryParameters,
+            _$WishlistStatsCardTypeEnumMap._$fromName),
       );
 
   String get location => GoRouteData.$location(
@@ -202,6 +204,8 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
         queryParams: {
           'wish-ids': wishIds.map((e) => e.toString()).toList(),
           if (isMyWishlist != false) 'is-my-wishlist': isMyWishlist.toString(),
+          if (cardType != null)
+            'card-type': _$WishlistStatsCardTypeEnumMap[cardType!],
         },
       );
 
@@ -214,6 +218,11 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
 
   void replace(BuildContext context) => context.replace(location);
 }
+
+const _$WishlistStatsCardTypeEnumMap = {
+  WishlistStatsCardType.pending: 'pending',
+  WishlistStatsCardType.booked: 'booked',
+};
 
 extension $EditWishRouteExtension on EditWishRoute {
   static EditWishRoute _fromState(GoRouterState state) => EditWishRoute(
@@ -273,6 +282,11 @@ bool _$boolConverter(String value) {
     default:
       throw UnsupportedError('Cannot convert "$value" into a bool.');
   }
+}
+
+extension<T extends Enum> on Map<T, String> {
+  T _$fromName(String value) =>
+      entries.singleWhere((element) => element.value == value).key;
 }
 
 RouteBase get $authRoute => GoRouteData.$route(

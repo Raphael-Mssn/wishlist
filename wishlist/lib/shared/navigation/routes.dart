@@ -8,6 +8,7 @@ import 'package:wishlist/modules/friends/view/screens/friend_details_screen.dart
 import 'package:wishlist/modules/settings/change_password/view/change_password_screen.dart';
 import 'package:wishlist/modules/settings/change_pseudo/view/change_pseudo_screen.dart';
 import 'package:wishlist/modules/settings/view/settings_screen.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
 import 'package:wishlist/modules/wishs/view/screens/consult_wish_screen.dart';
 import 'package:wishlist/modules/wishs/view/screens/edit_wish_screen.dart';
@@ -107,11 +108,13 @@ class ConsultWishRoute extends GoRouteData {
     this.wishId, {
     required this.wishIds,
     this.isMyWishlist = false,
+    this.cardType,
   });
   final int wishlistId;
   final int wishId;
   final List<int> wishIds;
   final bool isMyWishlist;
+  final WishlistStatsCardType? cardType;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -122,6 +125,7 @@ class ConsultWishRoute extends GoRouteData {
       wishIds: wishIds,
       initialIndex: initialIndex,
       isMyWishlist: isMyWishlist,
+      cardType: cardType,
     );
   }
 }

@@ -156,11 +156,18 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
 
     final wishIds = wishsToDisplay.map((wish) => wish.id).toList();
 
+    // Passer le cardType pour déterminer le comportement du bouton d'annulation
+    final routeCardType =
+        !isMyWishlist && cardType == WishlistStatsCardType.booked
+            ? WishlistStatsCardType.booked
+            : null;
+
     ConsultWishRoute(
       wish.wishlistId,
       wish.id,
       wishIds: wishIds,
       isMyWishlist: isMyWishlist,
+      cardType: routeCardType,
     ).push(context);
   }
 

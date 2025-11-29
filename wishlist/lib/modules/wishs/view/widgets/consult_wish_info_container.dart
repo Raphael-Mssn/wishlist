@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_box_shadow.dart';
 import 'package:wishlist/modules/wishs/view/widgets/scrollable_content_with_indicator.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
@@ -24,24 +25,46 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     required this.wish,
     required this.descriptionText,
     this.isMyWishlist = false,
+    this.cardType,
   });
 
   final Wish wish;
   final String descriptionText;
   final bool isMyWishlist;
+  final WishlistStatsCardType? cardType;
 
   void _onOpenLinkTap(String linkUrl) {
     launchUrl(Uri.parse(linkUrl));
   }
 
   Future<void> _onGiveItTap(BuildContext context, WidgetRef ref) async {
-    // Si quantité disponible > 1, afficher le dialog de sélection
-    if (wish.availableQuantity > 1) {
-      await showQuantitySelectionDialog(context, ref, wish: wish);
+    final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
+    final isWishTakenByMe = wish.takenByUser.any(
+      (element) => element.userId == currentUserId,
+    );
+
+    var currentQuantity = 0;
+    if (isWishTakenByMe) {
+      final userReservation = wish.takenByUser.firstWhere(
+        (element) => element.userId == currentUserId,
+      );
+      currentQuantity = userReservation.quantity;
+    }
+
+    // Si l'utilisateur a déjà réservé OU si quantité disponible > 1,
+    // afficher le dialog de sélection
+    if (isWishTakenByMe || wish.availableQuantity > 1) {
+      await showQuantitySelectionDialog(
+        context,
+        ref,
+        wish: wish,
+        initialQuantity: isWishTakenByMe ? currentQuantity : 1,
+        isModifying: isWishTakenByMe,
+      );
       return;
     }
 
-    // Si quantité disponible = 1, réserver directement
+    // Si quantité disponible = 1 et pas encore réservé, réserver directement
     try {
       await ref.read(wishTakenByUserServiceProvider).wishTakenByUser(
             wish,
@@ -93,13 +116,18 @@ class ConsultWishInfoContainer extends ConsumerWidget {
 
     final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
 
-    final isWishBooked = wish.takenByUser.isNotEmpty;
     final isWishTakenByMe = wish.takenByUser.any(
       (element) => element.userId == currentUserId,
     );
 
-    final shouldShowCancelButton = isWishBooked && isWishTakenByMe;
-    final shouldShowGiveItButton = !isWishBooked && wish.availableQuantity > 0;
+    final hasAvailableQuantity = wish.availableQuantity > 0;
+
+    // Si on vient de l'onglet "réservés", on affiche modifier + annuler
+    final isFromBookedTab = cardType == WishlistStatsCardType.booked;
+    final shouldShowGiveItButton =
+        !isWishTakenByMe && hasAvailableQuantity && !isFromBookedTab;
+    final shouldShowModifyButton = isWishTakenByMe && hasAvailableQuantity;
+    final shouldShowCancelButton = isWishTakenByMe && isFromBookedTab;
 
     final price = wish.price;
     final hasLinkUrl = linkUrl != null && linkUrl.isNotEmpty;
@@ -217,9 +245,16 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                       onPressed: () => _onGiveItTap(context, ref),
                       text: l10n.iWantToGiveIt,
                       isStretched: true,
-                    )
-                  else if (!isMyWishlist && shouldShowCancelButton)
+                    ),
+                  if (!isMyWishlist && shouldShowModifyButton)
                     PrimaryButton(
+                      style: BaseButtonStyle.medium,
+                      onPressed: () => _onGiveItTap(context, ref),
+                      text: l10n.modifyBooking,
+                      isStretched: true,
+                    ),
+                  if (!isMyWishlist && shouldShowCancelButton)
+                    DangerButton(
                       style: BaseButtonStyle.medium,
                       onPressed: () => _onCancelGiveItTap(context, ref),
                       text: l10n.cancelBooking,

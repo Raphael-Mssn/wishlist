@@ -338,6 +338,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
       bookedWish.wish.wishlistId,
       bookedWish.wish.id,
       wishIds: [bookedWish.wish.id],
+      cardType: WishlistStatsCardType.booked,
     ).push(context);
   }
 
