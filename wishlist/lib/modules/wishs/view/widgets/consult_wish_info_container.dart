@@ -134,6 +134,27 @@ class ConsultWishInfoContainer extends ConsumerWidget {
 
     const spacing = 12.0;
 
+    late final bool showPrimaryAction;
+    late final VoidCallback? primaryActionOnPressed;
+    late final String primaryActionText;
+
+    if (isMyWishlist) {
+      showPrimaryAction = true;
+      primaryActionOnPressed = () =>
+          EditWishRoute(wishlistId: wish.wishlistId, wishId: wish.id)
+              .push(context);
+      primaryActionText = l10n.editButton;
+    } else if (shouldShowGiveItButton || shouldShowModifyButton) {
+      showPrimaryAction = true;
+      primaryActionOnPressed = () => _onGiveItTap(context, ref);
+      primaryActionText =
+          shouldShowGiveItButton ? l10n.iWantToGiveIt : l10n.modifyBooking;
+    } else {
+      showPrimaryAction = false;
+      primaryActionOnPressed = null;
+      primaryActionText = '';
+    }
+
     return ConstrainedBox(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height / 1.8,
@@ -234,35 +255,18 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 spacing: spacing,
                 children: [
-                  if (isMyWishlist)
-                    PrimaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: () => EditWishRoute(
-                        wishlistId: wish.wishlistId,
-                        wishId: wish.id,
-                      ).push(context),
-                      text: l10n.editButton,
-                      isStretched: true,
-                    ),
-                  if (!isMyWishlist && shouldShowGiveItButton)
-                    PrimaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: () => _onGiveItTap(context, ref),
-                      text: l10n.iWantToGiveIt,
-                      isStretched: true,
-                    ),
-                  if (!isMyWishlist && shouldShowModifyButton)
-                    PrimaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: () => _onGiveItTap(context, ref),
-                      text: l10n.modifyBooking,
-                      isStretched: true,
-                    ),
                   if (!isMyWishlist && shouldShowCancelButton)
                     SecondaryButton(
                       style: BaseButtonStyle.medium,
                       onPressed: () => _onCancelGiveItTap(context, ref),
                       text: l10n.cancelBooking,
+                      isStretched: true,
+                    ),
+                  if (showPrimaryAction)
+                    PrimaryButton(
+                      style: BaseButtonStyle.medium,
+                      onPressed: primaryActionOnPressed,
+                      text: primaryActionText,
                       isStretched: true,
                     ),
                 ],
