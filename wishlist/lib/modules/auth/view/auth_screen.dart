@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/auth/view/auth_layout.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
 import 'package:wishlist/shared/infra/current_user_avatar_provider.dart';
+import 'package:wishlist/shared/infra/first_launch_service.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
@@ -29,6 +31,38 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   /// Whether the user is signing in or signing up
   bool _isSigningIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _initializeSigningInState();
+      }
+    });
+  }
+
+  Future<void> _initializeSigningInState() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final firstLaunchService = FirstLaunchService(prefs);
+      final isFirstLaunch = firstLaunchService.isFirstLaunch();
+
+      if (mounted) {
+        setState(() {
+          _isSigningIn = !isFirstLaunch;
+        });
+
+        await firstLaunchService.markAsLaunched();
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isSigningIn = false;
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
