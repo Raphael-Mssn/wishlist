@@ -25,6 +25,7 @@ class WishCard extends ConsumerWidget {
 
   static const double _cardPadding = 12;
   static const double _selectionBorderWidth = 3;
+  static const int _wishImageSize = 64;
 
   final Wish wish;
   final void Function() onTap;
@@ -64,6 +65,9 @@ class WishCard extends ConsumerWidget {
     final cardPadding =
         isSelected ? _cardPadding - _selectionBorderWidth : _cardPadding;
 
+    // Hauteur maximale = taille de l'image + padding (haut et bas)
+    final maxHeight = _wishImageSize.toDouble() + (cardPadding * 2);
+
     return Material(
       color: Colors.transparent,
       borderRadius: borderRadius,
@@ -73,81 +77,136 @@ class WishCard extends ConsumerWidget {
         onLongPress: onLongPress,
         child: Stack(
           children: [
-            Ink(
-              padding: EdgeInsets.all(cardPadding),
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(24),
-                border: isSelected
-                    ? Border.all(
-                        color: selectionColor,
-                        width: _selectionBorderWidth,
-                      )
-                    : null,
-              ),
-              child: Row(
-                children: [
-                  Stack(
-                    children: [
-                      WishImage(
-                        iconUrl: wish.iconUrl,
-                      ),
-                      if (quantityToDisplay > 1)
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Text(
-                            'x$quantityToDisplay',
-                            style: AppTextStyles.small.copyWith(
-                              color: AppColors.makara,
-                              height: 1,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                  const Gap(16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
+            SizedBox(
+              height: maxHeight,
+              child: Ink(
+                padding: EdgeInsets.all(cardPadding),
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(24),
+                  border: isSelected
+                      ? Border.all(
+                          color: selectionColor,
+                          width: _selectionBorderWidth,
+                        )
+                      : null,
+                ),
+                child: Row(
+                  children: [
+                    Stack(
+                      clipBehavior: Clip.none,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 20),
-                          child: Text(
-                            wish.name,
-                            maxLines: hasSubtitle ? 1 : 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.smaller.copyWith(
-                              color: AppColors.darkGrey,
-                              fontWeight: hasSubtitle
-                                  ? FontWeight.normal
-                                  : FontWeight.normal,
-                              height: 1,
+                        WishImage(
+                          iconUrl: wish.iconUrl,
+                          size: _wishImageSize.toDouble(),
+                        ),
+                        if (quantityToDisplay > 1)
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppColors.background,
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                ),
+                                boxShadow: [
+                                  // shadow only on the top right and bottom left corners
+                                  BoxShadow(
+                                    color:
+                                        AppColors.makara.withValues(alpha: 0.2),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'x',
+                                      style: AppTextStyles.smallest.copyWith(
+                                        color: AppColors.makara,
+                                        fontWeight: FontWeight.bold,
+                                        height: 1,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: quantityToDisplay.toString(),
+                                      style: AppTextStyles.smaller.copyWith(
+                                        color: AppColors.makara,
+                                        fontWeight: FontWeight.bold,
+                                        height: 1,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                        const Gap(2),
-                        if (hasSubtitle || hasPrice) ...[
-                          if (!hasSubtitle) const Gap(8),
-                          if (hasSubtitle)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    subtitle,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AppTextStyles.smaller.copyWith(
-                                      color: AppColors.makara,
-                                      fontWeight: FontWeight.normal,
+                      ],
+                    ),
+                    const Gap(16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: Text(
+                              wish.name,
+                              maxLines: hasSubtitle ? 2 : 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.smaller.copyWith(
+                                color: AppColors.darkGrey,
+                                fontWeight: hasSubtitle
+                                    ? FontWeight.normal
+                                    : FontWeight.normal,
+                                height: 1,
+                              ),
+                            ),
+                          ),
+                          if (hasSubtitle || hasPrice) ...[
+                            if (hasSubtitle)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      subtitle,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppTextStyles.smallest.copyWith(
+                                        color: AppColors.makara,
+                                        fontWeight: FontWeight.normal,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                if (hasPrice) ...[
-                                  const Gap(8),
-                                  Text(
+                                  if (hasPrice) ...[
+                                    const Gap(8),
+                                    Text(
+                                      Formatters.currency(price),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppTextStyles.smaller.copyWith(
+                                        color: AppColors.darkGrey,
+                                        height: 1,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              )
+                            else if (hasPrice)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
                                     Formatters.currency(price),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -156,30 +215,14 @@ class WishCard extends ConsumerWidget {
                                       height: 1,
                                     ),
                                   ),
-                                ],
-                              ],
-                            )
-                          else if (hasPrice)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  Formatters.currency(price),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppTextStyles.smaller.copyWith(
-                                    color: AppColors.darkGrey,
-                                    height: 1,
-                                  ),
                                 ),
                               ),
-                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             if (isSelected)

@@ -36,4 +36,10 @@ class AppTextStyles {
     fontSize: 18,
     fontWeight: FontWeight.w400,
   );
+
+  static const TextStyle smallest = TextStyle(
+    fontFamily: FontFamily.truculenta,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
 }
