@@ -26,6 +26,11 @@ class BaseAvatarPill extends ConsumerWidget {
     const borderRadius = BorderRadius.all(
       Radius.circular(50),
     );
+    final avatarUrl = this.avatarUrl;
+    final hasAvatar = avatarUrl != null && avatarUrl.isNotEmpty;
+
+    final boxDecorationColor =
+        hasAvatar ? AppColors.background : AppColors.makara;
 
     return AppWavePattern(
       backgroundColor: backgroundColor,
@@ -41,7 +46,7 @@ class BaseAvatarPill extends ConsumerWidget {
             height: avatarSize,
             width: avatarSize,
             decoration: BoxDecoration(
-              color: AppColors.makara,
+              color: boxDecorationColor,
               shape: BoxShape.circle,
               border: Border.fromBorderSide(
                 BorderSide(

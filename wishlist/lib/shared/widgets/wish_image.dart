@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/wish_image_url_provider.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/widgets/app_cached_network_image.dart';
 
 /// Widget pour afficher l'image d'un wish
 class WishImage extends ConsumerWidget {
@@ -24,26 +25,28 @@ class WishImage extends ConsumerWidget {
       wishImageUrlProvider((imagePath: iconUrl, thumbnail: thumbnail)),
     );
 
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
+    final image = wishImageUrl.isEmpty
+        ? Icon(
+            Icons.card_giftcard,
+            size: size / 2,
+            color: AppColors.makara.withValues(alpha: 0.3),
+          )
+        : AppCachedNetworkImage.loaded(
+            src: wishImageUrl,
+            width: size,
+            height: size,
+            fit: BoxFit.cover,
+            placeholderColor: AppColors.gainsboro,
+          );
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: Container(
+        width: size,
+        height: size,
         color: AppColors.gainsboro,
-        borderRadius: BorderRadius.circular(borderRadius),
-        image: wishImageUrl.isNotEmpty
-            ? DecorationImage(
-                image: NetworkImage(wishImageUrl),
-                fit: BoxFit.cover,
-              )
-            : null,
+        child: image,
       ),
-      child: wishImageUrl.isEmpty
-          ? Icon(
-              Icons.card_giftcard,
-              size: size / 2,
-              color: AppColors.makara.withValues(alpha: 0.3),
-            )
-          : null,
     );
   }
 }

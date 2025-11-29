@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/avatar_service.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/widgets/app_cached_network_image.dart';
 
 class AppAvatar extends ConsumerWidget {
   const AppAvatar({
@@ -24,14 +25,14 @@ class AppAvatar extends ConsumerWidget {
 
     if (fullAvatarUrl.isNotEmpty) {
       final Widget avatarImage = ClipOval(
-        child: Image.network(
-          fullAvatarUrl,
+        child: AppCachedNetworkImage.loaded(
+          src: fullAvatarUrl,
           width: size,
           height: size,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => _defaultIcon(),
         ),
       );
+
       if (hasBorders) {
         return Container(
           width: size,
