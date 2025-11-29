@@ -57,7 +57,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savePseudo => 'Save';
 
   @override
-  String get bookedWishesScreenTitle => 'My bookings';
+  String get bookedWishesScreenTitle => 'Bookings';
 
   @override
   String get bookedWishesEmptyTitle => 'No bookings';
@@ -235,7 +235,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get friendDetailsWishlistsTitle => 'Public wishlists';
 
   @override
-  String get myWishlists => 'My wishlists';
+  String get wishlistsScreenTitle => 'Wishlists';
 
   @override
   String get wishlistStatusPending => 'Pending';

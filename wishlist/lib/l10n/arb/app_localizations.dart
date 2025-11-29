@@ -197,7 +197,7 @@ abstract class AppLocalizations {
   /// No description provided for @bookedWishesScreenTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Mes réservations'**
+  /// **'Réservations'**
   String get bookedWishesScreenTitle;
 
   /// No description provided for @bookedWishesEmptyTitle.
@@ -488,11 +488,11 @@ abstract class AppLocalizations {
   /// **'Wishlists publiques'**
   String get friendDetailsWishlistsTitle;
 
-  /// No description provided for @myWishlists.
+  /// No description provided for @wishlistsScreenTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Mes wishlists'**
-  String get myWishlists;
+  /// **'Wishlists'**
+  String get wishlistsScreenTitle;
 
   /// No description provided for @wishlistStatusPending.
   ///

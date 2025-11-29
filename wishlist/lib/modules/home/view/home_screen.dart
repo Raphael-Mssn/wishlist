@@ -41,11 +41,11 @@ class HomeScreen extends ConsumerWidget {
                 showCreateDialog(context, ref);
               },
               onRefresh: refreshWishlists,
-              appBarTitle: l10n.myWishlists,
+              appBarTitle: l10n.wishlistsScreenTitle,
             )
           : PageLayout(
               padding: const EdgeInsets.all(20).copyWith(bottom: 0),
-              title: l10n.myWishlists,
+              title: l10n.wishlistsScreenTitle,
               onRefresh: refreshWishlists,
               child: WishlistsGrid(
                 wishlists: data,
