@@ -63,6 +63,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       try {
         await ref.read(authServiceProvider).sendPasswordResetEmail(
               email: _emailController.text.trim(),
+              ref: ref,
             );
 
         _onSuccess();

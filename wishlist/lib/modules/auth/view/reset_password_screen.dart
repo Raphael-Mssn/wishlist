@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/widgets/app_app_bar.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
@@ -46,7 +47,8 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
           context.l10n.resetPasswordSuccess,
           type: SnackBarType.success,
         );
-        // No need to redirect, signOut already redirects to AuthRoute
+
+        AuthRoute().go(context);
       }
     }
   }
