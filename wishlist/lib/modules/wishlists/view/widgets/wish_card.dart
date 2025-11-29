@@ -103,23 +103,32 @@ class WishCard extends ConsumerWidget {
                         if (quantityToDisplay > 1)
                           Positioned(
                             bottom: 0,
-                            left: 0,
+                            right: 0,
                             child: Container(
                               padding: const EdgeInsets.all(4),
-                              alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: AppColors.background,
                                 borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(12),
-                                  bottomLeft: Radius.circular(12),
+                                  topLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12),
+                                ),
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color:
+                                        AppColors.makara.withValues(alpha: 0.2),
+                                  ),
+                                  right: BorderSide(
+                                    color:
+                                        AppColors.makara.withValues(alpha: 0.2),
+                                  ),
                                 ),
                                 boxShadow: [
-                                  // shadow only on the top right and bottom left corners
+                                  // shadow only on left side
                                   BoxShadow(
                                     color:
                                         AppColors.makara.withValues(alpha: 0.2),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
+                                    blurRadius: 3,
+                                    offset: const Offset(-3, 0),
                                   ),
                                 ],
                               ),
