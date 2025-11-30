@@ -40,7 +40,7 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:scheme="wishy"
-                    android:host="com.raphtang.wishlist"/>
+                    android:host="com.raphtang.wishy"/>
             </intent-filter>
         </activity>
 
