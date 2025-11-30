@@ -1,4 +1,4 @@
-package com.raphtang.wishlist
+package com.raphtang.wishy
 
 import io.flutter.embedding.android.FlutterActivity
 

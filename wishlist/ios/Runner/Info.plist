@@ -55,7 +55,7 @@
 				<key>CFBundleTypeRole</key>
 				<string>Editor</string>
 				<key>CFBundleURLName</key>
-				<string>com.raphtang.wishlist</string>
+				<string>com.raphtang.wishy</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
 					<string>wishy</string>
