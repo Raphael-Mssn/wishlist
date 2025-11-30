@@ -27,10 +27,8 @@ class WishlistsGrid extends ConsumerStatefulWidget {
 class _WishlistsGridState extends ConsumerState<WishlistsGrid> {
   static const _animationDuration = Duration(milliseconds: 500);
   static const _crossAxisCount = 2;
-  static const _optimisticResetDelay = Duration(milliseconds: 500);
 
   List<Wishlist>? _optimisticWishlists;
-  bool _isReordering = false;
 
   List<Wishlist> get _displayedWishlists =>
       _optimisticWishlists ?? widget.wishlists;
@@ -38,38 +36,43 @@ class _WishlistsGridState extends ConsumerState<WishlistsGrid> {
   @override
   void didUpdateWidget(WishlistsGrid oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!_isReordering) {
-      _optimisticWishlists = null;
+
+    // Si on a un état optimiste, on vérifie si les données du stream
+    // correspondent
+    if (_optimisticWishlists != null) {
+      if (_isOrderMatching(widget.wishlists, _optimisticWishlists!)) {
+        // Les données du stream correspondent à l'état optimiste, on peut le
+        // réinitialiser
+        _optimisticWishlists = null;
+      }
     }
   }
 
-  Future<void> _handleReorder(int oldIndex, int newIndex) async {
-    setState(() => _isReordering = true);
+  bool _isOrderMatching(List<Wishlist> list1, List<Wishlist> list2) {
+    if (list1.length != list2.length) {
+      return false;
+    }
 
+    // Vérifie que l'ordre des IDs est identique
+    for (var i = 0; i < list1.length; i++) {
+      if (list1[i].id != list2[i].id) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  Future<void> _handleReorder(int oldIndex, int newIndex) async {
     final reorderedWishlists = List<Wishlist>.from(_displayedWishlists);
     final wishlist = reorderedWishlists.removeAt(oldIndex);
     reorderedWishlists.insert(newIndex, wishlist);
 
     setState(() => _optimisticWishlists = reorderedWishlists);
 
-    try {
-      await ref
-          .read(wishlistServiceProvider)
-          .updateWishlistsOrder(reorderedWishlists.toIList());
-    } finally {
-      _resetOptimisticState();
-    }
-  }
-
-  void _resetOptimisticState() {
-    Future.delayed(_optimisticResetDelay, () {
-      if (mounted) {
-        setState(() {
-          _isReordering = false;
-          _optimisticWishlists = null;
-        });
-      }
-    });
+    await ref
+        .read(wishlistServiceProvider)
+        .updateWishlistsOrder(reorderedWishlists.toIList());
   }
 
   Widget _buildWishlistCard(Wishlist wishlist, int index) {
