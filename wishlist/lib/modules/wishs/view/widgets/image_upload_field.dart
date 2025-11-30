@@ -115,16 +115,16 @@ class ImageUploadField extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(_borderRadius),
-            child: Container(
-              width: double.infinity,
-              height: _imageHeight,
-              color: AppColors.gainsboro,
-              child: AppCachedNetworkImage.loaded(
-                src: existingUrl,
-                height: _imageHeight,
-                fit: BoxFit.cover,
-                placeholderColor: AppColors.gainsboro,
-              ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return AppCachedNetworkImage.loaded(
+                  src: existingUrl,
+                  width: constraints.maxWidth,
+                  height: _imageHeight,
+                  fit: BoxFit.cover,
+                  placeholderColor: AppColors.gainsboro,
+                );
+              },
             ),
           ),
           Positioned.fill(
