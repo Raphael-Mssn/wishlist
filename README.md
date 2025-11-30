@@ -1,6 +1,6 @@
-# 🎁 Wishlist App
+# 🎁 Wishy App
 
-Welcome to the Wishlist App! This Flutter application is designed to help you effortlessly create, manage, and share your wishlists with friends and family, making gift-giving occasions more organized and enjoyable.
+Welcome to the Wishy App! This Flutter application is designed to help you effortlessly create, manage, and share your wishlists with friends and family, making gift-giving occasions more organized and enjoyable.
 
 ## ✨ Features
 
@@ -139,6 +139,6 @@ supabase projects list
 
 ## 📧 Contact
 
-If you have any questions, feel free to reach out via [raphtang.wishlist@gmail.com](mailto:raphtang.wishlist@gmail.com).
+If you have any questions, feel free to reach out via [wishyapp.contact@gmail.com](mailto:wishyapp.contact@gmail.com).
 
 ## Happy gifting! 🎁✨
