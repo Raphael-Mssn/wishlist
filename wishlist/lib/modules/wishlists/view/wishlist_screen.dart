@@ -414,11 +414,16 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     final wishlist = wishlistScreenData.wishlist;
     final wishs = _sortAndFilterWishs(wishlistScreenData.wishs);
 
-    final wishsPending =
-        wishs.where((wish) => wish.availableQuantity > 0).toIList();
+    final isWishsBookedHidden = !wishlist.canOwnerSeeTakenWish && isMyWishlist;
+
+    // Si les wishs réservés sont cachés pour le propriétaire,
+    // alors afficher tous les wishs en "pending"
+    final wishsPending = isWishsBookedHidden
+        ? wishs.toIList()
+        : wishs.where((wish) => wish.availableQuantity > 0).toIList();
+
     final wishsBooked =
         wishs.where((wish) => wish.totalBookedQuantity > 0).toIList();
-    final isWishsBookedHidden = !wishlist.canOwnerSeeTakenWish && isMyWishlist;
 
     final nbWishsPending = wishsPending.length;
     final nbWishsBooked = wishsBooked.length;
