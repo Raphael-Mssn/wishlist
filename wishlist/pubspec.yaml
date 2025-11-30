@@ -58,7 +58,6 @@ dependencies:
   intl: any
   json_annotation: ^4.9.0
   like_button: ^2.0.5
-  modal_bottom_sheet: ^3.0.0
   package_info_plus: ^8.1.2
   pattern_box: ^0.5.4
   riverpod_annotation: ^2.3.5
