@@ -43,7 +43,13 @@ Future<void> showAppBottomSheet(
         );
       }
 
-      return Material(child: themedBody);
+      return ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: radius),
+        child: Material(
+          color: AppColors.background,
+          child: themedBody,
+        ),
+      );
     },
   );
 }
