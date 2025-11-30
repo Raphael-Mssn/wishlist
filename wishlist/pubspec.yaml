@@ -33,7 +33,9 @@ dependencies:
   animated_reorderable_list: ^1.1.1
   animated_toggle_switch: ^0.8.3
   async_value_group: ^1.0.1
+  cached_network_image: ^3.3.1
   cupertino_icons: ^1.0.6
+  flutter_cache_manager: ^3.3.1
   currency_formatter: ^2.2.1
   email_validator: ^2.1.17
   equatable: ^2.0.5
