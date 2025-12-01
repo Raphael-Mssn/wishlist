@@ -172,6 +172,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             controller: _passwordController,
             label: l10n.passwordField,
             textInputAction: TextInputAction.done,
+            showStrengthIndicator: !_isSigningIn,
           ),
           const Gap(32),
           PrimaryButton(
