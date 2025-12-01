@@ -128,6 +128,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   controller: _newPasswordController,
                   label: l10n.newPasswordField,
                   textInputAction: TextInputAction.next,
+                  showStrengthIndicator: true,
                 ),
                 gapBetweenFields,
                 InputPassword(
