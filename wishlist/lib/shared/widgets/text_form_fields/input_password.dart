@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/l10n/l10n.dart';
 
-class InputPassword extends StatelessWidget {
+class InputPassword extends StatefulWidget {
   const InputPassword({
     super.key,
     required this.autofillHints,
@@ -18,12 +18,25 @@ class InputPassword extends StatelessWidget {
   final String? Function(String?)? additionalValidator;
 
   @override
+  State<InputPassword> createState() => _InputPasswordState();
+}
+
+class _InputPasswordState extends State<InputPassword> {
+  bool _obscureText = true;
+
+  void _toggleObscureText() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final additionalValidator = this.additionalValidator;
+    final additionalValidator = widget.additionalValidator;
 
     return TextFormField(
-      autofillHints: [autofillHints],
-      textInputAction: textInputAction,
+      autofillHints: [widget.autofillHints],
+      textInputAction: widget.textInputAction,
       validator: (value) {
         if (value == null || value.isEmpty || value.length < 6) {
           return context.l10n.passwordLengthError;
@@ -35,10 +48,16 @@ class InputPassword extends StatelessWidget {
       },
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.lock),
-        label: Text(label),
+        label: Text(widget.label),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscureText ? Icons.visibility_off : Icons.visibility,
+          ),
+          onPressed: _toggleObscureText,
+        ),
       ),
-      controller: controller,
-      obscureText: true,
+      controller: widget.controller,
+      obscureText: _obscureText,
     );
   }
 }
