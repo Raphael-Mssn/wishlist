@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/shared/widgets/password_strength_indicator.dart';
+import 'package:wishlist/shared/widgets/text_form_fields/validators/password_validator.dart';
 
 class InputPassword extends StatefulWidget {
   const InputPassword({
@@ -9,6 +12,7 @@ class InputPassword extends StatefulWidget {
     required this.label,
     required this.textInputAction,
     this.additionalValidator,
+    this.showStrengthIndicator = false,
   });
 
   final String autofillHints;
@@ -16,6 +20,7 @@ class InputPassword extends StatefulWidget {
   final String label;
   final TextInputAction textInputAction;
   final String? Function(String?)? additionalValidator;
+  final bool showStrengthIndicator;
 
   @override
   State<InputPassword> createState() => _InputPasswordState();
@@ -33,13 +38,20 @@ class _InputPasswordState extends State<InputPassword> {
   @override
   Widget build(BuildContext context) {
     final additionalValidator = widget.additionalValidator;
+    final l10n = context.l10n;
 
-    return TextFormField(
+    final textField = TextFormField(
       autofillHints: [widget.autofillHints],
       textInputAction: widget.textInputAction,
       validator: (value) {
-        if (value == null || value.isEmpty || value.length < 6) {
-          return context.l10n.passwordLengthError;
+        if (value == null || value.isEmpty) {
+          return l10n.notNullError;
+        }
+        if (widget.showStrengthIndicator) {
+          final securityError = passwordSecurityValidator(value, l10n);
+          if (securityError != null) {
+            return securityError;
+          }
         }
         if (additionalValidator != null) {
           return additionalValidator(value);
@@ -55,9 +67,25 @@ class _InputPasswordState extends State<InputPassword> {
           ),
           onPressed: _toggleObscureText,
         ),
+        errorMaxLines: 2,
       ),
       controller: widget.controller,
       obscureText: _obscureText,
+    );
+
+    if (!widget.showStrengthIndicator) {
+      return textField;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        textField,
+        const Gap(12),
+        PasswordStrengthIndicator(
+          controller: widget.controller,
+        ),
+      ],
     );
   }
 }

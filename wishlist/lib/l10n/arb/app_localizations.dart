@@ -122,11 +122,41 @@ abstract class AppLocalizations {
   /// **'Mot de passe'**
   String get passwordField;
 
-  /// No description provided for @passwordLengthError.
+  /// No description provided for @passwordRequirementMinLength.
   ///
   /// In fr, this message translates to:
-  /// **'Le mot de passe doit contenir au moins 6 caractères'**
-  String get passwordLengthError;
+  /// **'Au moins 8 caractères'**
+  String get passwordRequirementMinLength;
+
+  /// No description provided for @passwordRequirementUppercase.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au moins une majuscule'**
+  String get passwordRequirementUppercase;
+
+  /// No description provided for @passwordRequirementLowercase.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au moins une minuscule'**
+  String get passwordRequirementLowercase;
+
+  /// No description provided for @passwordRequirementNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au moins un chiffre'**
+  String get passwordRequirementNumber;
+
+  /// No description provided for @passwordRequirementSpecialChar.
+  ///
+  /// In fr, this message translates to:
+  /// **'Au moins un caractère spécial'**
+  String get passwordRequirementSpecialChar;
+
+  /// No description provided for @passwordSecurityError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le mot de passe ne respecte pas tous les critères de sécurité'**
+  String get passwordSecurityError;
 
   /// No description provided for @signIn.
   ///

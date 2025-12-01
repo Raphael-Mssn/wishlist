@@ -1,3 +1,5 @@
+import 'package:wishlist/l10n/l10n.dart';
+
 class PasswordValidator {
   static const int minLength = 8;
 
@@ -31,4 +33,11 @@ class PasswordValidator {
         hasNumber(password) &&
         hasSpecialChar(password);
   }
+}
+
+String? passwordSecurityValidator(String? value, AppLocalizations l10n) {
+  if (!PasswordValidator.isValid(value)) {
+    return l10n.passwordSecurityError;
+  }
+  return null;
 }
