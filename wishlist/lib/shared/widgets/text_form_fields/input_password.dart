@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/widgets/password_strength_indicator.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/validators/password_validator.dart';
@@ -73,17 +72,31 @@ class _InputPasswordState extends State<InputPassword> {
       obscureText: _obscureText,
     );
 
-    if (!widget.showStrengthIndicator) {
-      return textField;
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         textField,
-        const Gap(12),
-        PasswordStrengthIndicator(
-          controller: widget.controller,
+        AnimatedSwitcher(
+          duration: kThemeAnimationDuration,
+          switchInCurve: Curves.fastOutSlowIn,
+          switchOutCurve: Curves.fastOutSlowIn,
+          transitionBuilder: (child, animation) {
+            return SizeTransition(
+              sizeFactor: animation,
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
+          child: widget.showStrengthIndicator
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: PasswordStrengthIndicator(
+                    controller: widget.controller,
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
       ],
     );
