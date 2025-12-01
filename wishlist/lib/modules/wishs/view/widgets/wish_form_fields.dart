@@ -47,8 +47,19 @@ class WishFormFieldsState extends State<WishFormFields> {
   File? _selectedImage;
   bool _hasRemovedExistingImage = false;
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+  late final FocusNode _dummyFocusNode = FocusNode(skipTraversal: true);
 
   bool get hasRemovedExistingImage => _hasRemovedExistingImage;
+
+  @override
+  void dispose() {
+    _dummyFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _focusDummyNode() {
+    _dummyFocusNode.requestFocus();
+  }
 
   void enableAutovalidation() {
     if (_autovalidateMode != AutovalidateMode.onUserInteraction) {
@@ -251,7 +262,14 @@ class WishFormFieldsState extends State<WishFormFields> {
             imageFile: _selectedImage,
             existingImageUrl:
                 _hasRemovedExistingImage ? null : widget.existingImageUrl,
-            onTap: _showImageOptions,
+            onTap: () {
+              _showImageOptions();
+              _focusDummyNode();
+            },
+          ),
+          Focus(
+            focusNode: _dummyFocusNode,
+            child: const SizedBox.shrink(),
           ),
         ],
       ),
