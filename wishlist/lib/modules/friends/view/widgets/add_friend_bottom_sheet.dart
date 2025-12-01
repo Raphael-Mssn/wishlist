@@ -42,14 +42,14 @@ class _AddFriendBottomSheetState extends ConsumerState<AddFriendBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    const itemPadding = EdgeInsets.symmetric(vertical: 4);
-    final lastItemPadding = itemPadding.copyWith(bottom: 48);
     final searchState = ref.watch(searchProvider);
+    const paddingValue = 30.0;
 
-    return SafeArea(
-      child: SingleChildScrollView(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(paddingValue).copyWith(bottom: 0),
           child: Column(
             children: [
               UserSearchBar(
@@ -68,21 +68,15 @@ class _AddFriendBottomSheetState extends ConsumerState<AddFriendBottomSheet> {
                       context.l10n.noUserFound,
                     );
                   }
-                  return ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: users.length,
-                    itemBuilder: (context, index) {
-                      final isLast = index == users.length - 1;
-                      final appUser = users[index];
-
-                      return Padding(
-                        padding: isLast ? lastItemPadding : itemPadding,
-                        child: UserPill(
-                          appUser: appUser,
-                        ),
-                      );
-                    },
+                  return Expanded(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.only(bottom: paddingValue),
+                      itemBuilder: (context, index) => UserPill(
+                        appUser: users[index],
+                      ),
+                      separatorBuilder: (context, index) => const Gap(4),
+                      itemCount: users.length,
+                    ),
                   );
                 },
               ),

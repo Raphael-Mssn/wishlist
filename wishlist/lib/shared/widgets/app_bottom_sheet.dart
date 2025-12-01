@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
 
@@ -13,24 +12,44 @@ Future<void> showAppBottomSheet(
   // not the one from the builder of showBarModalBottomSheet
   final theme = Theme.of(context);
 
-  await showBarModalBottomSheet<void>(
+  await showModalBottomSheet<void>(
     context: context,
     backgroundColor: AppColors.background,
-    expand: expandToFillHeight,
     barrierColor: Colors.black54.withValues(alpha: 0.3),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: radius,
-        topRight: radius,
-      ),
-    ),
+    isScrollControlled: true,
     builder: (context) {
       final themedBody = AnimatedTheme(
         data: theme,
         child: body,
       );
 
-      return expandToFillHeight ? Scaffold(body: themedBody) : themedBody;
+      if (expandToFillHeight) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final screenHeight = MediaQuery.of(context).size.height - 80;
+
+            return ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: radius,
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: screenHeight,
+                ),
+                child: Scaffold(body: themedBody),
+              ),
+            );
+          },
+        );
+      }
+
+      return ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: radius),
+        child: Material(
+          color: AppColors.background,
+          child: themedBody,
+        ),
+      );
     },
   );
 }
