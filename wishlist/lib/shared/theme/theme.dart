@@ -59,5 +59,6 @@ ThemeData get theme => ThemeData(
             width: 2,
           ),
         ),
+        suffixIconColor: AppColors.darkGrey,
       ),
     );
