@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
 
-class WishlistCard extends StatelessWidget {
+class WishlistCard extends ConsumerWidget {
   const WishlistCard({
     super.key,
     required this.wishlist,
@@ -17,8 +19,11 @@ class WishlistCard extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final borderRadius = BorderRadius.circular(36);
+    final currentUserId =
+        ref.watch(supabaseClientProvider).auth.currentUser?.id;
+    final isOwner = currentUserId == wishlist.idOwner;
 
     void onTap() {
       WishlistRoute(wishlistId: wishlist.id).push(context);
@@ -39,13 +44,24 @@ class WishlistCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (wishlist.visibility == WishlistVisibility.private)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    _VisibilityBadge(color: color),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (wishlist.visibility == WishlistVisibility.private)
+                    _WishlistBadge(
+                      icon: Icons.lock,
+                      color: color,
+                    ),
+                  if (!isOwner && !wishlist.canOwnerSeeTakenWish) ...[
+                    if (wishlist.visibility == WishlistVisibility.private)
+                      const SizedBox(width: 8),
+                    _WishlistBadge(
+                      icon: Icons.visibility_off,
+                      color: color,
+                    ),
                   ],
-                ),
+                ],
+              ),
               const Gap(4),
               Expanded(
                 child: Align(
@@ -70,9 +86,13 @@ class WishlistCard extends StatelessWidget {
   }
 }
 
-class _VisibilityBadge extends StatelessWidget {
-  const _VisibilityBadge({required this.color});
+class _WishlistBadge extends StatelessWidget {
+  const _WishlistBadge({
+    required this.icon,
+    required this.color,
+  });
 
+  final IconData icon;
   final Color color;
 
   @override
@@ -90,8 +110,8 @@ class _VisibilityBadge extends StatelessWidget {
           ),
         ],
       ),
-      child: const Icon(
-        Icons.lock,
+      child: Icon(
+        icon,
         size: 16,
         color: AppColors.makara,
       ),
