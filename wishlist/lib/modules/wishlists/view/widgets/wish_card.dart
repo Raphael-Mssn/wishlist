@@ -103,8 +103,8 @@ class WishCard extends ConsumerWidget {
                             backgroundColor: primaryColor,
                             textStyle: AppTextStyles.smaller,
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 2,
+                              horizontal: 8,
+                              vertical: 4,
                             ),
                           ),
                         ),
