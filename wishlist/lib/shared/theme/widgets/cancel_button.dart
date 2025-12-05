@@ -14,7 +14,7 @@ class CancelButton extends StatelessWidget {
       child: Text(
         text,
         style: const TextStyle(
-          fontFamily: FontFamily.truculenta,
+          fontFamily: FontFamily.plusJakartaSans,
           fontSize: 20,
           fontWeight: FontWeight.w500,
           color: Colors.black,

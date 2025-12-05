@@ -22,7 +22,11 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     final actions = [
       if (isFirstRoute)
         IconButton(
-          icon: const Icon(Icons.settings, size: 32),
+          icon: const Icon(
+            Icons.settings,
+            color: AppColors.darkGrey,
+            size: 32,
+          ),
           onPressed: () => SettingsRoute().push(context),
         ),
     ];
