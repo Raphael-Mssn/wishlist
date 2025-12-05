@@ -16,7 +16,7 @@ class WishlistCreateRequest with _$WishlistCreateRequest {
     @Default(false)
     bool canOwnerSeeTakenWish,
     @JsonKey(name: 'visibility')
-    @Default(WishlistVisibility.private)
+    @Default(WishlistVisibility.public)
     WishlistVisibility visibility,
     @JsonKey(name: 'order') required int order,
     @JsonKey(name: 'updated_by') required String updatedBy,
