@@ -64,23 +64,23 @@ class _FriendDetailsScreen extends StatelessWidget {
               SliverToBoxAdapter(
                 child: _FriendStatsSection(friendDetails: friendDetails),
               ),
-              const _SliverGap(48),
+              const _SliverGap(24),
 
               // Mutual friends
               const SliverToBoxAdapter(
                 child: _MutualFriendsTitle(),
               ),
-              const _SliverGap(16),
+              const _SliverGap(12),
               SliverToBoxAdapter(
                 child: _MutualFriendsSection(friendDetails: friendDetails),
               ),
-              const _SliverGap(32),
+              const _SliverGap(24),
 
               // Wishlists
               const SliverToBoxAdapter(
                 child: _WishlistsTitle(),
               ),
-              const _SliverGap(16),
+              const _SliverGap(12),
               _WishlistsSection(friendDetails: friendDetails),
             ],
           ),
