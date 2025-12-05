@@ -67,12 +67,9 @@ class _FriendDetailsScreen extends StatelessWidget {
               const _SliverGap(24),
 
               // Mutual friends
-              const SliverToBoxAdapter(
-                child: _MutualFriendsTitle(),
-              ),
-              const _SliverGap(12),
               SliverToBoxAdapter(
-                child: _MutualFriendsSection(friendDetails: friendDetails),
+                child:
+                    _MutualFriendsTitleAndSection(friendDetails: friendDetails),
               ),
               const _SliverGap(24),
 
@@ -130,45 +127,109 @@ class _FriendStatsSection extends ConsumerWidget {
   }
 }
 
-class _MutualFriendsTitle extends StatelessWidget {
-  const _MutualFriendsTitle();
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      context.l10n.friendDetailsMutualFriendsTitle,
-      style: AppTextStyles.small.copyWith(
-        color: AppColors.makara,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-}
-
-class _MutualFriendsSection extends StatelessWidget {
-  const _MutualFriendsSection({required this.friendDetails});
+class _MutualFriendsTitleAndSection extends StatefulWidget {
+  const _MutualFriendsTitleAndSection({required this.friendDetails});
   final FriendDetails friendDetails;
 
   @override
+  State<_MutualFriendsTitleAndSection> createState() =>
+      _MutualFriendsTitleAndSectionState();
+}
+
+class _MutualFriendsTitleAndSectionState
+    extends State<_MutualFriendsTitleAndSection> {
+  static const int _maxVisibleFriends = 3;
+  bool _isExpanded = false;
+
+  @override
   Widget build(BuildContext context) {
-    if (friendDetails.mutualFriends.isEmpty) {
-      return Center(
-        child: Text(
-          context.l10n.friendDetailsNoMutualFriends,
-          style: AppTextStyles.smaller.copyWith(
-            color: AppColors.makara,
-          ),
-        ),
-      );
-    }
+    final l10n = context.l10n;
+    // Add 3 times the mutual friends to the list to make the list longer
+    final mutualFriends = widget.friendDetails.mutualFriends.toList()
+      ..addAll(widget.friendDetails.mutualFriends.toList())
+      ..addAll(widget.friendDetails.mutualFriends.toList());
+    final hasMoreFriends = mutualFriends.length > _maxVisibleFriends;
+    final nbFriendsNotVisible = mutualFriends.length - _maxVisibleFriends;
+
+    final seeAllAnimationDurationMs = nbFriendsNotVisible * 100;
+
+    const hideAllAnimationDurationMs = 300;
+
+    final animationDurationMs =
+        _isExpanded ? seeAllAnimationDurationMs : hideAllAnimationDurationMs;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final friend in friendDetails.mutualFriends)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: FriendPill(appUser: friend),
+        // Title row with "See all" / "Hide" button
+        Row(
+          children: [
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: ' ${l10n.friendDetailsMutualFriendsTitle}',
+                    style: AppTextStyles.small.copyWith(
+                      color: AppColors.makara,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  if (nbFriendsNotVisible > 0) ...[
+                    const WidgetSpan(child: SizedBox(width: 2)),
+                    TextSpan(
+                      text: '(${mutualFriends.length})',
+                      style: AppTextStyles.smaller.copyWith(
+                        color: AppColors.makara,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            if (hasMoreFriends) ...[
+              const Spacer(),
+              TextButton(
+                onPressed: () => setState(() => _isExpanded = !_isExpanded),
+                child: Text(
+                  _isExpanded ? l10n.hide : l10n.seeAll,
+                  style: AppTextStyles.smaller.copyWith(
+                    color: AppColors.makara,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+        const Gap(12),
+        // Mutual friends list
+        if (mutualFriends.isEmpty)
+          Center(
+            child: Text(
+              l10n.friendDetailsNoMutualFriends,
+              style: AppTextStyles.smaller.copyWith(
+                color: AppColors.makara,
+              ),
+            ),
+          )
+        else
+          ClipRect(
+            child: AnimatedAlign(
+              duration: Duration(milliseconds: animationDurationMs),
+              curve: Curves.easeInOutCubic,
+              alignment: Alignment.topCenter,
+              heightFactor:
+                  _isExpanded ? 1.0 : _maxVisibleFriends / mutualFriends.length,
+              child: Column(
+                children: [
+                  for (final friend in mutualFriends)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: FriendPill(appUser: friend),
+                    ),
+                ],
+              ),
+            ),
           ),
       ],
     );

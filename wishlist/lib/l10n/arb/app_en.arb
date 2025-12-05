@@ -76,6 +76,8 @@
   "numberOfWishs": "{count, plural, =0 {0 wish} =1 {1 wish} other {{count} wishs}}",
   "friendDetailsMutualFriendsTitle": "Mutual friends",
   "friendDetailsNoMutualFriends": "No mutual friends",
+  "seeAll": "See all",
+  "hide": "Hide",
   "friendDetailsWishlistsTitle": "Public wishlists",
   "wishlistsScreenTitle": "Wishlists",
   "wishlistStatusPending": "Pending",
