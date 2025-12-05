@@ -23,10 +23,9 @@ class AppTextStyles {
 
   static const TextStyle titleSmall = TextStyle(
     fontFamily: FontFamily.plusJakartaSans,
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: FontWeight.w800,
-    color: AppColors.darkGrey,
-    height: 1,
+    height: 1.1,
   );
 
   static const large = TextStyle(
