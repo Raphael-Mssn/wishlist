@@ -26,7 +26,7 @@ class _WishSortBottomSheet extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Text(
             l10n.sortWishs,
-            style: AppTextStyles.medium.copyWith(
+            style: AppTextStyles.large.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
