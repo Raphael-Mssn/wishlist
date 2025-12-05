@@ -21,8 +21,23 @@ class AppLocalizationsFr extends AppLocalizations {
   String get passwordField => 'Mot de passe';
 
   @override
-  String get passwordLengthError =>
-      'Le mot de passe doit contenir au moins 6 caractères';
+  String get passwordRequirementMinLength => 'Au moins 8 caractères';
+
+  @override
+  String get passwordRequirementUppercase => 'Au moins une majuscule';
+
+  @override
+  String get passwordRequirementLowercase => 'Au moins une minuscule';
+
+  @override
+  String get passwordRequirementNumber => 'Au moins un chiffre';
+
+  @override
+  String get passwordRequirementSpecialChar => 'Au moins un caractère spécial';
+
+  @override
+  String get passwordSecurityError =>
+      'Le mot de passe ne respecte pas tous les critères de sécurité';
 
   @override
   String get signIn => 'Se connecter';

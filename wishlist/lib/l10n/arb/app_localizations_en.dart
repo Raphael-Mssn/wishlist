@@ -21,7 +21,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordField => 'Password';
 
   @override
-  String get passwordLengthError => 'Password must be at least 6 characters';
+  String get passwordRequirementMinLength => 'At least 8 characters';
+
+  @override
+  String get passwordRequirementUppercase => 'At least one uppercase letter';
+
+  @override
+  String get passwordRequirementLowercase => 'At least one lowercase letter';
+
+  @override
+  String get passwordRequirementNumber => 'At least one number';
+
+  @override
+  String get passwordRequirementSpecialChar => 'At least one special character';
+
+  @override
+  String get passwordSecurityError =>
+      'Password does not meet all security requirements';
 
   @override
   String get signIn => 'Sign in';

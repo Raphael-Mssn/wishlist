@@ -110,6 +110,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 controller: _newPasswordController,
                 label: l10n.newPasswordField,
                 textInputAction: TextInputAction.next,
+                showStrengthIndicator: true,
               ),
               const Gap(16),
               InputPassword(
