@@ -52,4 +52,10 @@ class AppTextStyles {
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
+
+  static const TextStyle tiny = TextStyle(
+    fontFamily: FontFamily.plusJakartaSans,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
 }
