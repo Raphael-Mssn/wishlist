@@ -40,7 +40,7 @@ class WishlistToggleSwitch extends StatelessWidget {
       iconBuilder: (value) => value ? trueIcon : falseIcon,
       textBuilder: (value) => Text(
         value ? trueLabel : falseLabel,
-        style: AppTextStyles.smaller.copyWith(
+        style: AppTextStyles.tiny.copyWith(
           fontWeight: FontWeight.bold,
           color: AppColors.gainsboro,
         ),

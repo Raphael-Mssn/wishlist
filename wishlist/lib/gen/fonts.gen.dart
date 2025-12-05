@@ -10,6 +10,9 @@
 class FontFamily {
   FontFamily._();
 
-  /// Font family: Truculenta
-  static const String truculenta = 'Truculenta';
+  /// Font family: DMSerifDisplay
+  static const String dMSerifDisplay = 'DMSerifDisplay';
+
+  /// Font family: PlusJakartaSans
+  static const String plusJakartaSans = 'PlusJakartaSans';
 }

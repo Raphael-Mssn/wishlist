@@ -175,9 +175,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                   Expanded(
                     child: SelectableText(
                       wish.name,
-                      style: AppTextStyles.medium.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTextStyles.titleSmall,
                     ),
                   ),
                   const Gap(8),
@@ -203,6 +201,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                   ),
                 ],
               ),
+              const Gap(4),
               if (price != null)
                 SizedBox(
                   width: double.infinity,

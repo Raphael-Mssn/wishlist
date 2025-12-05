@@ -103,8 +103,8 @@ class WishCard extends ConsumerWidget {
                             backgroundColor: primaryColor,
                             textStyle: AppTextStyles.smaller,
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 2,
+                              horizontal: 8,
+                              vertical: 4,
                             ),
                           ),
                         ),
@@ -118,18 +118,20 @@ class WishCard extends ConsumerWidget {
                       children: [
                         Text(
                           wish.name,
-                          maxLines: hasSubtitle ? 2 : 1,
+                          maxLines: 2,
+                          textHeightBehavior: const TextHeightBehavior(
+                            applyHeightToFirstAscent: false,
+                            applyHeightToLastDescent: false,
+                          ),
                           overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.small.copyWith(
                             color: AppColors.darkGrey,
-                            fontWeight: hasSubtitle
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            height: hasSubtitle ? 1.2 : 1,
+                            fontWeight: FontWeight.w600,
+                            height: 1.1,
                           ),
                         ),
                         if (hasSubtitle || hasPrice) ...[
-                          if (!hasSubtitle) const Gap(8),
+                          const Gap(2),
                           if (hasSubtitle)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

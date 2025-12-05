@@ -54,7 +54,7 @@ class UserPill extends ConsumerWidget {
             child: Text(
               appUser.profile.pseudo,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.small.copyWith(
+              style: AppTextStyles.large.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppColors.darkGrey,
               ),
