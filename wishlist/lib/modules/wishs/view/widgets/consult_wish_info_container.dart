@@ -201,6 +201,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                   ),
                 ],
               ),
+              const Gap(4),
               if (price != null)
                 SizedBox(
                   width: double.infinity,
