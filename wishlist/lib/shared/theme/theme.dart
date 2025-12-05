@@ -31,9 +31,10 @@ ThemeData get theme => ThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: AppColors.darkGrey,
         contentTextStyle: const TextStyle(
-          fontFamily: FontFamily.truculenta,
+          fontFamily: FontFamily.plusJakartaSans,
           color: AppColors.background,
-          fontSize: 22,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
         ),
       ),
       textSelectionTheme: TextSelectionThemeData(
@@ -43,14 +44,15 @@ ThemeData get theme => ThemeData(
       ),
       inputDecorationTheme: const InputDecorationTheme(
         floatingLabelStyle: TextStyle(
-          fontFamily: FontFamily.truculenta,
-          fontSize: 20,
+          fontFamily: FontFamily.plusJakartaSans,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
           color: AppColors.darkGrey,
         ),
         labelStyle: TextStyle(
-          fontFamily: FontFamily.truculenta,
-          fontSize: 20,
-          fontStyle: FontStyle.italic,
+          fontFamily: FontFamily.plusJakartaSans,
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
           color: AppColors.darkGrey,
         ),
         focusedBorder: UnderlineInputBorder(
