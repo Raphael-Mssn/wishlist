@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -156,6 +158,10 @@ class _MutualFriendsTitleAndSectionState
     final animationDurationMs =
         _isExpanded ? seeAllAnimationDurationMs : hideAllAnimationDurationMs;
 
+    final heightFactor = _isExpanded
+        ? 1.0
+        : min(_maxVisibleFriends, mutualFriends.length) / mutualFriends.length;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -216,8 +222,7 @@ class _MutualFriendsTitleAndSectionState
               duration: Duration(milliseconds: animationDurationMs),
               curve: Curves.easeInOutCubic,
               alignment: Alignment.topCenter,
-              heightFactor:
-                  _isExpanded ? 1.0 : _maxVisibleFriends / mutualFriends.length,
+              heightFactor: heightFactor,
               child: Column(
                 children: [
                   for (final friend in mutualFriends)
