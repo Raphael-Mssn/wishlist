@@ -123,7 +123,7 @@ class WishCard extends ConsumerWidget {
                           style: AppTextStyles.small.copyWith(
                             color: AppColors.darkGrey,
                             fontWeight: hasSubtitle
-                                ? FontWeight.bold
+                                ? FontWeight.w600
                                 : FontWeight.normal,
                             height: hasSubtitle ? 1.2 : 1,
                           ),

@@ -29,6 +29,12 @@ class WishlistCard extends ConsumerWidget {
       WishlistRoute(wishlistId: wishlist.id).push(context);
     }
 
+    final textShadow = Shadow(
+      color: AppColors.darkGrey.withValues(alpha: 0.3),
+      offset: const Offset(2, 2),
+      blurRadius: 5,
+    );
+
     return Card(
       color: Colors.transparent,
       elevation: 0,
@@ -68,10 +74,11 @@ class WishlistCard extends ConsumerWidget {
                   alignment: Alignment.bottomLeft,
                   child: Text(
                     wishlist.name,
-                    style: AppTextStyles.medium.copyWith(
-                      fontWeight: FontWeight.w600,
+                    style: AppTextStyles.titleSmall.copyWith(
                       color: Colors.white,
-                      height: 1,
+                      shadows: [
+                        textShadow,
+                      ],
                     ),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
