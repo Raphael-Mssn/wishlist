@@ -70,7 +70,7 @@ class _DialogLayoutState extends State<_DialogLayout> {
       title: Text(
         widget.title,
         style: const TextStyle(
-          fontFamily: FontFamily.truculenta,
+          fontFamily: FontFamily.plusJakartaSans,
           fontSize: 28,
           fontWeight: FontWeight.w500,
         ),

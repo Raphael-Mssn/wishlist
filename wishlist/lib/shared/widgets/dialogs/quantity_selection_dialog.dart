@@ -168,7 +168,7 @@ class _QuantitySelectionDialogContentState
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                   style: const TextStyle(
-                    fontFamily: FontFamily.truculenta,
+                    fontFamily: FontFamily.plusJakartaSans,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),

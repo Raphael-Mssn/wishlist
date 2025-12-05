@@ -32,7 +32,7 @@ class _CreateDialogContentState extends State<_CreateDialogContent> {
             TextField(
               controller: widget.nameController,
               style: const TextStyle(
-                fontFamily: FontFamily.truculenta,
+                fontFamily: FontFamily.plusJakartaSans,
                 fontSize: labelFontSize,
               ),
               textCapitalization: TextCapitalization.sentences,
@@ -41,7 +41,7 @@ class _CreateDialogContentState extends State<_CreateDialogContent> {
               decoration: InputDecoration(
                 hintText: l10n.name,
                 hintStyle: const TextStyle(
-                  fontFamily: FontFamily.truculenta,
+                  fontFamily: FontFamily.plusJakartaSans,
                   fontSize: labelFontSize,
                   fontStyle: FontStyle.italic,
                 ),
