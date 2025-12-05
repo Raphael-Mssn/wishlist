@@ -43,9 +43,7 @@ class WishFormAppBar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
                 title,
-                style: AppTextStyles.medium.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: AppTextStyles.titleSmall,
               ),
             ),
             centerTitle: true,
