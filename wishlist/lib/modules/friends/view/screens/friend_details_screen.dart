@@ -144,10 +144,8 @@ class _MutualFriendsTitleAndSectionState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    // Add 3 times the mutual friends to the list to make the list longer
-    final mutualFriends = widget.friendDetails.mutualFriends.toList()
-      ..addAll(widget.friendDetails.mutualFriends.toList())
-      ..addAll(widget.friendDetails.mutualFriends.toList());
+
+    final mutualFriends = widget.friendDetails.mutualFriends.toList();
     final hasMoreFriends = mutualFriends.length > _maxVisibleFriends;
     final nbFriendsNotVisible = mutualFriends.length - _maxVisibleFriends;
 
