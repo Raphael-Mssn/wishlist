@@ -20,7 +20,7 @@ _$WishlistCreateRequestImpl _$$WishlistCreateRequestImplFromJson(
       canOwnerSeeTakenWish: json['can_owner_see_taken_wish'] as bool? ?? false,
       visibility: $enumDecodeNullable(
               _$WishlistVisibilityEnumMap, json['visibility']) ??
-          WishlistVisibility.private,
+          WishlistVisibility.public,
       order: (json['order'] as num).toInt(),
       updatedBy: json['updated_by'] as String,
     );

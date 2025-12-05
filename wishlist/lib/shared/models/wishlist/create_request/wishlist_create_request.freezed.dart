@@ -247,7 +247,7 @@ class _$WishlistCreateRequestImpl extends _WishlistCreateRequest {
       @JsonKey(name: 'end_date') this.endDate,
       @JsonKey(name: 'can_owner_see_taken_wish')
       this.canOwnerSeeTakenWish = false,
-      @JsonKey(name: 'visibility') this.visibility = WishlistVisibility.private,
+      @JsonKey(name: 'visibility') this.visibility = WishlistVisibility.public,
       @JsonKey(name: 'order') required this.order,
       @JsonKey(name: 'updated_by') required this.updatedBy})
       : super._();
