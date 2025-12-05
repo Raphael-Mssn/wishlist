@@ -175,9 +175,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                   Expanded(
                     child: SelectableText(
                       wish.name,
-                      style: AppTextStyles.medium.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTextStyles.titleSmall,
                     ),
                   ),
                   const Gap(8),
