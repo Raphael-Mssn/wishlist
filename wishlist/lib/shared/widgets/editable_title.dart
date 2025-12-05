@@ -51,7 +51,7 @@ class _EditableTitleState extends State<EditableTitle> {
           TextFormField(
             controller: _titleController,
             validator: widget.validator,
-            style: AppTextStyles.medium.copyWith(
+            style: AppTextStyles.titleSmall.copyWith(
               fontWeight: FontWeight.bold,
               color: AppColors.background,
             ),

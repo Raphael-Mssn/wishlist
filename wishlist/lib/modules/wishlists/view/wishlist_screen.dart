@@ -311,9 +311,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                           padding: const EdgeInsets.only(bottom: 4),
                           child: Text(
                             wishlist.name,
-                            style: AppTextStyles.medium.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: AppTextStyles.titleSmall,
                           ),
                         ),
                         centerTitle: true,
