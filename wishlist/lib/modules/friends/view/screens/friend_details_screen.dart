@@ -111,7 +111,7 @@ class _FriendStatsSection extends ConsumerWidget {
           children: [
             Text(
               friendDetails.appUser.profile.pseudo,
-              style: AppTextStyles.medium.copyWith(height: 0),
+              style: AppTextStyles.titleSmall,
             ),
             Text(
               personalStats,

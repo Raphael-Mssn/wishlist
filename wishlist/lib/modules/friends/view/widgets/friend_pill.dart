@@ -35,10 +35,9 @@ class FriendPill extends StatelessWidget {
       child: Text(
         appUser.profile.pseudo,
         overflow: TextOverflow.ellipsis,
-        style: AppTextStyles.small.copyWith(
+        style: AppTextStyles.large.copyWith(
           fontWeight: FontWeight.bold,
           color: textColor,
-          fontSize: AppTextStyles.small.fontSize,
           shadows: [
             textShadow,
           ],
