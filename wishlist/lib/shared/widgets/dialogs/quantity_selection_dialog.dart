@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wishlist/gen/fonts.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/wish_taken_by_user_service.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/validators/number_range_validator.dart';
@@ -167,9 +167,7 @@ class _QuantitySelectionDialogContentState
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
-                  style: const TextStyle(
-                    fontFamily: FontFamily.plusJakartaSans,
-                    fontSize: 20,
+                  style: AppTextStyles.large.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                   decoration: InputDecoration(

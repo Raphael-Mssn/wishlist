@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wishlist/gen/fonts.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 
@@ -69,11 +69,7 @@ class _DialogLayoutState extends State<_DialogLayout> {
       ),
       title: Text(
         widget.title,
-        style: const TextStyle(
-          fontFamily: FontFamily.plusJakartaSans,
-          fontSize: 28,
-          fontWeight: FontWeight.w500,
-        ),
+        style: AppTextStyles.titleSmall,
         textAlign: TextAlign.center,
       ),
       content: widget.content,
