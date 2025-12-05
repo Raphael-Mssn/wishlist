@@ -54,7 +54,7 @@ class WishlistCard extends ConsumerWidget {
                     ),
                   if (!isOwner && !wishlist.canOwnerSeeTakenWish) ...[
                     if (wishlist.visibility == WishlistVisibility.private)
-                      const SizedBox(width: 8),
+                      const Gap(8),
                     _WishlistBadge(
                       icon: Icons.visibility_off,
                       color: color,
