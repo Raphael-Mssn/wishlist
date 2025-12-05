@@ -248,6 +248,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get friendDetailsNoMutualFriends => 'No mutual friends';
 
   @override
+  String get seeAll => 'See all';
+
+  @override
+  String get hide => 'Hide';
+
+  @override
   String get friendDetailsWishlistsTitle => 'Public wishlists';
 
   @override

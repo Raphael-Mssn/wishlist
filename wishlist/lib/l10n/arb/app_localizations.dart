@@ -512,6 +512,18 @@ abstract class AppLocalizations {
   /// **'Aucun ami en commun'**
   String get friendDetailsNoMutualFriends;
 
+  /// No description provided for @seeAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir plus'**
+  String get seeAll;
+
+  /// No description provided for @hide.
+  ///
+  /// In fr, this message translates to:
+  /// **'Masquer'**
+  String get hide;
+
   /// No description provided for @friendDetailsWishlistsTitle.
   ///
   /// In fr, this message translates to:
