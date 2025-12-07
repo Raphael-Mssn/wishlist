@@ -120,7 +120,7 @@ class FriendsScreen extends ConsumerWidget {
                         oldItem.user.user.id == newItem.user.user.id &&
                         oldItem.type == newItem.type,
                     itemSpacing: 8,
-                    padding: const EdgeInsets.only(bottom: 48),
+                    padding: const EdgeInsets.only(bottom: 88),
                     itemBuilder: (context, item, index) {
                       switch (item.type) {
                         case requestedType:
