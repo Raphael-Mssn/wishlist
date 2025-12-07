@@ -22,8 +22,27 @@ class FriendsScreen extends ConsumerWidget {
   List<_FriendItem> _buildCombinedList(FriendsData data) {
     final combinedList = <_FriendItem>[];
 
+    // Sort each category alphabetically by pseudo
+    final sortedRequestedFriends = [...data.requestedFriends]..sort(
+        (a, b) => a.profile.pseudo.toLowerCase().compareTo(
+              b.profile.pseudo.toLowerCase(),
+            ),
+      );
+
+    final sortedPendingFriends = [...data.pendingFriends]..sort(
+        (a, b) => a.profile.pseudo.toLowerCase().compareTo(
+              b.profile.pseudo.toLowerCase(),
+            ),
+      );
+
+    final sortedFriends = [...data.friends]..sort(
+        (a, b) => a.profile.pseudo.toLowerCase().compareTo(
+              b.profile.pseudo.toLowerCase(),
+            ),
+      );
+
     combinedList.addAll(
-      data.requestedFriends.map(
+      sortedRequestedFriends.map(
         (user) => _FriendItem(
           user: user,
           type: requestedType,
@@ -32,7 +51,7 @@ class FriendsScreen extends ConsumerWidget {
     );
 
     combinedList.addAll(
-      data.pendingFriends.map(
+      sortedPendingFriends.map(
         (user) => _FriendItem(
           user: user,
           type: pendingType,
@@ -41,7 +60,7 @@ class FriendsScreen extends ConsumerWidget {
     );
 
     combinedList.addAll(
-      data.friends.map(
+      sortedFriends.map(
         (user) => _FriendItem(
           user: user,
           type: friendType,
