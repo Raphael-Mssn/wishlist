@@ -19,11 +19,21 @@ class FriendsScreen extends ConsumerWidget {
   static const pendingType = 'pending';
   static const friendType = 'friend';
 
+  /// Sorts a list of [AppUser] alphabetically by pseudo (case-insensitive).
+  List<AppUser> _sortByPseudo(Iterable<AppUser> users) {
+    return users.toList()
+      ..sort(
+        (a, b) => a.profile.pseudo.toLowerCase().compareTo(
+              b.profile.pseudo.toLowerCase(),
+            ),
+      );
+  }
+
   List<_FriendItem> _buildCombinedList(FriendsData data) {
     final combinedList = <_FriendItem>[];
 
     combinedList.addAll(
-      data.requestedFriends.map(
+      _sortByPseudo(data.requestedFriends).map(
         (user) => _FriendItem(
           user: user,
           type: requestedType,
@@ -32,7 +42,7 @@ class FriendsScreen extends ConsumerWidget {
     );
 
     combinedList.addAll(
-      data.pendingFriends.map(
+      _sortByPseudo(data.pendingFriends).map(
         (user) => _FriendItem(
           user: user,
           type: pendingType,
@@ -41,7 +51,7 @@ class FriendsScreen extends ConsumerWidget {
     );
 
     combinedList.addAll(
-      data.friends.map(
+      _sortByPseudo(data.friends).map(
         (user) => _FriendItem(
           user: user,
           type: friendType,
@@ -101,7 +111,7 @@ class FriendsScreen extends ConsumerWidget {
                         oldItem.user.user.id == newItem.user.user.id &&
                         oldItem.type == newItem.type,
                     itemSpacing: 8,
-                    padding: const EdgeInsets.only(bottom: 48),
+                    padding: const EdgeInsets.only(bottom: 88),
                     itemBuilder: (context, item, index) {
                       switch (item.type) {
                         case requestedType:
