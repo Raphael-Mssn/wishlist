@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/friendships_realtime_provider.dart';
 import 'package:wishlist/shared/navigation/floating_nav_bar_navigator.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/widgets/notification_badge.dart';
 
 class FloatingNavBar extends ConsumerWidget {
   const FloatingNavBar({
@@ -75,19 +76,7 @@ class _TabIcon extends StatelessWidget {
           Positioned(
             top: -4,
             right: -4,
-            child: AnimatedScale(
-              scale: showBadge ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              child: Container(
-                width: 10,
-                height: 10,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
+            child: NotificationBadge(show: showBadge),
           ),
         ],
       ),
