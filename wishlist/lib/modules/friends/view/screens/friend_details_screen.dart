@@ -56,33 +56,44 @@ class _FriendDetailsScreen extends StatelessWidget {
       appBar: FriendDetailsAppBar(
         friend: friendDetails.appUser,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(30).copyWith(top: 16),
-        child: AppRefreshIndicator(
-          onRefresh: onRefresh,
-          child: CustomScrollView(
-            slivers: [
-              // Stats
-              SliverToBoxAdapter(
+      body: AppRefreshIndicator(
+        onRefresh: onRefresh,
+        child: CustomScrollView(
+          slivers: [
+            const _SliverGap(16),
+            // Stats
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              sliver: SliverToBoxAdapter(
                 child: _FriendStatsSection(friendDetails: friendDetails),
               ),
-              const _SliverGap(24),
+            ),
+            const _SliverGap(24),
 
-              // Mutual friends
-              SliverToBoxAdapter(
+            // Mutual friends
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              sliver: SliverToBoxAdapter(
                 child:
                     _MutualFriendsTitleAndSection(friendDetails: friendDetails),
               ),
-              const _SliverGap(24),
+            ),
+            const _SliverGap(24),
 
-              // Wishlists
-              const SliverToBoxAdapter(
+            // Wishlists
+            const SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              sliver: SliverToBoxAdapter(
                 child: _WishlistsTitle(),
               ),
-              const _SliverGap(12),
-              _WishlistsSection(friendDetails: friendDetails),
-            ],
-          ),
+            ),
+            const _SliverGap(12),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              sliver: _WishlistsSection(friendDetails: friendDetails),
+            ),
+            const _SliverGap(24),
+          ],
         ),
       ),
     );
