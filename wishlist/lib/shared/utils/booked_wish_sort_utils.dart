@@ -35,6 +35,20 @@ class BookedWishSortUtils {
       grouped.putIfAbsent(bookedWish.ownerId, () => []).add(bookedWish);
     }
 
+    // Trier les wishs dans chaque groupe par favoris puis alphabétique
+    for (final entry in grouped.entries) {
+      entry.value.sort((a, b) {
+        // D'abord par favori (favoris en premier)
+        if (a.wish.isFavourite != b.wish.isFavourite) {
+          return a.wish.isFavourite ? -1 : 1;
+        }
+        // Ensuite par ordre alphabétique
+        final nameA = normalizeString(a.wish.name);
+        final nameB = normalizeString(b.wish.name);
+        return nameA.compareTo(nameB);
+      });
+    }
+
     // Trier les groupes
     final sortedEntries = grouped.entries.toList();
 
