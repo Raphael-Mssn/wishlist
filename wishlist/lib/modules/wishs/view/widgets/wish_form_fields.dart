@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
@@ -27,6 +28,7 @@ class WishFormFields extends StatefulWidget {
     required this.linkController,
     required this.descriptionController,
     required this.onImageSelected,
+    required this.wishlistColor,
     this.existingImageUrl,
   });
 
@@ -37,6 +39,7 @@ class WishFormFields extends StatefulWidget {
   final TextEditingController linkController;
   final TextEditingController descriptionController;
   final ValueChanged<File?> onImageSelected;
+  final Color wishlistColor;
   final String? existingImageUrl;
 
   @override
@@ -99,10 +102,7 @@ class WishFormFieldsState extends State<WishFormFields> {
     );
 
     if (image != null) {
-      setState(() {
-        _selectedImage = File(image.path);
-      });
-      widget.onImageSelected(_selectedImage);
+      await _cropImage(image.path);
     }
   }
 
@@ -116,8 +116,45 @@ class WishFormFieldsState extends State<WishFormFields> {
     );
 
     if (image != null) {
+      await _cropImage(image.path);
+    }
+  }
+
+  Future<void> _cropImage(String sourcePath) async {
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: sourcePath,
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: "Recadrer l'image",
+          toolbarColor: widget.wishlistColor,
+          toolbarWidgetColor: AppColors.background,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.original,
+          ],
+          cropFrameColor: widget.wishlistColor,
+          cropGridColor: widget.wishlistColor.withValues(alpha: 0.5),
+          activeControlsWidgetColor: widget.wishlistColor,
+          hideBottomControls: true,
+        ),
+        IOSUiSettings(
+          title: "Recadrer l'image",
+          aspectRatioPresets: [
+            CropAspectRatioPreset.original,
+          ],
+          cancelButtonTitle: 'Annuler',
+          doneButtonTitle: 'Valider',
+          resetAspectRatioEnabled: false,
+          aspectRatioPickerButtonHidden: true,
+          rotateButtonsHidden: true,
+        ),
+      ],
+    );
+
+    if (croppedFile != null) {
       setState(() {
-        _selectedImage = File(image.path);
+        _selectedImage = File(croppedFile.path);
       });
       widget.onImageSelected(_selectedImage);
     }

@@ -343,6 +343,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
                         linkController: _linkInputController,
                         descriptionController: _descriptionInputController,
                         onImageSelected: _onImageSelected,
+                        wishlistColor: wishlistTheme.primaryColor,
                         existingImageUrl: wishImageUrl,
                       ),
                     ),
