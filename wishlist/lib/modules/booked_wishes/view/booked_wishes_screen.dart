@@ -14,8 +14,8 @@ import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/booked_wish_sort_utils.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
 import 'package:wishlist/shared/utils/string_utils.dart';
 import 'package:wishlist/shared/widgets/animated_list_view.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
@@ -98,7 +98,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
     return bookedWishesAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) {
-        ScaffoldMessenger.of(context).showGenericError(isTopSnackBar: true);
+        showGenericError(context, isTopSnackBar: true);
         return const SizedBox.shrink();
       },
       data: (bookedWishes) {
