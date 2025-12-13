@@ -171,11 +171,6 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
         }
 
         if (mounted) {
-          showAppSnackBar(
-            context,
-            context.l10n.createWishSuccess,
-            type: SnackBarType.success,
-          );
           context.pop();
         }
       } catch (e) {
