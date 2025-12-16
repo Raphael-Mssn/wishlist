@@ -60,39 +60,31 @@ class _FriendDetailsScreen extends StatelessWidget {
         onRefresh: onRefresh,
         child: CustomScrollView(
           slivers: [
-            const _SliverGap(16),
-            // Stats
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              sliver: SliverToBoxAdapter(
-                child: _FriendStatsSection(friendDetails: friendDetails),
-              ),
-            ),
-            const _SliverGap(24),
+              padding: const EdgeInsets.fromLTRB(30, 16, 30, 30),
+              sliver: SliverMainAxisGroup(
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      // Stats
+                      _FriendStatsSection(friendDetails: friendDetails),
+                      const Gap(24),
 
-            // Mutual friends
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              sliver: SliverToBoxAdapter(
-                child:
-                    _MutualFriendsTitleAndSection(friendDetails: friendDetails),
-              ),
-            ),
-            const _SliverGap(24),
+                      // Mutual friends
+                      _MutualFriendsTitleAndSection(
+                        friendDetails: friendDetails,
+                      ),
+                      const Gap(24),
 
-            // Wishlists
-            const SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              sliver: SliverToBoxAdapter(
-                child: _WishlistsTitle(),
+                      // Wishlists
+                      const _WishlistsTitle(),
+                      const Gap(12),
+                    ]),
+                  ),
+                  _WishlistsSection(friendDetails: friendDetails),
+                ],
               ),
             ),
-            const _SliverGap(12),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              sliver: _WishlistsSection(friendDetails: friendDetails),
-            ),
-            const _SliverGap(24),
           ],
         ),
       ),
@@ -287,18 +279,6 @@ class _WishlistsSection extends StatelessWidget {
     return WishlistsGrid(
       wishlists: friendDetails.publicWishlists.toList(),
       isReorderable: false,
-    );
-  }
-}
-
-class _SliverGap extends StatelessWidget {
-  const _SliverGap(this.size);
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Gap(size),
     );
   }
 }
