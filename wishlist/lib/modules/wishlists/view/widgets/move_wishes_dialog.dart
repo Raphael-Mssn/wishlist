@@ -113,6 +113,14 @@ class _MoveWishesDialogContent extends ConsumerWidget {
 
         showConfirmButton.value = availableWishlists.isNotEmpty;
 
+        // Présélectionner la wishlist la plus récente
+        if (availableWishlists.isNotEmpty && selectedWishlistId.value == null) {
+          final mostRecent = availableWishlists.reduce(
+            (a, b) => a.createdAt.isAfter(b.createdAt) ? a : b,
+          );
+          selectedWishlistId.value = mostRecent.id;
+        }
+
         if (availableWishlists.isEmpty) {
           return Text(
             l10n.noOtherWishlistsAvailable,
