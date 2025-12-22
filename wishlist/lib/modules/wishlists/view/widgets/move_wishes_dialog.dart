@@ -17,6 +17,7 @@ Future<void> showMoveWishesDialog(
 }) async {
   final selectedWishlistId = ValueNotifier<int?>(null);
   final isConfirmEnabled = ValueNotifier<bool>(false);
+  final showConfirmButton = ValueNotifier<bool>(true);
 
   selectedWishlistId.addListener(() {
     isConfirmEnabled.value = selectedWishlistId.value != null;
@@ -29,9 +30,11 @@ Future<void> showMoveWishesDialog(
       currentWishlistId: currentWishlistId,
       wishCount: wishCount,
       selectedWishlistId: selectedWishlistId,
+      showConfirmButton: showConfirmButton,
     ),
     confirmButtonLabel: context.l10n.moveButton,
     isConfirmEnabled: isConfirmEnabled,
+    showConfirmButton: showConfirmButton,
     onConfirm: () async {
       if (selectedWishlistId.value != null) {
         await onConfirm(selectedWishlistId.value!);
@@ -46,11 +49,13 @@ class _MoveWishesDialogContent extends ConsumerWidget {
     required this.currentWishlistId,
     required this.wishCount,
     required this.selectedWishlistId,
+    required this.showConfirmButton,
   });
 
   final int currentWishlistId;
   final int wishCount;
   final ValueNotifier<int?> selectedWishlistId;
+  final ValueNotifier<bool> showConfirmButton;
 
   Future<void> _showWishlistBottomSheet(
     BuildContext context,
@@ -105,6 +110,8 @@ class _MoveWishesDialogContent extends ConsumerWidget {
       data: (wishlists) {
         final availableWishlists =
             wishlists.where((wl) => wl.id != currentWishlistId).toList();
+
+        showConfirmButton.value = availableWishlists.isNotEmpty;
 
         if (availableWishlists.isEmpty) {
           return Text(
