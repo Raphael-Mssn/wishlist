@@ -157,6 +157,29 @@
       }
     }
   },
+  "moveWishes": "Déplacer des wishs",
+  "moveButton": "Déplacer",
+  "selectWishlist": "Sélectionner une wishlist",
+  "selectDestinationWishlistSingle": "Sélectionne la wishlist vers laquelle tu veux déplacer ce wish :",
+  "selectDestinationWishlistMultiple": "Sélectionne la wishlist vers laquelle tu veux déplacer ces {count} wishs :",
+  "@selectDestinationWishlistMultiple": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noOtherWishlistsAvailable": "Aucune autre wishlist disponible",
+  "closeButton": "Fermer",
+  "errorLoadingWishlists": "Erreur lors du chargement des wishlists",
+  "wishesMoved": "{count, plural, =1{Wish déplacé avec succès !} other{{count} wishs déplacés avec succès !}}",
+  "@wishesMoved": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "avatarOptions": "Modification de l'avatar",
   "chooseFromGallery": "Choisir depuis la galerie",
   "takePhoto": "Prendre une photo",

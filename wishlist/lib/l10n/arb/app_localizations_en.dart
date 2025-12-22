@@ -462,6 +462,44 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get moveWishes => 'Move wishes';
+
+  @override
+  String get moveButton => 'Move';
+
+  @override
+  String get selectWishlist => 'Select a wishlist';
+
+  @override
+  String get selectDestinationWishlistSingle =>
+      'Select the wishlist where you want to move this wish:';
+
+  @override
+  String selectDestinationWishlistMultiple(int count) {
+    return 'Select the wishlist where you want to move these $count wishes:';
+  }
+
+  @override
+  String get noOtherWishlistsAvailable => 'No other wishlists available';
+
+  @override
+  String get closeButton => 'Close';
+
+  @override
+  String get errorLoadingWishlists => 'Error loading wishlists';
+
+  @override
+  String wishesMoved(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count wishes moved successfully!',
+      one: 'Wish moved successfully!',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get avatarOptions => 'Avatar modification';
 
   @override
