@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_realtime_provider.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/move_wishes_dialog.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_content.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_search_bar.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_section.dart';
+import 'package:wishlist/shared/infra/repositories/wish/wish_streams_providers.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
@@ -137,6 +139,43 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     );
   }
 
+  Future<void> _moveSelectedWishs(BuildContext context) async {
+    final count = _selectedWishIds.length;
+    final l10n = context.l10n;
+
+    await showMoveWishesDialog(
+      context,
+      currentWishlistId: widget.wishlistId,
+      wishCount: count,
+      onConfirm: (targetWishlistId) async {
+        try {
+          for (final wishId in _selectedWishIds) {
+            await ref.read(wishMutationsProvider.notifier).moveToWishlist(
+                  wishId: wishId,
+                  targetWishlistId: targetWishlistId,
+                );
+          }
+
+          // Invalider le stream pour forcer un refresh immédiat
+          ref.invalidate(watchWishsFromWishlistProvider(widget.wishlistId));
+
+          if (context.mounted) {
+            _exitSelectionMode();
+            showAppSnackBar(
+              context,
+              l10n.wishesMoved(count),
+              type: SnackBarType.success,
+            );
+          }
+        } catch (e) {
+          if (context.mounted) {
+            showGenericError(context);
+          }
+        }
+      },
+    );
+  }
+
   void onAddWish(BuildContext context, Wishlist wishlist) {
     CreateWishRoute(wishlistId: wishlist.id).push(context);
   }
@@ -241,6 +280,83 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     );
   }
 
+  Widget _buildActionButton({
+    required IconData icon,
+    required VoidCallback onPressed,
+    required Color color,
+    required Color colorDark,
+    bool showBadge = false,
+  }) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Theme(
+          data: Theme.of(context).copyWith(
+            primaryColor: color,
+            primaryColorDark: colorDark,
+          ),
+          child: NavBarAddButton(
+            icon: icon,
+            onPressed: onPressed,
+          ),
+        ),
+        if (showBadge) _buildSelectionBadge(),
+      ],
+    );
+  }
+
+  Widget _buildFloatingActionButtons({
+    required BuildContext context,
+    required ThemeData wishlistTheme,
+    required Wishlist wishlist,
+  }) {
+    return Positioned(
+      bottom: 24,
+      right: 24,
+      child: SizedBox(
+        height: 240,
+        child: Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.bottomCenter,
+          children: [
+            // Bouton Déplacer
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOut,
+              bottom: _isSelectionMode ? 80 : 0,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: _isSelectionMode ? 1 : 0,
+                child: IgnorePointer(
+                  ignoring: !_isSelectionMode,
+                  child: _buildActionButton(
+                    icon: Icons.drive_file_move,
+                    onPressed: () => _moveSelectedWishs(context),
+                    color: wishlistTheme.primaryColor,
+                    colorDark: wishlistTheme.primaryColorDark,
+                    showBadge: _isSelectionMode,
+                  ),
+                ),
+              ),
+            ),
+            // Bouton principal (+ ou Supprimer)
+            _buildActionButton(
+              icon: _isSelectionMode ? Icons.delete : Icons.add,
+              onPressed: _isSelectionMode
+                  ? () => _deleteSelectedWishs(context)
+                  : () => onAddWish(context, wishlist),
+              color: _isSelectionMode ? Colors.red : wishlistTheme.primaryColor,
+              colorDark: _isSelectionMode
+                  ? AppColors.darken(Colors.red)
+                  : wishlistTheme.primaryColorDark,
+              showBadge: _isSelectionMode,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> refreshWishlistScreen() async {
     ref.invalidate(wishlistScreenDataRealtimeProvider(widget.wishlistId));
 
@@ -333,50 +449,10 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                       isMyWishlist: isMyWishlist,
                     ),
                     if (isMyWishlist)
-                      Positioned(
-                        bottom: 24,
-                        right: 24,
-                        child: SizedBox(
-                          width: MediaQuery.sizeOf(context).width,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 300),
-                              transitionBuilder: (child, animation) {
-                                return ScaleTransition(
-                                  scale: animation,
-                                  child: child,
-                                );
-                              },
-                              child: _isSelectionMode
-                                  ? Stack(
-                                      key: const ValueKey('delete'),
-                                      clipBehavior: Clip.none,
-                                      children: [
-                                        Theme(
-                                          data: Theme.of(context).copyWith(
-                                            primaryColor: Colors.red,
-                                            primaryColorDark:
-                                                AppColors.darken(Colors.red),
-                                          ),
-                                          child: NavBarAddButton(
-                                            icon: Icons.delete,
-                                            onPressed: () =>
-                                                _deleteSelectedWishs(context),
-                                          ),
-                                        ),
-                                        _buildSelectionBadge(),
-                                      ],
-                                    )
-                                  : NavBarAddButton(
-                                      key: const ValueKey('add'),
-                                      icon: Icons.add,
-                                      onPressed: () =>
-                                          onAddWish(context, wishlist),
-                                    ),
-                            ),
-                          ),
-                        ),
+                      _buildFloatingActionButtons(
+                        context: context,
+                        wishlistTheme: wishlistTheme,
+                        wishlist: wishlist,
                       ),
                   ],
                 ),
