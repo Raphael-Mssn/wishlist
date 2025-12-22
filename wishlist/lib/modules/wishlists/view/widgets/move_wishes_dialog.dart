@@ -61,6 +61,9 @@ class _MoveWishesDialogContent extends ConsumerWidget {
     BuildContext context,
     List<Wishlist> wishlists,
   ) async {
+    final sortedWishlists = List<Wishlist>.from(wishlists)
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
     await showAppBottomSheet(
       context,
       expandToFillHeight: false,
@@ -82,13 +85,14 @@ class _MoveWishesDialogContent extends ConsumerWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 padding: const EdgeInsets.only(bottom: 16),
-                itemCount: wishlists.length,
+                itemCount: sortedWishlists.length,
                 itemBuilder: (context, index) {
                   return _WishlistListTile(
-                    wishlist: wishlists[index],
-                    isSelected: selectedWishlistId.value == wishlists[index].id,
+                    wishlist: sortedWishlists[index],
+                    isSelected:
+                        selectedWishlistId.value == sortedWishlists[index].id,
                     onTap: () {
-                      selectedWishlistId.value = wishlists[index].id;
+                      selectedWishlistId.value = sortedWishlists[index].id;
                       Navigator.of(context).pop();
                     },
                   );
