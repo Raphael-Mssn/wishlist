@@ -932,17 +932,11 @@ abstract class AppLocalizations {
   /// **'Sélectionner une wishlist'**
   String get selectWishlist;
 
-  /// No description provided for @selectDestinationWishlistSingle.
+  /// No description provided for @selectDestinationWishlist.
   ///
   /// In fr, this message translates to:
-  /// **'Sélectionne la wishlist vers laquelle tu veux déplacer ce wish :'**
-  String get selectDestinationWishlistSingle;
-
-  /// No description provided for @selectDestinationWishlistMultiple.
-  ///
-  /// In fr, this message translates to:
-  /// **'Sélectionne la wishlist vers laquelle tu veux déplacer ces {count} wishs :'**
-  String selectDestinationWishlistMultiple(int count);
+  /// **'Sélectionne la wishlist vers laquelle tu veux déplacer {count, plural, =1{ce wish} other{ces {count} wishs}} :'**
+  String selectDestinationWishlist(int count);
 
   /// No description provided for @noOtherWishlistsAvailable.
   ///

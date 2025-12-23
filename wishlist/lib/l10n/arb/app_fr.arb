@@ -160,9 +160,8 @@
   "moveWishes": "Déplacer des wishs",
   "moveButton": "Déplacer",
   "selectWishlist": "Sélectionner une wishlist",
-  "selectDestinationWishlistSingle": "Sélectionne la wishlist vers laquelle tu veux déplacer ce wish :",
-  "selectDestinationWishlistMultiple": "Sélectionne la wishlist vers laquelle tu veux déplacer ces {count} wishs :",
-  "@selectDestinationWishlistMultiple": {
+  "selectDestinationWishlist": "Sélectionne la wishlist vers laquelle tu veux déplacer {count, plural, =1{ce wish} other{ces {count} wishs}} :",
+  "@selectDestinationWishlist": {
     "placeholders": {
       "count": {
         "type": "int"

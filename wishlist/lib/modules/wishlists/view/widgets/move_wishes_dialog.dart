@@ -138,9 +138,7 @@ class _MoveWishesDialogContent extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              wishCount == 1
-                  ? l10n.selectDestinationWishlistSingle
-                  : l10n.selectDestinationWishlistMultiple(wishCount),
+              l10n.selectDestinationWishlist(wishCount),
               style: AppTextStyles.small.copyWith(
                 color: AppColors.makara,
               ),

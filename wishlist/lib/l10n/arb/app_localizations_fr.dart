@@ -472,12 +472,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get selectWishlist => 'Sélectionner une wishlist';
 
   @override
-  String get selectDestinationWishlistSingle =>
-      'Sélectionne la wishlist vers laquelle tu veux déplacer ce wish :';
-
-  @override
-  String selectDestinationWishlistMultiple(int count) {
-    return 'Sélectionne la wishlist vers laquelle tu veux déplacer ces $count wishs :';
+  String selectDestinationWishlist(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ces $count wishs',
+      one: 'ce wish',
+    );
+    return 'Sélectionne la wishlist vers laquelle tu veux déplacer $_temp0 :';
   }
 
   @override
