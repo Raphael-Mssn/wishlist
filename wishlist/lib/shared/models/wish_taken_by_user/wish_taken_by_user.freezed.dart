@@ -29,7 +29,12 @@ mixin _$WishTakenByUser {
   @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
-  DateTime get updatedAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt =>
+      throw _privateConstructorUsedError; // Données du profil (chargées via un join)
+  @JsonKey(name: 'user_pseudo', includeToJson: false)
+  String? get userPseudo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'user_avatar_url', includeToJson: false)
+  String? get userAvatarUrl => throw _privateConstructorUsedError;
 
   /// Serializes this WishTakenByUser to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,7 +57,10 @@ abstract class $WishTakenByUserCopyWith<$Res> {
       @JsonKey(name: 'user_id') String userId,
       @JsonKey(name: 'quantity') int quantity,
       @JsonKey(name: 'created_at') DateTime createdAt,
-      @JsonKey(name: 'updated_at') DateTime updatedAt});
+      @JsonKey(name: 'updated_at') DateTime updatedAt,
+      @JsonKey(name: 'user_pseudo', includeToJson: false) String? userPseudo,
+      @JsonKey(name: 'user_avatar_url', includeToJson: false)
+      String? userAvatarUrl});
 }
 
 /// @nodoc
@@ -75,6 +83,8 @@ class _$WishTakenByUserCopyWithImpl<$Res, $Val extends WishTakenByUser>
     Object? quantity = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? userPseudo = freezed,
+    Object? userAvatarUrl = freezed,
   }) {
     return _then(_value.copyWith(
       wishId: null == wishId
@@ -97,6 +107,14 @@ class _$WishTakenByUserCopyWithImpl<$Res, $Val extends WishTakenByUser>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      userPseudo: freezed == userPseudo
+          ? _value.userPseudo
+          : userPseudo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userAvatarUrl: freezed == userAvatarUrl
+          ? _value.userAvatarUrl
+          : userAvatarUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -114,7 +132,10 @@ abstract class _$$WishTakenByUserImplCopyWith<$Res>
       @JsonKey(name: 'user_id') String userId,
       @JsonKey(name: 'quantity') int quantity,
       @JsonKey(name: 'created_at') DateTime createdAt,
-      @JsonKey(name: 'updated_at') DateTime updatedAt});
+      @JsonKey(name: 'updated_at') DateTime updatedAt,
+      @JsonKey(name: 'user_pseudo', includeToJson: false) String? userPseudo,
+      @JsonKey(name: 'user_avatar_url', includeToJson: false)
+      String? userAvatarUrl});
 }
 
 /// @nodoc
@@ -135,6 +156,8 @@ class __$$WishTakenByUserImplCopyWithImpl<$Res>
     Object? quantity = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? userPseudo = freezed,
+    Object? userAvatarUrl = freezed,
   }) {
     return _then(_$WishTakenByUserImpl(
       wishId: null == wishId
@@ -157,6 +180,14 @@ class __$$WishTakenByUserImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      userPseudo: freezed == userPseudo
+          ? _value.userPseudo
+          : userPseudo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userAvatarUrl: freezed == userAvatarUrl
+          ? _value.userAvatarUrl
+          : userAvatarUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -169,7 +200,10 @@ class _$WishTakenByUserImpl extends _WishTakenByUser {
       @JsonKey(name: 'user_id') required this.userId,
       @JsonKey(name: 'quantity') required this.quantity,
       @JsonKey(name: 'created_at') required this.createdAt,
-      @JsonKey(name: 'updated_at') required this.updatedAt})
+      @JsonKey(name: 'updated_at') required this.updatedAt,
+      @JsonKey(name: 'user_pseudo', includeToJson: false) this.userPseudo,
+      @JsonKey(name: 'user_avatar_url', includeToJson: false)
+      this.userAvatarUrl})
       : super._();
 
   factory _$WishTakenByUserImpl.fromJson(Map<String, dynamic> json) =>
@@ -190,10 +224,17 @@ class _$WishTakenByUserImpl extends _WishTakenByUser {
   @override
   @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
+// Données du profil (chargées via un join)
+  @override
+  @JsonKey(name: 'user_pseudo', includeToJson: false)
+  final String? userPseudo;
+  @override
+  @JsonKey(name: 'user_avatar_url', includeToJson: false)
+  final String? userAvatarUrl;
 
   @override
   String toString() {
-    return 'WishTakenByUser(wishId: $wishId, userId: $userId, quantity: $quantity, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'WishTakenByUser(wishId: $wishId, userId: $userId, quantity: $quantity, createdAt: $createdAt, updatedAt: $updatedAt, userPseudo: $userPseudo, userAvatarUrl: $userAvatarUrl)';
   }
 
   @override
@@ -208,13 +249,17 @@ class _$WishTakenByUserImpl extends _WishTakenByUser {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.userPseudo, userPseudo) ||
+                other.userPseudo == userPseudo) &&
+            (identical(other.userAvatarUrl, userAvatarUrl) ||
+                other.userAvatarUrl == userAvatarUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, wishId, userId, quantity, createdAt, updatedAt);
+  int get hashCode => Object.hash(runtimeType, wishId, userId, quantity,
+      createdAt, updatedAt, userPseudo, userAvatarUrl);
 
   /// Create a copy of WishTakenByUser
   /// with the given fields replaced by the non-null parameter values.
@@ -235,12 +280,15 @@ class _$WishTakenByUserImpl extends _WishTakenByUser {
 
 abstract class _WishTakenByUser extends WishTakenByUser {
   const factory _WishTakenByUser(
-          {@JsonKey(name: 'wish_id') required final int wishId,
-          @JsonKey(name: 'user_id') required final String userId,
-          @JsonKey(name: 'quantity') required final int quantity,
-          @JsonKey(name: 'created_at') required final DateTime createdAt,
-          @JsonKey(name: 'updated_at') required final DateTime updatedAt}) =
-      _$WishTakenByUserImpl;
+      {@JsonKey(name: 'wish_id') required final int wishId,
+      @JsonKey(name: 'user_id') required final String userId,
+      @JsonKey(name: 'quantity') required final int quantity,
+      @JsonKey(name: 'created_at') required final DateTime createdAt,
+      @JsonKey(name: 'updated_at') required final DateTime updatedAt,
+      @JsonKey(name: 'user_pseudo', includeToJson: false)
+      final String? userPseudo,
+      @JsonKey(name: 'user_avatar_url', includeToJson: false)
+      final String? userAvatarUrl}) = _$WishTakenByUserImpl;
   const _WishTakenByUser._() : super._();
 
   factory _WishTakenByUser.fromJson(Map<String, dynamic> json) =
@@ -260,7 +308,13 @@ abstract class _WishTakenByUser extends WishTakenByUser {
   DateTime get createdAt;
   @override
   @JsonKey(name: 'updated_at')
-  DateTime get updatedAt;
+  DateTime get updatedAt; // Données du profil (chargées via un join)
+  @override
+  @JsonKey(name: 'user_pseudo', includeToJson: false)
+  String? get userPseudo;
+  @override
+  @JsonKey(name: 'user_avatar_url', includeToJson: false)
+  String? get userAvatarUrl;
 
   /// Create a copy of WishTakenByUser
   /// with the given fields replaced by the non-null parameter values.
