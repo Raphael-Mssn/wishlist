@@ -8,6 +8,7 @@ import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/pill.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
+import 'package:wishlist/shared/widgets/avatar/stacked_avatars.dart';
 import 'package:wishlist/shared/widgets/wish_image.dart';
 
 class WishCard extends ConsumerWidget {
@@ -22,6 +23,7 @@ class WishCard extends ConsumerWidget {
     this.quantityOverride,
     this.onLongPress,
     this.isSelected = false,
+    this.showAvatars = true,
   });
 
   static const double _cardPadding = 12;
@@ -36,6 +38,7 @@ class WishCard extends ConsumerWidget {
   final int? quantityOverride;
   final VoidCallback? onLongPress;
   final bool isSelected;
+  final bool showAvatars;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,6 +59,9 @@ class WishCard extends ConsumerWidget {
     final hasPrice = price != null;
     final shouldDisplayFavouriteIcon =
         isMyWishlist || (!isMyWishlist && wish.isFavourite);
+    final shouldDisplayAvatars = showAvatars &&
+        cardType == WishlistStatsCardType.booked &&
+        wish.takenByUser.isNotEmpty;
 
     final borderRadius = BorderRadius.circular(24);
 
@@ -120,22 +126,29 @@ class WishCard extends ConsumerWidget {
                           padding: EdgeInsets.only(
                             right: shouldDisplayFavouriteIcon ? 12 : 0,
                           ),
-                          child: Text(
-                            wish.name,
-                            maxLines: 2,
-                            textHeightBehavior: const TextHeightBehavior(
-                              applyHeightToFirstAscent: false,
-                              applyHeightToLastDescent: false,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.small.copyWith(
-                              color: AppColors.darkGrey,
-                              fontWeight: FontWeight.w600,
-                              height: 1.1,
+                          child: Transform.translate(
+                            offset: shouldDisplayAvatars
+                                ? const Offset(0, -6)
+                                : Offset.zero,
+                            child: Text(
+                              wish.name,
+                              maxLines: 2,
+                              textHeightBehavior: const TextHeightBehavior(
+                                applyHeightToFirstAscent: false,
+                                applyHeightToLastDescent: false,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.small.copyWith(
+                                color: AppColors.darkGrey,
+                                fontWeight: FontWeight.w600,
+                                height: 1.1,
+                              ),
                             ),
                           ),
                         ),
-                        if (hasSubtitle || hasPrice) ...[
+                        if (hasSubtitle ||
+                            hasPrice ||
+                            shouldDisplayAvatars) ...[
                           const Gap(2),
                           if (hasSubtitle)
                             Row(
@@ -182,7 +195,9 @@ class WishCard extends ConsumerWidget {
                                   ),
                                 ),
                               ),
-                            ),
+                            )
+                          else if (shouldDisplayAvatars)
+                            const SizedBox(height: 14),
                         ],
                       ],
                     ),
@@ -190,6 +205,14 @@ class WishCard extends ConsumerWidget {
                 ],
               ),
             ),
+            if (shouldDisplayAvatars)
+              Positioned(
+                left: cardPadding + 80,
+                top: cardPadding + 36,
+                child: _WishReserversAvatars(
+                  wish: wish,
+                ),
+              ),
             if (isSelected)
               Positioned(
                 top: 8,
@@ -264,6 +287,41 @@ class _SelectionCheckIcon extends StatelessWidget {
         Icons.check,
         color: AppColors.background,
         size: 16,
+      ),
+    );
+  }
+}
+
+/// Widget qui affiche les avatars des utilisateurs qui ont réservé ce wish
+class _WishReserversAvatars extends StatelessWidget {
+  const _WishReserversAvatars({
+    required this.wish,
+  });
+
+  final Wish wish;
+
+  @override
+  Widget build(BuildContext context) {
+    final userNames = wish.takenByUser
+        .map((t) => t.userPseudo ?? 'Utilisateur inconnu')
+        .toList();
+    final avatarUrls = wish.takenByUser.map((t) => t.userAvatarUrl).toList();
+
+    if (avatarUrls.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final tooltipMessage = userNames.length == 1
+        ? userNames.first
+        : userNames.map((name) => '• $name').join('\n');
+
+    return Tooltip(
+      message: tooltipMessage,
+      triggerMode: TooltipTriggerMode.tap,
+      showDuration: const Duration(seconds: 2),
+      waitDuration: Duration.zero,
+      child: StackedAvatars(
+        avatarUrls: avatarUrls,
       ),
     );
   }
