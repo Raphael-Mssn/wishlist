@@ -54,6 +54,25 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
           ),
           callback: (payload) => _handleWishChange(wishlistId, controller),
         )
+        // Écouter aussi les UPDATE sans filtre pour détecter les wishs
+        // qui sont déplacés vers/depuis cette wishlist
+        .onPostgresChanges(
+          event: PostgresChangeEvent.update,
+          schema: 'public',
+          table: _wishsTableName,
+          callback: (payload) {
+            // Recharger uniquement si le wish concerné nous intéresse
+            final oldRecord = payload.oldRecord;
+            final newRecord = payload.newRecord;
+            final oldWishlistId = oldRecord?['wishlist_id'] as int?;
+            final newWishlistId = newRecord?['wishlist_id'] as int?;
+
+            // Si le wish est déplacé depuis ou vers cette wishlist
+            if (oldWishlistId == wishlistId || newWishlistId == wishlistId) {
+              _handleWishChange(wishlistId, controller);
+            }
+          },
+        )
         // Écouter aussi les changements sur wish_taken_by_user
         // pour mettre à jour les réservations en temps réel
         .onPostgresChanges(

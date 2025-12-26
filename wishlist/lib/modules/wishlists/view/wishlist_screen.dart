@@ -156,9 +156,6 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                 );
           }
 
-          // Invalider le stream pour forcer un refresh immédiat
-          ref.invalidate(watchWishsFromWishlistProvider(widget.wishlistId));
-
           if (context.mounted) {
             _exitSelectionMode();
             showAppSnackBar(
