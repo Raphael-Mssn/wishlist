@@ -14,6 +14,8 @@ _$WishTakenByUserImpl _$$WishTakenByUserImplFromJson(
       quantity: (json['quantity'] as num).toInt(),
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
+      userPseudo: json['user_pseudo'] as String?,
+      userAvatarUrl: json['user_avatar_url'] as String?,
     );
 
 Map<String, dynamic> _$$WishTakenByUserImplToJson(
