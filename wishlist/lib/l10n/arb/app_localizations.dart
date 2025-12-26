@@ -914,6 +914,54 @@ abstract class AppLocalizations {
   /// **'{count} wishs supprimés avec succès !'**
   String wishesDeleted(int count);
 
+  /// No description provided for @moveWishes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déplacer des wishs'**
+  String get moveWishes;
+
+  /// No description provided for @moveButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déplacer'**
+  String get moveButton;
+
+  /// No description provided for @selectWishlist.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionner une wishlist'**
+  String get selectWishlist;
+
+  /// No description provided for @selectDestinationWishlist.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionne la wishlist vers laquelle tu veux déplacer {count, plural, =1{ce wish} other{ces {count} wishs}} :'**
+  String selectDestinationWishlist(int count);
+
+  /// No description provided for @noOtherWishlistsAvailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune autre wishlist disponible'**
+  String get noOtherWishlistsAvailable;
+
+  /// No description provided for @closeButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fermer'**
+  String get closeButton;
+
+  /// No description provided for @errorLoadingWishlists.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur lors du chargement des wishlists'**
+  String get errorLoadingWishlists;
+
+  /// No description provided for @wishesMoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count, plural, =1{Wish déplacé avec succès !} other{{count} wishs déplacés avec succès !}}'**
+  String wishesMoved(int count);
+
   /// No description provided for @avatarOptions.
   ///
   /// In fr, this message translates to:

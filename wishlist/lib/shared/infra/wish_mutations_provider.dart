@@ -72,4 +72,18 @@ class WishMutations extends _$WishMutations with Mutation<void> {
       },
     );
   }
+
+  Future<void> moveToWishlist({
+    required int wishId,
+    required int targetWishlistId,
+  }) async {
+    await mutate(
+      () async {
+        final service = ref.read(wishServiceProvider);
+        final wish = await service.getWishById(wishId);
+        final updatedWish = wish.copyWith(wishlistId: targetWishlistId);
+        await service.updateWish(updatedWish);
+      },
+    );
+  }
 }

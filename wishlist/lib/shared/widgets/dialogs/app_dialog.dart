@@ -15,6 +15,7 @@ class _DialogLayout extends StatefulWidget {
     this.onCancel,
     this.onConfirm,
     this.isConfirmEnabled,
+    this.showConfirmButton,
   });
 
   final String title;
@@ -23,6 +24,7 @@ class _DialogLayout extends StatefulWidget {
   final void Function()? onCancel;
   final Future<void> Function()? onConfirm;
   final ValueListenable<bool>? isConfirmEnabled;
+  final ValueListenable<bool>? showConfirmButton;
 
   @override
   State<_DialogLayout> createState() => _DialogLayoutState();
@@ -89,7 +91,38 @@ class _DialogLayoutState extends State<_DialogLayout> {
                 },
               ),
             if (onConfirm != null)
-              if (widget.isConfirmEnabled == null)
+              if (widget.showConfirmButton != null)
+                ValueListenableBuilder<bool>(
+                  valueListenable: widget.showConfirmButton!,
+                  builder: (context, show, _) {
+                    if (!show) {
+                      return const SizedBox.shrink();
+                    }
+
+                    if (widget.isConfirmEnabled == null) {
+                      return PrimaryButton(
+                        text: widget.confirmLabel,
+                        onPressed: confirmHandler(),
+                        style: BaseButtonStyle.medium,
+                        isLoading: _isLoading,
+                      );
+                    }
+
+                    return ValueListenableBuilder<bool>(
+                      valueListenable: widget.isConfirmEnabled!,
+                      builder: (context, enabled, child) {
+                        return PrimaryButton(
+                          text: widget.confirmLabel,
+                          onPressed:
+                              enabled && !_isLoading ? confirmHandler() : null,
+                          style: BaseButtonStyle.medium,
+                          isLoading: _isLoading,
+                        );
+                      },
+                    );
+                  },
+                )
+              else if (widget.isConfirmEnabled == null)
                 PrimaryButton(
                   text: widget.confirmLabel,
                   onPressed: confirmHandler(),
@@ -125,6 +158,7 @@ Future<void> showAppDialog(
   Future<void> Function()? onConfirm,
   void Function()? onCancel,
   ValueListenable<bool>? isConfirmEnabled,
+  ValueListenable<bool>? showConfirmButton,
 }) async {
   final l10n = context.l10n;
   final theme = Theme.of(context);
@@ -169,6 +203,7 @@ Future<void> showAppDialog(
                         onConfirm: onConfirm,
                         onCancel: onCancel,
                         isConfirmEnabled: isConfirmEnabled,
+                        showConfirmButton: showConfirmButton,
                       ),
                     ),
                   ),
