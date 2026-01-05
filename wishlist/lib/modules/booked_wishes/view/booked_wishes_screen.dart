@@ -14,6 +14,7 @@ import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/widgets/app_scaffold.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/booked_wish_sort_utils.dart';
 import 'package:wishlist/shared/utils/string_utils.dart';
@@ -30,7 +31,6 @@ class BookedWishesScreen extends ConsumerStatefulWidget {
 class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
   static const double _contentPadding = 16;
   static const double _itemSpacing = 16;
-  static const double _listBottomPadding = 110;
   static const EdgeInsets _headerPadding =
       EdgeInsets.fromLTRB(_contentPadding, _contentPadding, _contentPadding, 8);
   static const int _estimatedMaxItems = 10;
@@ -263,9 +263,9 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
 
     return AnimatedListView<List<BookedWishWithDetails>>(
       items: groupsList,
-      padding: const EdgeInsets.only(
+      padding: EdgeInsets.only(
         top: 140,
-        bottom: _listBottomPadding,
+        bottom: NavBarPadding.of(context),
       ),
       itemSpacing: _itemSpacing,
       estimatedMaxItems: _estimatedMaxItems,
