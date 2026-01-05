@@ -37,19 +37,24 @@ abstract class BaseButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor(context),
-          disabledBackgroundColor: backgroundColor(context),
-          disabledForegroundColor: textColor(context),
+          disabledBackgroundColor:
+              isLoading ? backgroundColor(context) : AppColors.gainsboro,
+          disabledForegroundColor:
+              isLoading ? textColor(context) : AppColors.makara,
           padding: style.padding,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           elevation: 2,
         ),
-        onPressed: isLoading
+        onPressed: onPressed == null || isLoading
             ? null
             : () {
-                FocusScope.of(context).unfocus();
-                onPressed?.call();
+                final callback = onPressed;
+                if (callback != null) {
+                  FocusScope.of(context).unfocus();
+                  callback();
+                }
               },
         child: IntrinsicHeight(
           child: Stack(

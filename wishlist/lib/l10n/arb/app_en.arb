@@ -157,6 +157,28 @@
       }
     }
   },
+  "moveWishes": "Move wishes",
+  "moveButton": "Move",
+  "selectWishlist": "Select a wishlist",
+  "selectDestinationWishlist": "Select the wishlist where you want to move {count, plural, =1{this wish} other{these {count} wishes}}:",
+  "@selectDestinationWishlist": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noOtherWishlistsAvailable": "No other wishlists available",
+  "closeButton": "Close",
+  "errorLoadingWishlists": "Error loading wishlists",
+  "wishesMoved": "{count, plural, =1{Wish moved successfully!} other{{count} wishes moved successfully!}}",
+  "@wishesMoved": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "avatarOptions": "Avatar modification",
   "chooseFromGallery": "Choose from gallery",
   "takePhoto": "Take a photo",
