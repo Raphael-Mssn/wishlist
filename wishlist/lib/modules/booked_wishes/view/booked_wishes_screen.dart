@@ -325,6 +325,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
                 cardType: WishlistStatsCardType.booked,
                 subtitle: bookedWish.wishlistName,
                 quantityOverride: bookedWish.bookedQuantity,
+                showAvatars: false,
               );
             }).toList(),
           ),
