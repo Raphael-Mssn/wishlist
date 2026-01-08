@@ -8,6 +8,7 @@ import 'package:wishlist/modules/friends/view/widgets/user_pill.dart';
 import 'package:wishlist/shared/infra/friendships_realtime_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
+import 'package:wishlist/shared/theme/widgets/app_scaffold.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/animated_list_view.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
@@ -101,6 +102,7 @@ class FriendsScreen extends ConsumerWidget {
             )
           : PageLayout(
               title: l10n.fiendsScreenTitle,
+              padding: EdgeInsets.zero,
               onRefresh: refreshFriends,
               child: Builder(
                 builder: (context) {
@@ -111,7 +113,9 @@ class FriendsScreen extends ConsumerWidget {
                         oldItem.user.user.id == newItem.user.user.id &&
                         oldItem.type == newItem.type,
                     itemSpacing: 8,
-                    padding: const EdgeInsets.only(bottom: 88),
+                    padding: const EdgeInsets.all(20).copyWith(
+                      bottom: NavBarPadding.of(context),
+                    ),
                     itemBuilder: (context, item, index) {
                       switch (item.type) {
                         case requestedType:

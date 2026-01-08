@@ -4,6 +4,7 @@ import 'package:wishlist/gen/assets.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/wishlists_realtime_provider.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
+import 'package:wishlist/shared/theme/widgets/app_scaffold.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/dialogs/create_dialog.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
@@ -44,13 +45,15 @@ class HomeScreen extends ConsumerWidget {
               appBarTitle: l10n.wishlistsScreenTitle,
             )
           : PageLayout(
-              padding: const EdgeInsets.all(20).copyWith(bottom: 0),
+              padding: EdgeInsets.zero,
               title: l10n.wishlistsScreenTitle,
               onRefresh: refreshWishlists,
               child: WishlistsGrid(
                 wishlists: data,
                 isReorderable: true,
-                padding: const EdgeInsets.only(bottom: 96),
+                padding: const EdgeInsets.all(20).copyWith(
+                  bottom: NavBarPadding.of(context),
+                ),
               ),
             ),
     );

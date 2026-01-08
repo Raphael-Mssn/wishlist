@@ -1,6 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:wishlist/shared/theme/spacing.dart';
+
+/// InheritedWidget pour exposer le padding du contenu aux écrans enfants
+class NavBarPadding extends InheritedWidget {
+  const NavBarPadding({
+    super.key,
+    required this.contentPadding,
+    required super.child,
+  });
+
+  /// Padding à appliquer en bas des listes pour éviter la nav bar
+  final double contentPadding;
+
+  static double of(BuildContext context) {
+    final widget = context.dependOnInheritedWidgetOfExactType<NavBarPadding>();
+    // Fallback sur la constante si pas dans un AppScaffold
+    return widget?.contentPadding ?? AppSpacing.navBarContentPadding;
+  }
+
+  @override
+  bool updateShouldNotify(NavBarPadding oldWidget) {
+    return contentPadding != oldWidget.contentPadding;
+  }
+}
 
 class AppScaffold extends ConsumerWidget {
   const AppScaffold({
@@ -16,29 +40,42 @@ class AppScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bottomSafeArea = MediaQuery.of(context).viewPadding.bottom;
+    final bottomPadding = MediaQuery.of(context).systemGestureInsets.bottom;
+
+    final difference = bottomPadding - bottomSafeArea;
+
+    final navBarBottomPosition =
+        bottomSafeArea - difference + AppSpacing.navBarBottomOffset;
+    final contentPadding =
+        AppSpacing.navBarContentPadding + navBarBottomPosition;
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: <Widget>[
-          body,
-          Positioned(
-            bottom: 24,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-              ),
-              width: MediaQuery.sizeOf(context).width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(child: bottomNavigationBar),
-                  const Gap(32),
-                  floatingActionButton,
-                ],
+      resizeToAvoidBottomInset: true,
+      body: NavBarPadding(
+        contentPadding: contentPadding,
+        child: Stack(
+          children: <Widget>[
+            body,
+            Positioned(
+              bottom: navBarBottomPosition,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                ),
+                width: MediaQuery.sizeOf(context).width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(child: bottomNavigationBar),
+                    const Gap(32),
+                    floatingActionButton,
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
