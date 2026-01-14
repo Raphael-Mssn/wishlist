@@ -80,10 +80,9 @@ class SettingsScreen extends ConsumerWidget {
 
     return PageLayout(
       title: l10n.settingsScreenTitle,
-      child: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 80),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

@@ -41,14 +41,16 @@ class AppScaffold extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bottomSafeArea = MediaQuery.of(context).viewPadding.bottom;
-    final bottomPadding = MediaQuery.of(context).systemGestureInsets.bottom;
+    final gestureInsets = MediaQuery.of(context).systemGestureInsets.bottom;
 
-    final difference = bottomPadding - bottomSafeArea;
+    // Détecte Android avec 3 boutons de navigation
+    // (gestureInsets == bottomSafeArea quand il y a des boutons système)
+    final hasSystemNavButtons =
+        gestureInsets == bottomSafeArea && bottomSafeArea > 0;
+    final navBarBottomOffset = hasSystemNavButtons ? 8.0 : 0.0;
 
-    final navBarBottomPosition =
-        bottomSafeArea - difference + AppSpacing.navBarBottomOffset;
-    final contentPadding =
-        AppSpacing.navBarContentPadding + navBarBottomPosition;
+    final navBarBottomPosition = bottomSafeArea + navBarBottomOffset;
+    final contentPadding = AppSpacing.navBarHeight + navBarBottomPosition;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,

@@ -164,7 +164,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
           boxShadow: [consultBoxShadow],
         ),
         child: Container(
-          padding: const EdgeInsets.all(16).copyWith(bottom: 32),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
