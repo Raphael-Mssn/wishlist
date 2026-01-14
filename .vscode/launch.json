@@ -80,5 +80,16 @@
             "--dart-define=APP_NAME_PREFIX="
           ]
         },
+        {
+          "name": "Update Goldens",
+          "type": "dart",
+          "request": "launch",
+          "cwd": "wishlist",
+          "args": ["--update-goldens"],
+          "codeLens": {
+            "for": ["run-test", "run-test-file"],
+            "title": "Update Goldens"
+          }
+        }
     ]
 }
