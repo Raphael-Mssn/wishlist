@@ -30,13 +30,15 @@ class FriendDetailsScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      body: friendDetails.when(
-        data: (friendDetails) => _FriendDetailsScreen(
-          friendDetails: friendDetails,
-          onRefresh: refreshFriendDetails,
+      body: SafeArea(
+        child: friendDetails.when(
+          data: (friendDetails) => _FriendDetailsScreen(
+            friendDetails: friendDetails,
+            onRefresh: refreshFriendDetails,
+          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => const SizedBox.shrink(),
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => const SizedBox.shrink(),
       ),
     );
   }
@@ -61,7 +63,7 @@ class _FriendDetailsScreen extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(30, 16, 30, 30),
+              padding: const EdgeInsets.fromLTRB(30, 16, 30, 16),
               sliver: SliverMainAxisGroup(
                 slivers: [
                   SliverList(
