@@ -1,5 +1,7 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wishlist/shared/infra/user_service.dart';
 
 import 'fake_data.dart';
 
@@ -13,8 +15,10 @@ class MockGoTrueClient extends Mock implements GoTrueClient {}
 
 class MockUser extends Mock implements User {}
 
+class MockUserService extends Mock implements UserService {}
+
 // =============================================================================
-// MOCK SETUP
+// MOCK SUPABASE
 // =============================================================================
 
 /// Crée un MockSupabaseClient configuré avec un utilisateur de test
@@ -33,3 +37,33 @@ MockSupabaseClient createMockSupabaseClient({
 
   return mockSupabaseClient;
 }
+
+// =============================================================================
+// MOCK USER SERVICE
+// =============================================================================
+
+/// Crée un MockUserService configuré avec des données de test
+MockUserService createMockUserService({
+  String? userId,
+  String? userEmail,
+}) {
+  final mockUserService = MockUserService();
+
+  when(mockUserService.getCurrentUserId)
+      .thenReturn(userId ?? fakeCurrentUserId);
+  when(mockUserService.getCurrentUserEmail)
+      .thenReturn(userEmail ?? 'test@example.com');
+
+  return mockUserService;
+}
+
+// =============================================================================
+// FAKE PACKAGE INFO
+// =============================================================================
+
+final fakePackageInfo = PackageInfo(
+  appName: 'Wishlist',
+  packageName: 'com.example.wishlist',
+  version: '1.0.0',
+  buildNumber: '1',
+);
