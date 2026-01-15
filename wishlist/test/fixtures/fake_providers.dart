@@ -1,10 +1,17 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wishlist/shared/infra/app_info_provider.dart';
 import 'package:wishlist/shared/infra/booked_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/infra/friendships_realtime_provider.dart';
+import 'package:wishlist/shared/infra/repositories/user/user_streams_providers.dart';
+import 'package:wishlist/shared/infra/repositories/wish/wish_streams_providers.dart';
+import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_streams_providers.dart';
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
+import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wishlists_realtime_provider.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
+import 'package:wishlist/shared/models/profile.dart';
+import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 
 import 'fake_data.dart';
@@ -82,6 +89,37 @@ Override emptyBookedWishesRealtimeOverride() {
 }
 
 // =============================================================================
+// USER SERVICE OVERRIDE
+// =============================================================================
+
+/// Override pour userServiceProvider avec un mock
+Override userServiceOverride({String? userId, String? userEmail}) {
+  return userServiceProvider.overrideWithValue(
+    createMockUserService(userId: userId, userEmail: userEmail),
+  );
+}
+
+// =============================================================================
+// PROFILE STREAM OVERRIDE
+// =============================================================================
+
+/// Override pour watchCurrentUserProfileProvider avec un profil de test
+Override watchCurrentUserProfileOverride({Profile? profile}) {
+  return watchCurrentUserProfileProvider.overrideWith(
+    (ref) => Stream.value(profile ?? fakeCurrentUserProfile),
+  );
+}
+
+// =============================================================================
+// APP INFO OVERRIDE
+// =============================================================================
+
+/// Override pour appInfoProvider avec des infos de test
+Override appInfoOverride() {
+  return appInfoProvider.overrideWith((ref) async => fakePackageInfo);
+}
+
+// =============================================================================
 // COMBINED OVERRIDES FOR SCREENS
 // =============================================================================
 
@@ -107,5 +145,55 @@ List<Override> emptyDataOverrides({String? currentUserId}) {
     emptyWishlistsRealtimeOverride(),
     emptyFriendshipsRealtimeOverride(),
     emptyBookedWishesRealtimeOverride(),
+  ];
+}
+
+/// Overrides pour le SettingsScreen
+List<Override> settingsScreenOverrides({
+  String? currentUserId,
+  String? currentUserEmail,
+  Profile? currentUserProfile,
+}) {
+  return [
+    supabaseClientOverride(userId: currentUserId),
+    userServiceOverride(userId: currentUserId, userEmail: currentUserEmail),
+    watchCurrentUserProfileOverride(profile: currentUserProfile),
+    appInfoOverride(),
+  ];
+}
+
+// =============================================================================
+// WISHLIST SCREEN OVERRIDES
+// =============================================================================
+
+/// Override pour watchWishlistByIdProvider
+Override watchWishlistByIdOverride(int wishlistId, {Wishlist? wishlist}) {
+  return watchWishlistByIdProvider(wishlistId).overrideWith(
+    (ref) => Stream.value(wishlist ?? fakeWishlist1),
+  );
+}
+
+/// Override pour watchWishsFromWishlistProvider
+Override watchWishsFromWishlistOverride(
+  int wishlistId, {
+  List<Wish>? wishes,
+}) {
+  return watchWishsFromWishlistProvider(wishlistId).overrideWith(
+    (ref) => Stream.value((wishes ?? fakeWishes).toIList()),
+  );
+}
+
+/// Overrides pour le WishlistScreen
+List<Override> wishlistScreenOverrides({
+  required int wishlistId,
+  Wishlist? wishlist,
+  List<Wish>? wishes,
+  String? currentUserId,
+}) {
+  return [
+    supabaseClientOverride(userId: currentUserId),
+    userServiceOverride(userId: currentUserId),
+    watchWishlistByIdOverride(wishlistId, wishlist: wishlist),
+    watchWishsFromWishlistOverride(wishlistId, wishes: wishes),
   ];
 }
