@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
+import 'package:wishlist/gen/fonts.gen.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/auth/view/auth_layout.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
 import 'package:wishlist/shared/infra/current_user_avatar_provider.dart';
 import 'package:wishlist/shared/infra/first_launch_service.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
+import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_email.dart';
@@ -190,7 +192,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             },
             child: Text(
               _isSigningIn ? l10n.dontHaveAccount : l10n.haveAccount,
-              style: const TextStyle(
+              style: AppTextStyles.smaller.copyWith(
+                fontFamily: FontFamily.plusJakartaSans,
                 color: Colors.black,
                 fontStyle: FontStyle.italic,
               ),
@@ -202,9 +205,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             onPressed: () => ForgotPasswordRoute().push(context),
             child: Text(
               l10n.forgotPasswordButton,
-              style: const TextStyle(
-                color: Colors.black54,
+              style: AppTextStyles.smaller.copyWith(
                 decoration: TextDecoration.underline,
+                color: Colors.black54,
               ),
               textAlign: TextAlign.center,
             ),

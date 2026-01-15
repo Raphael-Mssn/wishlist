@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/validators/password_validator.dart';
 
 class PasswordStrengthIndicator extends StatelessWidget {
@@ -99,14 +100,15 @@ class _AnimatedRequirementRow extends StatelessWidget {
           ),
         ),
         const Gap(8),
-        AnimatedDefaultTextStyle(
-          duration: kThemeAnimationDuration,
-          curve: Curves.easeInOut,
-          style: TextStyle(
-            fontSize: 12,
-            color: targetColor,
+        Flexible(
+          child: AnimatedDefaultTextStyle(
+            duration: kThemeAnimationDuration,
+            curve: Curves.easeInOut,
+            style: AppTextStyles.tiny.copyWith(
+              color: targetColor,
+            ),
+            child: Text(requirement.label),
           ),
-          child: Text(requirement.label),
         ),
       ],
     );
