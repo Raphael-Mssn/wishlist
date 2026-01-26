@@ -47,7 +47,10 @@ Future<void> showAppBottomSheet(
         borderRadius: const BorderRadius.vertical(top: radius),
         child: Material(
           color: AppColors.background,
-          child: themedBody,
+          child: SafeArea(
+            top: false,
+            child: themedBody,
+          ),
         ),
       );
     },
@@ -106,9 +109,11 @@ class AppBottomSheetWithThemeAndAppBarLayout extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: body,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: body,
+              ),
             ),
           ),
         ],

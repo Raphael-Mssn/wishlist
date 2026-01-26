@@ -83,26 +83,27 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
 
               return AnimatedTheme(
                 data: wishlistTheme,
-                child: Stack(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          const Gap(64),
-                          const ConsultWishBackButton(),
-                          const Gap(16),
-                          ConsultWishImage(wish: wishData),
-                          const Gap(32),
-                          ConsultWishInfoContainer(
-                            wish: wishData,
-                            descriptionText: descriptionText,
-                            isMyWishlist: widget.isMyWishlist,
-                          ),
-                        ],
+                child: SafeArea(
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          children: [
+                            const ConsultWishBackButton(),
+                            const Gap(16),
+                            ConsultWishImage(wish: wishData),
+                            const Gap(32),
+                            ConsultWishInfoContainer(
+                              wish: wishData,
+                              descriptionText: descriptionText,
+                              isMyWishlist: widget.isMyWishlist,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },

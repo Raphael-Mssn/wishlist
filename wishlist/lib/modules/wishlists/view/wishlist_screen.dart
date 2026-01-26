@@ -437,21 +437,23 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                     ),
                   ),
                 ),
-                body: Stack(
-                  children: [
-                    _buildWishlistDetail(
-                      data,
-                      context,
-                      ref,
-                      isMyWishlist: isMyWishlist,
-                    ),
-                    if (isMyWishlist)
-                      _buildFloatingActionButtons(
-                        context: context,
-                        wishlistTheme: wishlistTheme,
-                        wishlist: wishlist,
+                body: SafeArea(
+                  child: Stack(
+                    children: [
+                      _buildWishlistDetail(
+                        data,
+                        context,
+                        ref,
+                        isMyWishlist: isMyWishlist,
                       ),
-                  ],
+                      if (isMyWishlist)
+                        _buildFloatingActionButtons(
+                          context: context,
+                          wishlistTheme: wishlistTheme,
+                          wishlist: wishlist,
+                        ),
+                    ],
+                  ),
                 ),
               );
             },
