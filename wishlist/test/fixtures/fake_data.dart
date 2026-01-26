@@ -6,6 +6,7 @@ import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with
 import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 import 'package:wishlist/shared/models/profile.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
+import 'package:wishlist/shared/models/wish_taken_by_user/wish_taken_by_user.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 
 // =============================================================================
@@ -107,6 +108,32 @@ final fakeWish2 = Wish(
 );
 
 final fakeWishes = [fakeWish1, fakeWish2];
+
+// Wish avec une réservation (pour tester l'onglet "booked")
+final fakeWishTakenByUser = WishTakenByUser(
+  wishId: 3,
+  userId: fakeFriendUserId1,
+  quantity: 1,
+  createdAt: fakeCreatedAt,
+  updatedAt: fakeUpdatedAt,
+  userPseudo: 'Alice',
+);
+
+final fakeWishBooked = Wish(
+  id: 3,
+  createdAt: fakeCreatedAt,
+  name: 'MacBook Pro',
+  description: 'Ordinateur portable Apple',
+  price: 2499,
+  linkUrl: 'https://apple.com/macbook-pro',
+  quantity: 1,
+  wishlistId: 1,
+  updatedBy: fakeCurrentUserId,
+  updatedAt: fakeUpdatedAt,
+  takenByUser: [fakeWishTakenByUser].toIList(),
+);
+
+final fakeWishesWithBooked = [fakeWish1, fakeWish2, fakeWishBooked];
 
 // =============================================================================
 // FAKE PROFILES
