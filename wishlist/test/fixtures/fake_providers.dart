@@ -2,6 +2,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/app_info_provider.dart';
 import 'package:wishlist/shared/infra/booked_wishes_realtime_provider.dart';
+import 'package:wishlist/shared/infra/current_user_profile_provider.dart';
+import 'package:wishlist/shared/infra/friend_details_realtime_provider.dart';
 import 'package:wishlist/shared/infra/friendships_realtime_provider.dart';
 import 'package:wishlist/shared/infra/repositories/user/user_streams_providers.dart';
 import 'package:wishlist/shared/infra/repositories/wish/wish_streams_providers.dart';
@@ -9,7 +11,9 @@ import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_streams_pro
 import 'package:wishlist/shared/infra/supabase_client_provider.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wishlists_realtime_provider.dart';
+import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
+import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 import 'package:wishlist/shared/models/profile.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
@@ -195,5 +199,97 @@ List<Override> wishlistScreenOverrides({
     userServiceOverride(userId: currentUserId),
     watchWishlistByIdOverride(wishlistId, wishlist: wishlist),
     watchWishsFromWishlistOverride(wishlistId, wishes: wishes),
+  ];
+}
+
+// =============================================================================
+// CURRENT USER PROFILE OVERRIDE
+// =============================================================================
+
+/// Override pour currentUserProfileProvider
+Override currentUserProfileOverride({AppUser? appUser}) {
+  return currentUserProfileProvider.overrideWith(
+    (ref) async => appUser ?? fakeCurrentAppUser,
+  );
+}
+
+// =============================================================================
+// FRIEND DETAILS OVERRIDE
+// =============================================================================
+
+/// Override pour friendDetailsRealtimeProvider
+Override friendDetailsRealtimeOverride(
+  String friendId, {
+  FriendDetails? friendDetails,
+}) {
+  return friendDetailsRealtimeProvider(friendId).overrideWith(
+    (ref) => Stream.value(friendDetails ?? fakeFriendDetails),
+  );
+}
+
+/// Overrides pour FriendDetailsScreen
+List<Override> friendDetailsScreenOverrides({
+  required String friendId,
+  FriendDetails? friendDetails,
+  String? currentUserId,
+}) {
+  return [
+    supabaseClientOverride(userId: currentUserId),
+    friendDetailsRealtimeOverride(friendId, friendDetails: friendDetails),
+  ];
+}
+
+// =============================================================================
+// WISH SCREEN OVERRIDES
+// =============================================================================
+
+/// Override pour watchWishByIdProvider
+Override watchWishByIdOverride(int wishId, {Wish? wish}) {
+  return watchWishByIdProvider(wishId).overrideWith(
+    (ref) => Stream.value(wish ?? fakeWish1),
+  );
+}
+
+/// Overrides pour ConsultWishScreen et EditWishScreen
+List<Override> wishScreenOverrides({
+  required int wishId,
+  required int wishlistId,
+  Wish? wish,
+  Wishlist? wishlist,
+  String? currentUserId,
+}) {
+  return [
+    supabaseClientOverride(userId: currentUserId),
+    userServiceOverride(userId: currentUserId),
+    watchWishByIdOverride(wishId, wish: wish),
+    watchWishlistByIdOverride(wishlistId, wishlist: wishlist),
+  ];
+}
+
+// =============================================================================
+// CHANGE PSEUDO SCREEN OVERRIDES
+// =============================================================================
+
+/// Overrides pour ChangePseudoScreen
+List<Override> changePseudoScreenOverrides({
+  AppUser? currentUser,
+  String? currentUserId,
+}) {
+  return [
+    supabaseClientOverride(userId: currentUserId),
+    userServiceOverride(userId: currentUserId),
+    currentUserProfileOverride(appUser: currentUser),
+  ];
+}
+
+// =============================================================================
+// PSEUDO SCREEN OVERRIDES
+// =============================================================================
+
+/// Overrides pour PseudoScreen
+List<Override> pseudoScreenOverrides({String? currentUserId}) {
+  return [
+    supabaseClientOverride(userId: currentUserId),
+    userServiceOverride(userId: currentUserId),
   ];
 }

@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/shared/infra/friendships_realtime_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
+import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 import 'package:wishlist/shared/models/profile.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
@@ -214,3 +215,23 @@ final fakeBookedWish2 = BookedWishWithDetails(
 final fakeBookedWishes = [fakeBookedWish1, fakeBookedWish2].toIList();
 
 const fakeEmptyBookedWishes = IListConst<BookedWishWithDetails>([]);
+
+// =============================================================================
+// FAKE FRIEND DETAILS
+// =============================================================================
+
+final fakeFriendDetails = FriendDetails(
+  appUser: fakeFriendAppUser1,
+  mutualFriends: [fakeFriendAppUser2].toISet(),
+  publicWishlists: [fakeWishlist1, fakeWishlist2].toIList(),
+  nbWishlists: 2,
+  nbWishs: 5,
+);
+
+final fakeFriendDetailsEmpty = FriendDetails(
+  appUser: fakeFriendAppUser1,
+  mutualFriends: const ISetConst({}),
+  publicWishlists: const IListConst([]),
+  nbWishlists: 0,
+  nbWishs: 0,
+);
