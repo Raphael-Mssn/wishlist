@@ -20,14 +20,21 @@ class SupabaseWishRepository implements WishRepository {
       () async {
         final wishsJson = await _client
             .from(_wishsTableName)
-            .select(
-              '*, taken_by_user:$_wishTakenByUserTableName(*)',
-            )
+            .select('''
+              *, 
+              taken_by_user:$_wishTakenByUserTableName(
+                *,
+                profiles(
+                  pseudo,
+                  avatar_url
+                )
+              )
+            ''')
             .eq('wishlist_id', wishlistId)
             .order('is_favourite', ascending: false)
             .order('created_at');
 
-        return wishsJson.map(Wish.fromJson).toIList();
+        return wishsJson.map((json) => _parseWishWithProfiles(json)).toIList();
       },
       errorMessage: 'Failed to get wishs from wishlist',
     );
@@ -37,15 +44,18 @@ class SupabaseWishRepository implements WishRepository {
   Future<Wish> getWishById(int wishId) async {
     return executeSafely(
       () async {
-        final wishJson = await _client
-            .from(_wishsTableName)
-            .select(
-              '*, taken_by_user:$_wishTakenByUserTableName(*)',
-            )
-            .eq('id', wishId)
-            .single();
+        final wishJson = await _client.from(_wishsTableName).select('''
+              *, 
+              taken_by_user:$_wishTakenByUserTableName(
+                *,
+                profiles(
+                  pseudo,
+                  avatar_url
+                )
+              )
+            ''').eq('id', wishId).single();
 
-        return Wish.fromJson(wishJson);
+        return _parseWishWithProfiles(wishJson);
       },
       errorMessage: 'Failed to get wish by id',
     );
@@ -134,12 +144,18 @@ class SupabaseWishRepository implements WishRepository {
             .from(_wishsTableName)
             .update(wishToUpdate.toJson())
             .eq('id', wishToUpdate.id)
-            .select(
-              '*, taken_by_user:$_wishTakenByUserTableName(*)',
-            )
-            .single();
+            .select('''
+              *, 
+              taken_by_user:$_wishTakenByUserTableName(
+                *,
+                profiles(
+                  pseudo,
+                  avatar_url
+                )
+              )
+            ''').single();
 
-        final wish = Wish.fromJson(wishJson);
+        final wish = _parseWishWithProfiles(wishJson);
 
         return wish;
       },
@@ -205,5 +221,43 @@ class SupabaseWishRepository implements WishRepository {
       },
       errorMessage: 'Failed to delete wish image',
     );
+  }
+
+  /// Parse un JSON de wish en incluant les données des profils
+  /// dans la liste taken_by_user
+  Wish _parseWishWithProfiles(Map<String, dynamic> json) {
+    try {
+      // Créer une copie du JSON pour ne pas modifier l'original
+      final jsonCopy = Map<String, dynamic>.from(json);
+
+      // Transformer les données taken_by_user pour inclure pseudo et avatar_url
+      final takenByUserList = jsonCopy['taken_by_user'] as List<dynamic>?;
+
+      if (takenByUserList != null && takenByUserList.isNotEmpty) {
+        jsonCopy['taken_by_user'] = takenByUserList.map((item) {
+          // Créer une copie de l'item
+          final itemMap =
+              Map<String, dynamic>.from(item as Map<String, dynamic>);
+          final profiles = itemMap['profiles'] as Map<String, dynamic>?;
+
+          if (profiles != null) {
+            // Ajouter les données du profil directement dans l'item
+            itemMap['user_pseudo'] = profiles['pseudo'];
+            itemMap['user_avatar_url'] = profiles['avatar_url'];
+          }
+
+          // Retirer la clé 'profiles' car elle n'est pas dans le modèle
+          itemMap.remove('profiles');
+
+          return itemMap;
+        }).toList();
+      }
+
+      return Wish.fromJson(jsonCopy);
+    } catch (e) {
+      // En cas d'erreur, essayer de parser sans les profils
+      print('Error parsing wish with profiles: $e');
+      return Wish.fromJson(json);
+    }
   }
 }

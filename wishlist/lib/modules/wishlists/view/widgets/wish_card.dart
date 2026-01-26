@@ -8,6 +8,7 @@ import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/pill.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
+import 'package:wishlist/shared/widgets/avatar/stacked_avatars.dart';
 import 'package:wishlist/shared/widgets/wish_image.dart';
 
 class WishCard extends ConsumerWidget {
@@ -22,6 +23,7 @@ class WishCard extends ConsumerWidget {
     this.quantityOverride,
     this.onLongPress,
     this.isSelected = false,
+    this.showAvatars = true,
   });
 
   static const double _cardPadding = 12;
@@ -36,6 +38,7 @@ class WishCard extends ConsumerWidget {
   final int? quantityOverride;
   final VoidCallback? onLongPress;
   final bool isSelected;
+  final bool showAvatars;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,6 +59,9 @@ class WishCard extends ConsumerWidget {
     final hasPrice = price != null;
     final shouldDisplayFavouriteIcon =
         isMyWishlist || (!isMyWishlist && wish.isFavourite);
+    final shouldDisplayAvatars = showAvatars &&
+        cardType == WishlistStatsCardType.booked &&
+        wish.takenByUser.isNotEmpty;
 
     final borderRadius = BorderRadius.circular(24);
 
@@ -88,108 +94,34 @@ class WishCard extends ConsumerWidget {
               ),
               child: Row(
                 children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      WishImage(
-                        iconUrl: wish.iconUrl,
-                      ),
-                      if (quantityToDisplay > 1)
-                        Positioned(
-                          bottom: -4,
-                          right: -4,
-                          child: Pill(
-                            text: 'x$quantityToDisplay',
-                            backgroundColor: primaryColor,
-                            textStyle: AppTextStyles.smaller,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                          ),
-                        ),
-                    ],
+                  _WishImageWithQuantity(
+                    iconUrl: wish.iconUrl,
+                    quantityToDisplay: quantityToDisplay,
+                    primaryColor: primaryColor,
                   ),
                   const Gap(16),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            right: shouldDisplayFavouriteIcon ? 12 : 0,
-                          ),
-                          child: Text(
-                            wish.name,
-                            maxLines: 2,
-                            textHeightBehavior: const TextHeightBehavior(
-                              applyHeightToFirstAscent: false,
-                              applyHeightToLastDescent: false,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.small.copyWith(
-                              color: AppColors.darkGrey,
-                              fontWeight: FontWeight.w600,
-                              height: 1.1,
-                            ),
-                          ),
-                        ),
-                        if (hasSubtitle || hasPrice) ...[
-                          const Gap(2),
-                          if (hasSubtitle)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    subtitle,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AppTextStyles.smaller.copyWith(
-                                      color: AppColors.makara,
-                                      fontWeight: FontWeight.normal,
-                                      height: 1.2,
-                                    ),
-                                  ),
-                                ),
-                                if (hasPrice) ...[
-                                  const Gap(8),
-                                  Text(
-                                    Formatters.currency(price),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AppTextStyles.small.copyWith(
-                                      color: AppColors.darkGrey,
-                                      height: 1,
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            )
-                          else if (hasPrice)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  Formatters.currency(price),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppTextStyles.small.copyWith(
-                                    color: AppColors.darkGrey,
-                                    height: 1,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ],
+                    child: _WishCardContent(
+                      wish: wish,
+                      subtitle: subtitle,
+                      price: price,
+                      hasSubtitle: hasSubtitle,
+                      hasPrice: hasPrice,
+                      shouldDisplayFavouriteIcon: shouldDisplayFavouriteIcon,
+                      shouldDisplayAvatars: shouldDisplayAvatars,
                     ),
                   ),
                 ],
               ),
             ),
+            if (shouldDisplayAvatars)
+              Positioned(
+                left: cardPadding + 80,
+                top: cardPadding + 36,
+                child: _WishReserversAvatars(
+                  wish: wish,
+                ),
+              ),
             if (isSelected)
               Positioned(
                 top: 8,
@@ -200,28 +132,10 @@ class WishCard extends ConsumerWidget {
               Positioned(
                 top: 4,
                 right: 4,
-                child: Material(
-                  color: Colors.transparent,
-                  shape: const CircleBorder(),
-                  clipBehavior: Clip.hardEdge,
-                  child: InkWell(
-                    onTap: isMyWishlist ? onFavoriteToggle : null,
-                    customBorder: const CircleBorder(),
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      alignment: Alignment.center,
-                      child: Icon(
-                        wish.isFavourite
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: wish.isFavourite
-                            ? AppColors.favorite
-                            : AppColors.makara,
-                        size: 20,
-                      ),
-                    ),
-                  ),
+                child: _FavoriteIconButton(
+                  isFavourite: wish.isFavourite,
+                  isMyWishlist: isMyWishlist,
+                  onTap: onFavoriteToggle,
                 ),
               ),
           ],
@@ -237,6 +151,245 @@ class WishCard extends ConsumerWidget {
       case WishlistStatsCardType.booked:
         return wish.totalBookedQuantity;
     }
+  }
+}
+
+/// Widget affichant l'image du wish avec la quantité en badge
+class _WishImageWithQuantity extends StatelessWidget {
+  const _WishImageWithQuantity({
+    required this.iconUrl,
+    required this.quantityToDisplay,
+    required this.primaryColor,
+  });
+
+  final String? iconUrl;
+  final int quantityToDisplay;
+  final Color primaryColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        WishImage(
+          iconUrl: iconUrl,
+        ),
+        if (quantityToDisplay > 1)
+          Positioned(
+            bottom: -4,
+            right: -4,
+            child: Pill(
+              text: 'x$quantityToDisplay',
+              backgroundColor: primaryColor,
+              textStyle: AppTextStyles.smaller,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 4,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// Widget affichant le contenu textuel de la carte (titre, subtitle, prix)
+class _WishCardContent extends StatelessWidget {
+  const _WishCardContent({
+    required this.wish,
+    required this.subtitle,
+    required this.price,
+    required this.hasSubtitle,
+    required this.hasPrice,
+    required this.shouldDisplayFavouriteIcon,
+    required this.shouldDisplayAvatars,
+  });
+
+  final Wish wish;
+  final String? subtitle;
+  final double? price;
+  final bool hasSubtitle;
+  final bool hasPrice;
+  final bool shouldDisplayFavouriteIcon;
+  final bool shouldDisplayAvatars;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _WishTitle(
+          name: wish.name,
+          shouldDisplayFavouriteIcon: shouldDisplayFavouriteIcon,
+          shouldDisplayAvatars: shouldDisplayAvatars,
+        ),
+        if (hasSubtitle || hasPrice || shouldDisplayAvatars) ...[
+          const Gap(2),
+          if (hasSubtitle)
+            _WishSubtitleWithPrice(
+              subtitle: subtitle!,
+              price: price,
+              hasPrice: hasPrice,
+            )
+          else if (hasPrice)
+            _WishPriceOnly(price: price!)
+          else if (shouldDisplayAvatars)
+            const SizedBox(height: 14),
+        ],
+      ],
+    );
+  }
+}
+
+/// Widget affichant le titre du wish
+class _WishTitle extends StatelessWidget {
+  const _WishTitle({
+    required this.name,
+    required this.shouldDisplayFavouriteIcon,
+    required this.shouldDisplayAvatars,
+  });
+
+  final String name;
+  final bool shouldDisplayFavouriteIcon;
+  final bool shouldDisplayAvatars;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        right: shouldDisplayFavouriteIcon ? 12 : 0,
+      ),
+      child: Transform.translate(
+        offset: shouldDisplayAvatars ? const Offset(0, -6) : Offset.zero,
+        child: Text(
+          name,
+          maxLines: 2,
+          textHeightBehavior: const TextHeightBehavior(
+            applyHeightToFirstAscent: false,
+            applyHeightToLastDescent: false,
+          ),
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyles.small.copyWith(
+            color: AppColors.darkGrey,
+            fontWeight: FontWeight.w600,
+            height: 1.1,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Widget affichant le subtitle avec le prix optionnel
+class _WishSubtitleWithPrice extends StatelessWidget {
+  const _WishSubtitleWithPrice({
+    required this.subtitle,
+    required this.price,
+    required this.hasPrice,
+  });
+
+  final String subtitle;
+  final double? price;
+  final bool hasPrice;
+
+  @override
+  Widget build(BuildContext context) {
+    final priceValue = price;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            subtitle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.smaller.copyWith(
+              color: AppColors.makara,
+              fontWeight: FontWeight.normal,
+              height: 1.2,
+            ),
+          ),
+        ),
+        if (hasPrice && priceValue != null) ...[
+          const Gap(8),
+          Text(
+            Formatters.currency(priceValue),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.small.copyWith(
+              color: AppColors.darkGrey,
+              height: 1,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// Widget affichant uniquement le prix
+class _WishPriceOnly extends StatelessWidget {
+  const _WishPriceOnly({
+    required this.price,
+  });
+
+  final double price;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Text(
+          Formatters.currency(price),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyles.small.copyWith(
+            color: AppColors.darkGrey,
+            height: 1,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Widget affichant l'icône de favori
+class _FavoriteIconButton extends StatelessWidget {
+  const _FavoriteIconButton({
+    required this.isFavourite,
+    required this.isMyWishlist,
+    required this.onTap,
+  });
+
+  final bool isFavourite;
+  final bool isMyWishlist;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      shape: const CircleBorder(),
+      clipBehavior: Clip.hardEdge,
+      child: InkWell(
+        onTap: isMyWishlist ? onTap : null,
+        customBorder: const CircleBorder(),
+        child: Container(
+          width: 32,
+          height: 32,
+          alignment: Alignment.center,
+          child: Icon(
+            isFavourite ? Icons.favorite : Icons.favorite_border,
+            color: isFavourite ? AppColors.favorite : AppColors.makara,
+            size: 20,
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -264,6 +417,41 @@ class _SelectionCheckIcon extends StatelessWidget {
         Icons.check,
         color: AppColors.background,
         size: 16,
+      ),
+    );
+  }
+}
+
+/// Widget qui affiche les avatars des utilisateurs qui ont réservé ce wish
+class _WishReserversAvatars extends StatelessWidget {
+  const _WishReserversAvatars({
+    required this.wish,
+  });
+
+  final Wish wish;
+
+  @override
+  Widget build(BuildContext context) {
+    final userNames = wish.takenByUser
+        .map((t) => t.userPseudo ?? 'Utilisateur inconnu')
+        .toList();
+    final avatarUrls = wish.takenByUser.map((t) => t.userAvatarUrl).toList();
+
+    if (avatarUrls.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final tooltipMessage = userNames.length == 1
+        ? userNames.first
+        : userNames.map((name) => '• $name').join('\n');
+
+    return Tooltip(
+      message: tooltipMessage,
+      triggerMode: TooltipTriggerMode.tap,
+      showDuration: const Duration(seconds: 2),
+      waitDuration: Duration.zero,
+      child: StackedAvatars(
+        avatarUrls: avatarUrls,
       ),
     );
   }
