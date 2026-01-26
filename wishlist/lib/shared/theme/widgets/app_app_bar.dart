@@ -13,7 +13,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isFirstRoute = ModalRoute.of(context)?.isFirst ?? false;
+    final isFirstRoute = ModalRoute.of(context)?.isFirst ?? true;
     // We allow "!" usage here because we know that the fontSize is not null
     final titleSize = isFirstRoute
         ? AppTextStyles.title.fontSize
@@ -32,19 +32,28 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
     ];
 
     return AppBar(
-      centerTitle: !isFirstRoute,
-      titleSpacing: 0,
+      centerTitle: false,
       scrolledUnderElevation: 0,
       backgroundColor: AppColors.background,
-      title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Text(
-          title,
-          style: AppTextStyles.title.copyWith(fontSize: titleSize),
-        ),
-      ),
       actions: actions,
       actionsPadding: const EdgeInsets.only(right: 12),
+      flexibleSpace: SafeArea(
+        child: Padding(
+          // Padding symétrique de 56 pour centrer par rapport à l'écran
+          // (56 ≈ largeur du bouton retour ou du bouton settings)
+          padding: EdgeInsets.symmetric(horizontal: isFirstRoute ? 20 : 56),
+          child: Align(
+            alignment: isFirstRoute ? Alignment.centerLeft : Alignment.center,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title,
+                style: AppTextStyles.title.copyWith(fontSize: titleSize),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
