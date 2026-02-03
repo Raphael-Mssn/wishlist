@@ -8,7 +8,6 @@ import 'package:wishlist/modules/friends/view/screens/friend_details_screen.dart
 import 'package:wishlist/modules/settings/change_password/view/change_password_screen.dart';
 import 'package:wishlist/modules/settings/change_pseudo/view/change_pseudo_screen.dart';
 import 'package:wishlist/modules/settings/view/settings_screen.dart';
-import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
 import 'package:wishlist/modules/wishs/view/screens/consult_wish_screen.dart';
 import 'package:wishlist/modules/wishs/view/screens/edit_wish_screen.dart';
