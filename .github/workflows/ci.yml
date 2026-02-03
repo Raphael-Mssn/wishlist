@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      - 'feat/**'
+      - 'fix/**'
+      - 'test/**'
+
+# Évite les runs en doublon et annule les anciens runs si un nouveau commit est pushé
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+ 
+jobs:
+  analyze:
+    name: Analyze & Format
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: wishlist
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        run: dart format --set-exit-if-changed lib test
+
+      - name: Analyze code
+        run: flutter analyze
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: wishlist
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run build_runner
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Upload golden test failures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-failures
+          path: wishlist/test/**/failures/
+          retention-days: 7
