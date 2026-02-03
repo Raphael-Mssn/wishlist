@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:adaptive_test/adaptive_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,6 +14,13 @@ final defaultDeviceConfigs = {
 
 final _fakeLocaleSymbols = en_USSymbols;
 
+/// Seuil de tolérance pour les golden tests.
+/// En CI (Linux), le rendu peut différer légèrement de macOS.
+double get _goldenThreshold {
+  final isCI = Platform.environment['CI'] == 'true';
+  return isCI ? 0.05 : 0.005; // 5% en CI, 0.5% en local
+}
+
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   TestWidgetsFlutterBinding.ensureInitialized();
   AdaptiveTestConfiguration.instance.setDeviceVariants(defaultDeviceConfigs);
@@ -25,7 +33,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
     patterns: en_USPatterns,
   );
 
-  setupFileComparatorWithThreshold();
+  setupFileComparatorWithThreshold(_goldenThreshold);
 
   await testMain();
 }

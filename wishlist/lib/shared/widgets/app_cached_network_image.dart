@@ -115,8 +115,8 @@ class _LoadedAppCachedNetworkImage extends AppCachedNetworkImage {
         future: Future.delayed(_imageLoadingDelay),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            // Si height et width sont spécifiés, on utilise imageBuilder pour mieux contrôler
-            // l'affichage et éviter la déformation
+            // Si height et width sont spécifiés, on utilise imageBuilder
+            // pour mieux contrôler l'affichage et éviter la déformation
             if (height != null && width != null) {
               return SizedBox(
                 width: width,
@@ -205,8 +205,8 @@ class _LoadedAppCachedNetworkImage extends AppCachedNetworkImage {
       );
     }
 
-    // Si height et width sont spécifiés, on utilise imageBuilder pour mieux contrôler
-    // l'affichage et éviter la déformation
+    // Si height et width sont spécifiés, on utilise imageBuilder
+    // pour mieux contrôler l'affichage et éviter la déformation
     if (height != null && width != null) {
       return SizedBox(
         width: width,

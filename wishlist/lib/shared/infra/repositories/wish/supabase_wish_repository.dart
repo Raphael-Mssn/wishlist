@@ -34,7 +34,7 @@ class SupabaseWishRepository implements WishRepository {
             .order('is_favourite', ascending: false)
             .order('created_at');
 
-        return wishsJson.map((json) => _parseWishWithProfiles(json)).toIList();
+        return wishsJson.map(_parseWishWithProfiles).toIList();
       },
       errorMessage: 'Failed to get wishs from wishlist',
     );
@@ -254,9 +254,8 @@ class SupabaseWishRepository implements WishRepository {
       }
 
       return Wish.fromJson(jsonCopy);
-    } catch (e) {
+    } catch (_) {
       // En cas d'erreur, essayer de parser sans les profils
-      print('Error parsing wish with profiles: $e');
       return Wish.fromJson(json);
     }
   }
