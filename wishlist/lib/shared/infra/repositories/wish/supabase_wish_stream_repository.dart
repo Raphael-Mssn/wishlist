@@ -64,8 +64,8 @@ class SupabaseWishStreamRepository implements WishStreamRepository {
             // Recharger uniquement si le wish concerné nous intéresse
             final oldRecord = payload.oldRecord;
             final newRecord = payload.newRecord;
-            final oldWishlistId = oldRecord?['wishlist_id'] as int?;
-            final newWishlistId = newRecord?['wishlist_id'] as int?;
+            final oldWishlistId = oldRecord['wishlist_id'] as int?;
+            final newWishlistId = newRecord['wishlist_id'] as int?;
 
             // Si le wish est déplacé depuis ou vers cette wishlist
             if (oldWishlistId == wishlistId || newWishlistId == wishlistId) {
