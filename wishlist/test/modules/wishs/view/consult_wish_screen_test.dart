@@ -6,7 +6,8 @@ import '../../../fixtures/fake_providers.dart';
 import '../../../pump_app.dart';
 
 void main() {
-  testAdaptiveWidgets('$ConsultWishScreen golden test', (tester, variant) async {
+  testAdaptiveWidgets('$ConsultWishScreen golden test',
+      (tester, variant) async {
     await tester.pumpApp(
       const ConsultWishScreen(
         wishIds: [1],
