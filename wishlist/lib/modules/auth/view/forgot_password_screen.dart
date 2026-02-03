@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/auth_service.dart';
+import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
@@ -94,7 +95,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             children: [
               Text(
                 l10n.forgotPasswordDescription,
-                style: const TextStyle(fontSize: 16),
+                style: AppTextStyles.small,
               ),
               const Gap(16),
               InputEmail(controller: _emailController),
