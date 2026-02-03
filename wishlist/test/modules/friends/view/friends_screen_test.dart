@@ -15,7 +15,7 @@ void main() {
       overrides: homeScreenOverrides(),
     );
 
-    // Pump suffisamment pour que les animations de AnimatedListView se terminent
+    // Pump suffisamment pour que les animations se terminent
     await tester.pumpAndSettle(const Duration(seconds: 1));
 
     await tester.expectGolden<FriendsScreen>(variant);

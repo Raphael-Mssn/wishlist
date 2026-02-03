@@ -13,7 +13,7 @@ extension EnhancedWidgetTester on WidgetTester {
     Widget child, {
     required WindowConfigData? windowConfig,
   }) {
-    Widget app = child;
+    var app = child;
 
     if (windowConfig != null) {
       app = AdaptiveWrapper(

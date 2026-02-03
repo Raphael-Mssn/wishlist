@@ -19,11 +19,12 @@ class Optional<T> {
 
 /// Extension pour simplifier l'utilisation d'Optional dans copyWith
 extension OptionalCopyWith<T> on Optional<T>? {
-  /// Retourne la valeur de l'Optional si présent, sinon garde la valeur par défaut
+  /// Retourne la valeur de l'Optional si présent, sinon garde la valeur
+  /// par défaut.
   ///
-  /// - Si [this] est `null` → retourne [defaultValue] (ne pas modifier)
-  /// - Si [this] est `Optional.value(x)` → retourne `x` (même si `x` est null)
-  /// - Si [this] est `Optional.absent()` → retourne [defaultValue] (ne pas modifier)
+  /// - Si this est `null` → retourne [defaultValue] (ne pas modifier)
+  /// - Si this est `Optional.value(x)` → retourne `x` (même si `x` est null)
+  /// - Si this est `Optional.absent()` → retourne [defaultValue]
   T? orKeep(T? defaultValue) {
     final thisValue = this;
     if (thisValue == null) {

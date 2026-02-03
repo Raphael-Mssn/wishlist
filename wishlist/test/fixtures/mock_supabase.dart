@@ -13,6 +13,7 @@ class MockSupabaseClient extends Mock implements SupabaseClient {}
 
 class MockGoTrueClient extends Mock implements GoTrueClient {}
 
+// ignore: avoid_implementing_value_types
 class MockUser extends Mock implements User {}
 
 class MockUserService extends Mock implements UserService {}
