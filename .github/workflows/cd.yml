@@ -1,0 +1,147 @@
+name: CD
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  # ============================================================================
+  # ANDROID - Build et deploy sur Google Play (Internal Testing)
+  # ============================================================================
+  build-android:
+    name: Build & Deploy Android
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: wishlist
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run build_runner
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Decode Keystore
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/key.keystore
+
+      - name: Create key.properties
+        run: |
+          cat > android/key.properties << EOF
+          storeFile=key.keystore
+          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
+          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+          EOF
+
+      - name: Create .env.prod
+        run: |
+          cat > env/.env.prod << EOF
+          SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+          EOF
+
+      - name: Build App Bundle
+        run: flutter build appbundle --release --dart-define=ENV=prod
+
+      - name: Upload to Google Play (Internal Testing)
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.raphtang.wishy
+          releaseFiles: wishlist/build/app/outputs/bundle/release/app-release.aab
+          track: internal
+          status: completed
+
+  # ============================================================================
+  # iOS - Build et deploy sur TestFlight
+  # ============================================================================
+  build-ios:
+    name: Build & Deploy iOS
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: wishlist
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run build_runner
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Create .env.prod
+        run: |
+          cat > env/.env.prod << EOF
+          SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+          EOF
+
+      - name: Install Apple Certificate
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.IOS_P12_BASE64 }}
+          p12-password: ${{ secrets.IOS_P12_PASSWORD }}
+
+      - name: Install Provisioning Profile
+        run: |
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}" | base64 -d > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+          # Extraire l'UUID du provisioning profile
+          PROFILE_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(/usr/bin/security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision))
+          echo "PROFILE_UUID=$PROFILE_UUID" >> $GITHUB_ENV
+
+      - name: Create ExportOptions.plist
+        run: |
+          cat > ios/ExportOptions.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>uploadSymbols</key>
+              <true/>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>com.raphtang.wishy</key>
+                  <string>${PROFILE_UUID}</string>
+              </dict>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install
+
+      - name: Build iOS
+        run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist --dart-define=ENV=prod
+
+      - name: Upload to TestFlight
+        uses: apple-actions/upload-testflight-build@v1
+        with:
+          app-path: wishlist/build/ios/ipa/*.ipa
+          issuer-id: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          api-key-id: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          api-private-key: ${{ secrets.APP_STORE_CONNECT_API_PRIVATE_KEY }}
