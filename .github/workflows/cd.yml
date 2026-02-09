@@ -133,7 +133,7 @@ jobs:
       - name: Install CocoaPods
         run: |
           cd ios
-          pod install
+          pod install --repo-update
 
       - name: Build iOS
         run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist --dart-define=ENV=prod
