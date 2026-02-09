@@ -138,10 +138,13 @@ jobs:
       - name: Build iOS
         run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist --dart-define=ENV=prod
 
+      - name: Find IPA file
+        run: echo "IPA_PATH=$(find build/ios/ipa -name '*.ipa' | head -1)" >> $GITHUB_ENV
+
       - name: Upload to TestFlight
         uses: apple-actions/upload-testflight-build@v1
         with:
-          app-path: wishlist/build/ios/ipa/*.ipa
+          app-path: wishlist/${{ env.IPA_PATH }}
           issuer-id: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           api-key-id: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           api-private-key: ${{ secrets.APP_STORE_CONNECT_API_PRIVATE_KEY }}
