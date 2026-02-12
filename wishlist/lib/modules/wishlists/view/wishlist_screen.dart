@@ -386,72 +386,80 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
           data: wishlistTheme,
           child: Builder(
             builder: (context) {
-              return Scaffold(
-                resizeToAvoidBottomInset: false,
-                appBar: PreferredSize(
-                  preferredSize: const Size.fromHeight(70),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      bottom: Radius.circular(_appBarBorderRadius),
-                    ),
-                    child: AppWavePattern(
-                      backgroundColor: wishlistTheme.primaryColor,
-                      preset: WavePreset.appBar,
-                      rotationType: WaveRotationType.fixed,
-                      rotationAngle: 45,
-                      child: AppBar(
-                        backgroundColor: Colors.transparent,
-                        actions: [
-                          if (isMyWishlist)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.settings,
-                                  size: 32,
-                                ),
-                                onPressed: () =>
-                                    showWishlistSettingsBottomSheet(
-                                  context,
-                                  wishlist,
+              return PopScope(
+                canPop: !_isSelectionMode,
+                onPopInvokedWithResult: (didPop, result) {
+                  if (!didPop && _isSelectionMode) {
+                    _exitSelectionMode();
+                  }
+                },
+                child: Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  appBar: PreferredSize(
+                    preferredSize: const Size.fromHeight(70),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(_appBarBorderRadius),
+                      ),
+                      child: AppWavePattern(
+                        backgroundColor: wishlistTheme.primaryColor,
+                        preset: WavePreset.appBar,
+                        rotationType: WaveRotationType.fixed,
+                        rotationAngle: 45,
+                        child: AppBar(
+                          backgroundColor: Colors.transparent,
+                          actions: [
+                            if (isMyWishlist)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.settings,
+                                    size: 32,
+                                  ),
+                                  onPressed: () =>
+                                      showWishlistSettingsBottomSheet(
+                                    context,
+                                    wishlist,
+                                  ),
                                 ),
                               ),
+                          ],
+                          foregroundColor: AppColors.background,
+                          title: Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Text(
+                              wishlist.name,
+                              style: AppTextStyles.titleSmall,
                             ),
-                        ],
-                        foregroundColor: AppColors.background,
-                        title: Padding(
-                          padding: const EdgeInsets.only(bottom: 4),
-                          child: Text(
-                            wishlist.name,
-                            style: AppTextStyles.titleSmall,
                           ),
-                        ),
-                        centerTitle: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            bottom: Radius.circular(_appBarBorderRadius),
+                          centerTitle: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              bottom: Radius.circular(_appBarBorderRadius),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                body: SafeArea(
-                  child: Stack(
-                    children: [
-                      _buildWishlistDetail(
-                        data,
-                        context,
-                        ref,
-                        isMyWishlist: isMyWishlist,
-                      ),
-                      if (isMyWishlist)
-                        _buildFloatingActionButtons(
-                          context: context,
-                          wishlistTheme: wishlistTheme,
-                          wishlist: wishlist,
+                  body: SafeArea(
+                    child: Stack(
+                      children: [
+                        _buildWishlistDetail(
+                          data,
+                          context,
+                          ref,
+                          isMyWishlist: isMyWishlist,
                         ),
-                    ],
+                        if (isMyWishlist)
+                          _buildFloatingActionButtons(
+                            context: context,
+                            wishlistTheme: wishlistTheme,
+                            wishlist: wishlist,
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               );
