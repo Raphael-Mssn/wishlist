@@ -22,27 +22,27 @@ class AuthService {
     required String password,
   }) async {
     final isEmail = EmailValidator.validate(identifier);
+    final email =
+        isEmail ? identifier : await _resolveEmailFromPseudo(identifier);
 
-    if (!isEmail) {
-      // Si ce n'est pas un email, on récupère l'email correspondant au pseudo
-      final response = await supabase
-          .from('users_profiles')
-          .select('user->>email')
-          .eq('profile->>pseudo', identifier)
-          .maybeSingle();
+    await supabase.auth.signInWithPassword(email: email, password: password);
+  }
 
-      if (response == null || response['email'] == null) {
-        throw const AuthException(
-          'User not found',
-          statusCode: '404',
-        );
-      }
+  Future<String> _resolveEmailFromPseudo(String pseudo) async {
+    final response = await supabase
+        .from('users_profiles')
+        .select('user->>email')
+        .eq('profile->>pseudo', pseudo)
+        .maybeSingle();
 
-      identifier = response['email'];
+    if (response == null || response['email'] == null) {
+      throw const AuthException(
+        'User not found',
+        statusCode: '404',
+      );
     }
 
-    await supabase.auth
-        .signInWithPassword(email: identifier, password: password);
+    return response['email'] as String;
   }
 
   Future<void> signUp({required String email, required String password}) async {
