@@ -61,6 +61,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get genericError => 'Une erreur est survenue, veuillez réessayer.';
 
   @override
+  String get inputTooLong => 'La saisie est trop longue.';
+
+  @override
   String get pseudoField => 'Pseudo';
 
   @override

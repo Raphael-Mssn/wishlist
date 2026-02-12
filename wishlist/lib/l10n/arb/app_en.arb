@@ -17,6 +17,7 @@
   "invalidLoginCredentials": "Invalid login credentials",
   "userAlreadyRegistered": "This email is already registered",
   "genericError": "An error occurred, please try again!",
+  "inputTooLong": "The input is too long.",
   "pseudoField": "Pseudo",
   "validPseudoError": "Pseudo cannot be empty",
   "pseudoAlreadyExists": "This pseudo is already used",
