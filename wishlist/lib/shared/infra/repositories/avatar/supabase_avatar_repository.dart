@@ -27,7 +27,8 @@ class SupabaseAvatarRepository implements AvatarRepository {
 
           return filePath;
         } on StorageException catch (e) {
-          // Si le fichier existe déjà (409), essayons avec upsert
+          // 409 = fichier déjà présent : réessai en upsert (logique métier).
+          // Ne pas remonter en AppException : pas une erreur à afficher.
           if (e.statusCode == '409') {
             await _client.storage.from(_bucketName).uploadBinary(
                   filePath,
