@@ -1,10 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
-
-/// Détecte une violation de contrainte CHECK max_length (code 23514).
-bool _isMaxLengthConstraintError(PostgrestException e) {
-  return e.code == '23514' && e.message.contains('_max_length');
-}
+import 'package:wishlist/shared/infra/utils/postgrest_user_message_key.dart';
 
 Future<T> executeSafely<T>(
   Future<T> Function() operation, {
@@ -20,8 +16,7 @@ Future<T> executeSafely<T>(
     throw AppException(
       statusCode: statusCode ?? 500,
       message: e.message,
-      userMessageKey:
-          _isMaxLengthConstraintError(e) ? AppUserMessageKey.inputTooLong : null,
+      userMessageKey: userMessageKeyForPostgrestException(e),
     );
   } on StorageException catch (e) {
     customErrorHandler?.call(e);
