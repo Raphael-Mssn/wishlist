@@ -30,9 +30,26 @@ void main() {
       expect(userMessageKeyForPostgrestException(e), isNull);
     });
 
-    test('should return null when code is different', () {
+    test(
+        'should return pseudoAlreadyExists when code is 23505 and message '
+        'contains pseudo', () {
       const e = PostgrestException(
-        message: 'duplicate key',
+        message:
+            'duplicate key value violates unique constraint "profiles_pseudo_key"',
+        code: '23505',
+      );
+
+      expect(
+        userMessageKeyForPostgrestException(e),
+        AppUserMessageKey.pseudoAlreadyExists,
+      );
+    });
+
+    test(
+        'should return null when code is 23505 and message does not contain '
+        'pseudo', () {
+      const e = PostgrestException(
+        message: 'duplicate key value violates unique constraint "other_key"',
         code: '23505',
       );
 
