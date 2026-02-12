@@ -5,6 +5,7 @@ import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_nul
 import 'package:wishlist/shared/infra/non_null_extensions/user_non_null_getter_email_extension.dart';
 import 'package:wishlist/shared/infra/repositories/user/user_repository.dart';
 import 'package:wishlist/shared/infra/utils/execute_safely.dart';
+import 'package:wishlist/shared/infra/utils/postgrest_user_message_key.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/models/profile.dart';
 
@@ -23,10 +24,11 @@ class SupabaseUserRepository implements UserRepository {
   }
 
   void _handleDuplicateProfileError(Object error) {
-    if (error is PostgrestException && error.code == '23505') {
+    if (error is PostgrestException) {
       throw AppException(
         statusCode: 409,
         message: 'User profile already exists',
+        userMessageKey: userMessageKeyForPostgrestException(error),
       );
     }
   }

@@ -6,6 +6,7 @@ import 'package:wishlist/main.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/infra/app_info_provider.dart';
 import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
+import 'package:wishlist/shared/infra/utils/auth_user_message_key.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 
 class AuthService {
@@ -58,15 +59,19 @@ class AuthService {
       throw AppException(
         statusCode: 403,
         message: 'Old password is incorrect',
+        userMessageKey: AppUserMessageKey.oldPasswordIncorrect,
       );
     }
     try {
       await supabase.auth.updateUser(UserAttributes(password: newPassword));
     } on AuthException catch (e) {
       final statusCode = e.statusCode;
+      final statusCodeInt = statusCode != null ? int.parse(statusCode) : 500;
+
       throw AppException(
-        statusCode: statusCode != null ? int.parse(statusCode) : 500,
+        statusCode: statusCodeInt,
         message: e.message,
+        userMessageKey: userMessageKeyForAuthException(e),
       );
     }
   }
@@ -113,9 +118,12 @@ class AuthService {
       await supabase.auth.updateUser(UserAttributes(password: newPassword));
     } on AuthException catch (e) {
       final statusCode = e.statusCode;
+      final statusCodeInt = statusCode != null ? int.parse(statusCode) : 500;
+
       throw AppException(
-        statusCode: statusCode != null ? int.parse(statusCode) : 500,
+        statusCode: statusCodeInt,
         message: e.message,
+        userMessageKey: userMessageKeyForAuthException(e),
       );
     }
   }
@@ -136,10 +144,7 @@ class AuthService {
           message: e.message,
         );
       }
-      throw AppException(
-        statusCode: 500,
-        message: 'Failed to delete account',
-      );
+      throw AppException(statusCode: 500, message: 'Failed to delete account');
     }
   }
 }

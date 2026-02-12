@@ -28,9 +28,6 @@ Future<T> executeSafely<T>(
   } on Exception catch (e) {
     customErrorHandler?.call(e);
 
-    throw AppException(
-      statusCode: 500,
-      message: errorMessage,
-    );
+    throw AppException(statusCode: 500, message: errorMessage);
   }
 }
