@@ -58,16 +58,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
       setState(() {
         _isLoading = false;
       });
-      final statusCode = appException.statusCode;
-      if (statusCode == 422) {
-        showAppSnackBar(
-          context,
-          context.l10n.newPasswordShouldBeDifferent,
-          type: SnackBarType.error,
-        );
-      } else {
-        showGenericError(context, error: appException);
-      }
+      showGenericError(context, error: appException);
     }
   }
 
