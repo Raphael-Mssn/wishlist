@@ -52,7 +52,7 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
           );
         case 401:
         default:
-          showGenericError(context);
+          showGenericError(context, error: appException);
       }
     }
   }

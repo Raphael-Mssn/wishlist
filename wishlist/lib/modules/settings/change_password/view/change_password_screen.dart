@@ -62,7 +62,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       final statusCode = appException.statusCode;
       switch (statusCode) {
         case 401:
-          showGenericError(context);
+          showGenericError(context, error: appException);
         case 403:
           showAppSnackBar(
             context,

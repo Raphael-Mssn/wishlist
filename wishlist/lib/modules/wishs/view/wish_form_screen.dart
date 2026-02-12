@@ -175,7 +175,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
         }
       } catch (e) {
         if (mounted) {
-          showGenericError(context);
+          showGenericError(context, error: e);
         }
       }
     });
@@ -231,7 +231,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
       }
     } catch (e) {
       if (mounted) {
-        showGenericError(context);
+        showGenericError(context, error: e);
       }
     }
   }
@@ -264,7 +264,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
           }
         } catch (e) {
           if (context.mounted) {
-            showGenericError(context);
+            showGenericError(context, error: e);
           }
         }
       },

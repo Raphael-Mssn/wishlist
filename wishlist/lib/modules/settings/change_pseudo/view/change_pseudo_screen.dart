@@ -31,7 +31,7 @@ class ChangePseudoScreen extends ConsumerWidget {
           error: (error, stackTrace) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (context.mounted) {
-                showGenericError(context);
+                showGenericError(context, error: error);
               }
             });
             return const SizedBox.shrink();
@@ -100,7 +100,7 @@ class _ChangePseudoFormState extends ConsumerState<_ChangePseudoForm> {
           type: SnackBarType.error,
         );
       } else {
-        showGenericError(context);
+        showGenericError(context, error: appException);
       }
     }
   }

@@ -51,7 +51,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       setState(() {
         _isLoading = false;
       });
-      showGenericError(context);
+      showGenericError(context, error: appException);
     }
   }
 

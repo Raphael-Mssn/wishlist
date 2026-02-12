@@ -54,10 +54,10 @@ class FriendsScreen extends ConsumerWidget {
     return combinedList;
   }
 
-  void _onError(BuildContext context) {
+  void _onError(BuildContext context, Object error) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (context.mounted) {
-        showGenericError(context, isTopSnackBar: true);
+        showGenericError(context, error: error, isTopSnackBar: true);
       }
     });
   }
@@ -79,7 +79,7 @@ class FriendsScreen extends ConsumerWidget {
         child: CircularProgressIndicator(),
       ),
       error: (error, stackTrace) {
-        _onError(context);
+        _onError(context, error);
         return const SizedBox.shrink();
       },
       data: (data) => data.isEmpty

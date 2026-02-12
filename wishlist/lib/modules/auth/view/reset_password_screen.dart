@@ -66,7 +66,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
           type: SnackBarType.error,
         );
       } else {
-        showGenericError(context);
+        showGenericError(context, error: appException);
       }
     }
   }

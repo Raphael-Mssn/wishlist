@@ -78,7 +78,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
       }
     } catch (e) {
       if (context.mounted) {
-        showGenericError(context);
+        showGenericError(context, error: e);
       }
     }
   }
@@ -99,7 +99,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
           }
         } catch (e) {
           if (context.mounted) {
-            showGenericError(context);
+            showGenericError(context, error: e);
           }
         }
       },

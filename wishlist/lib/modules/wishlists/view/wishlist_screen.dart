@@ -131,7 +131,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
           }
         } catch (e) {
           if (context.mounted) {
-            showGenericError(context);
+            showGenericError(context, error: e);
           }
         }
       },
@@ -165,7 +165,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
           }
         } catch (e) {
           if (context.mounted) {
-            showGenericError(context);
+            showGenericError(context, error: e);
           }
         }
       },
@@ -225,7 +225,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
       await ref.read(wishMutationsProvider.notifier).update(updatedWish);
     } catch (e) {
       if (mounted) {
-        showGenericError(context);
+        showGenericError(context, error: e);
       }
     }
   }
