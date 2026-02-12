@@ -137,6 +137,60 @@ supabase projects list
 
 ---
 
+## 🚀 CI/CD
+
+Le projet utilise **GitHub Actions** pour l'intégration et le déploiement continus.
+
+### ✅ Intégration Continue (CI)
+
+La CI se déclenche automatiquement sur :
+- Push sur `main`
+- Ouverture/mise à jour d'une Pull Request
+
+Elle exécute :
+- `dart format` - vérification du formatage
+- `flutter analyze` - analyse statique du code
+- `build_runner` - génération de code (Freezed, Riverpod, etc.)
+- `flutter test` - tests unitaires et golden tests
+
+### 📦 Déploiement Continu (CD)
+
+La CD se déclenche lors du push d'un **tag de version** (`v*`).
+
+#### Déclencher un déploiement
+
+```bash
+git tag v0.2.3
+git push origin v0.2.3
+```
+
+#### Destinations
+
+| Plateforme | Track            |
+| ---------- | ---------------- |
+| Android    | Internal Testing |
+| iOS        | TestFlight       |
+
+#### Secrets GitHub requis
+
+| Secret | Description |
+| ------ | ----------- |
+| `ANDROID_KEYSTORE_BASE64` | Keystore Android encodé en base64 |
+| `ANDROID_KEYSTORE_PASSWORD` | Mot de passe du keystore |
+| `ANDROID_KEY_ALIAS` | Alias de la clé |
+| `ANDROID_KEY_PASSWORD` | Mot de passe de la clé |
+| `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` | JSON du service account Google Play |
+| `IOS_P12_BASE64` | Certificat Apple Distribution encodé en base64 |
+| `IOS_P12_PASSWORD` | Mot de passe du certificat |
+| `IOS_PROVISIONING_PROFILE_BASE64` | Provisioning profile encodé en base64 |
+| `APP_STORE_CONNECT_ISSUER_ID` | Issuer ID App Store Connect |
+| `APP_STORE_CONNECT_API_KEY_ID` | Key ID App Store Connect |
+| `APP_STORE_CONNECT_API_PRIVATE_KEY` | Contenu du fichier .p8 |
+| `SUPABASE_URL` | URL Supabase production |
+| `SUPABASE_ANON_KEY` | Clé anonyme Supabase production |
+
+---
+
 ## 📧 Contact
 
 If you have any questions, feel free to reach out via [wishyapp.contact@gmail.com](mailto:wishyapp.contact@gmail.com).
