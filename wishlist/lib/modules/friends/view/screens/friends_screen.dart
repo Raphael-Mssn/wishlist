@@ -10,6 +10,7 @@ import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/page_layout_empty/page_layout_empty.dart';
 import 'package:wishlist/shared/theme/widgets/app_scaffold.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
+import 'package:wishlist/shared/utils/app_user_utils.dart';
 import 'package:wishlist/shared/widgets/animated_list_view.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 
@@ -20,21 +21,11 @@ class FriendsScreen extends ConsumerWidget {
   static const pendingType = 'pending';
   static const friendType = 'friend';
 
-  /// Sorts a list of [AppUser] alphabetically by pseudo (case-insensitive).
-  List<AppUser> _sortByPseudo(Iterable<AppUser> users) {
-    return users.toList()
-      ..sort(
-        (a, b) => a.profile.pseudo.toLowerCase().compareTo(
-              b.profile.pseudo.toLowerCase(),
-            ),
-      );
-  }
-
   List<_FriendItem> _buildCombinedList(FriendsData data) {
     final combinedList = <_FriendItem>[];
 
     combinedList.addAll(
-      _sortByPseudo(data.requestedFriends).map(
+      sortAppUsersByPseudo(data.requestedFriends).map(
         (user) => _FriendItem(
           user: user,
           type: requestedType,
@@ -43,7 +34,7 @@ class FriendsScreen extends ConsumerWidget {
     );
 
     combinedList.addAll(
-      _sortByPseudo(data.pendingFriends).map(
+      sortAppUsersByPseudo(data.pendingFriends).map(
         (user) => _FriendItem(
           user: user,
           type: pendingType,
@@ -52,7 +43,7 @@ class FriendsScreen extends ConsumerWidget {
     );
 
     combinedList.addAll(
-      _sortByPseudo(data.friends).map(
+      sortAppUsersByPseudo(data.friends).map(
         (user) => _FriendItem(
           user: user,
           type: friendType,

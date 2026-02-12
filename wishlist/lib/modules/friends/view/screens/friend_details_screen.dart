@@ -11,6 +11,7 @@ import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/app_refresh_indicator.dart';
+import 'package:wishlist/shared/utils/app_user_utils.dart';
 import 'package:wishlist/shared/widgets/avatar/app_avatar.dart';
 import 'package:wishlist/shared/widgets/wishlists_grid.dart';
 
@@ -152,7 +153,8 @@ class _MutualFriendsTitleAndSectionState
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final mutualFriends = widget.friendDetails.mutualFriends.toList();
+    final mutualFriends =
+        sortAppUsersByPseudo(widget.friendDetails.mutualFriends);
     final hasMoreFriends = mutualFriends.length > _maxVisibleFriends;
     final nbFriendsNotVisible = mutualFriends.length - _maxVisibleFriends;
 
