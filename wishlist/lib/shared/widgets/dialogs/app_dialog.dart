@@ -5,7 +5,7 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
-import 'package:wishlist/shared/utils/scaffold_messenger_extension.dart';
+import 'package:wishlist/shared/utils/app_snackbar.dart';
 
 class _DialogLayout extends StatefulWidget {
   const _DialogLayout({
@@ -38,7 +38,6 @@ class _DialogLayoutState extends State<_DialogLayout> {
     final l10n = context.l10n;
     final onCancel = widget.onCancel;
     final onConfirm = widget.onConfirm;
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     Future<void> Function()? confirmHandler() {
       if (onConfirm == null || _isLoading) {
@@ -59,7 +58,7 @@ class _DialogLayoutState extends State<_DialogLayout> {
             setState(() {
               _isLoading = false;
             });
-            scaffoldMessenger.showGenericError();
+            showGenericError(context, error: e);
           }
         }
       };
