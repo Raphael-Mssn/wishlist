@@ -34,8 +34,8 @@ void main() {
         'should return pseudoAlreadyExists when code is 23505 and message '
         'contains pseudo', () {
       const e = PostgrestException(
-        message:
-            'duplicate key value violates unique constraint "profiles_pseudo_key"',
+        message: 'duplicate key value violates unique constraint '
+            '"profiles_pseudo_key"',
         code: '23505',
       );
 
