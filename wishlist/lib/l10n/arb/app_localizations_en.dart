@@ -61,6 +61,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get genericError => 'An error occurred, please try again!';
 
   @override
+  String get inputTooLong => 'The input is too long.';
+
+  @override
   String get pseudoField => 'Pseudo';
 
   @override

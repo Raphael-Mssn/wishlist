@@ -200,6 +200,12 @@ abstract class AppLocalizations {
   /// **'Une erreur est survenue, veuillez réessayer.'**
   String get genericError;
 
+  /// No description provided for @inputTooLong.
+  ///
+  /// In fr, this message translates to:
+  /// **'La saisie est trop longue.'**
+  String get inputTooLong;
+
   /// No description provided for @pseudoField.
   ///
   /// In fr, this message translates to:

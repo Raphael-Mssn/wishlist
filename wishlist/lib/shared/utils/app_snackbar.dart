@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/shared/infra/app_exception.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 
 enum SnackBarType {
@@ -59,16 +60,23 @@ void showAppSnackBar(
   overlayState.insert(overlayEntry);
 }
 
-/// Affiche une erreur générique
+/// Affiche une erreur : si [error] est une [AppException] avec un message
+/// reconnu (ex. saisie trop longue), affiche ce message ; sinon erreur
+/// générique.
 void showGenericError(
   BuildContext context, {
+  Object? error,
   bool isTopSnackBar = false,
   Duration duration = const Duration(seconds: 4),
 }) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
+    final userMessageKey = error is AppException ? error.userMessageKey : null;
+    final message = userMessageKey?.toLocalizedString(context.l10n) ??
+        context.l10n.genericError;
+
     showAppSnackBar(
       context,
-      context.l10n.genericError,
+      message,
       type: SnackBarType.error,
       isTopSnackBar: isTopSnackBar,
       duration: duration,

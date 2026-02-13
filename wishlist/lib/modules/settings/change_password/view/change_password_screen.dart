@@ -53,29 +53,11 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   }
 
   void onError(AppException appException) {
-    final l10n = context.l10n;
-
     if (mounted) {
       setState(() {
         _isLoading = false;
       });
-      final statusCode = appException.statusCode;
-      switch (statusCode) {
-        case 401:
-          showGenericError(context);
-        case 403:
-          showAppSnackBar(
-            context,
-            l10n.oldPasswordIncorrect,
-            type: SnackBarType.error,
-          );
-        case 422:
-          showAppSnackBar(
-            context,
-            l10n.newPasswordShouldBeDifferent,
-            type: SnackBarType.error,
-          );
-      }
+      showGenericError(context, error: appException);
     }
   }
 

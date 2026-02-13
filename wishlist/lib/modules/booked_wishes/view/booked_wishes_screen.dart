@@ -98,7 +98,7 @@ class _BookedWishesScreenState extends ConsumerState<BookedWishesScreen> {
     return bookedWishesAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) {
-        showGenericError(context, isTopSnackBar: true);
+        showGenericError(context, error: error, isTopSnackBar: true);
         return const SizedBox.shrink();
       },
       data: (bookedWishes) {

@@ -31,7 +31,7 @@ class ChangePseudoScreen extends ConsumerWidget {
           error: (error, stackTrace) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (context.mounted) {
-                showGenericError(context);
+                showGenericError(context, error: error);
               }
             });
             return const SizedBox.shrink();
@@ -90,18 +90,7 @@ class _ChangePseudoFormState extends ConsumerState<_ChangePseudoForm> {
       setState(() {
         _isLoading = false;
       });
-
-      final statusCode = appException.statusCode;
-
-      if (statusCode == 409) {
-        showAppSnackBar(
-          context,
-          context.l10n.pseudoAlreadyExists,
-          type: SnackBarType.error,
-        );
-      } else {
-        showGenericError(context);
-      }
+      showGenericError(context, error: appException);
     }
   }
 

@@ -112,7 +112,7 @@ class _WishlistSettingsBottomSheetState
           }
         } catch (e) {
           if (mounted) {
-            showGenericError(context);
+            showGenericError(context, error: e);
           }
         }
       },
@@ -187,7 +187,7 @@ class _WishlistSettingsBottomSheetState
               }
             } catch (e) {
               if (mounted) {
-                showGenericError(context);
+                showGenericError(context, error: e);
               }
             }
           },
@@ -196,7 +196,7 @@ class _WishlistSettingsBottomSheetState
       }
     } catch (e) {
       if (mounted) {
-        showGenericError(context);
+        showGenericError(context, error: e);
       }
     }
   }
@@ -228,7 +228,7 @@ class _WishlistSettingsBottomSheetState
       }
     } catch (e) {
       if (mounted) {
-        showGenericError(context);
+        showGenericError(context, error: e);
       }
     }
   }

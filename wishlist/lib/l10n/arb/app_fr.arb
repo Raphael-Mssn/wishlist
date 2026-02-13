@@ -17,6 +17,7 @@
   "invalidLoginCredentials": "Identifiants de connexion invalides",
   "userAlreadyRegistered": "Cet email est déjà enregistré",
   "genericError": "Une erreur est survenue, veuillez réessayer.",
+  "inputTooLong": "La saisie est trop longue.",
   "pseudoField": "Pseudo",
   "validPseudoError": "Le pseudo ne peut pas être vide",
   "pseudoAlreadyExists": "Ce pseudo est déjà utilisé",

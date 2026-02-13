@@ -40,20 +40,7 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
       setState(() {
         _isLoading = false;
       });
-
-      final statusCode = appException.statusCode;
-
-      switch (statusCode) {
-        case 409:
-          showAppSnackBar(
-            context,
-            context.l10n.pseudoAlreadyExists,
-            type: SnackBarType.error,
-          );
-        case 401:
-        default:
-          showGenericError(context);
-      }
+      showGenericError(context, error: appException);
     }
   }
 

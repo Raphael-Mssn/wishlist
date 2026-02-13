@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
+import 'package:wishlist/shared/infra/utils/postgrest_user_message_key.dart';
 
 Future<T> executeSafely<T>(
   Future<T> Function() operation, {
@@ -15,6 +16,7 @@ Future<T> executeSafely<T>(
     throw AppException(
       statusCode: statusCode ?? 500,
       message: e.message,
+      userMessageKey: userMessageKeyForPostgrestException(e),
     );
   } on StorageException catch (e) {
     customErrorHandler?.call(e);
@@ -26,9 +28,6 @@ Future<T> executeSafely<T>(
   } on Exception catch (e) {
     customErrorHandler?.call(e);
 
-    throw AppException(
-      statusCode: 500,
-      message: errorMessage,
-    );
+    throw AppException(statusCode: 500, message: errorMessage);
   }
 }
