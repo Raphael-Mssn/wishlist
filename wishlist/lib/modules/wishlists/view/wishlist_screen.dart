@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_realtime_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/move_wishes_dialog.dart';
@@ -40,6 +41,8 @@ class WishlistScreen extends ConsumerStatefulWidget {
 
 class _WishlistScreenState extends ConsumerState<WishlistScreen> {
   static const double _appBarBorderRadius = 32;
+  static const String _deeplinkScheme = 'wishy';
+  static const String _deeplinkHost = 'com.raphtang.wishy';
 
   WishlistStatsCardType statCardSelected = WishlistStatsCardType.pending;
   WishSort wishSort = const WishSort(
@@ -360,6 +363,30 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     await Future.delayed(const Duration(milliseconds: 300));
   }
 
+  Future<void> _shareWishlist(Wishlist wishlist) async {
+    final wishlistPath = WishlistRoute(wishlistId: wishlist.id).location;
+    final deeplink = Uri(
+      scheme: _deeplinkScheme,
+      host: _deeplinkHost,
+      pathSegments: wishlistPath
+          .split('/')
+          .where((segment) => segment.isNotEmpty)
+          .toList(),
+    ).toString();
+
+    try {
+      await SharePlus.instance.share(
+        ShareParams(
+          text: '${wishlist.name}\n$deeplink',
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        showGenericError(context, error: e);
+      }
+    }
+  }
+
   void _updateWishlistTheme(WidgetRef ref, Wishlist wishlist) {
     final wishlistTheme = getWishlistTheme(context, wishlist);
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -379,6 +406,8 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         final wishlistTheme = getWishlistTheme(context, wishlist);
         final isMyWishlist = wishlist.idOwner ==
             ref.read(userServiceProvider).getCurrentUserId();
+        final canShareWishlist =
+            isMyWishlist && wishlist.visibility == WishlistVisibility.public;
 
         _updateWishlistTheme(ref, wishlist);
 
@@ -409,6 +438,14 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                         child: AppBar(
                           backgroundColor: Colors.transparent,
                           actions: [
+                            if (canShareWishlist)
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.share,
+                                  size: 32,
+                                ),
+                                onPressed: () => _shareWishlist(wishlist),
+                              ),
                             if (isMyWishlist)
                               Padding(
                                 padding: const EdgeInsets.only(right: 8),
