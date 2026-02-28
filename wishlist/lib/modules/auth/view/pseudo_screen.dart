@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/auth/view/auth_layout.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
@@ -14,7 +15,12 @@ import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/validators/pseudo_validator.dart';
 
 class PseudoScreen extends ConsumerStatefulWidget {
-  const PseudoScreen({super.key});
+  const PseudoScreen({
+    super.key,
+    this.redirectTo,
+  });
+
+  final String? redirectTo;
 
   @override
   ConsumerState<PseudoScreen> createState() => _PseudoScreenState();
@@ -26,12 +32,18 @@ class _PseudoScreenState extends ConsumerState<PseudoScreen> {
   bool _isLoading = false;
 
   void onSuccess() {
+    final redirectTo = widget.redirectTo;
+
     if (mounted) {
       setState(() {
         _isLoading = false;
       });
 
-      HomeRoute().go(context);
+      if (redirectTo != null && redirectTo.startsWith('/')) {
+        context.go(redirectTo);
+      } else {
+        HomeRoute().go(context);
+      }
     }
   }
 
