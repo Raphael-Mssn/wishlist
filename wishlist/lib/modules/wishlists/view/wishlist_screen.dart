@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:wishlist/app/config/deeplink_config.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_realtime_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/move_wishes_dialog.dart';
@@ -41,8 +42,6 @@ class WishlistScreen extends ConsumerStatefulWidget {
 
 class _WishlistScreenState extends ConsumerState<WishlistScreen> {
   static const double _appBarBorderRadius = 32;
-  static const String _deeplinkScheme = 'wishy';
-  static const String _deeplinkHost = 'com.raphtang.wishy';
 
   WishlistStatsCardType statCardSelected = WishlistStatsCardType.pending;
   WishSort wishSort = const WishSort(
@@ -365,14 +364,8 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
 
   Future<void> _shareWishlist(Wishlist wishlist) async {
     final wishlistPath = WishlistRoute(wishlistId: wishlist.id).location;
-    final deeplink = Uri(
-      scheme: _deeplinkScheme,
-      host: _deeplinkHost,
-      pathSegments: wishlistPath
-          .split('/')
-          .where((segment) => segment.isNotEmpty)
-          .toList(),
-    ).toString();
+    final deeplink =
+        DeeplinkConfig.buildDeeplinkUri(path: wishlistPath).toString();
 
     try {
       await SharePlus.instance.share(

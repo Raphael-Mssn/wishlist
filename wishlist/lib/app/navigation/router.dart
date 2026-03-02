@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wishlist/app/config/deeplink_config.dart';
 import 'package:wishlist/main.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 
@@ -35,8 +36,7 @@ String? _sanitizeRedirectTarget(String? target) {
     return target;
   }
 
-  final isWishyDeepLink =
-      uri.scheme == 'wishy' && uri.host == 'com.raphtang.wishy';
+  final isWishyDeepLink = DeeplinkConfig.isValidDeeplink(uri);
 
   if (!isWishyDeepLink || !uri.path.startsWith('/')) {
     return null;

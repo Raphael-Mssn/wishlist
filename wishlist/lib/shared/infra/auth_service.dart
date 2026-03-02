@@ -2,9 +2,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wishlist/app/config/deeplink_config.dart';
 import 'package:wishlist/main.dart';
 import 'package:wishlist/shared/infra/app_exception.dart';
-import 'package:wishlist/shared/infra/app_info_provider.dart';
 import 'package:wishlist/shared/infra/non_null_extensions/go_true_client_non_null_getter_user_extension.dart';
 import 'package:wishlist/shared/infra/utils/auth_user_message_key.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
@@ -89,16 +89,13 @@ class AuthService {
 
   Future<void> sendPasswordResetEmail({
     required String email,
-    required WidgetRef ref,
   }) async {
     try {
-      const deepLinkScheme = 'wishy';
-      final appInfo = await ref.watch(appInfoProvider.future);
-      final packageName = appInfo.packageName;
       final resetPasswordRouteLocation = ResetPasswordRoute().location;
 
-      final redirectUrl =
-          '$deepLinkScheme://$packageName$resetPasswordRouteLocation';
+      final redirectUrl = DeeplinkConfig.buildDeeplinkUri(
+        path: resetPasswordRouteLocation,
+      ).toString();
 
       await supabase.auth.resetPasswordForEmail(
         email,
