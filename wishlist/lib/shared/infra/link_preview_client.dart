@@ -132,7 +132,9 @@ String? _extensionFromMime(String? contentType) {
 /// Utilisé pour valider que le corps de la réponse est bien une image et pour
 /// choisir l’extension du fichier temporaire.
 String? _imageExtensionFromMagicBytes(List<int> bytes) {
-  if (bytes.length < 4) return null;
+  if (bytes.length < 4) {
+    return null;
+  }
 
   // PNG: 89 50 4E 47
   const png = [0x89, 0x50, 0x4E, 0x47];

@@ -23,7 +23,9 @@ Future<LinkPreviewData> linkPreviewData(Ref ref, String pageUrl) async {
     return await fetchPreviewDataViaEdgeFunction(client, url)
         .timeout(_edgeFunctionTimeout);
   } on TimeoutException {
-    if (kDebugMode) debugPrint('[Wishy link_preview] linkPreviewData: timeout');
+    if (kDebugMode) {
+      debugPrint('[Wishy link_preview] linkPreviewData: timeout');
+    }
     return const LinkPreviewData();
   } catch (e, st) {
     if (kDebugMode) {

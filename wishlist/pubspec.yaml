@@ -62,10 +62,10 @@ dependencies:
   package_info_plus: ^8.1.2
   pattern_box: ^0.5.4
   riverpod_annotation: ^2.3.5
-  share_intent_package: ^1.0.29
   riverpod_community_mutation: ^1.1.2
   rxdart: ^0.28.0
-  share_plus: ^11.0.0
+  share_intent_package: ^1.0.29
+  share_plus: ^12.0.1
   shared_preferences: ^2.3.2
   supabase_auth_ui: ^0.5.0
   supabase_flutter: ^2.5.11
