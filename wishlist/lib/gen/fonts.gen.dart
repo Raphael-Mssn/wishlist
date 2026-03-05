@@ -10,9 +10,6 @@
 class FontFamily {
   FontFamily._();
 
-  /// Font family: DMSerifDisplay
-  static const String dMSerifDisplay = 'DMSerifDisplay';
-
   /// Font family: PlusJakartaSans
   static const String plusJakartaSans = 'PlusJakartaSans';
 }
