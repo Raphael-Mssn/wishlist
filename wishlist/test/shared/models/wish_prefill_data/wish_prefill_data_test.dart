@@ -37,7 +37,8 @@ void main() {
       expect(result.linkUrl, 'https://amzn.eu/abc123');
     });
 
-    test('returns name and linkUrl when text has multiple words before URL', () {
+    test('returns name and linkUrl when text has multiple words before URL',
+        () {
       const text = 'Titre avec plusieurs mots https://example.com/item';
       final result = WishPrefillData.fromSharedText(text);
       expect(result.name, 'Titre avec plusieurs mots');

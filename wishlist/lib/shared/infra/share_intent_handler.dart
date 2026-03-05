@@ -39,7 +39,9 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     if (kDebugMode) {
-      debugPrint('[Wishy Share] ShareIntentHandler initState (iOS=${Platform.isIOS})');
+      debugPrint(
+        '[Wishy Share] ShareIntentHandler initState (iOS=${Platform.isIOS})',
+      );
     }
     unawaited(_initShareIntent());
   }
@@ -55,25 +57,37 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed && Platform.isIOS) {
-      Future<void>.delayed(const Duration(milliseconds: _kResumedShareDelayMs), () {
-        if (!mounted) return;
-        unawaited(_tryGetInitialSharing());
-      });
+      Future<void>.delayed(
+        const Duration(milliseconds: _kResumedShareDelayMs),
+        () {
+          if (!mounted) {
+            return;
+          }
+          unawaited(_tryGetInitialSharing());
+        },
+      );
     }
   }
 
   Future<void> _initShareIntent() async {
     if (Platform.isIOS) {
-      await ShareIntentPackage.instance.init(appGroupId: 'group.com.raphtang.wishy');
+      await ShareIntentPackage.instance.init(
+        appGroupId: 'group.com.raphtang.wishy',
+      );
     }
 
     var initial = await ShareIntentPackage.instance.getInitialSharing();
-    // Fallback iOS : données lues par le Runner dans application(open url) ou via le canal depuis le conteneur
+    // Fallback iOS : données lues par le Runner dans application(open url) ou
+    // via le canal depuis le conteneur
     if (Platform.isIOS && (initial == null || !initial.hasContent) && mounted) {
       final fromContainer = await _getSharedDataFromContainerWithRetry();
       if (fromContainer != null && fromContainer.hasContent) {
         initial = fromContainer;
-        if (kDebugMode) debugPrint('[Wishy Share] Using shared data from container (fallback)');
+        if (kDebugMode) {
+          debugPrint(
+            '[Wishy Share] Using shared data from container (fallback)',
+          );
+        }
       }
     }
     if (initial != null && initial.hasContent && mounted) {
@@ -82,22 +96,33 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
     }
 
     _mediaStreamSubscription =
-        ShareIntentPackage.instance.getMediaStream().listen((SharedData data) async {
+        ShareIntentPackage.instance.getMediaStream().listen((data) async {
       var effective = data;
-      // iOS warm start : le plugin reçoit l’URL mais UserDefaults renvoie souvent {} ; utiliser le conteneur.
+      // iOS warm start : le plugin reçoit l’URL mais UserDefaults renvoie
+      // souvent {} ; utiliser le conteneur.
       if (Platform.isIOS && (!data.hasContent) && mounted) {
-        // Délai pour laisser application(open url) s’exécuter et lire le fichier avant nous.
+        // Délai pour laisser application(open url) s’exécuter et lire le
+        // fichier avant nous.
         await Future<void>.delayed(const Duration(milliseconds: 450));
-        if (!mounted) return;
+        if (!mounted) {
+          return;
+        }
         final fromContainer = await _getSharedDataFromContainerWithRetry();
         if (fromContainer != null && fromContainer.hasContent) {
           effective = fromContainer;
-          if (kDebugMode) debugPrint('[Wishy Share] Using shared data from container (stream fallback)');
+          if (kDebugMode) {
+            debugPrint(
+              '[Wishy Share] Using shared data from container '
+              '(stream fallback)',
+            );
+          }
         }
       }
       if (effective.hasContent && mounted) {
         await _handleSharedData(effective);
-        if (mounted) await ShareIntentPackage.instance.reset();
+        if (mounted) {
+          await ShareIntentPackage.instance.reset();
+        }
       }
     });
   }
@@ -120,31 +145,44 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
     }
   }
 
-  /// Lecture des données partagées depuis le conteneur (lues par le Runner à l’ouverture ou depuis le fichier).
-  /// Plusieurs tentatives pour laisser le temps au MethodChannel de s’enregistrer au cold start.
+  /// Lecture des données partagées depuis le conteneur
+  /// (lues par le Runner à l’ouverture ou depuis le fichier).
+  /// Plusieurs tentatives pour laisser le temps au MethodChannel de
+  /// s’enregistrer au cold start.
   Future<SharedData?> _getSharedDataFromContainerWithRetry() async {
-    const int maxAttempts = 5;
-    const int delayMs = 200;
+    const maxAttempts = 5;
+    const delayMs = 200;
     for (var attempt = 0; attempt < maxAttempts && mounted; attempt++) {
       if (attempt > 0) {
         await Future<void>.delayed(const Duration(milliseconds: delayMs));
-        if (!mounted) return null;
+        if (!mounted) {
+          return null;
+        }
       }
       final data = await _getSharedDataFromContainer();
-      if (data != null && data.hasContent) return data;
+      if (data != null && data.hasContent) {
+        return data;
+      }
     }
     return null;
   }
 
   Future<SharedData?> _getSharedDataFromContainer() async {
     try {
-      final json = await _channel.invokeMethod<String>('getSharedDataFromContainer');
-      if (json == null || json.isEmpty) return null;
+      final json =
+          await _channel.invokeMethod<String>('getSharedDataFromContainer');
+      if (json == null || json.isEmpty) {
+        return null;
+      }
       final map = jsonDecode(json) as Map<String, dynamic>?;
-      if (map == null || map.isEmpty) return null;
+      if (map == null || map.isEmpty) {
+        return null;
+      }
       return SharedData.fromMap(map);
     } on PlatformException catch (e) {
-      if (kDebugMode) debugPrint('[Wishy Share] getSharedDataFromContainer: $e');
+      if (kDebugMode) {
+        debugPrint('[Wishy Share] getSharedDataFromContainer: $e');
+      }
       return null;
     } catch (e, st) {
       if (kDebugMode) {
@@ -156,7 +194,9 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
   }
 
   Future<void> _handleSharedData(SharedData data) async {
-    if (!data.hasContent) return;
+    if (!data.hasContent) {
+      return;
+    }
 
     if (kDebugMode) {
       debugPrint(
@@ -165,8 +205,8 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
       );
     }
 
-    String? text = data.text?.trim();
-    String? imagePath = _firstImagePath(data);
+    var text = data.text?.trim();
+    var imagePath = _firstImagePath(data);
 
     if (Platform.isAndroid &&
         (text == null || text.isEmpty || text.startsWith('content://'))) {
@@ -187,8 +227,12 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
     }
 
     final hasPrefill = prefill != null && prefill.hasData;
-    if (!hasPrefill && imagePath == null) return;
-    if (!mounted) return;
+    if (!hasPrefill && imagePath == null) {
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
 
     ref.read(shareIntentPayloadNotifierProvider.notifier).setPayload(
           prefill: hasPrefill ? prefill : null,
@@ -196,18 +240,28 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
         );
 
     final location = AddWishRoute().location;
-    Future<void>.delayed(const Duration(milliseconds: _kNavigateAfterPayloadDelayMs), () {
-      if (kDebugMode) debugPrint('[Wishy Share] navigating to $location');
-      router.go(location);
-    });
+    Future<void>.delayed(
+      const Duration(milliseconds: _kNavigateAfterPayloadDelayMs),
+      () {
+        if (kDebugMode) {
+          debugPrint('[Wishy Share] navigating to $location');
+        }
+        router.go(location);
+      },
+    );
   }
 
   String? _firstImagePath(SharedData data) {
-    if (data.filePaths.isEmpty) return null;
-    if (data.isImage) return data.filePaths.first;
+    if (data.filePaths.isEmpty) {
+      return null;
+    }
+    if (data.isImage) {
+      return data.filePaths.first;
+    }
     final first = data.filePaths.first;
     final ext = first.split('.').last.toLowerCase();
-    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic', 'heif', 'bmp'].contains(ext)) {
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic', 'heif', 'bmp']
+        .contains(ext)) {
       return first;
     }
     return null;
@@ -217,10 +271,13 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
 
   Future<String?> _getSharedTextFromPlatform() async {
     try {
-      final result = await _channel.invokeMethod<String>('getInitialSharedText');
+      final result =
+          await _channel.invokeMethod<String>('getInitialSharedText');
       return result?.trim();
     } on PlatformException catch (e) {
-      if (kDebugMode) debugPrint('[ShareIntent] getInitialSharedText failed: $e');
+      if (kDebugMode) {
+        debugPrint('[ShareIntent] getInitialSharedText failed: $e');
+      }
       return null;
     }
   }
@@ -229,11 +286,15 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
     try {
       final result = await _channel
           .invokeMethod<Map<Object?, Object?>>('getInitialShareExtras');
-      if (result == null || result.isEmpty) return null;
+      if (result == null || result.isEmpty) {
+        return null;
+      }
       return result
           .map((k, v) => MapEntry(k?.toString() ?? '', v?.toString() ?? ''));
     } on PlatformException catch (e) {
-      if (kDebugMode) debugPrint('[ShareIntent] getInitialShareExtras failed: $e');
+      if (kDebugMode) {
+        debugPrint('[ShareIntent] getInitialShareExtras failed: $e');
+      }
       return null;
     }
   }
@@ -258,7 +319,9 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
     if (imgUrl != null && imgUrl.startsWith('http')) {
       final imgUrlToUse = imgUrl.replaceAll(RegExp(r'_SS\d+_'), '_SS500_');
       final file = await downloadImageToTempFile(imgUrlToUse);
-      if (file != null) downloadedImagePath = file.path;
+      if (file != null) {
+        downloadedImagePath = file.path;
+      }
     }
     return (prefill: result, imagePath: downloadedImagePath);
   }
