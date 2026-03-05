@@ -774,7 +774,7 @@ packages:
     source: hosted
     version: "0.15.5"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: b9c29a161230ee03d3ccf545097fccd9b87a5264228c5d348202e0f0c28f9010
@@ -1261,6 +1261,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
+  share_intent_package:
+    dependency: "direct main"
+    description:
+      name: share_intent_package
+      sha256: "3ff375a849ae83841f1b2ce54b684f424ea4a8dca691c2c5a624a202ee905e6e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.29"
   share_plus:
     dependency: "direct main"
     description:
@@ -1755,5 +1763,5 @@ packages:
     source: hosted
     version: "2.0.3"
 sdks:
-  dart: ">=3.9.0 <4.0.0"
+  dart: ">=3.10.1 <4.0.0"
   flutter: ">=3.29.0"

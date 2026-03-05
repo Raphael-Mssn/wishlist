@@ -53,6 +53,7 @@ dependencies:
   freezed_annotation: ^2.4.4
   gap: ^3.0.1
   go_router: ^14.8.1
+  http: ^1.2.0
   image_picker: ^1.1.2
   implicitly_animated_list: ^2.3.0
   intl: any
@@ -61,6 +62,7 @@ dependencies:
   package_info_plus: ^8.1.2
   pattern_box: ^0.5.4
   riverpod_annotation: ^2.3.5
+  share_intent_package: ^1.0.29
   riverpod_community_mutation: ^1.1.2
   rxdart: ^0.28.0
   share_plus: ^11.0.0
