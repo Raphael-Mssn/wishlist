@@ -8,6 +8,7 @@ import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/dialogs/app_dialog.dart';
+import 'package:wishlist/shared/widgets/wishlist_list_tile.dart';
 
 Future<void> showMoveWishesDialog(
   BuildContext context, {
@@ -87,7 +88,7 @@ class _MoveWishesDialogContent extends ConsumerWidget {
                 padding: const EdgeInsets.only(bottom: 16),
                 itemCount: sortedWishlists.length,
                 itemBuilder: (context, index) {
-                  return _WishlistListTile(
+                  return WishlistListTile(
                     wishlist: sortedWishlists[index],
                     isSelected:
                         selectedWishlistId.value == sortedWishlists[index].id,
@@ -166,48 +167,6 @@ class _MoveWishesDialogContent extends ConsumerWidget {
         ),
         textAlign: TextAlign.center,
       ),
-    );
-  }
-}
-
-class _WishlistListTile extends StatelessWidget {
-  const _WishlistListTile({
-    required this.wishlist,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final Wishlist wishlist;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final wishlistColor = AppColors.getColorFromHexValue(wishlist.color);
-
-    return ListTile(
-      leading: Container(
-        width: 16,
-        height: 16,
-        decoration: BoxDecoration(
-          color: wishlistColor,
-          shape: BoxShape.circle,
-        ),
-      ),
-      title: Text(
-        wishlist.name,
-        style: AppTextStyles.medium.copyWith(
-          color: isSelected ? wishlistColor : AppColors.darkGrey,
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
-      trailing: isSelected
-          ? Icon(
-              Icons.check,
-              color: wishlistColor,
-            )
-          : null,
-      onTap: onTap,
     );
   }
 }
