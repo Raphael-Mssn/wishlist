@@ -400,7 +400,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         final isMyWishlist = wishlist.idOwner ==
             ref.read(userServiceProvider).getCurrentUserId();
         final canShareWishlist =
-            isMyWishlist && wishlist.visibility == WishlistVisibility.public;
+            wishlist.visibility == WishlistVisibility.public;
 
         _updateWishlistTheme(ref, wishlist);
 
@@ -432,12 +432,17 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                           backgroundColor: Colors.transparent,
                           actions: [
                             if (canShareWishlist)
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.share,
-                                  size: 32,
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  right: isMyWishlist ? 0 : 8,
                                 ),
-                                onPressed: () => _shareWishlist(wishlist),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.share,
+                                    size: 32,
+                                  ),
+                                  onPressed: () => _shareWishlist(wishlist),
+                                ),
                               ),
                             if (isMyWishlist)
                               Padding(
