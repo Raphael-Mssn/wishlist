@@ -12,11 +12,15 @@ class ImageUploadField extends StatelessWidget {
     this.onTap,
     this.imageFile,
     this.existingImageUrl,
+    this.isPreviewLoading = false,
   });
 
   final VoidCallback? onTap;
   final File? imageFile;
   final String? existingImageUrl;
+
+  /// True quand on charge l'image de prévisualisation du lien (og:image / Microlink).
+  final bool isPreviewLoading;
 
   static const double _imageHeight = 180;
   static const double _borderRadius = 16;
@@ -107,6 +111,23 @@ class ImageUploadField extends StatelessWidget {
           ),
         ),
         child: content,
+      );
+    }
+
+    if (isPreviewLoading && !_hasImage) {
+      return Container(
+        height: _imageHeight,
+        decoration: BoxDecoration(
+          color: AppColors.gainsboro,
+          borderRadius: BorderRadius.circular(_borderRadius),
+        ),
+        child: const Center(
+          child: SizedBox(
+            width: 32,
+            height: 32,
+            child: CircularProgressIndicator(),
+          ),
+        ),
       );
     }
 

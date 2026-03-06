@@ -27,7 +27,13 @@ class WishFormFields extends StatefulWidget {
     required this.linkController,
     required this.descriptionController,
     required this.onImageSelected,
+    this.linkFocusNode,
+    this.onLinkPasted,
+    this.onLinkFieldUnfocused,
     this.existingImageUrl,
+    this.initialImageFile,
+    this.isPreviewImageLoading = false,
+    this.initialNameFromPreview,
   });
 
   final GlobalKey<FormState> formKey;
@@ -37,7 +43,25 @@ class WishFormFields extends StatefulWidget {
   final TextEditingController linkController;
   final TextEditingController descriptionController;
   final ValueChanged<File?> onImageSelected;
+
+  /// FocusNode du champ lien (pour détecter la perte de focus).
+  final FocusNode? linkFocusNode;
+
+  /// Appelé quand l'utilisateur colle un lien via le bouton.
+  final VoidCallback? onLinkPasted;
+
+  /// Appelé quand le champ lien perd le focus.
+  final VoidCallback? onLinkFieldUnfocused;
   final String? existingImageUrl;
+
+  /// Image reçue via partage (ex. Amazon) : affichée dans le formulaire.
+  final File? initialImageFile;
+
+  /// True pendant le chargement de l'aperçu du lien (og:image / Microlink).
+  final bool isPreviewImageLoading;
+
+  /// Titre de la page (og:title) : préremplit le nom quand vide.
+  final String? initialNameFromPreview;
 
   @override
   State<WishFormFields> createState() => WishFormFieldsState();
@@ -52,9 +76,50 @@ class WishFormFieldsState extends State<WishFormFields> {
   bool get hasRemovedExistingImage => _hasRemovedExistingImage;
 
   @override
+  void initState() {
+    super.initState();
+    widget.linkFocusNode?.addListener(_onLinkFocusChange);
+    if (widget.initialImageFile != null) {
+      _selectedImage = widget.initialImageFile;
+    }
+    if (widget.initialNameFromPreview != null &&
+        widget.initialNameFromPreview!.isNotEmpty &&
+        widget.nameController.text.trim().isEmpty) {
+      widget.nameController.text = widget.initialNameFromPreview!;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant WishFormFields oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.linkFocusNode != widget.linkFocusNode) {
+      oldWidget.linkFocusNode?.removeListener(_onLinkFocusChange);
+      widget.linkFocusNode?.addListener(_onLinkFocusChange);
+    }
+    final newFile = widget.initialImageFile;
+    if (newFile != null && newFile.path != _selectedImage?.path) {
+      setState(() => _selectedImage = newFile);
+    }
+    final nameFromPreview = widget.initialNameFromPreview;
+    if (nameFromPreview != null &&
+        nameFromPreview.isNotEmpty &&
+        nameFromPreview != oldWidget.initialNameFromPreview &&
+        widget.nameController.text.trim().isEmpty) {
+      widget.nameController.text = nameFromPreview;
+    }
+  }
+
+  @override
   void dispose() {
+    widget.linkFocusNode?.removeListener(_onLinkFocusChange);
     _dummyFocusNode.dispose();
     super.dispose();
+  }
+
+  void _onLinkFocusChange() {
+    if (widget.linkFocusNode?.hasFocus == false) {
+      widget.onLinkFieldUnfocused?.call();
+    }
   }
 
   void _focusDummyNode() {
@@ -136,6 +201,7 @@ class WishFormFieldsState extends State<WishFormFields> {
     final text = clipboardData?.text;
     if (text != null) {
       widget.linkController.text = text;
+      widget.onLinkPasted?.call();
     }
   }
 
@@ -213,6 +279,7 @@ class WishFormFieldsState extends State<WishFormFields> {
           ),
           AppTextField(
             controller: widget.linkController,
+            focusNode: widget.linkFocusNode,
             label: l10n.wishLinkLabel,
             icon: Icons.link,
             keyboardType: TextInputType.url,
@@ -262,6 +329,7 @@ class WishFormFieldsState extends State<WishFormFields> {
             imageFile: _selectedImage,
             existingImageUrl:
                 _hasRemovedExistingImage ? null : widget.existingImageUrl,
+            isPreviewLoading: widget.isPreviewImageLoading,
             onTap: () {
               _showImageOptions();
               _focusDummyNode();

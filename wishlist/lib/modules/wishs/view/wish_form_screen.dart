@@ -1,15 +1,19 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form_app_bar.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form_fields.dart';
+import 'package:wishlist/shared/infra/link_preview_provider.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_streams_providers.dart';
+import 'package:wishlist/shared/infra/share_intent_payload_provider.dart';
 import 'package:wishlist/shared/infra/wish_image_url_provider.dart';
 import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
+import 'package:wishlist/shared/models/wish_prefill_data/wish_prefill_data.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
@@ -24,10 +28,12 @@ class WishFormScreen extends ConsumerStatefulWidget {
     super.key,
     required this.wishlistId,
     this.wish,
+    this.prefill,
   });
 
   final int wishlistId;
   final Wish? wish;
+  final WishPrefillData? prefill;
 
   bool get isEditMode => wish != null;
 
@@ -48,6 +54,15 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
   late bool _isFavourite;
   File? _selectedImage;
 
+  /// True = afficher l'image de la preview ; false = l'utilisateur l'a
+  /// supprimée (redevient true à la sortie du champ lien ou au collage).
+  bool _showPreviewImage = true;
+
+  /// True si on est arrivé avec une image partagée (intent) : ne pas appeler
+  /// l'Edge Function pour ce formulaire.
+  bool _hadPendingSharedImage = false;
+  FocusNode? _linkFocusNode;
+
   @override
   void initState() {
     super.initState();
@@ -67,24 +82,91 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
           TextEditingController(text: wish.description);
       _isFavourite = wish.isFavourite;
     } else {
-      // Mode création : initialiser avec des valeurs par défaut
-      _nameInputController = TextEditingController();
-      _priceInputController = TextEditingController();
+      // Mode création : préremplissage si fourni (partage, deep link), sinon
+      // vide
+      final prefill = widget.prefill;
+      _nameInputController = TextEditingController(text: prefill?.name ?? '');
+      _priceInputController = TextEditingController(
+        text: (prefill?.price).toStringWithout0OrEmpty(),
+      );
       _quantityInputController = TextEditingController(text: '1');
-      _linkInputController = TextEditingController();
-      _descriptionInputController = TextEditingController();
+      _linkInputController =
+          TextEditingController(text: prefill?.linkUrl ?? '');
+      _descriptionInputController =
+          TextEditingController(text: prefill?.description ?? '');
       _isFavourite = false;
+
+      _linkFocusNode = FocusNode();
+      _linkFocusNode!.addListener(_onLinkFocusChange);
+      _linkInputController.addListener(_onLinkChanged);
+
+      _hadPendingSharedImage =
+          ref.read(shareIntentPayloadNotifierProvider).imagePath != null;
+      // Image reçue via partage : lecture (sans modifier le provider) puis
+      // clear après le build
+      _loadPendingSharedImage();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) {
+          return;
+        }
+        _loadPendingSharedImage();
+        ref.read(shareIntentPayloadNotifierProvider.notifier).clearImagePath();
+      });
+    }
+  }
+
+  /// Lit le chemin image (sans modifier le provider). Le clear est fait
+  /// dans le post-frame callback. Appelée depuis initState puis en post-frame :
+  /// pas de setState tant que le widget n'est pas monté.
+  void _loadPendingSharedImage() {
+    final path = ref.read(shareIntentPayloadNotifierProvider).imagePath;
+    if (path == null) {
+      return;
+    }
+    final file = File(path);
+    if (file.existsSync() && _selectedImage?.path != file.path) {
+      if (mounted) {
+        setState(() => _selectedImage = file);
+      } else {
+        // Appel depuis initState : pas encore de build, on fixe l'état initial.
+        _selectedImage = file;
+      }
+    }
+  }
+
+  void _onLinkFocusChange() {
+    if (_linkFocusNode?.hasFocus == false && mounted) {
+      setState(() => _showPreviewImage = true);
+    }
+  }
+
+  /// Dès que l'utilisateur modifie le lien (ou colle), on réautorise la
+  /// preview (après une suppression d'image).
+  void _onLinkChanged() {
+    if (widget.wish != null) {
+      return;
+    }
+    if (mounted && _linkInputController.text.trim().isNotEmpty) {
+      setState(() => _showPreviewImage = true);
     }
   }
 
   void _onImageSelected(File? imageFile) {
     setState(() {
       _selectedImage = imageFile;
+      if (imageFile == null) {
+        _showPreviewImage = false;
+        _hadPendingSharedImage = false;
+        // permettre à nouveau la preview (Edge Function) pour un nouveau lien
+      }
     });
   }
 
   bool _validateQuantity(int? quantity) {
-    if (!widget.isEditMode || quantity == null) {
+    if (!widget.isEditMode) {
+      return true;
+    }
+    if (quantity == null) {
       return true;
     }
 
@@ -145,40 +227,45 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
     String link,
     String description,
   ) async {
-    final wishlistAsync =
-        ref.read(watchWishlistByIdProvider(widget.wishlistId));
+    final wishlist = await ref.read(
+      watchWishlistByIdProvider(widget.wishlistId).future,
+    );
 
-    wishlistAsync.whenData((wishlist) async {
-      final wish = WishCreateRequest(
-        name: name,
-        price: double.tryParse(price),
-        quantity: quantity,
-        description: description,
-        wishlistId: widget.wishlistId,
-        updatedBy: wishlist.idOwner,
-        linkUrl: link,
-        isFavourite: _isFavourite,
-      );
+    final wish = WishCreateRequest(
+      name: name,
+      price: double.tryParse(price),
+      quantity: quantity,
+      description: description,
+      wishlistId: widget.wishlistId,
+      updatedBy: wishlist.idOwner,
+      linkUrl: link,
+      isFavourite: _isFavourite,
+    );
 
-      try {
-        if (_selectedImage != null) {
-          await ref.read(wishMutationsProvider.notifier).createWithImage(
-                request: wish,
-                imageFile: _selectedImage,
-              );
-        } else {
-          await ref.read(wishMutationsProvider.notifier).create(wish);
-        }
+    final previewData = link.trim().isEmpty
+        ? null
+        : ref.read(linkPreviewDataProvider(link)).valueOrNull;
+    final imageFile = _selectedImage ?? previewData?.image;
 
-        if (mounted) {
-          context.pop();
-        }
-      } catch (e) {
-        if (mounted) {
-          showGenericError(context, error: e);
-        }
+    try {
+      final notifier = ref.read(wishMutationsProvider.notifier);
+      if (imageFile != null) {
+        await notifier.createWithImage(
+          request: wish,
+          imageFile: imageFile,
+        );
+      } else {
+        await notifier.create(wish);
       }
-    });
+
+      if (mounted) {
+        context.pop();
+      }
+    } catch (e) {
+      if (mounted) {
+        showGenericError(context, error: e);
+      }
+    }
   }
 
   Future<void> _updateWish(
@@ -205,20 +292,19 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
       isFavourite: _isFavourite,
     );
 
-    try {
-      final hasRemovedImage =
-          _wishFormFieldsKey.currentState?.hasRemovedExistingImage ?? false;
+    final hasRemovedImage =
+        _wishFormFieldsKey.currentState?.hasRemovedExistingImage ?? false;
+    final notifier = ref.read(wishMutationsProvider.notifier);
 
-      // Utiliser updateWithImage pour tous les cas où l'image change
+    try {
       if (_selectedImage != null || hasRemovedImage) {
-        await ref.read(wishMutationsProvider.notifier).updateWithImage(
-              wish: wishToUpdate,
-              imageFile: _selectedImage,
-              deleteImage: hasRemovedImage && _selectedImage == null,
-            );
+        await notifier.updateWithImage(
+          wish: wishToUpdate,
+          imageFile: _selectedImage,
+          deleteImage: hasRemovedImage && _selectedImage == null,
+        );
       } else {
-        // Sinon, update sans changement d'image
-        await ref.read(wishMutationsProvider.notifier).update(wishToUpdate);
+        await notifier.update(wishToUpdate);
       }
 
       if (mounted) {
@@ -273,6 +359,11 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
 
   @override
   void dispose() {
+    if (widget.wish == null) {
+      _linkFocusNode?.removeListener(_onLinkFocusChange);
+      _linkFocusNode?.dispose();
+      _linkInputController.removeListener(_onLinkChanged);
+    }
     _nameInputController.dispose();
     _priceInputController.dispose();
     _quantityInputController.dispose();
@@ -285,6 +376,30 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    // Mode création : URL pour la preview = champ lien (priorité) puis prefill
+    final linkUrl = widget.wish == null
+        ? (_linkInputController.text.trim().isNotEmpty
+            ? _linkInputController.text.trim()
+            : (widget.prefill?.linkUrl ?? '').trim())
+        : '';
+    // Ne pas appeler l'Edge Function si image déjà fournie par partage
+    // (intent) ou par l'utilisateur, ou si preview désactivée.
+    final previewAsync = linkUrl.isEmpty ||
+            _selectedImage != null ||
+            ref.read(shareIntentPayloadNotifierProvider).imagePath != null ||
+            _hadPendingSharedImage ||
+            !_showPreviewImage
+        ? null
+        : ref.watch(linkPreviewDataProvider(linkUrl));
+    final previewData = previewAsync?.valueOrNull;
+    final imageToDisplay =
+        _selectedImage ?? (_showPreviewImage ? previewData?.image : null);
+    final titleFromPreview = previewData?.title;
+    final isPreviewImageLoading = widget.wish == null &&
+        linkUrl.isNotEmpty &&
+        (previewAsync?.isLoading ?? false) &&
+        imageToDisplay == null;
+
     final wishlistThemeAsync = ref.watch(
       wishlistThemeProvider(
         widget.wishlistId,
@@ -338,7 +453,15 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
                         linkController: _linkInputController,
                         descriptionController: _descriptionInputController,
                         onImageSelected: _onImageSelected,
+                        linkFocusNode: _linkFocusNode,
+                        onLinkPasted: () =>
+                            setState(() => _showPreviewImage = true),
+                        onLinkFieldUnfocused: () =>
+                            setState(() => _showPreviewImage = true),
                         existingImageUrl: wishImageUrl,
+                        initialImageFile: imageToDisplay,
+                        isPreviewImageLoading: isPreviewImageLoading,
+                        initialNameFromPreview: titleFromPreview,
                       ),
                     ),
                   ),
