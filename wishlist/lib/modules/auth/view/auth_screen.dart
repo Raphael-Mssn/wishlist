@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:wishlist/gen/fonts.gen.dart';
@@ -18,7 +19,12 @@ import 'package:wishlist/shared/widgets/text_form_fields/input_password.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/input_pseudo_or_email.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
-  const AuthScreen({super.key});
+  const AuthScreen({
+    super.key,
+    this.redirectTo,
+  });
+
+  final String? redirectTo;
 
   @override
   ConsumerState<AuthScreen> createState() => _AuthScreenState();
@@ -74,15 +80,32 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   }
 
   void onSuccess() {
+    final redirectTo = widget.redirectTo;
+
     if (mounted) {
       setState(() {
         _isLoading = false;
       });
       if (_isSigningIn) {
         ref.read(currentUserAvatarProvider.notifier).refresh();
-        HomeRoute().go(context);
+        if (redirectTo != null && redirectTo.startsWith('/')) {
+          context.go(redirectTo);
+        } else {
+          HomeRoute().go(context);
+        }
       } else {
-        PseudoRoute().go(context);
+        if (redirectTo != null && redirectTo.startsWith('/')) {
+          context.go(
+            Uri(
+              path: PseudoRoute().location,
+              queryParameters: {
+                'redirectTo': redirectTo,
+              },
+            ).toString(),
+          );
+        } else {
+          PseudoRoute().go(context);
+        }
       }
     }
   }

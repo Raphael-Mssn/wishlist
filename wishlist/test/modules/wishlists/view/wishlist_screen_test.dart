@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen.dart';
+import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 
 import '../../../fixtures/fake_data.dart';
@@ -10,14 +11,41 @@ import '../../../fixtures/fake_providers.dart';
 import '../../../pump_app.dart';
 
 void main() {
+  Future<void> expectShareButtonVisibility({
+    required WidgetTester tester,
+    required String testName,
+    required int wishlistId,
+    required Wishlist wishlist,
+    required bool shouldShowShareButton,
+  }) async {
+    await tester.pumpRouterApp(
+      WishlistRoute(wishlistId: wishlistId).location,
+      overrides: wishlistScreenOverrides(
+        wishlistId: wishlistId,
+        wishlist: wishlist,
+        wishes: fakeWishes,
+        currentUserId: fakeCurrentUserId,
+      ),
+    );
+
+    await tester.pumpAndSettle(const Duration(seconds: 1));
+
+    final shareFinder = find.byIcon(Icons.share);
+    expect(
+      shareFinder,
+      shouldShowShareButton ? findsOneWidget : findsNothing,
+      reason: testName,
+    );
+  }
+
   testAdaptiveWidgets('$WishlistScreen golden test with wishes',
       (tester, variant) async {
     await tester.pumpRouterApp(
-      WishlistRoute(wishlistId: 1).location,
+      WishlistRoute(wishlistId: 2).location,
       windowConfig: variant,
       overrides: wishlistScreenOverrides(
-        wishlistId: 1,
-        wishlist: fakeWishlist1,
+        wishlistId: 2,
+        wishlist: fakeWishlist2,
         wishes: fakeWishes,
       ),
     );
@@ -31,11 +59,11 @@ void main() {
   testAdaptiveWidgets('$WishlistScreen golden test when empty',
       (tester, variant) async {
     await tester.pumpRouterApp(
-      WishlistRoute(wishlistId: 1).location,
+      WishlistRoute(wishlistId: 2).location,
       windowConfig: variant,
       overrides: wishlistScreenOverrides(
-        wishlistId: 1,
-        wishlist: fakeWishlist1,
+        wishlistId: 2,
+        wishlist: fakeWishlist2,
         wishes: [],
       ),
     );
@@ -48,11 +76,11 @@ void main() {
   testAdaptiveWidgets('$WishlistScreen golden test with booked wishes',
       (tester, variant) async {
     await tester.pumpRouterApp(
-      WishlistRoute(wishlistId: 1).location,
+      WishlistRoute(wishlistId: 2).location,
       windowConfig: variant,
       overrides: wishlistScreenOverrides(
-        wishlistId: 1,
-        wishlist: fakeWishlist1,
+        wishlistId: 2,
+        wishlist: fakeWishlist2,
         wishes: fakeWishesWithBooked,
       ),
     );
@@ -79,10 +107,10 @@ void main() {
     'should only exit selection mode when user does back system action',
     (tester) async {
       await tester.pumpRouterApp(
-        WishlistRoute(wishlistId: 1).location,
+        WishlistRoute(wishlistId: 2).location,
         overrides: wishlistScreenOverrides(
-          wishlistId: 1,
-          wishlist: fakeWishlist1,
+          wishlistId: 2,
+          wishlist: fakeWishlist2,
           wishes: fakeWishes,
           currentUserId: fakeCurrentUserId,
         ),
@@ -111,6 +139,32 @@ void main() {
       expect(find.byType(WishlistScreen), findsOneWidget);
       expect(find.byIcon(Icons.add), findsOneWidget);
       expect(find.byIcon(Icons.delete), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'should not display share button when wishlist is private',
+    (tester) async {
+      await expectShareButtonVisibility(
+        tester: tester,
+        testName: 'private wishlist should hide share button',
+        wishlistId: 1,
+        wishlist: fakeWishlist1,
+        shouldShowShareButton: false,
+      );
+    },
+  );
+
+  testWidgets(
+    'should display share button when wishlist is public',
+    (tester) async {
+      await expectShareButtonVisibility(
+        tester: tester,
+        testName: 'public wishlist should show share button',
+        wishlistId: 2,
+        wishlist: fakeWishlist2,
+        shouldShowShareButton: true,
+      );
     },
   );
 }

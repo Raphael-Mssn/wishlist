@@ -67,8 +67,9 @@ class HomeRoute extends GoRouteData {
 
 class PseudoRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const PseudoScreen();
+  Widget build(BuildContext context, GoRouterState state) => PseudoScreen(
+        redirectTo: state.uri.queryParameters['redirectTo'],
+      );
 }
 
 class WishlistRoute extends GoRouteData {
@@ -183,7 +184,9 @@ class FriendDetailsRoute extends GoRouteData {
 )
 class AuthRoute extends GoRouteData {
   @override
-  Widget build(BuildContext context, GoRouterState state) => const AuthScreen();
+  Widget build(BuildContext context, GoRouterState state) => AuthScreen(
+        redirectTo: state.uri.queryParameters['redirectTo'],
+      );
 }
 
 class ForgotPasswordRoute extends GoRouteData {

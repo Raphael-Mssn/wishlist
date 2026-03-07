@@ -1,6 +1,8 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:wishlist/app/config/deeplink_config.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_realtime_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/move_wishes_dialog.dart';
@@ -360,6 +362,24 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
     await Future.delayed(const Duration(milliseconds: 300));
   }
 
+  Future<void> _shareWishlist(Wishlist wishlist) async {
+    final wishlistPath = WishlistRoute(wishlistId: wishlist.id).location;
+    final deeplink =
+        DeeplinkConfig.buildDeeplinkUri(path: wishlistPath).toString();
+
+    try {
+      await SharePlus.instance.share(
+        ShareParams(
+          text: '${wishlist.name}\n$deeplink',
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        showGenericError(context, error: e);
+      }
+    }
+  }
+
   void _updateWishlistTheme(WidgetRef ref, Wishlist wishlist) {
     final wishlistTheme = getWishlistTheme(context, wishlist);
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -379,6 +399,8 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         final wishlistTheme = getWishlistTheme(context, wishlist);
         final isMyWishlist = wishlist.idOwner ==
             ref.read(userServiceProvider).getCurrentUserId();
+        final canShareWishlist =
+            wishlist.visibility == WishlistVisibility.public;
 
         _updateWishlistTheme(ref, wishlist);
 
@@ -409,6 +431,19 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
                         child: AppBar(
                           backgroundColor: Colors.transparent,
                           actions: [
+                            if (canShareWishlist)
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  right: isMyWishlist ? 0 : 8,
+                                ),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.share,
+                                    size: 32,
+                                  ),
+                                  onPressed: () => _shareWishlist(wishlist),
+                                ),
+                              ),
                             if (isMyWishlist)
                               Padding(
                                 padding: const EdgeInsets.only(right: 8),
