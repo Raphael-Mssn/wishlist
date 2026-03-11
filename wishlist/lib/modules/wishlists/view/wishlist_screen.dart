@@ -1,4 +1,3 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
@@ -7,21 +6,16 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_realtime_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/move_wishes_dialog.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_app_bar.dart';
-import 'package:wishlist/modules/wishlists/view/widgets/wishlist_content.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_floating_actions.dart';
-import 'package:wishlist/modules/wishlists/view/widgets/wishlist_search_bar.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wishlist_screen_body.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom_sheet.dart';
-import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
-import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_section.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen_notifier.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
-import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
-import 'package:wishlist/shared/utils/wish_sort_utils.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 
 class WishlistScreen extends ConsumerWidget {
@@ -31,37 +25,6 @@ class WishlistScreen extends ConsumerWidget {
   });
 
   final int wishlistId;
-
-  void _onAddWish(BuildContext context, Wishlist wishlist) {
-    CreateWishRoute(wishlistId: wishlist.id).push(context);
-  }
-
-  void _onTapWish(
-    BuildContext context,
-    WidgetRef ref,
-    Wish wish, {
-    required bool isMyWishlist,
-    required IList<Wish> wishsToDisplay,
-  }) {
-    final screenState =
-        ref.read(wishlistScreenNotifierProvider(wishlistId));
-
-    if (screenState.isSelectionMode) {
-      ref
-          .read(wishlistScreenNotifierProvider(wishlistId).notifier)
-          .toggleWishSelection(wish.id);
-      return;
-    }
-
-    final wishIds = wishsToDisplay.map((w) => w.id).toList();
-
-    ConsultWishRoute(
-      wish.wishlistId,
-      wish.id,
-      wishIds: wishIds,
-      isMyWishlist: isMyWishlist,
-    ).push(context);
-  }
 
   Future<void> _deleteSelectedWishs(
     BuildContext context,
@@ -207,20 +170,18 @@ class WishlistScreen extends ConsumerWidget {
                   body: SafeArea(
                     child: Stack(
                       children: [
-                        _buildWishlistDetail(
-                          context,
-                          ref,
-                          data,
-                          screenState: screenState,
-                          notifier: notifier,
+                        WishlistScreenBody(
+                          wishlistId: wishlistId,
+                          wishlistScreenData: data,
                           isMyWishlist: isMyWishlist,
                         ),
                         if (isMyWishlist)
                           WishlistFloatingActions(
                             wishlistId: wishlistId,
                             wishlistTheme: wishlistTheme,
-                            onAdd: () =>
-                                _onAddWish(context, wishlist),
+                            onAdd: () => CreateWishRoute(
+                              wishlistId: wishlist.id,
+                            ).push(context),
                             onDelete: () =>
                                 _deleteSelectedWishs(context, ref),
                             onMove: () =>
@@ -243,123 +204,6 @@ class WishlistScreen extends ConsumerWidget {
         appBar: AppBar(backgroundColor: AppColors.background),
         body: const SizedBox.shrink(),
       ),
-    );
-  }
-
-  Widget _buildWishlistDetail(
-    BuildContext context,
-    WidgetRef ref,
-    WishlistScreenData wishlistScreenData, {
-    required WishlistScreenState screenState,
-    required WishlistScreenNotifier notifier,
-    required bool isMyWishlist,
-  }) {
-    final wishlist = wishlistScreenData.wishlist;
-    final wishs = WishSortUtils.sortAndFilterWishs(
-      wishlistScreenData.wishs,
-      wishSort: screenState.wishSort,
-      searchQuery: screenState.searchQuery,
-    );
-
-    final isWishsBookedHidden = !wishlist.canOwnerSeeTakenWish && isMyWishlist;
-
-    final wishsPending = isWishsBookedHidden
-        ? wishs.toIList()
-        : wishs.where((wish) => wish.availableQuantity > 0).toIList();
-
-    final wishsBooked =
-        wishs.where((wish) => wish.totalBookedQuantity > 0).toIList();
-
-    final nbWishsPending = wishsPending.length;
-    final nbWishsBooked = wishsBooked.length;
-
-    void onTapWish(
-      BuildContext context,
-      Wish wish, {
-      required bool isMyWishlist,
-      required IList<Wish> wishsToDisplay,
-      WishlistStatsCardType? cardType,
-    }) {
-      _onTapWish(
-        context,
-        ref,
-        wish,
-        isMyWishlist: isMyWishlist,
-        wishsToDisplay: wishsToDisplay,
-      );
-    }
-
-    WishlistContent buildContent({
-      required IList<Wish> wishs,
-      required bool shouldDisplay,
-      required WishlistStatsCardType cardType,
-    }) {
-      return WishlistContent(
-        wishlist: wishlist,
-        wishsToDisplay: wishs,
-        shouldDisplayWishs: shouldDisplay,
-        statCardSelected: cardType,
-        isWishsBookedHidden: isWishsBookedHidden,
-        isMyWishlist: isMyWishlist,
-        onTapWish: onTapWish,
-        onAddWish: _onAddWish,
-        onFavoriteToggle: (wish) async {
-          try {
-            await notifier.toggleFavorite(wish);
-          } catch (e) {
-            if (context.mounted) {
-              showGenericError(context, error: e);
-            }
-          }
-        },
-        onRefresh: notifier.refreshData,
-        isSelectionMode: screenState.isSelectionMode,
-        selectedWishIds: screenState.selectedWishIds,
-        onLongPressWish:
-            isMyWishlist ? notifier.enableSelectionMode : null,
-      );
-    }
-
-    return Column(
-      children: [
-        WishlistStatsSection(
-          statCardSelected: screenState.statCardSelected,
-          nbWishsTotal: wishs.length,
-          nbWishsPending: nbWishsPending,
-          nbWishsBooked: nbWishsBooked,
-          isWishsBookedHidden: isWishsBookedHidden,
-          onTapStatCard: notifier.selectStatCard,
-        ),
-        WishlistSearchBar(
-          searchController: notifier.searchController,
-          searchFocusNode: notifier.searchFocusNode,
-          searchQuery: screenState.searchQuery,
-          wishSort: screenState.wishSort,
-          onSortChanged: notifier.updateSort,
-          onClearFocus: () =>
-              FocusScope.of(context).requestFocus(FocusNode()),
-        ),
-        Expanded(
-          child: PageView(
-            physics: const ClampingScrollPhysics(),
-            controller: notifier.pageController,
-            onPageChanged: notifier.onPageChanged,
-            children: [
-              buildContent(
-                wishs: wishsPending,
-                shouldDisplay: nbWishsPending > 0,
-                cardType: WishlistStatsCardType.pending,
-              ),
-              buildContent(
-                wishs: wishsBooked,
-                shouldDisplay:
-                    nbWishsBooked > 0 && !isWishsBookedHidden,
-                cardType: WishlistStatsCardType.booked,
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 
