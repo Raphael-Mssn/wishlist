@@ -153,7 +153,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
 
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height / 1.8,
+        maxHeight: MediaQuery.sizeOf(context).height / 1.8,
       ),
       child: DecoratedBox(
         decoration: BoxDecoration(
