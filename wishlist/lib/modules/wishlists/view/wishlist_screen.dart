@@ -6,6 +6,7 @@ import 'package:wishlist/app/config/deeplink_config.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_realtime_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/move_wishes_dialog.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wishlist_app_bar.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_content.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_search_bar.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom_sheet.dart';
@@ -21,7 +22,6 @@ import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
-import 'package:wishlist/shared/theme/widgets/app_wave_pattern.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/wish_sort_utils.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
@@ -34,8 +34,6 @@ class WishlistScreen extends ConsumerWidget {
   });
 
   final int wishlistId;
-
-  static const double _appBarBorderRadius = 32;
 
   void _onAddWish(BuildContext context, Wishlist wishlist) {
     CreateWishRoute(wishlistId: wishlist.id).push(context);
@@ -234,60 +232,17 @@ class WishlistScreen extends ConsumerWidget {
                 },
                 child: Scaffold(
                   resizeToAvoidBottomInset: false,
-                  appBar: PreferredSize(
-                    preferredSize: const Size.fromHeight(70),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        bottom: Radius.circular(_appBarBorderRadius),
-                      ),
-                      child: AppWavePattern(
-                        backgroundColor: wishlistTheme.primaryColor,
-                        preset: WavePreset.appBar,
-                        rotationType: WaveRotationType.fixed,
-                        rotationAngle: 45,
-                        child: AppBar(
-                          backgroundColor: Colors.transparent,
-                          actions: [
-                            if (canShareWishlist)
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  right: isMyWishlist ? 0 : 8,
-                                ),
-                                child: IconButton(
-                                  icon: const Icon(Icons.share, size: 32),
-                                  onPressed: () =>
-                                      _shareWishlist(context, wishlist),
-                                ),
-                              ),
-                            if (isMyWishlist)
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: IconButton(
-                                  icon: const Icon(Icons.settings, size: 32),
-                                  onPressed: () =>
-                                      showWishlistSettingsBottomSheet(
-                                    context,
-                                    wishlist,
-                                  ),
-                                ),
-                              ),
-                          ],
-                          foregroundColor: AppColors.background,
-                          title: Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              wishlist.name,
-                              style: AppTextStyles.titleSmall,
-                            ),
-                          ),
-                          centerTitle: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              bottom: Radius.circular(_appBarBorderRadius),
-                            ),
-                          ),
-                        ),
-                      ),
+                  appBar: WishlistAppBar(
+                    title: wishlist.name,
+                    wishlistTheme: wishlistTheme,
+                    isMyWishlist: isMyWishlist,
+                    canShareWishlist: canShareWishlist,
+                    onShare: () =>
+                        _shareWishlist(context, wishlist),
+                    onSettings: () =>
+                        showWishlistSettingsBottomSheet(
+                      context,
+                      wishlist,
                     ),
                   ),
                   body: SafeArea(
