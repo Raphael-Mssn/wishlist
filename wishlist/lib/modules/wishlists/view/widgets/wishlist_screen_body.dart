@@ -32,8 +32,7 @@ class WishlistScreenBody extends ConsumerWidget {
     required bool isMyWishlist,
     required IList<Wish> wishsToDisplay,
   }) {
-    final screenState =
-        ref.read(wishlistScreenNotifierProvider(wishlistId));
+    final screenState = ref.read(wishlistScreenNotifierProvider(wishlistId));
 
     if (screenState.isSelectionMode) {
       ref
@@ -70,7 +69,9 @@ class WishlistScreenBody extends ConsumerWidget {
       statCardSelected: cardType,
       isWishsBookedHidden: isWishsBookedHidden,
       isMyWishlist: isMyWishlist,
-      onTapWish: (context, wish, {
+      onTapWish: (
+        context,
+        wish, {
         required isMyWishlist,
         required wishsToDisplay,
         cardType,
@@ -96,15 +97,13 @@ class WishlistScreenBody extends ConsumerWidget {
       onRefresh: notifier.refreshData,
       isSelectionMode: screenState.isSelectionMode,
       selectedWishIds: screenState.selectedWishIds,
-      onLongPressWish:
-          isMyWishlist ? notifier.enableSelectionMode : null,
+      onLongPressWish: isMyWishlist ? notifier.enableSelectionMode : null,
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenState =
-        ref.watch(wishlistScreenNotifierProvider(wishlistId));
+    final screenState = ref.watch(wishlistScreenNotifierProvider(wishlistId));
     final notifier =
         ref.read(wishlistScreenNotifierProvider(wishlistId).notifier);
 
@@ -115,8 +114,7 @@ class WishlistScreenBody extends ConsumerWidget {
       searchQuery: screenState.searchQuery,
     );
 
-    final isWishsBookedHidden =
-        !wishlist.canOwnerSeeTakenWish && isMyWishlist;
+    final isWishsBookedHidden = !wishlist.canOwnerSeeTakenWish && isMyWishlist;
 
     final wishsPending = isWishsBookedHidden
         ? wishs.toIList()
@@ -144,8 +142,7 @@ class WishlistScreenBody extends ConsumerWidget {
           searchQuery: screenState.searchQuery,
           wishSort: screenState.wishSort,
           onSortChanged: notifier.updateSort,
-          onClearFocus: () =>
-              FocusScope.of(context).requestFocus(FocusNode()),
+          onClearFocus: () => FocusScope.of(context).requestFocus(FocusNode()),
         ),
         Expanded(
           child: PageView(
@@ -169,8 +166,7 @@ class WishlistScreenBody extends ConsumerWidget {
                 ref,
                 wishlist: wishlist,
                 wishs: wishsBooked,
-                shouldDisplay:
-                    nbWishsBooked > 0 && !isWishsBookedHidden,
+                shouldDisplay: nbWishsBooked > 0 && !isWishsBookedHidden,
                 cardType: WishlistStatsCardType.booked,
                 isWishsBookedHidden: isWishsBookedHidden,
                 screenState: screenState,

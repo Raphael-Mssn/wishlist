@@ -32,9 +32,10 @@ class WishlistScreen extends ConsumerWidget {
   ) async {
     final notifier =
         ref.read(wishlistScreenNotifierProvider(wishlistId).notifier);
-    final count =
-        ref.read(wishlistScreenNotifierProvider(wishlistId))
-            .selectedWishIds.length;
+    final count = ref
+        .read(wishlistScreenNotifierProvider(wishlistId))
+        .selectedWishIds
+        .length;
     final l10n = context.l10n;
 
     final explanation = count == 1
@@ -51,9 +52,7 @@ class WishlistScreen extends ConsumerWidget {
           if (context.mounted) {
             showAppSnackBar(
               context,
-              count == 1
-                  ? l10n.deleteWishSuccess
-                  : l10n.wishesDeleted(count),
+              count == 1 ? l10n.deleteWishSuccess : l10n.wishesDeleted(count),
               type: SnackBarType.success,
             );
           }
@@ -72,9 +71,10 @@ class WishlistScreen extends ConsumerWidget {
   ) async {
     final notifier =
         ref.read(wishlistScreenNotifierProvider(wishlistId).notifier);
-    final count =
-        ref.read(wishlistScreenNotifierProvider(wishlistId))
-            .selectedWishIds.length;
+    final count = ref
+        .read(wishlistScreenNotifierProvider(wishlistId))
+        .selectedWishIds
+        .length;
     final l10n = context.l10n;
 
     await showMoveWishesDialog(
@@ -121,8 +121,7 @@ class WishlistScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenState =
-        ref.watch(wishlistScreenNotifierProvider(wishlistId));
+    final screenState = ref.watch(wishlistScreenNotifierProvider(wishlistId));
     final notifier =
         ref.read(wishlistScreenNotifierProvider(wishlistId).notifier);
     final wishlistScreenData =
@@ -161,8 +160,7 @@ class WishlistScreen extends ConsumerWidget {
                       context,
                       wishlist,
                     ),
-                    onSettings: () =>
-                        showWishlistSettingsBottomSheet(
+                    onSettings: () => showWishlistSettingsBottomSheet(
                       context,
                       wishlist,
                     ),
@@ -182,10 +180,8 @@ class WishlistScreen extends ConsumerWidget {
                             onAdd: () => CreateWishRoute(
                               wishlistId: wishlist.id,
                             ).push(context),
-                            onDelete: () =>
-                                _deleteSelectedWishs(context, ref),
-                            onMove: () =>
-                                _moveSelectedWishs(context, ref),
+                            onDelete: () => _deleteSelectedWishs(context, ref),
+                            onMove: () => _moveSelectedWishs(context, ref),
                           ),
                       ],
                     ),
@@ -206,5 +202,4 @@ class WishlistScreen extends ConsumerWidget {
       ),
     );
   }
-
 }

@@ -23,8 +23,7 @@ class WishlistFloatingActions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenState =
-        ref.watch(wishlistScreenNotifierProvider(wishlistId));
+    final screenState = ref.watch(wishlistScreenNotifierProvider(wishlistId));
     final isSelection = screenState.isSelectionMode;
     final badgeCount = screenState.selectedWishIds.length;
 
@@ -60,9 +59,7 @@ class WishlistFloatingActions extends ConsumerWidget {
             _ActionButton(
               icon: isSelection ? Icons.delete : Icons.add,
               onPressed: isSelection ? onDelete : onAdd,
-              color: isSelection
-                  ? Colors.red
-                  : wishlistTheme.primaryColor,
+              color: isSelection ? Colors.red : wishlistTheme.primaryColor,
               colorDark: isSelection
                   ? AppColors.darken(Colors.red)
                   : wishlistTheme.primaryColorDark,
