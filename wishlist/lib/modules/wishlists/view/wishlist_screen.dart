@@ -302,6 +302,46 @@ class WishlistScreen extends ConsumerWidget {
     final nbWishsPending = wishsPending.length;
     final nbWishsBooked = wishsBooked.length;
 
+    void onTapWish(
+      BuildContext context,
+      Wish wish, {
+      required bool isMyWishlist,
+      required IList<Wish> wishsToDisplay,
+      WishlistStatsCardType? cardType,
+    }) {
+      _onTapWish(
+        context,
+        ref,
+        wish,
+        isMyWishlist: isMyWishlist,
+        wishsToDisplay: wishsToDisplay,
+      );
+    }
+
+    WishlistContent buildContent({
+      required IList<Wish> wishs,
+      required bool shouldDisplay,
+      required WishlistStatsCardType cardType,
+    }) {
+      return WishlistContent(
+        wishlist: wishlist,
+        wishsToDisplay: wishs,
+        shouldDisplayWishs: shouldDisplay,
+        statCardSelected: cardType,
+        isWishsBookedHidden: isWishsBookedHidden,
+        isMyWishlist: isMyWishlist,
+        onTapWish: onTapWish,
+        onAddWish: _onAddWish,
+        onFavoriteToggle: (wish) =>
+            _onFavoriteToggle(context, ref, wish),
+        onRefresh: () => _refreshWishlistScreen(ref),
+        isSelectionMode: screenState.isSelectionMode,
+        selectedWishIds: screenState.selectedWishIds,
+        onLongPressWish:
+            isMyWishlist ? notifier.enableSelectionMode : null,
+      );
+    }
+
     return Column(
       children: [
         WishlistStatsSection(
@@ -327,66 +367,16 @@ class WishlistScreen extends ConsumerWidget {
             controller: notifier.pageController,
             onPageChanged: notifier.onPageChanged,
             children: [
-              WishlistContent(
-                wishlist: wishlist,
-                wishsToDisplay: wishsPending,
-                shouldDisplayWishs: nbWishsPending > 0,
-                statCardSelected: WishlistStatsCardType.pending,
-                isWishsBookedHidden: isWishsBookedHidden,
-                isMyWishlist: isMyWishlist,
-                onTapWish: (
-                  context,
-                  wish, {
-                  required isMyWishlist,
-                  required wishsToDisplay,
-                  cardType,
-                }) =>
-                    _onTapWish(
-                      context,
-                      ref,
-                      wish,
-                      isMyWishlist: isMyWishlist,
-                      wishsToDisplay: wishsToDisplay,
-                    ),
-                onAddWish: _onAddWish,
-                onFavoriteToggle: (wish) =>
-                    _onFavoriteToggle(context, ref, wish),
-                onRefresh: () => _refreshWishlistScreen(ref),
-                isSelectionMode: screenState.isSelectionMode,
-                selectedWishIds: screenState.selectedWishIds,
-                onLongPressWish:
-                    isMyWishlist ? notifier.enableSelectionMode : null,
+              buildContent(
+                wishs: wishsPending,
+                shouldDisplay: nbWishsPending > 0,
+                cardType: WishlistStatsCardType.pending,
               ),
-              WishlistContent(
-                wishlist: wishlist,
-                wishsToDisplay: wishsBooked,
-                shouldDisplayWishs:
+              buildContent(
+                wishs: wishsBooked,
+                shouldDisplay:
                     nbWishsBooked > 0 && !isWishsBookedHidden,
-                statCardSelected: WishlistStatsCardType.booked,
-                isWishsBookedHidden: isWishsBookedHidden,
-                isMyWishlist: isMyWishlist,
-                onTapWish: (
-                  context,
-                  wish, {
-                  required isMyWishlist,
-                  required wishsToDisplay,
-                  cardType,
-                }) =>
-                    _onTapWish(
-                      context,
-                      ref,
-                      wish,
-                      isMyWishlist: isMyWishlist,
-                      wishsToDisplay: wishsToDisplay,
-                    ),
-                onAddWish: _onAddWish,
-                onFavoriteToggle: (wish) =>
-                    _onFavoriteToggle(context, ref, wish),
-                onRefresh: () => _refreshWishlistScreen(ref),
-                isSelectionMode: screenState.isSelectionMode,
-                selectedWishIds: screenState.selectedWishIds,
-                onLongPressWish:
-                    isMyWishlist ? notifier.enableSelectionMode : null,
+                cardType: WishlistStatsCardType.booked,
               ),
             ],
           ),
