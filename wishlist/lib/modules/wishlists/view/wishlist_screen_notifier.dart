@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_realtime_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
+import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
+import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/utils/string_utils.dart';
 
 part 'wishlist_screen_notifier.freezed.dart';
@@ -115,5 +118,21 @@ class WishlistScreenNotifier extends _$WishlistScreenNotifier {
           );
     }
     exitSelectionMode();
+  }
+
+  Future<void> toggleFavorite(Wish wish) async {
+    final updatedWish = wish.copyWith(isFavourite: !wish.isFavourite);
+    await ref.read(wishMutationsProvider.notifier).update(updatedWish);
+  }
+
+  Future<void> refreshData() async {
+    ref.invalidate(wishlistScreenDataRealtimeProvider(wishlistId));
+    await Future.delayed(const Duration(milliseconds: 300));
+  }
+
+  void cacheWishlistTheme(int id, ThemeData theme) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(wishlistThemeCacheProvider(id).notifier).state = theme;
+    });
   }
 }

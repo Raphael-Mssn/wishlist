@@ -15,12 +15,10 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_section.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen_notifier.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
-import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
-import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/wish_sort_utils.dart';
@@ -63,21 +61,6 @@ class WishlistScreen extends ConsumerWidget {
       wishIds: wishIds,
       isMyWishlist: isMyWishlist,
     ).push(context);
-  }
-
-  Future<void> _onFavoriteToggle(
-    BuildContext context,
-    WidgetRef ref,
-    Wish wish,
-  ) async {
-    try {
-      final updatedWish = wish.copyWith(isFavourite: !wish.isFavourite);
-      await ref.read(wishMutationsProvider.notifier).update(updatedWish);
-    } catch (e) {
-      if (context.mounted) {
-        showGenericError(context, error: e);
-      }
-    }
   }
 
   Future<void> _deleteSelectedWishs(
@@ -154,12 +137,10 @@ class WishlistScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _refreshWishlistScreen(WidgetRef ref) async {
-    ref.invalidate(wishlistScreenDataRealtimeProvider(wishlistId));
-    await Future.delayed(const Duration(milliseconds: 300));
-  }
-
-  Future<void> _shareWishlist(BuildContext context, Wishlist wishlist) async {
+  Future<void> _shareWishlist(
+    BuildContext context,
+    Wishlist wishlist,
+  ) async {
     final wishlistPath = WishlistRoute(wishlistId: wishlist.id).location;
     final deeplink =
         DeeplinkConfig.buildDeeplinkUri(path: wishlistPath).toString();
@@ -173,18 +154,6 @@ class WishlistScreen extends ConsumerWidget {
         showGenericError(context, error: e);
       }
     }
-  }
-
-  void _updateWishlistTheme(
-    BuildContext context,
-    WidgetRef ref,
-    Wishlist wishlist,
-  ) {
-    final wishlistTheme = getWishlistTheme(context, wishlist);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(wishlistThemeCacheProvider(wishlist.id).notifier).state =
-          wishlistTheme;
-    });
   }
 
   @override
@@ -205,7 +174,7 @@ class WishlistScreen extends ConsumerWidget {
         final canShareWishlist =
             wishlist.visibility == WishlistVisibility.public;
 
-        _updateWishlistTheme(context, ref, wishlist);
+        notifier.cacheWishlistTheme(wishlist.id, wishlistTheme);
 
         return AnimatedTheme(
           data: wishlistTheme,
@@ -225,8 +194,10 @@ class WishlistScreen extends ConsumerWidget {
                     wishlistTheme: wishlistTheme,
                     isMyWishlist: isMyWishlist,
                     canShareWishlist: canShareWishlist,
-                    onShare: () =>
-                        _shareWishlist(context, wishlist),
+                    onShare: () => _shareWishlist(
+                      context,
+                      wishlist,
+                    ),
                     onSettings: () =>
                         showWishlistSettingsBottomSheet(
                       context,
@@ -332,9 +303,16 @@ class WishlistScreen extends ConsumerWidget {
         isMyWishlist: isMyWishlist,
         onTapWish: onTapWish,
         onAddWish: _onAddWish,
-        onFavoriteToggle: (wish) =>
-            _onFavoriteToggle(context, ref, wish),
-        onRefresh: () => _refreshWishlistScreen(ref),
+        onFavoriteToggle: (wish) async {
+          try {
+            await notifier.toggleFavorite(wish);
+          } catch (e) {
+            if (context.mounted) {
+              showGenericError(context, error: e);
+            }
+          }
+        },
+        onRefresh: notifier.refreshData,
         isSelectionMode: screenState.isSelectionMode,
         selectedWishIds: screenState.selectedWishIds,
         onLongPressWish:
