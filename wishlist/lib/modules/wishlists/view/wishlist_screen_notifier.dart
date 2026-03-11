@@ -1,44 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
 import 'package:wishlist/shared/utils/string_utils.dart';
 
+part 'wishlist_screen_notifier.freezed.dart';
 part 'wishlist_screen_notifier.g.dart';
 
-class WishlistScreenState {
-  const WishlistScreenState({
-    this.statCardSelected = WishlistStatsCardType.pending,
-    this.wishSort = const WishSort(
-      type: WishSortType.favorite,
-      order: SortOrder.descending,
-    ),
-    this.searchQuery = '',
-    this.isSelectionMode = false,
-    this.selectedWishIds = const {},
-  });
-
-  final WishlistStatsCardType statCardSelected;
-  final WishSort wishSort;
-  final String searchQuery;
-  final bool isSelectionMode;
-  final Set<int> selectedWishIds;
-
-  WishlistScreenState copyWith({
-    WishlistStatsCardType? statCardSelected,
-    WishSort? wishSort,
-    String? searchQuery,
-    bool? isSelectionMode,
-    Set<int>? selectedWishIds,
-  }) {
-    return WishlistScreenState(
-      statCardSelected: statCardSelected ?? this.statCardSelected,
-      wishSort: wishSort ?? this.wishSort,
-      searchQuery: searchQuery ?? this.searchQuery,
-      isSelectionMode: isSelectionMode ?? this.isSelectionMode,
-      selectedWishIds: selectedWishIds ?? this.selectedWishIds,
-    );
-  }
+@freezed
+class WishlistScreenState with _$WishlistScreenState {
+  const factory WishlistScreenState({
+    @Default(WishlistStatsCardType.pending)
+    WishlistStatsCardType statCardSelected,
+    @Default(
+      WishSort(type: WishSortType.favorite, order: SortOrder.descending),
+    )
+    WishSort wishSort,
+    @Default('') String searchQuery,
+    @Default(false) bool isSelectionMode,
+    @Default(<int>{}) Set<int> selectedWishIds,
+  }) = _WishlistScreenState;
 }
 
 @riverpod
