@@ -8,6 +8,7 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_section.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen_notifier.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
+import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/wish_sort_utils.dart';
@@ -51,6 +52,55 @@ class WishlistScreenBody extends ConsumerWidget {
     ).push(context);
   }
 
+  WishlistContent _buildContent(
+    BuildContext context,
+    WidgetRef ref, {
+    required Wishlist wishlist,
+    required IList<Wish> wishs,
+    required bool shouldDisplay,
+    required WishlistStatsCardType cardType,
+    required bool isWishsBookedHidden,
+    required WishlistScreenState screenState,
+    required WishlistScreenNotifier notifier,
+  }) {
+    return WishlistContent(
+      wishlist: wishlist,
+      wishsToDisplay: wishs,
+      shouldDisplayWishs: shouldDisplay,
+      statCardSelected: cardType,
+      isWishsBookedHidden: isWishsBookedHidden,
+      isMyWishlist: isMyWishlist,
+      onTapWish: (context, wish, {
+        required isMyWishlist,
+        required wishsToDisplay,
+        cardType,
+      }) =>
+          _onTapWish(
+        context,
+        ref,
+        wish,
+        isMyWishlist: isMyWishlist,
+        wishsToDisplay: wishsToDisplay,
+      ),
+      onAddWish: (context, wishlist) =>
+          CreateWishRoute(wishlistId: wishlist.id).push(context),
+      onFavoriteToggle: (wish) async {
+        try {
+          await notifier.toggleFavorite(wish);
+        } catch (e) {
+          if (context.mounted) {
+            showGenericError(context, error: e);
+          }
+        }
+      },
+      onRefresh: notifier.refreshData,
+      isSelectionMode: screenState.isSelectionMode,
+      selectedWishIds: screenState.selectedWishIds,
+      onLongPressWish:
+          isMyWishlist ? notifier.enableSelectionMode : null,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenState =
@@ -78,54 +128,6 @@ class WishlistScreenBody extends ConsumerWidget {
     final nbWishsPending = wishsPending.length;
     final nbWishsBooked = wishsBooked.length;
 
-    void onTapWish(
-      BuildContext context,
-      Wish wish, {
-      required bool isMyWishlist,
-      required IList<Wish> wishsToDisplay,
-      WishlistStatsCardType? cardType,
-    }) {
-      _onTapWish(
-        context,
-        ref,
-        wish,
-        isMyWishlist: isMyWishlist,
-        wishsToDisplay: wishsToDisplay,
-      );
-    }
-
-    WishlistContent buildContent({
-      required IList<Wish> wishs,
-      required bool shouldDisplay,
-      required WishlistStatsCardType cardType,
-    }) {
-      return WishlistContent(
-        wishlist: wishlist,
-        wishsToDisplay: wishs,
-        shouldDisplayWishs: shouldDisplay,
-        statCardSelected: cardType,
-        isWishsBookedHidden: isWishsBookedHidden,
-        isMyWishlist: isMyWishlist,
-        onTapWish: onTapWish,
-        onAddWish: (context, wishlist) =>
-            CreateWishRoute(wishlistId: wishlist.id).push(context),
-        onFavoriteToggle: (wish) async {
-          try {
-            await notifier.toggleFavorite(wish);
-          } catch (e) {
-            if (context.mounted) {
-              showGenericError(context, error: e);
-            }
-          }
-        },
-        onRefresh: notifier.refreshData,
-        isSelectionMode: screenState.isSelectionMode,
-        selectedWishIds: screenState.selectedWishIds,
-        onLongPressWish:
-            isMyWishlist ? notifier.enableSelectionMode : null,
-      );
-    }
-
     return Column(
       children: [
         WishlistStatsSection(
@@ -151,16 +153,28 @@ class WishlistScreenBody extends ConsumerWidget {
             controller: notifier.pageController,
             onPageChanged: notifier.onPageChanged,
             children: [
-              buildContent(
+              _buildContent(
+                context,
+                ref,
+                wishlist: wishlist,
                 wishs: wishsPending,
                 shouldDisplay: nbWishsPending > 0,
                 cardType: WishlistStatsCardType.pending,
+                isWishsBookedHidden: isWishsBookedHidden,
+                screenState: screenState,
+                notifier: notifier,
               ),
-              buildContent(
+              _buildContent(
+                context,
+                ref,
+                wishlist: wishlist,
                 wishs: wishsBooked,
                 shouldDisplay:
                     nbWishsBooked > 0 && !isWishsBookedHidden,
                 cardType: WishlistStatsCardType.booked,
+                isWishsBookedHidden: isWishsBookedHidden,
+                screenState: screenState,
+                notifier: notifier,
               ),
             ],
           ),
