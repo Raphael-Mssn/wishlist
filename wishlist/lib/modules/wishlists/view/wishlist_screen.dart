@@ -8,6 +8,7 @@ import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_realtime_p
 import 'package:wishlist/modules/wishlists/view/widgets/move_wishes_dialog.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_app_bar.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_content.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wishlist_floating_actions.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_search_bar.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
@@ -20,12 +21,10 @@ import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
-import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/wish_sort_utils.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
-import 'package:wishlist/shared/widgets/nav_bar_add_button.dart';
 
 class WishlistScreen extends ConsumerWidget {
   const WishlistScreen({
@@ -257,12 +256,15 @@ class WishlistScreen extends ConsumerWidget {
                           isMyWishlist: isMyWishlist,
                         ),
                         if (isMyWishlist)
-                          _buildFloatingActionButtons(
-                            context: context,
-                            ref: ref,
-                            screenState: screenState,
+                          WishlistFloatingActions(
+                            wishlistId: wishlistId,
                             wishlistTheme: wishlistTheme,
-                            wishlist: wishlist,
+                            onAdd: () =>
+                                _onAddWish(context, wishlist),
+                            onDelete: () =>
+                                _deleteSelectedWishs(context, ref),
+                            onMove: () =>
+                                _moveSelectedWishs(context, ref),
                           ),
                       ],
                     ),
@@ -404,112 +406,4 @@ class WishlistScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSelectionBadge(int count) {
-    return Positioned(
-      top: -4,
-      right: -4,
-      child: Container(
-        constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: AppColors.darkGrey,
-          shape: BoxShape.circle,
-          border: Border.all(color: AppColors.background, width: 2),
-        ),
-        child: Center(
-          child: Text(
-            '$count',
-            style: AppTextStyles.smaller.copyWith(
-              color: AppColors.background,
-              fontWeight: FontWeight.bold,
-              height: 1,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButton(
-    BuildContext context, {
-    required IconData icon,
-    required VoidCallback onPressed,
-    required Color color,
-    required Color colorDark,
-    bool showBadge = false,
-    int badgeCount = 0,
-  }) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Theme(
-          data: Theme.of(context).copyWith(
-            primaryColor: color,
-            primaryColorDark: colorDark,
-          ),
-          child: NavBarAddButton(icon: icon, onPressed: onPressed),
-        ),
-        if (showBadge) _buildSelectionBadge(badgeCount),
-      ],
-    );
-  }
-
-  Widget _buildFloatingActionButtons({
-    required BuildContext context,
-    required WidgetRef ref,
-    required WishlistScreenState screenState,
-    required ThemeData wishlistTheme,
-    required Wishlist wishlist,
-  }) {
-    final isSelection = screenState.isSelectionMode;
-    final badgeCount = screenState.selectedWishIds.length;
-
-    return Positioned(
-      bottom: 24,
-      right: 24,
-      child: SizedBox(
-        height: 240,
-        child: Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.bottomCenter,
-          children: [
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeOut,
-              bottom: isSelection ? 80 : 0,
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 200),
-                opacity: isSelection ? 1 : 0,
-                child: IgnorePointer(
-                  ignoring: !isSelection,
-                  child: _buildActionButton(
-                    context,
-                    icon: Icons.drive_file_move,
-                    onPressed: () => _moveSelectedWishs(context, ref),
-                    color: wishlistTheme.primaryColor,
-                    colorDark: wishlistTheme.primaryColorDark,
-                    showBadge: isSelection,
-                    badgeCount: badgeCount,
-                  ),
-                ),
-              ),
-            ),
-            _buildActionButton(
-              context,
-              icon: isSelection ? Icons.delete : Icons.add,
-              onPressed: isSelection
-                  ? () => _deleteSelectedWishs(context, ref)
-                  : () => _onAddWish(context, wishlist),
-              color: isSelection ? Colors.red : wishlistTheme.primaryColor,
-              colorDark: isSelection
-                  ? AppColors.darken(Colors.red)
-                  : wishlistTheme.primaryColorDark,
-              showBadge: isSelection,
-              badgeCount: badgeCount,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
