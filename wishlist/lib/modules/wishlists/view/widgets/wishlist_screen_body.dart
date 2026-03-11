@@ -2,10 +2,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_realtime_provider.dart';
-import 'package:wishlist/modules/wishlists/view/widgets/wishlist_content.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_search_bar.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_section.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/wishs_tab.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen_notifier.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
@@ -52,7 +52,7 @@ class WishlistScreenBody extends ConsumerWidget {
     ).push(context);
   }
 
-  WishlistContent _buildContent(
+  WishsTab _buildWishsTab(
     BuildContext context,
     WidgetRef ref, {
     required Wishlist wishlist,
@@ -63,7 +63,7 @@ class WishlistScreenBody extends ConsumerWidget {
     required WishlistScreenState screenState,
     required WishlistScreenNotifier notifier,
   }) {
-    return WishlistContent(
+    return WishsTab(
       wishlist: wishlist,
       wishsToDisplay: wishs,
       shouldDisplayWishs: shouldDisplay,
@@ -153,7 +153,7 @@ class WishlistScreenBody extends ConsumerWidget {
             controller: notifier.pageController,
             onPageChanged: notifier.onPageChanged,
             children: [
-              _buildContent(
+              _buildWishsTab(
                 context,
                 ref,
                 wishlist: wishlist,
@@ -164,7 +164,7 @@ class WishlistScreenBody extends ConsumerWidget {
                 screenState: screenState,
                 notifier: notifier,
               ),
-              _buildContent(
+              _buildWishsTab(
                 context,
                 ref,
                 wishlist: wishlist,
