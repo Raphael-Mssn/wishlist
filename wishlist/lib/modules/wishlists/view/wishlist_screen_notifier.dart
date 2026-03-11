@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
+import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
 import 'package:wishlist/shared/utils/string_utils.dart';
 
@@ -95,5 +96,24 @@ class WishlistScreenNotifier extends _$WishlistScreenNotifier {
       isSelectionMode: false,
       selectedWishIds: {},
     );
+  }
+
+  Future<void> deleteSelectedWishs() async {
+    final selectedIds = state.selectedWishIds;
+    for (final wishId in selectedIds) {
+      await ref.read(wishMutationsProvider.notifier).delete(wishId);
+    }
+    exitSelectionMode();
+  }
+
+  Future<void> moveSelectedWishs(int targetWishlistId) async {
+    final selectedIds = state.selectedWishIds;
+    for (final wishId in selectedIds) {
+      await ref.read(wishMutationsProvider.notifier).moveToWishlist(
+            wishId: wishId,
+            targetWishlistId: targetWishlistId,
+          );
+    }
+    exitSelectionMode();
   }
 }

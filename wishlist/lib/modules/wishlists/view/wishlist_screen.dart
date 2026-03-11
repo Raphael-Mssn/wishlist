@@ -86,9 +86,9 @@ class WishlistScreen extends ConsumerWidget {
   ) async {
     final notifier =
         ref.read(wishlistScreenNotifierProvider(wishlistId).notifier);
-    final selectedIds =
-        ref.read(wishlistScreenNotifierProvider(wishlistId)).selectedWishIds;
-    final count = selectedIds.length;
+    final count =
+        ref.read(wishlistScreenNotifierProvider(wishlistId))
+            .selectedWishIds.length;
     final l10n = context.l10n;
 
     final explanation = count == 1
@@ -101,12 +101,8 @@ class WishlistScreen extends ConsumerWidget {
       explanation: explanation,
       onConfirm: () async {
         try {
-          for (final wishId in selectedIds) {
-            await ref.read(wishMutationsProvider.notifier).delete(wishId);
-          }
-
+          await notifier.deleteSelectedWishs();
           if (context.mounted) {
-            notifier.exitSelectionMode();
             showAppSnackBar(
               context,
               count == 1
@@ -130,9 +126,9 @@ class WishlistScreen extends ConsumerWidget {
   ) async {
     final notifier =
         ref.read(wishlistScreenNotifierProvider(wishlistId).notifier);
-    final selectedIds =
-        ref.read(wishlistScreenNotifierProvider(wishlistId)).selectedWishIds;
-    final count = selectedIds.length;
+    final count =
+        ref.read(wishlistScreenNotifierProvider(wishlistId))
+            .selectedWishIds.length;
     final l10n = context.l10n;
 
     await showMoveWishesDialog(
@@ -141,15 +137,8 @@ class WishlistScreen extends ConsumerWidget {
       wishCount: count,
       onConfirm: (targetWishlistId) async {
         try {
-          for (final wishId in selectedIds) {
-            await ref.read(wishMutationsProvider.notifier).moveToWishlist(
-                  wishId: wishId,
-                  targetWishlistId: targetWishlistId,
-                );
-          }
-
+          await notifier.moveSelectedWishs(targetWishlistId);
           if (context.mounted) {
-            notifier.exitSelectionMode();
             showAppSnackBar(
               context,
               l10n.wishesMoved(count),
