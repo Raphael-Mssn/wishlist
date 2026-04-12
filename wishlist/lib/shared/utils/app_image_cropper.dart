@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 
 enum AppImageCropMode {
@@ -8,13 +9,13 @@ enum AppImageCropMode {
 }
 
 abstract final class AppImageCropper {
-  static const String _cropTitle = "Recadrer l'image";
-
   static Future<CroppedFile?> cropImage({
+    required BuildContext context,
     required String sourcePath,
     required AppImageCropMode mode,
     Color? accentColor,
   }) {
+    final l10n = context.l10n;
     final isAvatar = mode == AppImageCropMode.avatar;
     final effectiveAccentColor = accentColor ?? AppColors.primary;
     final aspectRatioPresets = isAvatar
@@ -25,7 +26,7 @@ abstract final class AppImageCropper {
       sourcePath: sourcePath,
       uiSettings: [
         AndroidUiSettings(
-          toolbarTitle: _cropTitle,
+          toolbarTitle: l10n.cropImageTitle,
           toolbarColor: effectiveAccentColor,
           toolbarWidgetColor: AppColors.background,
           cropStyle: isAvatar ? CropStyle.circle : CropStyle.rectangle,
@@ -40,11 +41,11 @@ abstract final class AppImageCropper {
           hideBottomControls: true,
         ),
         IOSUiSettings(
-          title: _cropTitle,
+          title: l10n.cropImageTitle,
           cropStyle: isAvatar ? CropStyle.circle : CropStyle.rectangle,
           aspectRatioPresets: aspectRatioPresets,
-          cancelButtonTitle: 'Annuler',
-          doneButtonTitle: 'Valider',
+          cancelButtonTitle: l10n.cropImageCancel,
+          doneButtonTitle: l10n.cropImageValidate,
           resetAspectRatioEnabled: false,
           aspectRatioPickerButtonHidden: true,
           rotateButtonsHidden: true,

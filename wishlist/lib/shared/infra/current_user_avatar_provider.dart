@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wishlist/shared/infra/avatar_service.dart';
@@ -31,15 +32,24 @@ class AvatarNotifier extends StateNotifier<AsyncValue<String?>> {
     }
   }
 
-  Future<void> pickAndUploadAvatar() async {
-    await _pickCropAndUploadAvatar(ImageSource.gallery);
+  Future<void> pickAndUploadAvatar(BuildContext context) async {
+    await _pickCropAndUploadAvatar(
+      context,
+      ImageSource.gallery,
+    );
   }
 
-  Future<void> takePhotoAndUpload() async {
-    await _pickCropAndUploadAvatar(ImageSource.camera);
+  Future<void> takePhotoAndUpload(BuildContext context) async {
+    await _pickCropAndUploadAvatar(
+      context,
+      ImageSource.camera,
+    );
   }
 
-  Future<void> _pickCropAndUploadAvatar(ImageSource source) async {
+  Future<void> _pickCropAndUploadAvatar(
+    BuildContext context,
+    ImageSource source,
+  ) async {
     try {
       state = const AsyncValue.loading();
 
@@ -58,6 +68,7 @@ class AvatarNotifier extends StateNotifier<AsyncValue<String?>> {
       }
 
       final croppedImage = await AppImageCropper.cropImage(
+        context: context,
         sourcePath: image.path,
         mode: AppImageCropMode.avatar,
       );

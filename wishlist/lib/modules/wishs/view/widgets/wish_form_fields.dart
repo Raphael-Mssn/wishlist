@@ -122,6 +122,7 @@ class WishFormFieldsState extends State<WishFormFields> {
 
   Future<void> _cropImage(String sourcePath) async {
     final croppedFile = await AppImageCropper.cropImage(
+      context: context,
       sourcePath: sourcePath,
       mode: AppImageCropMode.wish,
       accentColor: widget.wishlistColor,
