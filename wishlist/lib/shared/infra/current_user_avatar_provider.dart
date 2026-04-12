@@ -67,6 +67,11 @@ class AvatarNotifier extends StateNotifier<AsyncValue<String?>> {
         return;
       }
 
+      if (!context.mounted) {
+        await _loadCurrentUserAvatar();
+        return;
+      }
+
       final croppedImage = await AppImageCropper.cropImage(
         context: context,
         sourcePath: image.path,
