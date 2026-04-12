@@ -2,12 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/image_upload_field.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/utils/app_image_cropper.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/image_options_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/app_text_field.dart';
@@ -121,35 +121,10 @@ class WishFormFieldsState extends State<WishFormFields> {
   }
 
   Future<void> _cropImage(String sourcePath) async {
-    final croppedFile = await ImageCropper().cropImage(
+    final croppedFile = await AppImageCropper.cropImage(
       sourcePath: sourcePath,
-      uiSettings: [
-        AndroidUiSettings(
-          toolbarTitle: "Recadrer l'image",
-          toolbarColor: widget.wishlistColor,
-          toolbarWidgetColor: AppColors.background,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false,
-          aspectRatioPresets: [
-            CropAspectRatioPreset.original,
-          ],
-          cropFrameColor: widget.wishlistColor,
-          cropGridColor: widget.wishlistColor.withValues(alpha: 0.5),
-          activeControlsWidgetColor: widget.wishlistColor,
-          hideBottomControls: true,
-        ),
-        IOSUiSettings(
-          title: "Recadrer l'image",
-          aspectRatioPresets: [
-            CropAspectRatioPreset.original,
-          ],
-          cancelButtonTitle: 'Annuler',
-          doneButtonTitle: 'Valider',
-          resetAspectRatioEnabled: false,
-          aspectRatioPickerButtonHidden: true,
-          rotateButtonsHidden: true,
-        ),
-      ],
+      mode: AppImageCropMode.wish,
+      accentColor: widget.wishlistColor,
     );
 
     if (croppedFile != null) {

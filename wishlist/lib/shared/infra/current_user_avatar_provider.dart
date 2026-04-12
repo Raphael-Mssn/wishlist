@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wishlist/shared/infra/avatar_service.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
+import 'package:wishlist/shared/utils/app_image_cropper.dart';
 
 class AvatarNotifier extends StateNotifier<AsyncValue<String?>> {
   AvatarNotifier(this._avatarService, this._userService)
@@ -31,40 +32,20 @@ class AvatarNotifier extends StateNotifier<AsyncValue<String?>> {
   }
 
   Future<void> pickAndUploadAvatar() async {
-    try {
-      state = const AsyncValue.loading();
-
-      final picker = ImagePicker();
-      final image = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 800,
-        maxHeight: 800,
-        imageQuality: 85,
-      );
-
-      if (image == null) {
-        // Restauration de l'état précédent
-        await _loadCurrentUserAvatar();
-        return;
-      }
-
-      final imageFile = File(image.path);
-      final avatarPath = await _avatarService.uploadAvatar(imageFile);
-      final fullAvatarUrl = _avatarService.getAvatarUrl(avatarPath);
-
-      state = AsyncValue.data(fullAvatarUrl);
-    } catch (e, stack) {
-      state = AsyncValue.error(e, stack);
-    }
+    await _pickCropAndUploadAvatar(ImageSource.gallery);
   }
 
   Future<void> takePhotoAndUpload() async {
+    await _pickCropAndUploadAvatar(ImageSource.camera);
+  }
+
+  Future<void> _pickCropAndUploadAvatar(ImageSource source) async {
     try {
       state = const AsyncValue.loading();
 
       final picker = ImagePicker();
       final image = await picker.pickImage(
-        source: ImageSource.camera,
+        source: source,
         maxWidth: 800,
         maxHeight: 800,
         imageQuality: 85,
@@ -76,7 +57,18 @@ class AvatarNotifier extends StateNotifier<AsyncValue<String?>> {
         return;
       }
 
-      final imageFile = File(image.path);
+      final croppedImage = await AppImageCropper.cropImage(
+        sourcePath: image.path,
+        mode: AppImageCropMode.avatar,
+      );
+
+      if (croppedImage == null) {
+        // Restauration de l'état précédent
+        await _loadCurrentUserAvatar();
+        return;
+      }
+
+      final imageFile = File(croppedImage.path);
       final avatarPath = await _avatarService.uploadAvatar(imageFile);
       final fullAvatarUrl = _avatarService.getAvatarUrl(avatarPath);
 
