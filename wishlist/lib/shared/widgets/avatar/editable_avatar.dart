@@ -104,10 +104,10 @@ class EditableAvatar extends ConsumerWidget {
                       hasImage: hasAvatar,
                       onPickFromGallery: () => ref
                           .read(currentUserAvatarProvider.notifier)
-                          .pickAndUploadAvatar(),
+                          .pickAndUploadAvatar(context),
                       onTakePhoto: () => ref
                           .read(currentUserAvatarProvider.notifier)
-                          .takePhotoAndUpload(),
+                          .takePhotoAndUpload(context),
                       onRemoveImage: () => ref
                           .read(currentUserAvatarProvider.notifier)
                           .deleteAvatar(),

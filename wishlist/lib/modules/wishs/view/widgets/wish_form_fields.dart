@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/image_upload_field.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/utils/app_image_cropper.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/image_options_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/app_text_field.dart';
@@ -27,6 +28,7 @@ class WishFormFields extends StatefulWidget {
     required this.linkController,
     required this.descriptionController,
     required this.onImageSelected,
+    required this.wishlistColor,
     this.existingImageUrl,
   });
 
@@ -37,6 +39,7 @@ class WishFormFields extends StatefulWidget {
   final TextEditingController linkController;
   final TextEditingController descriptionController;
   final ValueChanged<File?> onImageSelected;
+  final Color wishlistColor;
   final String? existingImageUrl;
 
   @override
@@ -99,10 +102,7 @@ class WishFormFieldsState extends State<WishFormFields> {
     );
 
     if (image != null) {
-      setState(() {
-        _selectedImage = File(image.path);
-      });
-      widget.onImageSelected(_selectedImage);
+      await _cropImage(image.path);
     }
   }
 
@@ -116,8 +116,21 @@ class WishFormFieldsState extends State<WishFormFields> {
     );
 
     if (image != null) {
+      await _cropImage(image.path);
+    }
+  }
+
+  Future<void> _cropImage(String sourcePath) async {
+    final croppedFile = await AppImageCropper.cropImage(
+      context: context,
+      sourcePath: sourcePath,
+      mode: AppImageCropMode.wish,
+      accentColor: widget.wishlistColor,
+    );
+
+    if (croppedFile != null) {
       setState(() {
-        _selectedImage = File(image.path);
+        _selectedImage = File(croppedFile.path);
       });
       widget.onImageSelected(_selectedImage);
     }
