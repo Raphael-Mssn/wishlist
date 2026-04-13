@@ -12,8 +12,8 @@ import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/app_refresh_indicator.dart';
 import 'package:wishlist/shared/widgets/animated_list_view.dart';
 
-class WishlistContent extends StatelessWidget {
-  const WishlistContent({
+class WishsTab extends StatelessWidget {
+  const WishsTab({
     super.key,
     required this.wishlist,
     required this.wishsToDisplay,
