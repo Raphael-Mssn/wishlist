@@ -15,10 +15,12 @@ final defaultDeviceConfigs = {
 final _fakeLocaleSymbols = en_USSymbols;
 
 /// Seuil de tolérance pour les golden tests.
-/// En CI (Linux), le rendu peut différer légèrement de macOS.
+/// Les goldens sont générés en CI (Linux) — seule source de vérité.
+/// En CI le seuil est strict (même environnement), en local il est
+/// plus tolérant pour absorber les différences de rendu macOS/Windows.
 double get _goldenThreshold {
   final isCI = Platform.environment['CI'] == 'true';
-  return isCI ? 0.05 : 0.005; // 5% en CI, 0.5% en local
+  return isCI ? 0.005 : 0.05;
 }
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
