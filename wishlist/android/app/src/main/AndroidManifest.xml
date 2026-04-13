@@ -42,6 +42,20 @@
                     android:scheme="wishy"
                     android:host="com.raphtang.wishy"/>
             </intent-filter>
+
+            <!-- Partage vers Wishy : un seul filtre avec text+image pour recevoir
+                 les intents qui contiennent lien ET vignette (ex. Amazon). -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/*"/>
+                <data android:mimeType="image/*"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="image/*"/>
+            </intent-filter>
         </activity>
 
         <!-- Flutter plugin registration metadata -->

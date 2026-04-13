@@ -4,6 +4,10 @@ import 'package:wishlist/app/config/deeplink_config.dart';
 import 'package:wishlist/main.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 
+/// Clé globale du ScaffoldMessenger pour afficher des snackbars depuis
+/// n'importe quel contexte (ex. après une erreur async dans un formulaire).
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 class AuthStateNotifier extends ChangeNotifier {
   AuthStateNotifier() {
     supabase.auth.onAuthStateChange.listen((data) {
