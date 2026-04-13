@@ -26,7 +26,7 @@ Future<void> showAppBottomSheet(
       if (expandToFillHeight) {
         return LayoutBuilder(
           builder: (context, constraints) {
-            final screenHeight = MediaQuery.of(context).size.height - 80;
+            final screenHeight = MediaQuery.sizeOf(context).height - 80;
 
             return ClipRRect(
               borderRadius: const BorderRadius.vertical(

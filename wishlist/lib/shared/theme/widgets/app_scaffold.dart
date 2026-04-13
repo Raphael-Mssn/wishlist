@@ -40,8 +40,8 @@ class AppScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bottomSafeArea = MediaQuery.of(context).viewPadding.bottom;
-    final gestureInsets = MediaQuery.of(context).systemGestureInsets.bottom;
+    final bottomSafeArea = MediaQuery.viewPaddingOf(context).bottom;
+    final gestureInsets = MediaQuery.systemGestureInsetsOf(context).bottom;
 
     // Détecte Android avec 3 boutons de navigation
     // (gestureInsets == bottomSafeArea quand il y a des boutons système)
