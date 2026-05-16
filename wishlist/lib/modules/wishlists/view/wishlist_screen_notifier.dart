@@ -1,8 +1,10 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:wishlist/modules/wishlists/infra/wishlist_screen_data_realtime_provider.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart';
+import 'package:wishlist/shared/infra/completed_wish_mutations_provider.dart';
 import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
@@ -116,6 +118,21 @@ class WishlistScreenNotifier extends _$WishlistScreenNotifier {
             wishId: wishId,
             targetWishlistId: targetWishlistId,
           );
+    }
+    exitSelectionMode();
+  }
+
+  Future<void> completeSelectedWishs() async {
+    final dataAsync = ref.read(wishlistScreenDataRealtimeProvider(wishlistId));
+    final wishs = dataAsync.valueOrNull?.wishs ?? const IListConst([]);
+    final selectedIds = state.selectedWishIds;
+    for (final wishId in selectedIds) {
+      final matching = wishs.where((w) => w.id == wishId);
+      if (matching.isNotEmpty) {
+        await ref
+            .read(completedWishMutationsProvider.notifier)
+            .markAsCompleted(matching.first);
+      }
     }
     exitSelectionMode();
   }

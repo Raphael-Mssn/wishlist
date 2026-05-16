@@ -100,6 +100,30 @@ class WishlistScreen extends ConsumerWidget {
     );
   }
 
+  Future<void> _completeSelectedWishs(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final notifier =
+        ref.read(wishlistScreenNotifierProvider(wishlistId).notifier);
+    final l10n = context.l10n;
+
+    try {
+      await notifier.completeSelectedWishs();
+      if (context.mounted) {
+        showAppSnackBar(
+          context,
+          l10n.updateSuccess,
+          type: SnackBarType.success,
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showGenericError(context, error: e);
+      }
+    }
+  }
+
   Future<void> _shareWishlist(
     BuildContext context,
     Wishlist wishlist,
@@ -182,6 +206,8 @@ class WishlistScreen extends ConsumerWidget {
                             ).push(context),
                             onDelete: () => _deleteSelectedWishs(context, ref),
                             onMove: () => _moveSelectedWishs(context, ref),
+                            onComplete: () =>
+                                _completeSelectedWishs(context, ref),
                           ),
                       ],
                     ),

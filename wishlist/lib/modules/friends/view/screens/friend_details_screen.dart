@@ -6,7 +6,9 @@ import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_details_app_bar.dart';
 import 'package:wishlist/modules/friends/view/widgets/friend_pill.dart';
+import 'package:wishlist/shared/infra/completed_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/infra/friend_details_realtime_provider.dart';
+import 'package:wishlist/shared/models/completed_wish_with_details/completed_wish_with_details.dart';
 import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
@@ -76,6 +78,12 @@ class _FriendDetailsScreen extends StatelessWidget {
                       // Mutual friends
                       _MutualFriendsTitleAndSection(
                         friendDetails: friendDetails,
+                      ),
+                      const Gap(24),
+
+                      // Completed wishes
+                      _FriendCompletedWishesSection(
+                        friendId: friendDetails.appUser.user.id,
                       ),
                       const Gap(24),
 
@@ -283,6 +291,91 @@ class _WishlistsSection extends StatelessWidget {
     return WishlistsGrid(
       wishlists: friendDetails.publicWishlists.toList(),
       isReorderable: false,
+    );
+  }
+}
+
+class _FriendCompletedWishesSection extends ConsumerWidget {
+  const _FriendCompletedWishesSection({required this.friendId});
+
+  final String friendId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final completedWishesAsync =
+        ref.watch(completedWishesByUserRealtimeProvider(friendId));
+
+    return completedWishesAsync.when(
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+      data: (completedWishes) {
+        if (completedWishes.isEmpty) return const SizedBox.shrink();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.friendCompletedWishesTitle,
+              style: AppTextStyles.small.copyWith(
+                color: AppColors.makara,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Gap(12),
+            for (final item in completedWishes)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: _FriendCompletedWishTile(item: item),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _FriendCompletedWishTile extends StatelessWidget {
+  const _FriendCompletedWishTile({required this.item});
+
+  final CompletedWishWithDetails item;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    return Row(
+      children: [
+        const Icon(
+          Icons.check_circle,
+          color: AppColors.makara,
+          size: 18,
+        ),
+        const Gap(8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.wish.name,
+                style: AppTextStyles.smaller.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                l10n.completedWishFromWishlist(item.fromWishlistName),
+                style: AppTextStyles.smaller.copyWith(
+                  color: AppColors.makara,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

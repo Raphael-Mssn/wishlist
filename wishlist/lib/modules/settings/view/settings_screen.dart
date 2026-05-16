@@ -131,6 +131,12 @@ class SettingsScreen extends ConsumerWidget {
                     },
                   ),
                   SettingsLine(
+                    title: l10n.settingsCompletedWishes,
+                    onTap: () {
+                      CompletedWishesRoute().push(context);
+                    },
+                  ),
+                  SettingsLine(
                     title: l10n.settingsScreenDeleteAccount,
                     onTap: () {
                       _onDeleteAccountTap(context, ref);
