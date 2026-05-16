@@ -31,6 +31,10 @@ RouteBase get $homeRoute => GoRouteData.$route(
               path: 'change-pseudo',
               factory: $ChangePseudoRouteExtension._fromState,
             ),
+            GoRouteData.$route(
+              path: 'completed-wishes',
+              factory: $CompletedWishesRouteExtension._fromState,
+            ),
           ],
         ),
         GoRouteData.$route(
@@ -135,6 +139,24 @@ extension $ChangePseudoRouteExtension on ChangePseudoRoute {
 
   String get location => GoRouteData.$location(
         '/settings/change-pseudo',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $CompletedWishesRouteExtension on CompletedWishesRoute {
+  static CompletedWishesRoute _fromState(GoRouterState state) =>
+      CompletedWishesRoute();
+
+  String get location => GoRouteData.$location(
+        '/settings/completed-wishes',
       );
 
   void go(BuildContext context) => context.go(location);
