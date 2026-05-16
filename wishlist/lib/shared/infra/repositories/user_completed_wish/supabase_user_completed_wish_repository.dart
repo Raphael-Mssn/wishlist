@@ -56,6 +56,7 @@ class SupabaseUserCompletedWishRepository
       () async {
         final response = await _client.from(_tableName).select('''
               from_wishlist_id,
+              created_at,
               wishs!inner(
                 *,
                 taken_by_user:$_wishTakenByUserTableName(*),
@@ -82,6 +83,7 @@ class SupabaseUserCompletedWishRepository
             ownerId: wishlistData['id_owner'] as String,
             ownerPseudo: profileData['pseudo'] as String,
             ownerAvatarUrl: profileData['avatar_url'] as String?,
+            completedAt: DateTime.parse(item['created_at'] as String),
           );
         }).toIList();
       },
