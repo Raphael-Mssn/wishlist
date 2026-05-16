@@ -11,7 +11,6 @@ class SupabaseUserCompletedWishRepository
 
   final SupabaseClient _client;
   static const _tableName = 'user_completed_wishs';
-  static const _wishsTableName = 'wishs';
   static const _wishTakenByUserTableName = 'wish_taken_by_user';
 
   @override
