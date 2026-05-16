@@ -872,6 +872,12 @@ abstract class AppLocalizations {
   /// **'Par date de création'**
   String get sortByDate;
 
+  /// No description provided for @sortByCompletedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par date de complétion'**
+  String get sortByCompletedAt;
+
   /// No description provided for @sortByBookingCount.
   ///
   /// In fr, this message translates to:

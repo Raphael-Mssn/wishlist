@@ -434,6 +434,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sortByDate => 'By creation date';
 
   @override
+  String get sortByCompletedAt => 'By completion date';
+
+  @override
   String get sortByBookingCount => 'By booking count';
 
   @override

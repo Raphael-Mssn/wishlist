@@ -136,6 +136,7 @@
   "sortByAlphabetical": "Par ordre alphabétique",
   "sortByPrice": "Par prix",
   "sortByDate": "Par date de création",
+  "sortByCompletedAt": "Par date de complétion",
   "sortByBookingCount": "Par nombre de réservations",
   "selectQuantityToGive": "Quelle quantité souhaites-tu offrir ?",
   "wishReservedSuccess": "Wish réservé avec succès !",
