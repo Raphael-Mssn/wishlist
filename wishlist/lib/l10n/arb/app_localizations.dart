@@ -1105,6 +1105,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Cette fonctionnalité arrivera prochainement !'**
   String get comingSoonMessage;
+
+  /// No description provided for @completedWishesScreenTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Wishs complétés'**
+  String get completedWishesScreenTitle;
+
+  /// No description provided for @completedWishesEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun wish complété'**
+  String get completedWishesEmptyTitle;
+
+  /// No description provided for @markWishAsCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Marquer comme complété'**
+  String get markWishAsCompleted;
+
+  /// No description provided for @unmarkWishAsCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer des complétés'**
+  String get unmarkWishAsCompleted;
+
+  /// No description provided for @settingsCompletedWishes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes wishs complétés'**
+  String get settingsCompletedWishes;
+
+  /// No description provided for @unmarkWishConfirmTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer des wishs complétés'**
+  String get unmarkWishConfirmTitle;
+
+  /// No description provided for @unmarkWishConfirmMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce wish redeviendra visible normalement dans la wishlist \"{wishlistName}\".'**
+  String unmarkWishConfirmMessage(String wishlistName);
+
+  /// No description provided for @friendCompletedWishesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Wishs complétés'**
+  String get friendCompletedWishesTitle;
+
+  /// No description provided for @completeSelectedWishes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compléter'**
+  String get completeSelectedWishes;
+
+  /// No description provided for @completedWishFromWishlist.
+  ///
+  /// In fr, this message translates to:
+  /// **'Wishlist : {wishlistName}'**
+  String completedWishFromWishlist(String wishlistName);
 }
 
 class _AppLocalizationsDelegate

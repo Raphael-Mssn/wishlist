@@ -202,5 +202,29 @@
   "settingsTermsOfUse": "Conditions d'utilisation",
   "settingsPrivacyPolicy": "Politique de confidentialité",
   "comingSoonTitle": "Bientôt disponible",
-  "comingSoonMessage": "Cette fonctionnalité arrivera prochainement !"
+  "comingSoonMessage": "Cette fonctionnalité arrivera prochainement !",
+  "completedWishesScreenTitle": "Wishs complétés",
+  "completedWishesEmptyTitle": "Aucun wish complété",
+  "markWishAsCompleted": "Marquer comme complété",
+  "unmarkWishAsCompleted": "Retirer des complétés",
+  "settingsCompletedWishes": "Mes wishs complétés",
+  "unmarkWishConfirmTitle": "Retirer des wishs complétés",
+  "unmarkWishConfirmMessage": "Ce wish redeviendra visible normalement dans la wishlist \"{wishlistName}\".",
+  "@unmarkWishConfirmMessage": {
+    "placeholders": {
+      "wishlistName": {
+        "type": "String"
+      }
+    }
+  },
+  "friendCompletedWishesTitle": "Wishs complétés",
+  "completeSelectedWishes": "Compléter",
+  "completedWishFromWishlist": "Wishlist : {wishlistName}",
+  "@completedWishFromWishlist": {
+    "placeholders": {
+      "wishlistName": {
+        "type": "String"
+      }
+    }
+  }
 }

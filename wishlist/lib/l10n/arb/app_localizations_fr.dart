@@ -580,4 +580,38 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get comingSoonMessage =>
       'Cette fonctionnalité arrivera prochainement !';
+
+  @override
+  String get completedWishesScreenTitle => 'Wishs complétés';
+
+  @override
+  String get completedWishesEmptyTitle => 'Aucun wish complété';
+
+  @override
+  String get markWishAsCompleted => 'Marquer comme complété';
+
+  @override
+  String get unmarkWishAsCompleted => 'Retirer des complétés';
+
+  @override
+  String get settingsCompletedWishes => 'Mes wishs complétés';
+
+  @override
+  String get unmarkWishConfirmTitle => 'Retirer des wishs complétés';
+
+  @override
+  String unmarkWishConfirmMessage(String wishlistName) {
+    return 'Ce wish redeviendra visible normalement dans la wishlist \"$wishlistName\".';
+  }
+
+  @override
+  String get friendCompletedWishesTitle => 'Wishs complétés';
+
+  @override
+  String get completeSelectedWishes => 'Compléter';
+
+  @override
+  String completedWishFromWishlist(String wishlistName) {
+    return 'Wishlist : $wishlistName';
+  }
 }
