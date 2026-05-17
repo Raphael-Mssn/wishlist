@@ -15,6 +15,9 @@ ThemeData getWishlistTheme(BuildContext? context, Wishlist wishlist) {
     appBarTheme: currentTheme.appBarTheme.copyWith(
       backgroundColor: wishlistColor,
     ),
+    progressIndicatorTheme: currentTheme.progressIndicatorTheme.copyWith(
+      color: wishlistColor,
+    ),
     textSelectionTheme: currentTheme.textSelectionTheme.copyWith(
       cursorColor: wishlistColor,
       selectionHandleColor: wishlistColor,

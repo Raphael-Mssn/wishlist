@@ -15,7 +15,7 @@ class WishMutations extends _$WishMutations with Mutation<void> {
   }
 
   Future<void> create(WishCreateRequest request) async {
-    await mutate(
+    await mutateAsync(
       () async {
         final service = ref.read(wishServiceProvider);
         await service.createWish(request);
@@ -27,7 +27,7 @@ class WishMutations extends _$WishMutations with Mutation<void> {
     required WishCreateRequest request,
     File? imageFile,
   }) async {
-    await mutate(
+    await mutateAsync(
       () async {
         final service = ref.read(wishServiceProvider);
         await service.createWishWithImage(
@@ -39,7 +39,7 @@ class WishMutations extends _$WishMutations with Mutation<void> {
   }
 
   Future<void> update(Wish wish) async {
-    await mutate(
+    await mutateAsync(
       () async {
         final service = ref.read(wishServiceProvider);
         await service.updateWish(wish);
@@ -52,7 +52,7 @@ class WishMutations extends _$WishMutations with Mutation<void> {
     File? imageFile,
     bool deleteImage = false,
   }) async {
-    await mutate(
+    await mutateAsync(
       () async {
         final service = ref.read(wishServiceProvider);
         await service.updateWishWithImage(
@@ -65,7 +65,7 @@ class WishMutations extends _$WishMutations with Mutation<void> {
   }
 
   Future<void> delete(int wishId, {String? iconUrl}) async {
-    await mutate(
+    await mutateAsync(
       () async {
         final service = ref.read(wishServiceProvider);
         await service.deleteWish(wishId, iconUrl: iconUrl);
@@ -77,7 +77,7 @@ class WishMutations extends _$WishMutations with Mutation<void> {
     required int wishId,
     required int targetWishlistId,
   }) async {
-    await mutate(
+    await mutateAsync(
       () async {
         final service = ref.read(wishServiceProvider);
         final wish = await service.getWishById(wishId);

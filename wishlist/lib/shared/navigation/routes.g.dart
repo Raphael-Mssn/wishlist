@@ -57,6 +57,10 @@ RouteBase get $homeRoute => GoRouteData.$route(
           path: 'friend/:friendId',
           factory: $FriendDetailsRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: 'add-wish',
+          factory: $AddWishRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -169,10 +173,20 @@ extension $WishlistRouteExtension on WishlistRoute {
 extension $CreateWishRouteExtension on CreateWishRoute {
   static CreateWishRoute _fromState(GoRouterState state) => CreateWishRoute(
         wishlistId: int.parse(state.pathParameters['wishlistId']!),
+        name: state.uri.queryParameters['name'],
+        link: state.uri.queryParameters['link'],
+        description: state.uri.queryParameters['description'],
+        price: state.uri.queryParameters['price'],
       );
 
   String get location => GoRouteData.$location(
         '/wishlist/${Uri.encodeComponent(wishlistId.toString())}/create-wish',
+        queryParams: {
+          if (name != null) 'name': name,
+          if (link != null) 'link': link,
+          if (description != null) 'description': description,
+          if (price != null) 'price': price,
+        },
       );
 
   void go(BuildContext context) => context.go(location);
@@ -243,6 +257,34 @@ extension $FriendDetailsRouteExtension on FriendDetailsRoute {
 
   String get location => GoRouteData.$location(
         '/friend/${Uri.encodeComponent(friendId)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $AddWishRouteExtension on AddWishRoute {
+  static AddWishRoute _fromState(GoRouterState state) => AddWishRoute(
+        name: state.uri.queryParameters['name'],
+        link: state.uri.queryParameters['link'],
+        description: state.uri.queryParameters['description'],
+        price: state.uri.queryParameters['price'],
+      );
+
+  String get location => GoRouteData.$location(
+        '/add-wish',
+        queryParams: {
+          if (name != null) 'name': name,
+          if (link != null) 'link': link,
+          if (description != null) 'description': description,
+          if (price != null) 'price': price,
+        },
       );
 
   void go(BuildContext context) => context.go(location);
