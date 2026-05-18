@@ -7,7 +7,6 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_section.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishs_tab.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen_notifier.dart';
-import 'package:wishlist/shared/infra/completed_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
@@ -112,9 +111,8 @@ class WishlistScreenBody extends ConsumerWidget {
 
     final wishlist = wishlistScreenData.wishlist;
 
-    final completedWishes = isMyWishlist
-        ? ref.watch(completedWishesRealtimeProvider).valueOrNull
-        : null;
+    final completedWishes =
+        isMyWishlist ? wishlistScreenData.completedWishes : null;
     final completedByWishId = <int, int>{
       if (completedWishes != null)
         for (final c in completedWishes) c.wish.id: c.quantity,
@@ -124,7 +122,9 @@ class WishlistScreenBody extends ConsumerWidget {
         .where((w) => (completedByWishId[w.id] ?? 0) < w.quantity)
         .map((w) {
       final completedQty = completedByWishId[w.id] ?? 0;
-      if (completedQty == 0) return w;
+      if (completedQty == 0) {
+        return w;
+      }
       return w.copyWith(quantity: w.quantity - completedQty);
     }).toIList();
 

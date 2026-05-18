@@ -113,7 +113,6 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     try {
       await ref.read(completedWishMutationsProvider.notifier).markAsCompleted(
             wish,
-            quantity: 1,
           );
       if (context.mounted) {
         context.pop();
