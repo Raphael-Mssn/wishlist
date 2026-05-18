@@ -34,6 +34,8 @@ mixin _$CompletedWishWithDetails {
   String? get ownerAvatarUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   DateTime get completedAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'quantity')
+  int get quantity => throw _privateConstructorUsedError;
 
   /// Serializes this CompletedWishWithDetails to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -58,7 +60,8 @@ abstract class $CompletedWishWithDetailsCopyWith<$Res> {
       @JsonKey(name: 'owner_pseudo') String ownerPseudo,
       @JsonKey(name: 'owner_id') String ownerId,
       @JsonKey(name: 'owner_avatar_url') String? ownerAvatarUrl,
-      @JsonKey(name: 'created_at') DateTime completedAt});
+      @JsonKey(name: 'created_at') DateTime completedAt,
+      @JsonKey(name: 'quantity') int quantity});
 }
 
 /// @nodoc
@@ -84,6 +87,7 @@ class _$CompletedWishWithDetailsCopyWithImpl<$Res,
     Object? ownerId = null,
     Object? ownerAvatarUrl = freezed,
     Object? completedAt = null,
+    Object? quantity = null,
   }) {
     return _then(_value.copyWith(
       wish: null == wish
@@ -114,6 +118,10 @@ class _$CompletedWishWithDetailsCopyWithImpl<$Res,
           ? _value.completedAt
           : completedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      quantity: null == quantity
+          ? _value.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -134,7 +142,8 @@ abstract class _$$CompletedWishWithDetailsImplCopyWith<$Res>
       @JsonKey(name: 'owner_pseudo') String ownerPseudo,
       @JsonKey(name: 'owner_id') String ownerId,
       @JsonKey(name: 'owner_avatar_url') String? ownerAvatarUrl,
-      @JsonKey(name: 'created_at') DateTime completedAt});
+      @JsonKey(name: 'created_at') DateTime completedAt,
+      @JsonKey(name: 'quantity') int quantity});
 }
 
 /// @nodoc
@@ -159,6 +168,7 @@ class __$$CompletedWishWithDetailsImplCopyWithImpl<$Res>
     Object? ownerId = null,
     Object? ownerAvatarUrl = freezed,
     Object? completedAt = null,
+    Object? quantity = null,
   }) {
     return _then(_$CompletedWishWithDetailsImpl(
       wish: null == wish
@@ -189,6 +199,10 @@ class __$$CompletedWishWithDetailsImplCopyWithImpl<$Res>
           ? _value.completedAt
           : completedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      quantity: null == quantity
+          ? _value.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -203,7 +217,8 @@ class _$CompletedWishWithDetailsImpl extends _CompletedWishWithDetails {
       @JsonKey(name: 'owner_pseudo') required this.ownerPseudo,
       @JsonKey(name: 'owner_id') required this.ownerId,
       @JsonKey(name: 'owner_avatar_url') this.ownerAvatarUrl,
-      @JsonKey(name: 'created_at') required this.completedAt})
+      @JsonKey(name: 'created_at') required this.completedAt,
+      @JsonKey(name: 'quantity') required this.quantity})
       : super._();
 
   factory _$CompletedWishWithDetailsImpl.fromJson(Map<String, dynamic> json) =>
@@ -229,10 +244,13 @@ class _$CompletedWishWithDetailsImpl extends _CompletedWishWithDetails {
   @override
   @JsonKey(name: 'created_at')
   final DateTime completedAt;
+  @override
+  @JsonKey(name: 'quantity')
+  final int quantity;
 
   @override
   String toString() {
-    return 'CompletedWishWithDetails(wish: $wish, fromWishlistId: $fromWishlistId, fromWishlistName: $fromWishlistName, ownerPseudo: $ownerPseudo, ownerId: $ownerId, ownerAvatarUrl: $ownerAvatarUrl, completedAt: $completedAt)';
+    return 'CompletedWishWithDetails(wish: $wish, fromWishlistId: $fromWishlistId, fromWishlistName: $fromWishlistName, ownerPseudo: $ownerPseudo, ownerId: $ownerId, ownerAvatarUrl: $ownerAvatarUrl, completedAt: $completedAt, quantity: $quantity)';
   }
 
   @override
@@ -251,13 +269,23 @@ class _$CompletedWishWithDetailsImpl extends _CompletedWishWithDetails {
             (identical(other.ownerAvatarUrl, ownerAvatarUrl) ||
                 other.ownerAvatarUrl == ownerAvatarUrl) &&
             (identical(other.completedAt, completedAt) ||
-                other.completedAt == completedAt));
+                other.completedAt == completedAt) &&
+            (identical(other.quantity, quantity) ||
+                other.quantity == quantity));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, wish, fromWishlistId,
-      fromWishlistName, ownerPseudo, ownerId, ownerAvatarUrl, completedAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      wish,
+      fromWishlistId,
+      fromWishlistName,
+      ownerPseudo,
+      ownerId,
+      ownerAvatarUrl,
+      completedAt,
+      quantity);
 
   /// Create a copy of CompletedWishWithDetails
   /// with the given fields replaced by the non-null parameter values.
@@ -285,7 +313,8 @@ abstract class _CompletedWishWithDetails extends CompletedWishWithDetails {
           @JsonKey(name: 'owner_pseudo') required final String ownerPseudo,
           @JsonKey(name: 'owner_id') required final String ownerId,
           @JsonKey(name: 'owner_avatar_url') final String? ownerAvatarUrl,
-          @JsonKey(name: 'created_at') required final DateTime completedAt}) =
+          @JsonKey(name: 'created_at') required final DateTime completedAt,
+          @JsonKey(name: 'quantity') required final int quantity}) =
       _$CompletedWishWithDetailsImpl;
   const _CompletedWishWithDetails._() : super._();
 
@@ -312,6 +341,9 @@ abstract class _CompletedWishWithDetails extends CompletedWishWithDetails {
   @override
   @JsonKey(name: 'created_at')
   DateTime get completedAt;
+  @override
+  @JsonKey(name: 'quantity')
+  int get quantity;
 
   /// Create a copy of CompletedWishWithDetails
   /// with the given fields replaced by the non-null parameter values.

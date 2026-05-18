@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
@@ -10,6 +11,8 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_floating_action
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_screen_body.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom_sheet.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen_notifier.dart';
+import 'package:wishlist/shared/infra/completed_wish_mutations_provider.dart';
+import 'package:wishlist/shared/infra/completed_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
@@ -17,6 +20,7 @@ import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
+import 'package:wishlist/shared/widgets/dialogs/quantity_selection_dialog.dart';
 
 class WishlistScreen extends ConsumerWidget {
   const WishlistScreen({
@@ -106,21 +110,62 @@ class WishlistScreen extends ConsumerWidget {
   ) async {
     final notifier =
         ref.read(wishlistScreenNotifierProvider(wishlistId).notifier);
-    final l10n = context.l10n;
+    final selectedIds =
+        ref.read(wishlistScreenNotifierProvider(wishlistId)).selectedWishIds;
+    final wishs = ref
+            .read(wishlistScreenDataRealtimeProvider(wishlistId))
+            .valueOrNull
+            ?.wishs ??
+        const IListConst([]);
+    final completedWishs =
+        ref.read(completedWishesRealtimeProvider).valueOrNull;
 
-    try {
-      await notifier.completeSelectedWishs();
-      if (context.mounted) {
-        showAppSnackBar(
+    var anyCompleted = false;
+    for (final wishId in selectedIds) {
+      if (!context.mounted) {
+        break;
+      }
+      final matching = wishs.where((w) => w.id == wishId);
+      if (matching.isEmpty) {
+        continue;
+      }
+      final wish = matching.first;
+
+      final completedEntry =
+          completedWishs?.where((c) => c.wish.id == wish.id).firstOrNull;
+      final alreadyCompletedQuantity = completedEntry?.quantity ?? 0;
+
+      if (wish.quantity > 1) {
+        final confirmed = await showCompleteWishQuantityDialog(
           context,
-          l10n.updateSuccess,
-          type: SnackBarType.success,
+          ref,
+          wish: wish,
+          alreadyCompletedQuantity: alreadyCompletedQuantity,
         );
+        if (confirmed) {
+          anyCompleted = true;
+        }
+      } else {
+        try {
+          await ref
+              .read(completedWishMutationsProvider.notifier)
+              .markAsCompleted(wish, quantity: 1);
+          anyCompleted = true;
+        } catch (e) {
+          if (context.mounted) {
+            showGenericError(context, error: e);
+          }
+        }
       }
-    } catch (e) {
-      if (context.mounted) {
-        showGenericError(context, error: e);
-      }
+    }
+
+    notifier.exitSelectionMode();
+    if (anyCompleted && context.mounted) {
+      showAppSnackBar(
+        context,
+        context.l10n.updateSuccess,
+        type: SnackBarType.success,
+      );
     }
   }
 

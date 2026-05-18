@@ -7,6 +7,14 @@ abstract class UserCompletedWishRepository {
     required String userId,
     required int wishId,
     required int fromWishlistId,
+    required int quantity,
+  });
+
+  /// Met à jour la quantité d'un wish complété.
+  Future<void> updateCompletedWishQuantity({
+    required String userId,
+    required int wishId,
+    required int newQuantity,
   });
 
   /// Retire un wish de l'état complété.

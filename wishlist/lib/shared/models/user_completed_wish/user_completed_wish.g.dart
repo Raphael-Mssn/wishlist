@@ -13,6 +13,8 @@ _$UserCompletedWishImpl _$$UserCompletedWishImplFromJson(
       wishId: (json['wish_id'] as num).toInt(),
       fromWishlistId: (json['from_wishlist_id'] as num).toInt(),
       createdAt: DateTime.parse(json['created_at'] as String),
+      quantity: (json['quantity'] as num).toInt(),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$$UserCompletedWishImplToJson(
@@ -22,4 +24,6 @@ Map<String, dynamic> _$$UserCompletedWishImplToJson(
       'wish_id': instance.wishId,
       'from_wishlist_id': instance.fromWishlistId,
       'created_at': instance.createdAt.toIso8601String(),
+      'quantity': instance.quantity,
+      'updated_at': instance.updatedAt.toIso8601String(),
     };

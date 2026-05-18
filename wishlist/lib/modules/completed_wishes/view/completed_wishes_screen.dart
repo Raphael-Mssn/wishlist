@@ -10,6 +10,7 @@ import 'package:wishlist/shared/models/completed_wish_with_details/completed_wis
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
+import 'package:wishlist/shared/theme/widgets/pill.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/string_utils.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
@@ -73,9 +74,8 @@ class _CompletedWishesScreenState extends ConsumerState<CompletedWishesScreen> {
     switch (_sort.type) {
       case CompletedWishSortType.alphabetical:
         result.sort((a, b) {
-          final cmp = a.wish.name
-              .toLowerCase()
-              .compareTo(b.wish.name.toLowerCase());
+          final cmp =
+              a.wish.name.toLowerCase().compareTo(b.wish.name.toLowerCase());
           return _sort.order == SortOrder.ascending ? cmp : -cmp;
         });
       case CompletedWishSortType.completedAt:
@@ -241,10 +241,29 @@ class _CompletedWishCard extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            WishImage(
-              iconUrl: wish.iconUrl,
-              size: 56,
-              borderRadius: 12,
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                WishImage(
+                  iconUrl: wish.iconUrl,
+                  size: 56,
+                  borderRadius: 12,
+                ),
+                if (item.quantity > 1)
+                  Positioned(
+                    bottom: -4,
+                    right: -4,
+                    child: Pill(
+                      text: 'x${item.quantity}',
+                      backgroundColor: Theme.of(context).primaryColor,
+                      textStyle: AppTextStyles.smaller,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                    ),
+                  ),
+              ],
             ),
             const Gap(12),
             Expanded(

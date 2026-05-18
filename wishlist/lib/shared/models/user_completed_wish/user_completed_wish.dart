@@ -10,6 +10,8 @@ class UserCompletedWish with _$UserCompletedWish {
     @JsonKey(name: 'wish_id') required int wishId,
     @JsonKey(name: 'from_wishlist_id') required int fromWishlistId,
     @JsonKey(name: 'created_at') required DateTime createdAt,
+    @JsonKey(name: 'quantity') required int quantity,
+    @JsonKey(name: 'updated_at') required DateTime updatedAt,
   }) = _UserCompletedWish;
 
   const UserCompletedWish._();

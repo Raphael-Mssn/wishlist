@@ -890,6 +890,12 @@ abstract class AppLocalizations {
   /// **'Quelle quantité souhaites-tu offrir ?'**
   String get selectQuantityToGive;
 
+  /// No description provided for @selectQuantityToComplete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quelle quantité as-tu complétée ?'**
+  String get selectQuantityToComplete;
+
   /// No description provided for @wishReservedSuccess.
   ///
   /// In fr, this message translates to:

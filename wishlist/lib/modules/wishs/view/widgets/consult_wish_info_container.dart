@@ -86,12 +86,35 @@ class ConsultWishInfoContainer extends ConsumerWidget {
   }
 
   Future<void> _onMarkAsCompletedTap(
-      BuildContext context, WidgetRef ref) async {
+    BuildContext context,
+    WidgetRef ref, {
+    required int completedQuantity,
+  }) async {
     final l10n = context.l10n;
+
+    if (wish.quantity > 1) {
+      final confirmed = await showCompleteWishQuantityDialog(
+        context,
+        ref,
+        wish: wish,
+        alreadyCompletedQuantity: completedQuantity,
+      );
+      if (confirmed && context.mounted) {
+        context.pop();
+        showAppSnackBar(
+          context,
+          l10n.updateSuccess,
+          type: SnackBarType.success,
+        );
+      }
+      return;
+    }
+
     try {
-      await ref
-          .read(completedWishMutationsProvider.notifier)
-          .markAsCompleted(wish);
+      await ref.read(completedWishMutationsProvider.notifier).markAsCompleted(
+            wish,
+            quantity: 1,
+          );
       if (context.mounted) {
         context.pop();
         showAppSnackBar(
@@ -142,8 +165,11 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     );
 
     final completedWishes = ref.watch(completedWishesRealtimeProvider);
-    final isAlreadyCompleted =
-        completedWishes.valueOrNull?.any((c) => c.wish.id == wish.id) ?? false;
+    final completedEntry = completedWishes.valueOrNull
+        ?.where((c) => c.wish.id == wish.id)
+        .firstOrNull;
+    final completedQuantity = completedEntry?.quantity ?? 0;
+    final isFullyCompleted = completedQuantity >= wish.quantity;
 
     final hasQuantity = wish.quantity > 1;
     final hasAvailableQuantity = wish.availableQuantity > 0;
@@ -285,10 +311,14 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                       text: l10n.cancelBooking,
                       isStretched: true,
                     ),
-                  if (isMyWishlist && !isAlreadyCompleted)
+                  if (isMyWishlist && !isFullyCompleted)
                     SecondaryButton(
                       style: BaseButtonStyle.medium,
-                      onPressed: () => _onMarkAsCompletedTap(context, ref),
+                      onPressed: () => _onMarkAsCompletedTap(
+                        context,
+                        ref,
+                        completedQuantity: completedQuantity,
+                      ),
                       text: l10n.markWishAsCompleted,
                       isStretched: true,
                     ),

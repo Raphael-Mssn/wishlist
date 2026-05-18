@@ -139,6 +139,7 @@
   "sortByCompletedAt": "Par date de complétion",
   "sortByBookingCount": "Par nombre de réservations",
   "selectQuantityToGive": "Quelle quantité souhaites-tu offrir ?",
+  "selectQuantityToComplete": "Quelle quantité as-tu complétée ?",
   "wishReservedSuccess": "Wish réservé avec succès !",
   "quantityCannotBeLowerThanBooked": "La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)",
   "deleteSelectedWishes": "Supprimer les wishs",

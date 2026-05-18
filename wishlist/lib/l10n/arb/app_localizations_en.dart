@@ -443,6 +443,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectQuantityToGive => 'How much would you like to offer?';
 
   @override
+  String get selectQuantityToComplete => 'How many did you complete?';
+
+  @override
   String get wishReservedSuccess => 'Wish reserved successfully!';
 
   @override

@@ -28,6 +28,7 @@ class WishsTab extends StatelessWidget {
     this.isSelectionMode = false,
     this.selectedWishIds = const {},
     this.onLongPressWish,
+    this.quantityOverrideMap,
   });
 
   static const double _verticalPadding = 16;
@@ -51,6 +52,7 @@ class WishsTab extends StatelessWidget {
   final bool isSelectionMode;
   final Set<int> selectedWishIds;
   final Function(int)? onLongPressWish;
+  final Map<int, int>? quantityOverrideMap;
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +93,7 @@ class WishsTab extends StatelessWidget {
                   isSelectionMode: isSelectionMode,
                   selectedWishIds: selectedWishIds,
                   onLongPressWish: onLongPressWish,
+                  quantityOverrideMap: quantityOverrideMap,
                 )
               : _EmptyState(
                   constraints: constraints,
@@ -117,6 +120,7 @@ class _WishList extends StatelessWidget {
     this.isSelectionMode = false,
     this.selectedWishIds = const {},
     this.onLongPressWish,
+    this.quantityOverrideMap,
   });
 
   static const double _bottomPadding = 120;
@@ -138,6 +142,7 @@ class _WishList extends StatelessWidget {
   final bool isSelectionMode;
   final Set<int> selectedWishIds;
   final Function(int)? onLongPressWish;
+  final Map<int, int>? quantityOverrideMap;
 
   @override
   Widget build(BuildContext context) {
@@ -166,6 +171,7 @@ class _WishList extends StatelessWidget {
                 ? () => onLongPressWish!(wish.id)
                 : null,
             isSelected: selectedWishIds.contains(wish.id),
+            quantityOverride: quantityOverrideMap?[wish.id],
           );
         },
       ),

@@ -9,6 +9,7 @@ import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/app_bottom_sheet.dart';
+import 'package:wishlist/shared/widgets/dialogs/quantity_selection_dialog.dart';
 
 Future<void> showUncompleteWishBottomSheet(
   BuildContext context,
@@ -82,6 +83,31 @@ class _UncompleteWishBody extends ConsumerWidget {
             },
             isStretched: true,
           ),
+          if (item.wish.quantity > 1) ...[
+            const Gap(8),
+            SecondaryButton(
+              style: BaseButtonStyle.medium,
+              text: l10n.modifyBooking,
+              onPressed: () async {
+                final confirmed = await showCompleteWishQuantityDialog(
+                  context,
+                  ref,
+                  wish: item.wish,
+                  initialQuantity: item.quantity,
+                  isModifying: true,
+                );
+                if (confirmed && context.mounted) {
+                  Navigator.of(context).pop();
+                  showAppSnackBar(
+                    context,
+                    l10n.updateSuccess,
+                    type: SnackBarType.success,
+                  );
+                }
+              },
+              isStretched: true,
+            ),
+          ],
           const Gap(8),
           SecondaryButton(
             style: BaseButtonStyle.medium,

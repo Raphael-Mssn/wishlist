@@ -14,6 +14,7 @@ class CompletedWishWithDetails with _$CompletedWishWithDetails {
     @JsonKey(name: 'owner_id') required String ownerId,
     @JsonKey(name: 'owner_avatar_url') String? ownerAvatarUrl,
     @JsonKey(name: 'created_at') required DateTime completedAt,
+    @JsonKey(name: 'quantity') required int quantity,
   }) = _CompletedWishWithDetails;
 
   const CompletedWishWithDetails._();

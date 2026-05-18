@@ -28,6 +28,10 @@ mixin _$UserCompletedWish {
   int get fromWishlistId => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'quantity')
+  int get quantity => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
+  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   /// Serializes this UserCompletedWish to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,7 +53,9 @@ abstract class $UserCompletedWishCopyWith<$Res> {
       {@JsonKey(name: 'user_id') String userId,
       @JsonKey(name: 'wish_id') int wishId,
       @JsonKey(name: 'from_wishlist_id') int fromWishlistId,
-      @JsonKey(name: 'created_at') DateTime createdAt});
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'quantity') int quantity,
+      @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
 
 /// @nodoc
@@ -71,6 +77,8 @@ class _$UserCompletedWishCopyWithImpl<$Res, $Val extends UserCompletedWish>
     Object? wishId = null,
     Object? fromWishlistId = null,
     Object? createdAt = null,
+    Object? quantity = null,
+    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       userId: null == userId
@@ -89,6 +97,14 @@ class _$UserCompletedWishCopyWithImpl<$Res, $Val extends UserCompletedWish>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      quantity: null == quantity
+          ? _value.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
+              as int,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ) as $Val);
   }
 }
@@ -105,7 +121,9 @@ abstract class _$$UserCompletedWishImplCopyWith<$Res>
       {@JsonKey(name: 'user_id') String userId,
       @JsonKey(name: 'wish_id') int wishId,
       @JsonKey(name: 'from_wishlist_id') int fromWishlistId,
-      @JsonKey(name: 'created_at') DateTime createdAt});
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      @JsonKey(name: 'quantity') int quantity,
+      @JsonKey(name: 'updated_at') DateTime updatedAt});
 }
 
 /// @nodoc
@@ -125,6 +143,8 @@ class __$$UserCompletedWishImplCopyWithImpl<$Res>
     Object? wishId = null,
     Object? fromWishlistId = null,
     Object? createdAt = null,
+    Object? quantity = null,
+    Object? updatedAt = null,
   }) {
     return _then(_$UserCompletedWishImpl(
       userId: null == userId
@@ -143,6 +163,14 @@ class __$$UserCompletedWishImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      quantity: null == quantity
+          ? _value.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
+              as int,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -154,7 +182,9 @@ class _$UserCompletedWishImpl extends _UserCompletedWish {
       {@JsonKey(name: 'user_id') required this.userId,
       @JsonKey(name: 'wish_id') required this.wishId,
       @JsonKey(name: 'from_wishlist_id') required this.fromWishlistId,
-      @JsonKey(name: 'created_at') required this.createdAt})
+      @JsonKey(name: 'created_at') required this.createdAt,
+      @JsonKey(name: 'quantity') required this.quantity,
+      @JsonKey(name: 'updated_at') required this.updatedAt})
       : super._();
 
   factory _$UserCompletedWishImpl.fromJson(Map<String, dynamic> json) =>
@@ -172,10 +202,16 @@ class _$UserCompletedWishImpl extends _UserCompletedWish {
   @override
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
+  @override
+  @JsonKey(name: 'quantity')
+  final int quantity;
+  @override
+  @JsonKey(name: 'updated_at')
+  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'UserCompletedWish(userId: $userId, wishId: $wishId, fromWishlistId: $fromWishlistId, createdAt: $createdAt)';
+    return 'UserCompletedWish(userId: $userId, wishId: $wishId, fromWishlistId: $fromWishlistId, createdAt: $createdAt, quantity: $quantity, updatedAt: $updatedAt)';
   }
 
   @override
@@ -188,13 +224,17 @@ class _$UserCompletedWishImpl extends _UserCompletedWish {
             (identical(other.fromWishlistId, fromWishlistId) ||
                 other.fromWishlistId == fromWishlistId) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.quantity, quantity) ||
+                other.quantity == quantity) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, userId, wishId, fromWishlistId, createdAt);
+  int get hashCode => Object.hash(runtimeType, userId, wishId, fromWishlistId,
+      createdAt, quantity, updatedAt);
 
   /// Create a copy of UserCompletedWish
   /// with the given fields replaced by the non-null parameter values.
@@ -218,7 +258,9 @@ abstract class _UserCompletedWish extends UserCompletedWish {
           {@JsonKey(name: 'user_id') required final String userId,
           @JsonKey(name: 'wish_id') required final int wishId,
           @JsonKey(name: 'from_wishlist_id') required final int fromWishlistId,
-          @JsonKey(name: 'created_at') required final DateTime createdAt}) =
+          @JsonKey(name: 'created_at') required final DateTime createdAt,
+          @JsonKey(name: 'quantity') required final int quantity,
+          @JsonKey(name: 'updated_at') required final DateTime updatedAt}) =
       _$UserCompletedWishImpl;
   const _UserCompletedWish._() : super._();
 
@@ -237,6 +279,12 @@ abstract class _UserCompletedWish extends UserCompletedWish {
   @override
   @JsonKey(name: 'created_at')
   DateTime get createdAt;
+  @override
+  @JsonKey(name: 'quantity')
+  int get quantity;
+  @override
+  @JsonKey(name: 'updated_at')
+  DateTime get updatedAt;
 
   /// Create a copy of UserCompletedWish
   /// with the given fields replaced by the non-null parameter values.

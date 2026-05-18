@@ -18,16 +18,52 @@ class SupabaseUserCompletedWishRepository
     required String userId,
     required int wishId,
     required int fromWishlistId,
+    required int quantity,
   }) async {
     return executeSafely(
       () async {
-        await _client.from(_tableName).insert({
-          'user_id': userId,
-          'wish_id': wishId,
-          'from_wishlist_id': fromWishlistId,
-        });
+        final existing = await _client
+            .from(_tableName)
+            .select('quantity')
+            .eq('user_id', userId)
+            .eq('wish_id', wishId)
+            .maybeSingle();
+
+        if (existing != null) {
+          final newQuantity = (existing['quantity'] as num).toInt() + quantity;
+          await _client
+              .from(_tableName)
+              .update({'quantity': newQuantity})
+              .eq('user_id', userId)
+              .eq('wish_id', wishId);
+        } else {
+          await _client.from(_tableName).insert({
+            'user_id': userId,
+            'wish_id': wishId,
+            'from_wishlist_id': fromWishlistId,
+            'quantity': quantity,
+          });
+        }
       },
       errorMessage: 'Failed to mark wish as completed',
+    );
+  }
+
+  @override
+  Future<void> updateCompletedWishQuantity({
+    required String userId,
+    required int wishId,
+    required int newQuantity,
+  }) async {
+    return executeSafely(
+      () async {
+        await _client
+            .from(_tableName)
+            .update({'quantity': newQuantity})
+            .eq('user_id', userId)
+            .eq('wish_id', wishId);
+      },
+      errorMessage: 'Failed to update completed wish quantity',
     );
   }
 
@@ -57,6 +93,7 @@ class SupabaseUserCompletedWishRepository
         final response = await _client.from(_tableName).select('''
               from_wishlist_id,
               created_at,
+              quantity,
               wishs!inner(
                 *,
                 taken_by_user:$_wishTakenByUserTableName(*),
@@ -84,6 +121,7 @@ class SupabaseUserCompletedWishRepository
             ownerPseudo: profileData['pseudo'] as String,
             ownerAvatarUrl: profileData['avatar_url'] as String?,
             completedAt: DateTime.parse(item['created_at'] as String),
+            quantity: (item['quantity'] as num).toInt(),
           );
         }).toIList();
       },

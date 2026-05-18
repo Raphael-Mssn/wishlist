@@ -444,6 +444,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get selectQuantityToGive => 'Quelle quantité souhaites-tu offrir ?';
 
   @override
+  String get selectQuantityToComplete => 'Quelle quantité as-tu complétée ?';
+
+  @override
   String get wishReservedSuccess => 'Wish réservé avec succès !';
 
   @override
