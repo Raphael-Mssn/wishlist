@@ -992,6 +992,24 @@ abstract class AppLocalizations {
   /// **'Ajout de l\'image'**
   String get imageOptions;
 
+  /// No description provided for @cropImageTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recadrer l\'image'**
+  String get cropImageTitle;
+
+  /// No description provided for @cropImageCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get cropImageCancel;
+
+  /// No description provided for @cropImageValidate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider'**
+  String get cropImageValidate;
+
   /// No description provided for @removeImage.
   ///
   /// In fr, this message translates to:
