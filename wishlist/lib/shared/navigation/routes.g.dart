@@ -217,6 +217,9 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
         isMyWishlist: _$convertMapValue(
                 'is-my-wishlist', state.uri.queryParameters, _$boolConverter) ??
             false,
+        showActions: _$convertMapValue(
+                'show-actions', state.uri.queryParameters, _$boolConverter) ??
+            true,
       );
 
   String get location => GoRouteData.$location(
@@ -224,6 +227,7 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
         queryParams: {
           'wish-ids': wishIds.map((e) => e.toString()).toList(),
           if (isMyWishlist != false) 'is-my-wishlist': isMyWishlist.toString(),
+          if (showActions != true) 'show-actions': showActions.toString(),
         },
       );
 

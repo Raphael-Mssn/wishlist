@@ -16,11 +16,13 @@ class ConsultWishScreen extends ConsumerStatefulWidget {
     required this.wishIds,
     required this.initialIndex,
     this.isMyWishlist = false,
+    this.showActions = true,
   });
 
   final List<int> wishIds;
   final int initialIndex;
   final bool isMyWishlist;
+  final bool showActions;
 
   @override
   ConsumerState<ConsultWishScreen> createState() => _ConsultWishScreenState();
@@ -98,6 +100,7 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
                               wish: wishData,
                               descriptionText: descriptionText,
                               isMyWishlist: widget.isMyWishlist,
+                              showActions: widget.showActions,
                             ),
                           ],
                         ),

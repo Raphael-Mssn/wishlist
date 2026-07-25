@@ -26,11 +26,13 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     required this.wish,
     required this.descriptionText,
     this.isMyWishlist = false,
+    this.showActions = true,
   });
 
   final Wish wish;
   final String descriptionText;
   final bool isMyWishlist;
+  final bool showActions;
 
   void _onOpenLinkTap(String linkUrl) {
     launchUrl(Uri.parse(linkUrl));
@@ -298,38 +300,40 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                   ),
                 ),
               ),
-              const Gap(spacing * 3),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                spacing: spacing,
-                children: [
-                  if (!isMyWishlist && shouldShowCancelButton)
-                    SecondaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: () => _onCancelGiveItTap(context, ref),
-                      text: l10n.cancelBooking,
-                      isStretched: true,
-                    ),
-                  if (isMyWishlist && !isFullyCompleted)
-                    SecondaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: () => _onMarkAsCompletedTap(
-                        context,
-                        ref,
-                        completedQuantity: completedQuantity,
+              if (showActions) ...[
+                const Gap(spacing * 3),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: spacing,
+                  children: [
+                    if (!isMyWishlist && shouldShowCancelButton)
+                      SecondaryButton(
+                        style: BaseButtonStyle.medium,
+                        onPressed: () => _onCancelGiveItTap(context, ref),
+                        text: l10n.cancelBooking,
+                        isStretched: true,
                       ),
-                      text: l10n.markWishAsCompleted,
-                      isStretched: true,
-                    ),
-                  if (showPrimaryAction)
-                    PrimaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: primaryActionOnPressed,
-                      text: primaryActionText,
-                      isStretched: true,
-                    ),
-                ],
-              ),
+                    if (isMyWishlist && !isFullyCompleted)
+                      SecondaryButton(
+                        style: BaseButtonStyle.medium,
+                        onPressed: () => _onMarkAsCompletedTap(
+                          context,
+                          ref,
+                          completedQuantity: completedQuantity,
+                        ),
+                        text: l10n.markWishAsCompleted,
+                        isStretched: true,
+                      ),
+                    if (showPrimaryAction)
+                      PrimaryButton(
+                        style: BaseButtonStyle.medium,
+                        onPressed: primaryActionOnPressed,
+                        text: primaryActionText,
+                        isStretched: true,
+                      ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),
