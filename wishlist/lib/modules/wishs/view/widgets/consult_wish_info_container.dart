@@ -6,6 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_box_shadow.dart';
 import 'package:wishlist/modules/wishs/view/widgets/scrollable_content_with_indicator.dart';
+import 'package:wishlist/shared/infra/completed_wish_mutations_provider.dart';
+import 'package:wishlist/shared/infra/completed_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wish_taken_by_user_service.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
@@ -24,11 +26,13 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     required this.wish,
     required this.descriptionText,
     this.isMyWishlist = false,
+    this.showActions = true,
   });
 
   final Wish wish;
   final String descriptionText;
   final bool isMyWishlist;
+  final bool showActions;
 
   void _onOpenLinkTap(String linkUrl) {
     launchUrl(Uri.parse(linkUrl));
@@ -83,6 +87,50 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     }
   }
 
+  Future<void> _onMarkAsCompletedTap(
+    BuildContext context,
+    WidgetRef ref, {
+    required int completedQuantity,
+  }) async {
+    final l10n = context.l10n;
+
+    if (wish.quantity > 1) {
+      final confirmed = await showCompleteWishQuantityDialog(
+        context,
+        ref,
+        wish: wish,
+        alreadyCompletedQuantity: completedQuantity,
+      );
+      if (confirmed && context.mounted) {
+        context.pop();
+        showAppSnackBar(
+          context,
+          l10n.updateSuccess,
+          type: SnackBarType.success,
+        );
+      }
+      return;
+    }
+
+    try {
+      await ref.read(completedWishMutationsProvider.notifier).markAsCompleted(
+            wish,
+          );
+      if (context.mounted) {
+        context.pop();
+        showAppSnackBar(
+          context,
+          l10n.updateSuccess,
+          type: SnackBarType.success,
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showGenericError(context, error: e);
+      }
+    }
+  }
+
   Future<void> _onCancelGiveItTap(BuildContext context, WidgetRef ref) async {
     final l10n = context.l10n;
 
@@ -116,6 +164,13 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     final isWishTakenByMe = wish.takenByUser.any(
       (element) => element.userId == currentUserId,
     );
+
+    final completedWishes = ref.watch(completedWishesRealtimeProvider);
+    final completedEntry = completedWishes.valueOrNull
+        ?.where((c) => c.wish.id == wish.id)
+        .firstOrNull;
+    final completedQuantity = completedEntry?.quantity ?? 0;
+    final isFullyCompleted = completedQuantity >= wish.quantity;
 
     final hasQuantity = wish.quantity > 1;
     final hasAvailableQuantity = wish.availableQuantity > 0;
@@ -245,27 +300,40 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                   ),
                 ),
               ),
-              const Gap(spacing * 3),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                spacing: spacing,
-                children: [
-                  if (!isMyWishlist && shouldShowCancelButton)
-                    SecondaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: () => _onCancelGiveItTap(context, ref),
-                      text: l10n.cancelBooking,
-                      isStretched: true,
-                    ),
-                  if (showPrimaryAction)
-                    PrimaryButton(
-                      style: BaseButtonStyle.medium,
-                      onPressed: primaryActionOnPressed,
-                      text: primaryActionText,
-                      isStretched: true,
-                    ),
-                ],
-              ),
+              if (showActions) ...[
+                const Gap(spacing * 3),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: spacing,
+                  children: [
+                    if (!isMyWishlist && shouldShowCancelButton)
+                      SecondaryButton(
+                        style: BaseButtonStyle.medium,
+                        onPressed: () => _onCancelGiveItTap(context, ref),
+                        text: l10n.cancelBooking,
+                        isStretched: true,
+                      ),
+                    if (isMyWishlist && !isFullyCompleted)
+                      SecondaryButton(
+                        style: BaseButtonStyle.medium,
+                        onPressed: () => _onMarkAsCompletedTap(
+                          context,
+                          ref,
+                          completedQuantity: completedQuantity,
+                        ),
+                        text: l10n.markWishAsCompleted,
+                        isStretched: true,
+                      ),
+                    if (showPrimaryAction)
+                      PrimaryButton(
+                        style: BaseButtonStyle.medium,
+                        onPressed: primaryActionOnPressed,
+                        text: primaryActionText,
+                        isStretched: true,
+                      ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),

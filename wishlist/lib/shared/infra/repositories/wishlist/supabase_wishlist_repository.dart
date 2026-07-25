@@ -36,6 +36,7 @@ class SupabaseWishlistRepository implements WishlistRepository {
             .from(_wishlistsTableName)
             .select()
             .eq('id_owner', userId)
+            .isFilter('deleted_at', null)
             .order('order', ascending: true);
 
         return response.map(Wishlist.fromJson).toIList();
@@ -53,6 +54,7 @@ class SupabaseWishlistRepository implements WishlistRepository {
             .select()
             .eq('id_owner', userId)
             .eq('visibility', 'public')
+            .isFilter('deleted_at', null)
             .order('order', ascending: true);
 
         return response.map(Wishlist.fromJson).toIList();
@@ -69,6 +71,7 @@ class SupabaseWishlistRepository implements WishlistRepository {
             .from(_wishlistsTableName)
             .select('id')
             .eq('id_owner', userId)
+            .isFilter('deleted_at', null)
             .count();
 
         return response.count;
@@ -114,7 +117,10 @@ class SupabaseWishlistRepository implements WishlistRepository {
   Future<void> deleteWishlist(int wishlistId) async {
     return executeSafely(
       () async {
-        await _client.from(_wishlistsTableName).delete().eq('id', wishlistId);
+        await _client.rpc(
+          'delete_or_archive_wishlist',
+          params: {'p_wishlist_id': wishlistId},
+        );
       },
       errorMessage: 'Failed to delete wishlist',
     );

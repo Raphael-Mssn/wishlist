@@ -113,6 +113,7 @@
   "iWantToGiveIt": "I want to give it",
   "cancelBooking": "Cancel my booking",
   "modifyBooking": "Modify my booking",
+  "modifyCompletedQuantity": "Modify completed quantity",
   "cancelBookingDialogTitle": "Cancel booking",
   "cancelBookingDialogExplanation": "Are you sure you want to cancel this booking?",
   "noDescription": "No description",
@@ -128,7 +129,7 @@
   "updateSuccess": "Update successfully completed!",
   "deleteWishlist": "Delete my wishlist",
   "deleteWishlistConfirmation": "Are you sure you want to delete this wishlist?",
-  "deleteWishlistWishesWarning": "Wishes will also be deleted.",
+  "deleteWishlistWishesWarning": "Uncompleted wishes will be deleted. Completed wishes will remain in your history.",
   "deleteWishlistSuccess": "Wishlist successfully deleted!",
   "wishlistColor": "Wishlist color",
   "sortWishs": "Sort wishes",
@@ -136,8 +137,10 @@
   "sortByAlphabetical": "By alphabetical order",
   "sortByPrice": "By price",
   "sortByDate": "By creation date",
+  "sortByCompletedAt": "By completion date",
   "sortByBookingCount": "By booking count",
   "selectQuantityToGive": "How much would you like to offer?",
+  "selectQuantityToComplete": "How many did you complete?",
   "wishReservedSuccess": "Wish reserved successfully!",
   "quantityCannotBeLowerThanBooked": "Quantity cannot be lower than {bookedQuantity} (already booked quantity)",
   "deleteSelectedWishes": "Delete wishes",
@@ -160,6 +163,9 @@
   },
   "moveWishes": "Move wishes",
   "moveButton": "Move",
+  "reintegrateWish": "Restore a wish",
+  "reintegrateWishExplanation": "The wishlist this wish came from has been deleted. Select the wishlist in which you want to restore it:",
+  "reintegrateButton": "Restore",
   "selectWishlist": "Select a wishlist",
   "selectDestinationWishlist": "Select the wishlist where you want to move {count, plural, =1{this wish} other{these {count} wishes}}:",
   "@selectDestinationWishlist": {
@@ -202,5 +208,31 @@
   "settingsTermsOfUse": "Terms of use",
   "settingsPrivacyPolicy": "Privacy policy",
   "comingSoonTitle": "Coming Soon",
-  "comingSoonMessage": "This feature is coming soon!"
+  "comingSoonMessage": "This feature is coming soon!",
+  "completedWishesScreenTitle": "Completed wishes",
+  "completedWishesEmptyTitle": "No completed wishes",
+  "markWishAsCompleted": "Mark as completed",
+  "unmarkWishAsCompleted": "Remove from completed",
+  "settingsCompletedWishes": "My completed wishes",
+  "unmarkWishConfirmTitle": "Remove from completed",
+  "unmarkWishConfirmMessage": "This wish will become visible again in the wishlist \"{wishlistName}\".",
+  "@unmarkWishConfirmMessage": {
+    "placeholders": {
+      "wishlistName": {
+        "type": "String"
+      }
+    }
+  },
+  "unmarkWishArchivedConfirmMessage": "Choose a wishlist in which to restore this wish.",
+  "deletedWishlist": "Deleted wishlist",
+  "friendCompletedWishesTitle": "Completed wishes",
+  "completeSelectedWishes": "Complete",
+  "completedWishFromWishlist": "Wishlist: {wishlistName}",
+  "@completedWishFromWishlist": {
+    "placeholders": {
+      "wishlistName": {
+        "type": "String"
+      }
+    }
+  }
 }

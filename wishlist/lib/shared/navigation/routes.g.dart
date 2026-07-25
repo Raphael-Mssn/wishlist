@@ -31,6 +31,10 @@ RouteBase get $homeRoute => GoRouteData.$route(
               path: 'change-pseudo',
               factory: $ChangePseudoRouteExtension._fromState,
             ),
+            GoRouteData.$route(
+              path: 'completed-wishes',
+              factory: $CompletedWishesRouteExtension._fromState,
+            ),
           ],
         ),
         GoRouteData.$route(
@@ -147,6 +151,24 @@ extension $ChangePseudoRouteExtension on ChangePseudoRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+extension $CompletedWishesRouteExtension on CompletedWishesRoute {
+  static CompletedWishesRoute _fromState(GoRouterState state) =>
+      CompletedWishesRoute();
+
+  String get location => GoRouteData.$location(
+        '/settings/completed-wishes',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 extension $WishlistRouteExtension on WishlistRoute {
   static WishlistRoute _fromState(GoRouterState state) => WishlistRoute(
         wishlistId: int.parse(state.pathParameters['wishlistId']!),
@@ -195,6 +217,12 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
         isMyWishlist: _$convertMapValue(
                 'is-my-wishlist', state.uri.queryParameters, _$boolConverter) ??
             false,
+        showActions: _$convertMapValue(
+                'show-actions', state.uri.queryParameters, _$boolConverter) ??
+            true,
+        quantityDisplay: WishQuantityDisplay.values.asNameMap()[
+                state.uri.queryParameters['quantity-display']] ??
+            WishQuantityDisplay.total,
       );
 
   String get location => GoRouteData.$location(
@@ -202,6 +230,9 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
         queryParams: {
           'wish-ids': wishIds.map((e) => e.toString()).toList(),
           if (isMyWishlist != false) 'is-my-wishlist': isMyWishlist.toString(),
+          if (showActions != true) 'show-actions': showActions.toString(),
+          if (quantityDisplay != WishQuantityDisplay.total)
+            'quantity-display': quantityDisplay.name,
         },
       );
 

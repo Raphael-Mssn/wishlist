@@ -734,6 +734,12 @@ abstract class AppLocalizations {
   /// **'Modifier ma réservation'**
   String get modifyBooking;
 
+  /// No description provided for @modifyCompletedQuantity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la quantité complétée'**
+  String get modifyCompletedQuantity;
+
   /// No description provided for @cancelBookingDialogTitle.
   ///
   /// In fr, this message translates to:
@@ -827,7 +833,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteWishlistWishesWarning.
   ///
   /// In fr, this message translates to:
-  /// **'Les wishs seront également supprimés.'**
+  /// **'Les wishs non complétés seront supprimés. Les wishs complétés resteront dans ton historique.'**
   String get deleteWishlistWishesWarning;
 
   /// No description provided for @deleteWishlistSuccess.
@@ -872,6 +878,12 @@ abstract class AppLocalizations {
   /// **'Par date de création'**
   String get sortByDate;
 
+  /// No description provided for @sortByCompletedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par date de complétion'**
+  String get sortByCompletedAt;
+
   /// No description provided for @sortByBookingCount.
   ///
   /// In fr, this message translates to:
@@ -883,6 +895,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Quelle quantité souhaites-tu offrir ?'**
   String get selectQuantityToGive;
+
+  /// No description provided for @selectQuantityToComplete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quelle quantité as-tu complétée ?'**
+  String get selectQuantityToComplete;
 
   /// No description provided for @wishReservedSuccess.
   ///
@@ -931,6 +949,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Déplacer'**
   String get moveButton;
+
+  /// No description provided for @reintegrateWish.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réintégrer un wish'**
+  String get reintegrateWish;
+
+  /// No description provided for @reintegrateWishExplanation.
+  ///
+  /// In fr, this message translates to:
+  /// **'La wishlist d\'origine de ce wish a été supprimée, sélectionne la wishlist vers laquelle tu veux le réintégrer :'**
+  String get reintegrateWishExplanation;
+
+  /// No description provided for @reintegrateButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réintégrer'**
+  String get reintegrateButton;
 
   /// No description provided for @selectWishlist.
   ///
@@ -1105,6 +1141,78 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Cette fonctionnalité arrivera prochainement !'**
   String get comingSoonMessage;
+
+  /// No description provided for @completedWishesScreenTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Wishs complétés'**
+  String get completedWishesScreenTitle;
+
+  /// No description provided for @completedWishesEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun wish complété'**
+  String get completedWishesEmptyTitle;
+
+  /// No description provided for @markWishAsCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Marquer comme complété'**
+  String get markWishAsCompleted;
+
+  /// No description provided for @unmarkWishAsCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer des complétés'**
+  String get unmarkWishAsCompleted;
+
+  /// No description provided for @settingsCompletedWishes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes wishs complétés'**
+  String get settingsCompletedWishes;
+
+  /// No description provided for @unmarkWishConfirmTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer des wishs complétés'**
+  String get unmarkWishConfirmTitle;
+
+  /// No description provided for @unmarkWishConfirmMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce wish redeviendra visible dans la wishlist \"{wishlistName}\".'**
+  String unmarkWishConfirmMessage(String wishlistName);
+
+  /// No description provided for @unmarkWishArchivedConfirmMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisis une wishlist dans laquelle remettre ce wish.'**
+  String get unmarkWishArchivedConfirmMessage;
+
+  /// No description provided for @deletedWishlist.
+  ///
+  /// In fr, this message translates to:
+  /// **'Wishlist supprimée'**
+  String get deletedWishlist;
+
+  /// No description provided for @friendCompletedWishesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Wishs complétés'**
+  String get friendCompletedWishesTitle;
+
+  /// No description provided for @completeSelectedWishes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compléter'**
+  String get completeSelectedWishes;
+
+  /// No description provided for @completedWishFromWishlist.
+  ///
+  /// In fr, this message translates to:
+  /// **'Wishlist : {wishlistName}'**
+  String completedWishFromWishlist(String wishlistName);
 }
 
 class _AppLocalizationsDelegate

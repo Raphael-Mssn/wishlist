@@ -113,6 +113,7 @@
   "iWantToGiveIt": "Je veux l'offrir",
   "cancelBooking": "Annuler ma réservation",
   "modifyBooking": "Modifier ma réservation",
+  "modifyCompletedQuantity": "Modifier la quantité complétée",
   "cancelBookingDialogTitle": "Annuler la réservation",
   "cancelBookingDialogExplanation": "Es-tu sûr de vouloir annuler cette réservation ?",
   "noDescription": "Aucune description",
@@ -128,7 +129,7 @@
   "updateSuccess": "Mise à jour effectuée avec succès !",
   "deleteWishlist": "Supprimer ma wishlist",
   "deleteWishlistConfirmation": "Es-tu sûr de vouloir supprimer cette wishlist ?",
-  "deleteWishlistWishesWarning": "Les wishs seront également supprimés.",
+  "deleteWishlistWishesWarning": "Les wishs non complétés seront supprimés. Les wishs complétés resteront dans ton historique.",
   "deleteWishlistSuccess": "Wishlist supprimée avec succès !",
   "wishlistColor": "Couleur de la wishlist",
   "sortWishs": "Trier les wishs",
@@ -136,8 +137,10 @@
   "sortByAlphabetical": "Par ordre alphabétique",
   "sortByPrice": "Par prix",
   "sortByDate": "Par date de création",
+  "sortByCompletedAt": "Par date de complétion",
   "sortByBookingCount": "Par nombre de réservations",
   "selectQuantityToGive": "Quelle quantité souhaites-tu offrir ?",
+  "selectQuantityToComplete": "Quelle quantité as-tu complétée ?",
   "wishReservedSuccess": "Wish réservé avec succès !",
   "quantityCannotBeLowerThanBooked": "La quantité ne peut pas être inférieure à {bookedQuantity} (quantité déjà réservée)",
   "deleteSelectedWishes": "Supprimer les wishs",
@@ -160,6 +163,9 @@
   },
   "moveWishes": "Déplacer des wishs",
   "moveButton": "Déplacer",
+  "reintegrateWish": "Réintégrer un wish",
+  "reintegrateWishExplanation": "La wishlist d'origine de ce wish a été supprimée, sélectionne la wishlist vers laquelle tu veux le réintégrer :",
+  "reintegrateButton": "Réintégrer",
   "selectWishlist": "Sélectionner une wishlist",
   "selectDestinationWishlist": "Sélectionne la wishlist vers laquelle tu veux déplacer {count, plural, =1{ce wish} other{ces {count} wishs}} :",
   "@selectDestinationWishlist": {
@@ -202,5 +208,31 @@
   "settingsTermsOfUse": "Conditions d'utilisation",
   "settingsPrivacyPolicy": "Politique de confidentialité",
   "comingSoonTitle": "Bientôt disponible",
-  "comingSoonMessage": "Cette fonctionnalité arrivera prochainement !"
+  "comingSoonMessage": "Cette fonctionnalité arrivera prochainement !",
+  "completedWishesScreenTitle": "Wishs complétés",
+  "completedWishesEmptyTitle": "Aucun wish complété",
+  "markWishAsCompleted": "Marquer comme complété",
+  "unmarkWishAsCompleted": "Retirer des complétés",
+  "settingsCompletedWishes": "Mes wishs complétés",
+  "unmarkWishConfirmTitle": "Retirer des wishs complétés",
+  "unmarkWishConfirmMessage": "Ce wish redeviendra visible dans la wishlist \"{wishlistName}\".",
+  "@unmarkWishConfirmMessage": {
+    "placeholders": {
+      "wishlistName": {
+        "type": "String"
+      }
+    }
+  },
+  "unmarkWishArchivedConfirmMessage": "Choisis une wishlist dans laquelle remettre ce wish.",
+  "deletedWishlist": "Wishlist supprimée",
+  "friendCompletedWishesTitle": "Wishs complétés",
+  "completeSelectedWishes": "Compléter",
+  "completedWishFromWishlist": "Wishlist : {wishlistName}",
+  "@completedWishFromWishlist": {
+    "placeholders": {
+      "wishlistName": {
+        "type": "String"
+      }
+    }
+  }
 }
