@@ -300,7 +300,9 @@ class _CompletedWishCard extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            item.fromWishlistName,
+                            item.isFromDeletedWishlist
+                                ? l10n.deletedWishlist
+                                : item.fromWishlistName,
                             style: AppTextStyles.smaller.copyWith(
                               color: AppColors.makara,
                             ),
@@ -310,7 +312,7 @@ class _CompletedWishCard extends StatelessWidget {
                         ),
                         const Gap(8),
                         Text(
-                          DateFormat.yMMMMd(
+                          DateFormat.yMMMd(
                             Localizations.localeOf(context).toString(),
                           ).format(item.completedAt.toLocal()),
                           style: AppTextStyles.smaller.copyWith(

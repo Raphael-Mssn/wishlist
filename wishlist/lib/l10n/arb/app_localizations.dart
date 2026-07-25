@@ -833,7 +833,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteWishlistWishesWarning.
   ///
   /// In fr, this message translates to:
-  /// **'Les wishs seront également supprimés.'**
+  /// **'Les wishs non complétés seront supprimés. Les wishs complétés resteront dans ton historique.'**
   String get deleteWishlistWishesWarning;
 
   /// No description provided for @deleteWishlistSuccess.
@@ -949,6 +949,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Déplacer'**
   String get moveButton;
+
+  /// No description provided for @reintegrateWish.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réintégrer un wish'**
+  String get reintegrateWish;
+
+  /// No description provided for @reintegrateWishExplanation.
+  ///
+  /// In fr, this message translates to:
+  /// **'La wishlist d\'origine de ce wish a été supprimée, sélectionne la wishlist vers laquelle tu veux le réintégrer :'**
+  String get reintegrateWishExplanation;
+
+  /// No description provided for @reintegrateButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réintégrer'**
+  String get reintegrateButton;
 
   /// No description provided for @selectWishlist.
   ///
@@ -1165,6 +1183,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ce wish redeviendra visible dans la wishlist \"{wishlistName}\".'**
   String unmarkWishConfirmMessage(String wishlistName);
+
+  /// No description provided for @unmarkWishArchivedConfirmMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisis une wishlist dans laquelle remettre ce wish.'**
+  String get unmarkWishArchivedConfirmMessage;
+
+  /// No description provided for @deletedWishlist.
+  ///
+  /// In fr, this message translates to:
+  /// **'Wishlist supprimée'**
+  String get deletedWishlist;
 
   /// No description provided for @friendCompletedWishesTitle.
   ///

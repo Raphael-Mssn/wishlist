@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/modules/wishlists/view/widgets/move_wishes_dialog.dart';
 import 'package:wishlist/shared/infra/completed_wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/completed_wish_with_details/completed_wish_with_details.dart';
 import 'package:wishlist/shared/theme/colors.dart';
@@ -26,6 +27,49 @@ class _UncompleteWishBody extends ConsumerWidget {
   const _UncompleteWishBody({required this.item});
 
   final CompletedWishWithDetails item;
+
+  Future<void> _onUncomplete(BuildContext context, WidgetRef ref) async {
+    try {
+      var restored = false;
+      final mutations = ref.read(completedWishMutationsProvider.notifier);
+
+      if (item.isFromDeletedWishlist) {
+        await showMoveWishesDialog(
+          context,
+          currentWishlistId: item.fromWishlistId,
+          wishCount: 1,
+          dialogTitle: context.l10n.reintegrateWish,
+          description: context.l10n.reintegrateWishExplanation,
+          confirmButtonLabel: context.l10n.reintegrateButton,
+          onConfirm: (targetWishlistId) async {
+            await mutations.restoreCompletedWish(
+              wishId: item.wish.id,
+              targetWishlistId: targetWishlistId,
+            );
+            restored = true;
+          },
+        );
+        if (!restored) {
+          return;
+        }
+      } else {
+        await mutations.unmarkAsCompleted(item.wish.id);
+      }
+
+      if (context.mounted) {
+        Navigator.of(context).pop();
+        showAppSnackBar(
+          context,
+          context.l10n.updateSuccess,
+          type: SnackBarType.success,
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showGenericError(context, error: e);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,7 +97,9 @@ class _UncompleteWishBody extends ConsumerWidget {
           ),
           const Gap(16),
           Text(
-            l10n.unmarkWishConfirmMessage(item.fromWishlistName),
+            item.isFromDeletedWishlist
+                ? l10n.unmarkWishArchivedConfirmMessage
+                : l10n.unmarkWishConfirmMessage(item.fromWishlistName),
             style: AppTextStyles.small.copyWith(color: AppColors.makara),
             textAlign: TextAlign.center,
           ),
@@ -62,25 +108,7 @@ class _UncompleteWishBody extends ConsumerWidget {
             style: BaseButtonStyle.medium,
             text: l10n.unmarkWishAsCompleted,
             isLoading: mutationState.isLoading,
-            onPressed: () async {
-              try {
-                await ref
-                    .read(completedWishMutationsProvider.notifier)
-                    .unmarkAsCompleted(item.wish.id);
-                if (context.mounted) {
-                  Navigator.of(context).pop();
-                  showAppSnackBar(
-                    context,
-                    l10n.updateSuccess,
-                    type: SnackBarType.success,
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showGenericError(context, error: e);
-                }
-              }
-            },
+            onPressed: () => _onUncomplete(context, ref),
             isStretched: true,
           ),
           if (item.wish.quantity > 1) ...[

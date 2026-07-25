@@ -129,7 +129,7 @@
   "updateSuccess": "Mise à jour effectuée avec succès !",
   "deleteWishlist": "Supprimer ma wishlist",
   "deleteWishlistConfirmation": "Es-tu sûr de vouloir supprimer cette wishlist ?",
-  "deleteWishlistWishesWarning": "Les wishs seront également supprimés.",
+  "deleteWishlistWishesWarning": "Les wishs non complétés seront supprimés. Les wishs complétés resteront dans ton historique.",
   "deleteWishlistSuccess": "Wishlist supprimée avec succès !",
   "wishlistColor": "Couleur de la wishlist",
   "sortWishs": "Trier les wishs",
@@ -163,6 +163,9 @@
   },
   "moveWishes": "Déplacer des wishs",
   "moveButton": "Déplacer",
+  "reintegrateWish": "Réintégrer un wish",
+  "reintegrateWishExplanation": "La wishlist d'origine de ce wish a été supprimée, sélectionne la wishlist vers laquelle tu veux le réintégrer :",
+  "reintegrateButton": "Réintégrer",
   "selectWishlist": "Sélectionner une wishlist",
   "selectDestinationWishlist": "Sélectionne la wishlist vers laquelle tu veux déplacer {count, plural, =1{ce wish} other{ces {count} wishs}} :",
   "@selectDestinationWishlist": {
@@ -220,6 +223,8 @@
       }
     }
   },
+  "unmarkWishArchivedConfirmMessage": "Choisis une wishlist dans laquelle remettre ce wish.",
+  "deletedWishlist": "Wishlist supprimée",
   "friendCompletedWishesTitle": "Wishs complétés",
   "completeSelectedWishes": "Compléter",
   "completedWishFromWishlist": "Wishlist : {wishlistName}",

@@ -413,7 +413,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'Are you sure you want to delete this wishlist?';
 
   @override
-  String get deleteWishlistWishesWarning => 'Wishes will also be deleted.';
+  String get deleteWishlistWishesWarning =>
+      'Uncompleted wishes will be deleted. Completed wishes will remain in your history.';
 
   @override
   String get deleteWishlistSuccess => 'Wishlist successfully deleted!';
@@ -478,6 +479,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moveButton => 'Move';
+
+  @override
+  String get reintegrateWish => 'Restore a wish';
+
+  @override
+  String get reintegrateWishExplanation =>
+      'The wishlist this wish came from has been deleted. Select the wishlist in which you want to restore it:';
+
+  @override
+  String get reintegrateButton => 'Restore';
 
   @override
   String get selectWishlist => 'Select a wishlist';
@@ -608,6 +619,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String unmarkWishConfirmMessage(String wishlistName) {
     return 'This wish will become visible again in the wishlist \"$wishlistName\".';
   }
+
+  @override
+  String get unmarkWishArchivedConfirmMessage =>
+      'Choose a wishlist in which to restore this wish.';
+
+  @override
+  String get deletedWishlist => 'Deleted wishlist';
 
   @override
   String get friendCompletedWishesTitle => 'Completed wishes';

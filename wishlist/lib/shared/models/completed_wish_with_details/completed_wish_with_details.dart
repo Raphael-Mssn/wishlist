@@ -21,4 +21,8 @@ class CompletedWishWithDetails with _$CompletedWishWithDetails {
 
   factory CompletedWishWithDetails.fromJson(Map<String, dynamic> json) =>
       _$CompletedWishWithDetailsFromJson(json);
+
+  static const deletedWishlistName = '';
+
+  bool get isFromDeletedWishlist => fromWishlistName == deletedWishlistName;
 }

@@ -36,6 +36,16 @@ class CompletedWishService {
     final userId = _userService.getCurrentUserId();
     await _repository.unmarkAsCompleted(userId: userId, wishId: wishId);
   }
+
+  Future<void> restoreCompletedWish({
+    required int wishId,
+    required int targetWishlistId,
+  }) async {
+    await _repository.restoreCompletedWish(
+      wishId: wishId,
+      targetWishlistId: targetWishlistId,
+    );
+  }
 }
 
 final completedWishServiceProvider = Provider<CompletedWishService>((ref) {

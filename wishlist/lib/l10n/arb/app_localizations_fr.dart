@@ -414,7 +414,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get deleteWishlistWishesWarning =>
-      'Les wishs seront également supprimés.';
+      'Les wishs non complétés seront supprimés. Les wishs complétés resteront dans ton historique.';
 
   @override
   String get deleteWishlistSuccess => 'Wishlist supprimée avec succès !';
@@ -479,6 +479,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get moveButton => 'Déplacer';
+
+  @override
+  String get reintegrateWish => 'Réintégrer un wish';
+
+  @override
+  String get reintegrateWishExplanation =>
+      'La wishlist d\'origine de ce wish a été supprimée, sélectionne la wishlist vers laquelle tu veux le réintégrer :';
+
+  @override
+  String get reintegrateButton => 'Réintégrer';
 
   @override
   String get selectWishlist => 'Sélectionner une wishlist';
@@ -612,6 +622,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String unmarkWishConfirmMessage(String wishlistName) {
     return 'Ce wish redeviendra visible dans la wishlist \"$wishlistName\".';
   }
+
+  @override
+  String get unmarkWishArchivedConfirmMessage =>
+      'Choisis une wishlist dans laquelle remettre ce wish.';
+
+  @override
+  String get deletedWishlist => 'Wishlist supprimée';
 
   @override
   String get friendCompletedWishesTitle => 'Wishs complétés';

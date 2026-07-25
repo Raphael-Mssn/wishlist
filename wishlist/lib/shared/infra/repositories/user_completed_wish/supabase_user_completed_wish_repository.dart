@@ -85,38 +85,60 @@ class SupabaseUserCompletedWishRepository
   }
 
   @override
+  Future<void> restoreCompletedWish({
+    required int wishId,
+    required int targetWishlistId,
+  }) async {
+    return executeSafely(
+      () async {
+        await _client.rpc(
+          'restore_completed_wish',
+          params: {
+            'p_wish_id': wishId,
+            'p_target_wishlist_id': targetWishlistId,
+          },
+        );
+      },
+      errorMessage: 'Failed to restore completed wish',
+    );
+  }
+
+  @override
   Future<IList<CompletedWishWithDetails>> getCompletedWishesByUser(
     String userId,
   ) async {
     return executeSafely(
       () async {
         final response = await _client.from(_tableName).select('''
-              from_wishlist_id,
-              created_at,
-              quantity,
-              wishs!inner(
-                *,
-                taken_by_user:$_wishTakenByUserTableName(*),
-                wishlists!inner(
-                  name,
-                  id_owner,
-                  profiles!inner(
-                    pseudo,
-                    avatar_url
-                  )
-                )
-              )
+               from_wishlist_id,
+               created_at,
+               quantity,
+               from_wishlist:wishlists!inner(
+                 name,
+                 deleted_at,
+                 id_owner,
+                 profiles!inner(
+                   pseudo,
+                   avatar_url
+                 )
+               ),
+               wishs!inner(
+                 *,
+                 taken_by_user:$_wishTakenByUserTableName(*)
+               )
             ''').eq('user_id', userId).order('created_at', ascending: false);
 
         return response.map((item) {
           final wishData = item['wishs'] as Map<String, dynamic>;
-          final wishlistData = wishData['wishlists'] as Map<String, dynamic>;
+          final wishlistData = item['from_wishlist'] as Map<String, dynamic>;
           final profileData = wishlistData['profiles'] as Map<String, dynamic>;
 
           return CompletedWishWithDetails(
             wish: Wish.fromJson(wishData),
             fromWishlistId: item['from_wishlist_id'] as int,
-            fromWishlistName: wishlistData['name'] as String,
+            fromWishlistName: wishlistData['deleted_at'] == null
+                ? wishlistData['name'] as String
+                : CompletedWishWithDetails.deletedWishlistName,
             ownerId: wishlistData['id_owner'] as String,
             ownerPseudo: profileData['pseudo'] as String,
             ownerAvatarUrl: profileData['avatar_url'] as String?,

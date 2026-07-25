@@ -14,6 +14,9 @@ Future<void> showMoveWishesDialog(
   required int currentWishlistId,
   required int wishCount,
   required Future<void> Function(int targetWishlistId) onConfirm,
+  String? dialogTitle,
+  String? description,
+  String? confirmButtonLabel,
 }) async {
   final selectedWishlistId = ValueNotifier<int?>(null);
   final isConfirmEnabled = ValueNotifier<bool>(false);
@@ -25,14 +28,15 @@ Future<void> showMoveWishesDialog(
 
   await showAppDialog(
     context,
-    title: context.l10n.moveWishes,
+    title: dialogTitle ?? context.l10n.moveWishes,
     content: _MoveWishesDialogContent(
       currentWishlistId: currentWishlistId,
-      wishCount: wishCount,
       selectedWishlistId: selectedWishlistId,
       showConfirmButton: showConfirmButton,
+      description:
+          description ?? context.l10n.selectDestinationWishlist(wishCount),
     ),
-    confirmButtonLabel: context.l10n.moveButton,
+    confirmButtonLabel: confirmButtonLabel ?? context.l10n.moveButton,
     isConfirmEnabled: isConfirmEnabled,
     showConfirmButton: showConfirmButton,
     onConfirm: () async {
@@ -47,15 +51,15 @@ Future<void> showMoveWishesDialog(
 class _MoveWishesDialogContent extends ConsumerWidget {
   const _MoveWishesDialogContent({
     required this.currentWishlistId,
-    required this.wishCount,
     required this.selectedWishlistId,
     required this.showConfirmButton,
+    required this.description,
   });
 
   final int currentWishlistId;
-  final int wishCount;
   final ValueNotifier<int?> selectedWishlistId;
   final ValueNotifier<bool> showConfirmButton;
+  final String description;
 
   Future<void> _showWishlistBottomSheet(
     BuildContext context,
@@ -138,7 +142,7 @@ class _MoveWishesDialogContent extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              l10n.selectDestinationWishlist(wishCount),
+              description,
               style: AppTextStyles.small.copyWith(
                 color: AppColors.makara,
               ),

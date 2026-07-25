@@ -45,4 +45,19 @@ class CompletedWishMutations extends _$CompletedWishMutations
       },
     );
   }
+
+  Future<void> restoreCompletedWish({
+    required int wishId,
+    required int targetWishlistId,
+  }) async {
+    await mutateAsync(
+      () async {
+        final service = ref.read(completedWishServiceProvider);
+        await service.restoreCompletedWish(
+          wishId: wishId,
+          targetWishlistId: targetWishlistId,
+        );
+      },
+    );
+  }
 }

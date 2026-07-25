@@ -23,6 +23,12 @@ abstract class UserCompletedWishRepository {
     required int wishId,
   });
 
+  /// Déplace un wish depuis sa wishlist archivée et retire sa complétion.
+  Future<void> restoreCompletedWish({
+    required int wishId,
+    required int targetWishlistId,
+  });
+
   /// Récupère tous les wishs complétés d'un utilisateur avec leurs détails.
   Future<IList<CompletedWishWithDetails>> getCompletedWishesByUser(
     String userId,

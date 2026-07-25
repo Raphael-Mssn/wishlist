@@ -310,7 +310,9 @@ class _FriendCompletedWishesSection extends ConsumerWidget {
       loading: () => const SizedBox.shrink(),
       error: (_, __) => const SizedBox.shrink(),
       data: (completedWishes) {
-        if (completedWishes.isEmpty) return const SizedBox.shrink();
+        if (completedWishes.isEmpty) {
+          return const SizedBox.shrink();
+        }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -365,7 +367,11 @@ class _FriendCompletedWishTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                l10n.completedWishFromWishlist(item.fromWishlistName),
+                l10n.completedWishFromWishlist(
+                  item.isFromDeletedWishlist
+                      ? l10n.deletedWishlist
+                      : item.fromWishlistName,
+                ),
                 style: AppTextStyles.smaller.copyWith(
                   color: AppColors.makara,
                 ),
