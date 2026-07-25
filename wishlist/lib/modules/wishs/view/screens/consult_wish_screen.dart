@@ -5,10 +5,14 @@ import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_wish_back_button.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_wish_image.dart';
 import 'package:wishlist/modules/wishs/view/widgets/consult_wish_info_container.dart';
+import 'package:wishlist/shared/infra/completed_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/infra/repositories/wish/wish_streams_providers.dart';
+import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/providers/wishlist_theme_provider.dart';
+
+enum WishQuantityDisplay { total, pending, booked, myBooked, completed }
 
 class ConsultWishScreen extends ConsumerStatefulWidget {
   const ConsultWishScreen({
@@ -17,12 +21,14 @@ class ConsultWishScreen extends ConsumerStatefulWidget {
     required this.initialIndex,
     this.isMyWishlist = false,
     this.showActions = true,
+    this.quantityDisplay = WishQuantityDisplay.total,
   });
 
   final List<int> wishIds;
   final int initialIndex;
   final bool isMyWishlist;
   final bool showActions;
+  final WishQuantityDisplay quantityDisplay;
 
   @override
   ConsumerState<ConsultWishScreen> createState() => _ConsultWishScreenState();
@@ -74,6 +80,7 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
       backgroundColor: AppColors.gainsboro,
       body: wish.when(
         data: (wishData) {
+          final quantityToDisplay = _quantityToDisplay(wishData);
           final wishlistThemeAsync =
               ref.watch(wishlistThemeProvider(wishData.wishlistId));
 
@@ -94,7 +101,10 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
                           children: [
                             const ConsultWishBackButton(),
                             const Gap(16),
-                            ConsultWishImage(wish: wishData),
+                            ConsultWishImage(
+                              wish: wishData,
+                              quantityToDisplay: quantityToDisplay,
+                            ),
                             const Gap(32),
                             ConsultWishInfoContainer(
                               wish: wishData,
@@ -118,5 +128,37 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
+  }
+
+  int _quantityToDisplay(Wish wish) {
+    final completedQuantity = ref
+            .watch(completedWishesRealtimeProvider)
+            .valueOrNull
+            ?.where((item) => item.wish.id == wish.id)
+            .firstOrNull
+            ?.quantity ??
+        0;
+
+    switch (widget.quantityDisplay) {
+      case WishQuantityDisplay.total:
+        return wish.quantity;
+      case WishQuantityDisplay.pending:
+        return (wish.quantity - wish.totalBookedQuantity - completedQuantity)
+            .clamp(0, wish.quantity);
+      case WishQuantityDisplay.booked:
+        return (wish.totalBookedQuantity - completedQuantity).clamp(
+          0,
+          wish.totalBookedQuantity,
+        );
+      case WishQuantityDisplay.myBooked:
+        final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
+        return wish.takenByUser
+                .where((reservation) => reservation.userId == currentUserId)
+                .firstOrNull
+                ?.quantity ??
+            0;
+      case WishQuantityDisplay.completed:
+        return completedQuantity;
+    }
   }
 }

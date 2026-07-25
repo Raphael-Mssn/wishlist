@@ -113,12 +113,14 @@ class ConsultWishRoute extends GoRouteData {
     required this.wishIds,
     this.isMyWishlist = false,
     this.showActions = true,
+    this.quantityDisplay = WishQuantityDisplay.total,
   });
   final int wishlistId;
   final int wishId;
   final List<int> wishIds;
   final bool isMyWishlist;
   final bool showActions;
+  final WishQuantityDisplay quantityDisplay;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -130,6 +132,7 @@ class ConsultWishRoute extends GoRouteData {
       initialIndex: initialIndex,
       isMyWishlist: isMyWishlist,
       showActions: showActions,
+      quantityDisplay: quantityDisplay,
     );
   }
 }

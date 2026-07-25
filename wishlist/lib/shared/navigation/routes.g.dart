@@ -220,6 +220,9 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
         showActions: _$convertMapValue(
                 'show-actions', state.uri.queryParameters, _$boolConverter) ??
             true,
+        quantityDisplay: WishQuantityDisplay.values.asNameMap()[
+                state.uri.queryParameters['quantity-display']] ??
+            WishQuantityDisplay.total,
       );
 
   String get location => GoRouteData.$location(
@@ -228,6 +231,8 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
           'wish-ids': wishIds.map((e) => e.toString()).toList(),
           if (isMyWishlist != false) 'is-my-wishlist': isMyWishlist.toString(),
           if (showActions != true) 'show-actions': showActions.toString(),
+          if (quantityDisplay != WishQuantityDisplay.total)
+            'quantity-display': quantityDisplay.name,
         },
       );
 

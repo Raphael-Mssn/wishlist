@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/completed_wishes/view/widgets/completed_wish_sort_bottom_sheet.dart';
 import 'package:wishlist/modules/completed_wishes/view/widgets/uncomplete_wish_bottom_sheet.dart';
+import 'package:wishlist/modules/wishs/view/screens/consult_wish_screen.dart';
 import 'package:wishlist/shared/infra/completed_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/models/completed_wish_sort_type.dart';
 import 'package:wishlist/shared/models/completed_wish_with_details/completed_wish_with_details.dart';
@@ -250,6 +251,7 @@ class _CompletedWishCard extends StatelessWidget {
           wish.id,
           wishIds: [wish.id],
           showActions: false,
+          quantityDisplay: WishQuantityDisplay.completed,
         ).push(context),
         borderRadius: BorderRadius.circular(16),
         child: Padding(

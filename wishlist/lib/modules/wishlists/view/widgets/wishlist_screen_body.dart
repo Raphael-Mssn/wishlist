@@ -7,6 +7,7 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_card.dart
 import 'package:wishlist/modules/wishlists/view/widgets/wishlist_stats_section.dart';
 import 'package:wishlist/modules/wishlists/view/widgets/wishs_tab.dart';
 import 'package:wishlist/modules/wishlists/view/wishlist_screen_notifier.dart';
+import 'package:wishlist/modules/wishs/view/screens/consult_wish_screen.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
@@ -31,6 +32,7 @@ class WishlistScreenBody extends ConsumerWidget {
     Wish wish, {
     required bool isMyWishlist,
     required IList<Wish> wishsToDisplay,
+    required WishlistStatsCardType cardType,
   }) {
     final screenState = ref.read(wishlistScreenNotifierProvider(wishlistId));
 
@@ -48,6 +50,9 @@ class WishlistScreenBody extends ConsumerWidget {
       wish.id,
       wishIds: wishIds,
       isMyWishlist: isMyWishlist,
+      quantityDisplay: cardType == WishlistStatsCardType.pending
+          ? WishQuantityDisplay.pending
+          : WishQuantityDisplay.booked,
     ).push(context);
   }
 
@@ -84,6 +89,7 @@ class WishlistScreenBody extends ConsumerWidget {
         wish,
         isMyWishlist: isMyWishlist,
         wishsToDisplay: wishsToDisplay,
+        cardType: cardType!,
       ),
       onAddWish: (context, wishlist) =>
           CreateWishRoute(wishlistId: wishlist.id).push(context),
