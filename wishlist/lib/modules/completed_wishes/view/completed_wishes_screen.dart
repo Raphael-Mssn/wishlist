@@ -14,6 +14,7 @@ import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/pill.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/string_utils.dart';
+import 'package:wishlist/shared/widgets/animated_list_view.dart';
 import 'package:wishlist/shared/widgets/page_layout.dart';
 import 'package:wishlist/shared/widgets/search_bar/app_search_bar.dart';
 import 'package:wishlist/shared/widgets/wish_image.dart';
@@ -139,12 +140,15 @@ class _CompletedWishesScreenState extends ConsumerState<CompletedWishesScreen> {
                                 .copyWith(color: AppColors.makara),
                           ),
                         )
-                      : ListView.separated(
+                      : AnimatedListView<CompletedWishWithDetails>(
                           padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-                          itemCount: filtered.length,
-                          separatorBuilder: (_, __) => const Gap(12),
-                          itemBuilder: (context, index) {
-                            return _CompletedWishCard(item: filtered[index]);
+                          items: filtered,
+                          animationDuration: const Duration(milliseconds: 500),
+                          itemSpacing: 12,
+                          itemEquality: (oldItem, newItem) =>
+                              oldItem.wish.id == newItem.wish.id,
+                          itemBuilder: (context, item, index) {
+                            return _CompletedWishCard(item: item);
                           },
                         ),
                 ),
