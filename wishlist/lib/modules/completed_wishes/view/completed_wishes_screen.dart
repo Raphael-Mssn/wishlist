@@ -9,6 +9,7 @@ import 'package:wishlist/shared/infra/completed_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/models/completed_wish_sort_type.dart';
 import 'package:wishlist/shared/models/completed_wish_with_details/completed_wish_with_details.dart';
 import 'package:wishlist/shared/models/wish/wish_sort_type.dart';
+import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/pill.dart';
@@ -241,82 +242,92 @@ class _CompletedWishCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
+      clipBehavior: Clip.antiAlias,
       elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                WishImage(
-                  iconUrl: wish.iconUrl,
-                  size: 56,
-                  borderRadius: 12,
-                ),
-                if (item.quantity > 1)
-                  Positioned(
-                    bottom: -4,
-                    right: -4,
-                    child: Pill(
-                      text: 'x${item.quantity}',
-                      backgroundColor: Theme.of(context).primaryColor,
-                      textStyle: AppTextStyles.smaller,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+      child: InkWell(
+        onTap: () => ConsultWishRoute(
+          wish.wishlistId,
+          wish.id,
+          wishIds: [wish.id],
+          showActions: false,
+        ).push(context),
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  WishImage(
+                    iconUrl: wish.iconUrl,
+                    size: 56,
+                    borderRadius: 12,
+                  ),
+                  if (item.quantity > 1)
+                    Positioned(
+                      bottom: -4,
+                      right: -4,
+                      child: Pill(
+                        text: 'x${item.quantity}',
+                        backgroundColor: Theme.of(context).primaryColor,
+                        textStyle: AppTextStyles.smaller,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                       ),
                     ),
-                  ),
-              ],
-            ),
-            const Gap(12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    wish.name,
-                    style: AppTextStyles.small.copyWith(
-                      fontWeight: FontWeight.bold,
+                ],
+              ),
+              const Gap(12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      wish.name,
+                      style: AppTextStyles.small.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const Gap(2),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          item.fromWishlistName,
+                    const Gap(2),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            item.fromWishlistName,
+                            style: AppTextStyles.smaller.copyWith(
+                              color: AppColors.makara,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const Gap(8),
+                        Text(
+                          DateFormat.yMMMMd(
+                            Localizations.localeOf(context).toString(),
+                          ).format(item.completedAt.toLocal()),
                           style: AppTextStyles.smaller.copyWith(
                             color: AppColors.makara,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      const Gap(8),
-                      Text(
-                        DateFormat.yMMMMd(
-                          Localizations.localeOf(context).toString(),
-                        ).format(item.completedAt.toLocal()),
-                        style: AppTextStyles.smaller.copyWith(
-                          color: AppColors.makara,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const Gap(8),
-            IconButton(
-              icon: const Icon(Icons.undo, color: AppColors.makara),
-              tooltip: l10n.unmarkWishAsCompleted,
-              onPressed: () => showUncompleteWishBottomSheet(context, item),
-            ),
-          ],
+              const Gap(8),
+              IconButton(
+                icon: const Icon(Icons.undo, color: AppColors.makara),
+                tooltip: l10n.unmarkWishAsCompleted,
+                onPressed: () => showUncompleteWishBottomSheet(context, item),
+              ),
+            ],
+          ),
         ),
       ),
     );
