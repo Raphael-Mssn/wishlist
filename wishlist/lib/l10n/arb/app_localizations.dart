@@ -734,6 +734,12 @@ abstract class AppLocalizations {
   /// **'Modifier ma réservation'**
   String get modifyBooking;
 
+  /// No description provided for @modifyCompletedQuantity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la quantité complétée'**
+  String get modifyCompletedQuantity;
+
   /// No description provided for @cancelBookingDialogTitle.
   ///
   /// In fr, this message translates to:
@@ -1157,7 +1163,7 @@ abstract class AppLocalizations {
   /// No description provided for @unmarkWishConfirmMessage.
   ///
   /// In fr, this message translates to:
-  /// **'Ce wish redeviendra visible normalement dans la wishlist \"{wishlistName}\".'**
+  /// **'Ce wish redeviendra visible dans la wishlist \"{wishlistName}\".'**
   String unmarkWishConfirmMessage(String wishlistName);
 
   /// No description provided for @friendCompletedWishesTitle.

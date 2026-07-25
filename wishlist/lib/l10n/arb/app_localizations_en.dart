@@ -363,6 +363,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get modifyBooking => 'Modify my booking';
 
   @override
+  String get modifyCompletedQuantity => 'Modify completed quantity';
+
+  @override
   String get cancelBookingDialogTitle => 'Cancel booking';
 
   @override

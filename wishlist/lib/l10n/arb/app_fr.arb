@@ -113,6 +113,7 @@
   "iWantToGiveIt": "Je veux l'offrir",
   "cancelBooking": "Annuler ma réservation",
   "modifyBooking": "Modifier ma réservation",
+  "modifyCompletedQuantity": "Modifier la quantité complétée",
   "cancelBookingDialogTitle": "Annuler la réservation",
   "cancelBookingDialogExplanation": "Es-tu sûr de vouloir annuler cette réservation ?",
   "noDescription": "Aucune description",
@@ -211,7 +212,7 @@
   "unmarkWishAsCompleted": "Retirer des complétés",
   "settingsCompletedWishes": "Mes wishs complétés",
   "unmarkWishConfirmTitle": "Retirer des wishs complétés",
-  "unmarkWishConfirmMessage": "Ce wish redeviendra visible normalement dans la wishlist \"{wishlistName}\".",
+  "unmarkWishConfirmMessage": "Ce wish redeviendra visible dans la wishlist \"{wishlistName}\".",
   "@unmarkWishConfirmMessage": {
     "placeholders": {
       "wishlistName": {

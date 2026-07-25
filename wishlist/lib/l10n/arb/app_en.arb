@@ -113,6 +113,7 @@
   "iWantToGiveIt": "I want to give it",
   "cancelBooking": "Cancel my booking",
   "modifyBooking": "Modify my booking",
+  "modifyCompletedQuantity": "Modify completed quantity",
   "cancelBookingDialogTitle": "Cancel booking",
   "cancelBookingDialogExplanation": "Are you sure you want to cancel this booking?",
   "noDescription": "No description",

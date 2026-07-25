@@ -363,6 +363,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get modifyBooking => 'Modifier ma réservation';
 
   @override
+  String get modifyCompletedQuantity => 'Modifier la quantité complétée';
+
+  @override
   String get cancelBookingDialogTitle => 'Annuler la réservation';
 
   @override
@@ -607,7 +610,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String unmarkWishConfirmMessage(String wishlistName) {
-    return 'Ce wish redeviendra visible normalement dans la wishlist \"$wishlistName\".';
+    return 'Ce wish redeviendra visible dans la wishlist \"$wishlistName\".';
   }
 
   @override

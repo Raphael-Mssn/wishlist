@@ -87,7 +87,7 @@ class _UncompleteWishBody extends ConsumerWidget {
             const Gap(8),
             SecondaryButton(
               style: BaseButtonStyle.medium,
-              text: l10n.modifyBooking,
+              text: l10n.modifyCompletedQuantity,
               onPressed: () async {
                 final confirmed = await showCompleteWishQuantityDialog(
                   context,
