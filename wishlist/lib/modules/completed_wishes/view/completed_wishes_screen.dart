@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/completed_wishes/view/widgets/completed_wish_sort_bottom_sheet.dart';
 import 'package:wishlist/modules/completed_wishes/view/widgets/uncomplete_wish_bottom_sheet.dart';
@@ -279,13 +280,28 @@ class _CompletedWishCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const Gap(2),
-                  Text(
-                    l10n.completedWishFromWishlist(item.fromWishlistName),
-                    style: AppTextStyles.smaller.copyWith(
-                      color: AppColors.makara,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.fromWishlistName,
+                          style: AppTextStyles.smaller.copyWith(
+                            color: AppColors.makara,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const Gap(8),
+                      Text(
+                        DateFormat.yMMMMd(
+                          Localizations.localeOf(context).toString(),
+                        ).format(item.completedAt.toLocal()),
+                        style: AppTextStyles.smaller.copyWith(
+                          color: AppColors.makara,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
