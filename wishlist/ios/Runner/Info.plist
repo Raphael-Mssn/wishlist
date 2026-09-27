@@ -49,6 +49,8 @@
 		<false/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<key>FlutterDeepLinkingEnabled</key>
+		<true/>
 		<key>CFBundleURLTypes</key>
 		<array>
 			<dict>
