@@ -14,8 +14,9 @@ part 'share_intent_payload_provider.g.dart';
 ///    savoir s'il y avait une image, puis `clearImagePath` dans un
 ///    addPostFrameCallback pour consommer le chemin.
 ///
-/// Avec singleTop sur Android, un second partage réutilise la même
-/// activité ; le handler écrase le payload avant navigation.
+/// Sur Android, MainActivity est en singleTask : un second partage est livré
+/// à l'activité existante (onNewIntent) ; le handler écrase le payload avant
+/// navigation.
 @Riverpod(keepAlive: true)
 class ShareIntentPayloadNotifier extends _$ShareIntentPayloadNotifier {
   @override

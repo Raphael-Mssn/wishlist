@@ -12,10 +12,14 @@
         android:icon="@mipmap/ic_launcher">
         
         <!-- MainActivity configuration -->
+        <!-- singleTask : un partage depuis une autre app (Amazon...) doit être
+             livré à l'instance existante via onNewIntent. En singleTop, Android
+             crée une seconde MainActivity dans la tâche de l'app source, donc un
+             second moteur Flutter qui reste sur un écran noir. -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:taskAffinity=""
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
