@@ -18,6 +18,7 @@ class AppTextField extends StatefulWidget {
     this.suffixButtons,
     this.inputFormatters,
     this.textCapitalization,
+    this.maxLength,
   });
 
   final TextEditingController controller;
@@ -30,6 +31,7 @@ class AppTextField extends StatefulWidget {
   final List<Widget>? suffixButtons;
   final List<TextInputFormatter>? inputFormatters;
   final TextCapitalization? textCapitalization;
+  final int? maxLength;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -38,6 +40,32 @@ class AppTextField extends StatefulWidget {
 class _AppTextFieldState extends State<AppTextField> {
   bool _hasError = false;
   final _focusNode = FocusNode();
+
+  static Widget? _buildCounter(
+    BuildContext _, {
+    required int currentLength,
+    required bool isFocused,
+    int? maxLength,
+  }) {
+    if (!isFocused || maxLength == null) {
+      return null;
+    }
+
+    final displayThreshold = (maxLength * 0.8).ceil();
+    if (currentLength < displayThreshold) {
+      return null;
+    }
+
+    final warningThreshold = (maxLength * 0.9).ceil();
+    final isWarning = currentLength >= warningThreshold;
+
+    return Text(
+      '$currentLength/$maxLength',
+      style: AppTextStyles.smaller.copyWith(
+        color: isWarning ? Colors.red : AppColors.makara,
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -104,6 +132,8 @@ class _AppTextFieldState extends State<AppTextField> {
                 },
                 keyboardType: widget.keyboardType,
                 inputFormatters: widget.inputFormatters,
+                maxLength: widget.maxLength,
+                buildCounter: widget.maxLength == null ? null : _buildCounter,
                 maxLines: widget.maxLines ?? 1,
                 minLines: widget.minLines ?? 1,
                 style: AppTextStyles.small.copyWith(

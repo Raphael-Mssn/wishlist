@@ -15,6 +15,7 @@ import 'package:wishlist/shared/widgets/text_form_fields/validators/not_null_val
 
 const _smallGap = Gap(8);
 const _columnSpacing = 16.0;
+const _wishNameMaxLength = 80;
 
 /// Formulaire de création/édition de wish
 class WishFormFields extends StatefulWidget {
@@ -184,6 +185,7 @@ class WishFormFieldsState extends State<WishFormFields> {
             icon: Icons.sell_outlined,
             validator: (value) => notNullValidator(value, l10n),
             textCapitalization: TextCapitalization.sentences,
+            maxLength: _wishNameMaxLength,
           ),
           Row(
             children: [
