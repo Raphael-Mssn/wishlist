@@ -129,6 +129,12 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     final hasLinkUrl = linkUrl != null && linkUrl.isNotEmpty;
 
     const spacing = 12.0;
+    const padding = 16.0;
+
+    // The sheet extends under the bottom system inset (home indicator,
+    // navigation bar) so its background reaches the screen edge, while its
+    // content stays above it.
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
 
     late final bool showPrimaryAction;
     late final VoidCallback? primaryActionOnPressed;
@@ -153,7 +159,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
 
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.sizeOf(context).height / 1.8,
+        maxHeight: MediaQuery.sizeOf(context).height / 1.8 + bottomInset,
       ),
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -164,7 +170,9 @@ class ConsultWishInfoContainer extends ConsumerWidget {
           boxShadow: [consultBoxShadow],
         ),
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(padding).copyWith(
+            bottom: padding + bottomInset,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
