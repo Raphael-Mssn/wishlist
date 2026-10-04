@@ -4,6 +4,14 @@ on:
   push:
     tags:
       - 'v*'
+  # Lancement manuel pour valider le build (signing, extension iOS) sans
+  # publier : les étapes d'upload ne tournent que sur tag ou si publish=true.
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publier sur Google Play / TestFlight'
+        type: boolean
+        default: false
 
 jobs:
   # ============================================================================
@@ -55,6 +63,7 @@ jobs:
         run: flutter build appbundle --release --dart-define=ENV=prod
 
       - name: Upload to Google Play (Internal Testing)
+        if: github.event_name == 'push' || inputs.publish
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
@@ -102,13 +111,16 @@ jobs:
           p12-file-base64: ${{ secrets.IOS_P12_BASE64 }}
           p12-password: ${{ secrets.IOS_P12_PASSWORD }}
 
-      - name: Install Provisioning Profile
+      - name: Install Provisioning Profiles
         run: |
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo "${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}" | base64 -d > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
-          # Extraire l'UUID du provisioning profile
-          PROFILE_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(/usr/bin/security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision))
-          echo "PROFILE_UUID=$PROFILE_UUID" >> $GITHUB_ENV
+          PROFILES_DIR=~/Library/MobileDevice/Provisioning\ Profiles
+          mkdir -p "$PROFILES_DIR"
+          echo "${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}" | base64 -d > "$PROFILES_DIR/runner.mobileprovision"
+          echo "${{ secrets.IOS_SHARE_EXTENSION_PROFILE_BASE64 }}" | base64 -d > "$PROFILES_DIR/share-extension.mobileprovision"
+          # Extraire l'UUID de chaque provisioning profile pour l'ExportOptions
+          profile_uuid() { /usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< "$(/usr/bin/security cms -D -i "$1")"; }
+          echo "PROFILE_UUID=$(profile_uuid "$PROFILES_DIR/runner.mobileprovision")" >> $GITHUB_ENV
+          echo "SHARE_EXTENSION_PROFILE_UUID=$(profile_uuid "$PROFILES_DIR/share-extension.mobileprovision")" >> $GITHUB_ENV
 
       - name: Create ExportOptions.plist
         run: |
@@ -127,6 +139,8 @@ jobs:
               <dict>
                   <key>com.raphtang.wishy</key>
                   <string>${PROFILE_UUID}</string>
+                  <key>com.raphtang.wishy.ShareExtension</key>
+                  <string>${SHARE_EXTENSION_PROFILE_UUID}</string>
               </dict>
           </dict>
           </plist>
@@ -144,6 +158,7 @@ jobs:
         run: echo "IPA_PATH=$(find build/ios/ipa -name '*.ipa' | head -1)" >> $GITHUB_ENV
 
       - name: Upload to TestFlight
+        if: github.event_name == 'push' || inputs.publish
         uses: apple-actions/upload-testflight-build@v1
         with:
           app-path: wishlist/${{ env.IPA_PATH }}
