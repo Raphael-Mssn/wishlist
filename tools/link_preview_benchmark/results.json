@@ -1,0 +1,331 @@
+{
+  "date": "2026-10-04 18:11",
+  "results": [
+    {
+      "shop": "Amazon",
+      "url": "https://www.amazon.fr/dp/B0D1XD1ZV3",
+      "direct": {
+        "status": 200,
+        "time": 3.71,
+        "title": null,
+        "image": null,
+        "image_ok": false
+      },
+      "microlink": {
+        "status": 200,
+        "time": 0.08,
+        "title": "Apple AirPods Pro (2nd Generation) Wireless Ear Buds with USB-C Charging, Up to 2X More Active Noise Cancelling Bluetooth HEA",
+        "image": "data:image/jpeg;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+        "error": null,
+        "remaining": "24",
+        "image_ok": false
+      },
+      "jina": {
+        "status": 200,
+        "time": 0.64,
+        "title": "Apple AirPods Pro (2nd Generation) Wireless Ear Buds with USB-C Charging, Up to 2X More Active Noise Cancelling Bluetooth HEA : Amazon.fr: Electronics",
+        "image": null,
+        "http_status_of_page": 200,
+        "tokens": 72697,
+        "error": null,
+        "image_ok": false
+      },
+      "jina-direct": {
+        "status": 200,
+        "time": 0.56,
+        "title": "Apple AirPods Pro (2nd Generation) Wireless Ear Buds with USB-C Charging, Up to 2X More Active Noise Cancelling Bluetooth HEA : Amazon.fr: Electronics",
+        "image": null,
+        "http_status_of_page": 200,
+        "tokens": 72697,
+        "error": null,
+        "image_ok": false
+      }
+    },
+    {
+      "shop": "Fnac",
+      "url": "https://www.fnac.com/a19221423/Apple-AirPods-Pro-2",
+      "direct": {
+        "status": 403,
+        "time": 0.13,
+        "title": null,
+        "image": null,
+        "image_ok": false
+      },
+      "microlink": {
+        "status": 400,
+        "time": 1.97,
+        "title": null,
+        "image": null,
+        "error": "EPROXYNEEDED",
+        "remaining": "23",
+        "image_ok": false
+      },
+      "jina": {
+        "status": 200,
+        "time": 15.8,
+        "title": "fnac.com",
+        "image": null,
+        "http_status_of_page": 200,
+        "tokens": 0,
+        "error": null,
+        "image_ok": false
+      },
+      "jina-direct": {
+        "status": 200,
+        "time": 0.78,
+        "title": "fnac.com",
+        "image": null,
+        "http_status_of_page": 403,
+        "tokens": 8,
+        "error": null,
+        "image_ok": false
+      }
+    },
+    {
+      "shop": "Ikea",
+      "url": "https://www.ikea.com/fr/fr/p/billy-bibliotheque-blanc-20522046/",
+      "direct": {
+        "status": 200,
+        "time": 0.47,
+        "title": "BILLY bibliothèque, blanc, 80x28x202 cm",
+        "image": "https://www.ikea.com/fr/fr/images/products/billy-bibliotheque-blanc__1590272_pe1038911_s5.jpg",
+        "image_ok": true
+      },
+      "microlink": {
+        "status": 200,
+        "time": 4.53,
+        "title": "BILLY bibliothèque, blanc, 80x28x202 cm",
+        "image": "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.ikea.com/fr/fr/p/billy-bibliotheque-blanc-20522046/&size=128",
+        "error": null,
+        "remaining": "22",
+        "image_ok": true
+      },
+      "jina": {
+        "status": 200,
+        "time": 4.55,
+        "title": [
+          "BILLY bibliothèque, blanc, 80x28x202 cm",
+          "BILLY bibliothèque, blanc, 80x28x202 cm  - IKEA"
+        ],
+        "image": "https://www.ikea.com/fr/fr/images/products/billy-bibliotheque-blanc__1590272_pe1038911_s5.jpg",
+        "http_status_of_page": 200,
+        "tokens": 16020,
+        "error": null,
+        "image_ok": true
+      },
+      "jina-direct": {
+        "status": 200,
+        "time": 1.02,
+        "title": [
+          "BILLY bibliothèque, blanc, 80x28x202 cm",
+          "BILLY bibliothèque, blanc, 80x28x202 cm  - IKEA"
+        ],
+        "image": "https://www.ikea.com/fr/fr/images/products/billy-bibliotheque-blanc__1590272_pe1038911_s5.jpg",
+        "http_status_of_page": 200,
+        "tokens": 7460,
+        "error": null,
+        "image_ok": true
+      }
+    },
+    {
+      "shop": "Zalando",
+      "url": "https://www.zalando.fr/nike-sportswear-air-force-1-unisex-baskets-basses-phantomcool-greykhakisail-ni116d0nx-q12.html",
+      "direct": {
+        "status": 403,
+        "time": 0.19,
+        "title": null,
+        "image": null,
+        "image_ok": false
+      },
+      "microlink": {
+        "status": 200,
+        "time": 7.19,
+        "title": "Nike Sportswear AIR FORCE 1 - Baskets basses - phantom/cool grey/khaki/sail/noir - ZALANDO.FR",
+        "image": "https://img01.ztat.net/article/spp-media-p1/3b3c74d076ff4706a488b1d82e393cf8/619d91d46eff4ad9b93d2d6c0e10599c.jpg?imwidth=800&filter=packshot",
+        "error": null,
+        "remaining": "21",
+        "image_ok": true
+      },
+      "jina": {
+        "status": 200,
+        "time": 4.94,
+        "title": "Nike Sportswear AIR FORCE 1 - Baskets basses - phantom/cool grey/khaki/sail/noir - ZALANDO.FR",
+        "image": "https://img01.ztat.net/article/spp-media-p1/3b3c74d076ff4706a488b1d82e393cf8/619d91d46eff4ad9b93d2d6c0e10599c.jpg?imwidth=800&filter=packshot",
+        "http_status_of_page": 200,
+        "tokens": 17281,
+        "error": null,
+        "image_ok": true
+      },
+      "jina-direct": {
+        "status": 200,
+        "time": 4.0,
+        "title": "Nike Sportswear AIR FORCE 1 - Baskets basses - phantom/cool grey/khaki/sail/noir - ZALANDO.FR",
+        "image": "https://img01.ztat.net/article/spp-media-p1/3b3c74d076ff4706a488b1d82e393cf8/619d91d46eff4ad9b93d2d6c0e10599c.jpg?imwidth=800&filter=packshot",
+        "http_status_of_page": 200,
+        "tokens": 17251,
+        "error": null,
+        "image_ok": true
+      }
+    },
+    {
+      "shop": "Etsy",
+      "url": "https://www.etsy.com/listing/1534751289/funny-java-programmer-coffee-mug",
+      "direct": {
+        "status": 403,
+        "time": 0.08,
+        "title": null,
+        "image": null,
+        "image_ok": false
+      },
+      "microlink": {
+        "status": 400,
+        "time": 2.34,
+        "title": null,
+        "image": null,
+        "error": "EPROXYNEEDED",
+        "remaining": "20",
+        "image_ok": false
+      },
+      "jina": {
+        "status": 200,
+        "time": 15.61,
+        "title": "etsy.com",
+        "image": null,
+        "http_status_of_page": 200,
+        "tokens": 0,
+        "error": null,
+        "image_ok": false
+      },
+      "jina-direct": {
+        "status": 200,
+        "time": 0.52,
+        "title": "etsy.com",
+        "image": null,
+        "http_status_of_page": 403,
+        "tokens": 8,
+        "error": null,
+        "image_ok": false
+      }
+    },
+    {
+      "shop": "Sephora",
+      "url": "https://www.sephora.fr/Parfum/Parfum-Femme/Parisienne-Eau-de-Parfum/P88307",
+      "direct": {
+        "status": 403,
+        "time": 0.36,
+        "title": null,
+        "image": null,
+        "image_ok": false
+      },
+      "microlink": {
+        "status": 200,
+        "time": 1.47,
+        "title": "Access Denied",
+        "image": "https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.sephora.fr/Parfum/Parfum-Femme/Parisienne-Eau-de-Parfum/P88307&size=128",
+        "error": null,
+        "remaining": "19",
+        "image_ok": false
+      },
+      "jina": {
+        "status": 200,
+        "time": 1.62,
+        "title": "Access Denied",
+        "image": null,
+        "http_status_of_page": 403,
+        "tokens": 75,
+        "error": null,
+        "image_ok": false
+      },
+      "jina-direct": {
+        "status": 200,
+        "time": 0.42,
+        "title": "Access Denied",
+        "image": null,
+        "http_status_of_page": 403,
+        "tokens": 71,
+        "error": null,
+        "image_ok": false
+      }
+    },
+    {
+      "shop": "Decathlon",
+      "url": "https://www.decathlon.ca/fr/p/8957937/tente-de-camping-2-personnes-mh-100",
+      "direct": {
+        "status": 403,
+        "time": 0.16,
+        "title": null,
+        "image": null,
+        "image_ok": false
+      },
+      "microlink": {
+        "status": 400,
+        "time": 0.95,
+        "title": null,
+        "image": null,
+        "error": "EPROXYNEEDED",
+        "remaining": "18",
+        "image_ok": false
+      },
+      "jina": {
+        "status": 200,
+        "time": 4.72,
+        "title": "Tente de camping 2 personnes, MH 100",
+        "image": null,
+        "http_status_of_page": 200,
+        "tokens": 6459,
+        "error": null,
+        "image_ok": false
+      },
+      "jina-direct": {
+        "status": 200,
+        "time": 0.38,
+        "title": "Tente de camping 2 personnes, MH 100",
+        "image": null,
+        "http_status_of_page": 200,
+        "tokens": 9366,
+        "error": null,
+        "image_ok": false
+      }
+    },
+    {
+      "shop": "Shopify (Marin Montagut)",
+      "url": "https://www.marinmontagut.com/en/products/tasse-personnalisee-rue-madame",
+      "direct": {
+        "status": 200,
+        "time": 0.83,
+        "title": "Tasse personnalisée | RUE MADAME",
+        "image": "http://www.marinmontagut.com/cdn/shop/files/MUGS-LARGE-2.jpg?v=1707209941",
+        "image_ok": true
+      },
+      "microlink": {
+        "status": 200,
+        "time": 5.38,
+        "title": "Tasse personnalisée | RUE MADAME",
+        "image": "https://www.marinmontagut.com/cdn/shop/files/MUGS-LARGE-2.jpg?v=1707209941",
+        "error": null,
+        "remaining": "17",
+        "image_ok": true
+      },
+      "jina": {
+        "status": 200,
+        "time": 3.62,
+        "title": "Tasse personnalisée | RUE MADAME",
+        "image": "http://www.marinmontagut.com/cdn/shop/files/MUGS-LARGE-2.jpg?v=1707209941",
+        "http_status_of_page": 200,
+        "tokens": 15413,
+        "error": null,
+        "image_ok": true
+      },
+      "jina-direct": {
+        "status": 200,
+        "time": 0.47,
+        "title": "Tasse personnalisée | RUE MADAME",
+        "image": "http://www.marinmontagut.com/cdn/shop/files/MUGS-LARGE-2.jpg?v=1707209941",
+        "http_status_of_page": 200,
+        "tokens": 14464,
+        "error": null,
+        "image_ok": true
+      }
+    }
+  ]
+}
