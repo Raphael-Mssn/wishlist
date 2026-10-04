@@ -1,4 +1,4 @@
-// Link Preview Edge Function: Jina Reader puis lecture directe de la page (OG / meta), renvoie title + imageUrl (pas de prix).
+// Link Preview Edge Function: lecture directe de la page (OG / meta) puis Jina Reader en fallback, renvoie title + imageUrl (pas de prix).
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const CORS_HEADERS = {
@@ -61,7 +61,7 @@ function resolveUrl(base: string, path: string): string {
   }
 }
 
-// Jina Reader, source principale, sans clé (20 req/min par IP). Le moteur "direct"
+// Jina Reader en fallback, sans clé (20 req/min par IP). Le moteur "direct"
 // lit la page sans navigateur headless : même résultat sur les pages testées,
 // et moins d'une seconde au lieu de 5 à 15 s avec le moteur par défaut.
 // Comparatif : tools/link_preview_benchmark/ (branche chore/link-preview-benchmark).
@@ -163,9 +163,9 @@ async function fetchViaHtml(targetUrl: string): Promise<Preview> {
 }
 
 /**
- * Jina Reader d'abord, puis lecture directe de la page pour compléter ce qui
- * manque. `source` indique d'où vient chaque champ (pour tester, ignoré par
- * l'app).
+ * Lecture directe de la page d'abord (gratuite, sans quota), puis Jina Reader
+ * pour compléter ce qui manque. `source` indique d'où vient chaque champ
+ * (pour tester, ignoré par l'app).
  */
 async function fetchPreview(targetUrl: string): Promise<PreviewResult> {
   const result: PreviewResult = {
@@ -185,13 +185,13 @@ async function fetchPreview(targetUrl: string): Promise<PreviewResult> {
     }
   };
 
-  fill(await fetchViaJina(targetUrl), "jina");
+  fill(await fetchViaHtml(targetUrl), "html");
   if (!result.title || !result.imageUrl) {
-    console.log("[link-preview] Jina incomplete, reading page", {
+    console.log("[link-preview] page incomplete, fallback Jina", {
       hasTitle: !!result.title,
       hasImageUrl: !!result.imageUrl,
     });
-    fill(await fetchViaHtml(targetUrl), "html");
+    fill(await fetchViaJina(targetUrl), "jina");
   }
   return result;
 }
