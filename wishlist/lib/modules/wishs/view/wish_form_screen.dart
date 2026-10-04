@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form_app_bar.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form_fields.dart';
+import 'package:wishlist/shared/infra/link_preview_client.dart';
 import 'package:wishlist/shared/infra/link_preview_provider.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_streams_providers.dart';
 import 'package:wishlist/shared/infra/share_intent_payload_provider.dart';
@@ -54,6 +55,11 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
   late bool _isFavourite;
   File? _selectedImage;
 
+  /// URL dont on charge la prévisualisation (og:image / titre). Mise à jour
+  /// au collage et à la sortie du champ lien, pas à chaque frappe : sinon
+  /// chaque caractère saisi déclencherait un appel Edge Function.
+  String? _previewUrl;
+
   /// True = afficher l'image de la preview ; false = l'utilisateur l'a
   /// supprimée (redevient true à la sortie du champ lien ou au collage).
   bool _showPreviewImage = true;
@@ -62,6 +68,16 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
   /// l'Edge Function pour ce formulaire.
   bool _hadPendingSharedImage = false;
   FocusNode? _linkFocusNode;
+
+  /// L'Edge Function n'est appelée que s'il y a un lien à prévisualiser,
+  /// aucune image déjà fournie (partage ou utilisateur) et si l'utilisateur
+  /// n'a pas supprimé la preview.
+  bool get _shouldFetchPreview =>
+      !widget.isEditMode &&
+      _previewUrl != null &&
+      _selectedImage == null &&
+      !_hadPendingSharedImage &&
+      _showPreviewImage;
 
   @override
   void initState() {
@@ -96,9 +112,10 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
           TextEditingController(text: prefill?.description ?? '');
       _isFavourite = false;
 
+      final prefillLink = prefill?.linkUrl?.trim() ?? '';
+      _previewUrl = prefillLink.isEmpty ? null : prefillLink;
       _linkFocusNode = FocusNode();
       _linkFocusNode!.addListener(_onLinkFocusChange);
-      _linkInputController.addListener(_onLinkChanged);
 
       _hadPendingSharedImage =
           ref.read(shareIntentPayloadNotifierProvider).imagePath != null;
@@ -135,20 +152,31 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
   }
 
   void _onLinkFocusChange() {
-    if (_linkFocusNode?.hasFocus == false && mounted) {
-      setState(() => _showPreviewImage = true);
+    if (_linkFocusNode?.hasFocus == false) {
+      _refreshPreviewUrl();
     }
   }
 
-  /// Dès que l'utilisateur modifie le lien (ou colle), on réautorise la
-  /// preview (après une suppression d'image).
-  void _onLinkChanged() {
-    if (widget.wish != null) {
+  /// Relance la prévisualisation sur le lien saisi (collage ou sortie du
+  /// champ). Réaffiche aussi l'image si l'utilisateur l'avait supprimée.
+  void _refreshPreviewUrl() {
+    if (!mounted || widget.isEditMode) {
       return;
     }
-    if (mounted && _linkInputController.text.trim().isNotEmpty) {
-      setState(() => _showPreviewImage = true);
+    final url = _linkInputController.text.trim();
+    setState(() {
+      _previewUrl = url.isEmpty ? null : url;
+      _showPreviewImage = true;
+    });
+  }
+
+  /// Preview déjà chargée par le build (même clé de provider), sans
+  /// déclencher d'appel réseau.
+  LinkPreviewData? _readPreviewData() {
+    if (!_shouldFetchPreview) {
+      return null;
     }
+    return ref.read(linkPreviewDataProvider(_previewUrl!)).valueOrNull;
   }
 
   void _onImageSelected(File? imageFile) {
@@ -156,8 +184,9 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
       _selectedImage = imageFile;
       if (imageFile == null) {
         _showPreviewImage = false;
+        // L'image partagée a été retirée : la preview (Edge Function) redevient
+        // possible pour un nouveau lien.
         _hadPendingSharedImage = false;
-        // permettre à nouveau la preview (Edge Function) pour un nouveau lien
       }
     });
   }
@@ -242,10 +271,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
       isFavourite: _isFavourite,
     );
 
-    final previewData = link.trim().isEmpty
-        ? null
-        : ref.read(linkPreviewDataProvider(link)).valueOrNull;
-    final imageFile = _selectedImage ?? previewData?.image;
+    final imageFile = _selectedImage ?? _readPreviewData()?.image;
 
     try {
       final notifier = ref.read(wishMutationsProvider.notifier);
@@ -297,6 +323,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
     final notifier = ref.read(wishMutationsProvider.notifier);
 
     try {
+      // Utiliser updateWithImage pour tous les cas où l'image change
       if (_selectedImage != null || hasRemovedImage) {
         await notifier.updateWithImage(
           wish: wishToUpdate,
@@ -304,6 +331,7 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
           deleteImage: hasRemovedImage && _selectedImage == null,
         );
       } else {
+        // Sinon, update sans changement d'image
         await notifier.update(wishToUpdate);
       }
 
@@ -362,7 +390,6 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
     if (widget.wish == null) {
       _linkFocusNode?.removeListener(_onLinkFocusChange);
       _linkFocusNode?.dispose();
-      _linkInputController.removeListener(_onLinkChanged);
     }
     _nameInputController.dispose();
     _priceInputController.dispose();
@@ -376,29 +403,13 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    // Mode création : URL pour la preview = champ lien (priorité) puis prefill
-    final linkUrl = widget.wish == null
-        ? (_linkInputController.text.trim().isNotEmpty
-            ? _linkInputController.text.trim()
-            : (widget.prefill?.linkUrl ?? '').trim())
-        : '';
-    // Ne pas appeler l'Edge Function si image déjà fournie par partage
-    // (intent) ou par l'utilisateur, ou si preview désactivée.
-    final previewAsync = linkUrl.isEmpty ||
-            _selectedImage != null ||
-            ref.read(shareIntentPayloadNotifierProvider).imagePath != null ||
-            _hadPendingSharedImage ||
-            !_showPreviewImage
-        ? null
-        : ref.watch(linkPreviewDataProvider(linkUrl));
+    final previewAsync = _shouldFetchPreview
+        ? ref.watch(linkPreviewDataProvider(_previewUrl!))
+        : null;
     final previewData = previewAsync?.valueOrNull;
-    final imageToDisplay =
-        _selectedImage ?? (_showPreviewImage ? previewData?.image : null);
-    final titleFromPreview = previewData?.title;
-    final isPreviewImageLoading = widget.wish == null &&
-        linkUrl.isNotEmpty &&
-        (previewAsync?.isLoading ?? false) &&
-        imageToDisplay == null;
+    final imageToDisplay = _selectedImage ?? previewData?.image;
+    final isPreviewImageLoading =
+        (previewAsync?.isLoading ?? false) && imageToDisplay == null;
 
     final wishlistThemeAsync = ref.watch(
       wishlistThemeProvider(
@@ -455,14 +466,11 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
                         onImageSelected: _onImageSelected,
                         wishlistColor: wishlistTheme.primaryColor,
                         linkFocusNode: _linkFocusNode,
-                        onLinkPasted: () =>
-                            setState(() => _showPreviewImage = true),
-                        onLinkFieldUnfocused: () =>
-                            setState(() => _showPreviewImage = true),
+                        onLinkPasted: _refreshPreviewUrl,
                         existingImageUrl: wishImageUrl,
                         initialImageFile: imageToDisplay,
                         isPreviewImageLoading: isPreviewImageLoading,
-                        initialNameFromPreview: titleFromPreview,
+                        initialNameFromPreview: previewData?.title,
                       ),
                     ),
                   ),

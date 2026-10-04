@@ -33,7 +33,6 @@ class WishFormFields extends StatefulWidget {
     required this.wishlistColor,
     this.linkFocusNode,
     this.onLinkPasted,
-    this.onLinkFieldUnfocused,
     this.existingImageUrl,
     this.initialImageFile,
     this.isPreviewImageLoading = false,
@@ -49,14 +48,12 @@ class WishFormFields extends StatefulWidget {
   final ValueChanged<File?> onImageSelected;
   final Color wishlistColor;
 
-  /// FocusNode du champ lien (pour détecter la perte de focus).
+  /// FocusNode du champ lien, possédé par l'écran parent.
   final FocusNode? linkFocusNode;
 
   /// Appelé quand l'utilisateur colle un lien via le bouton.
   final VoidCallback? onLinkPasted;
 
-  /// Appelé quand le champ lien perd le focus.
-  final VoidCallback? onLinkFieldUnfocused;
   final String? existingImageUrl;
 
   /// Image reçue via partage (ex. Amazon) : affichée dans le formulaire.
@@ -83,7 +80,6 @@ class WishFormFieldsState extends State<WishFormFields> {
   @override
   void initState() {
     super.initState();
-    widget.linkFocusNode?.addListener(_onLinkFocusChange);
     if (widget.initialImageFile != null) {
       _selectedImage = widget.initialImageFile;
     }
@@ -97,10 +93,6 @@ class WishFormFieldsState extends State<WishFormFields> {
   @override
   void didUpdateWidget(covariant WishFormFields oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.linkFocusNode != widget.linkFocusNode) {
-      oldWidget.linkFocusNode?.removeListener(_onLinkFocusChange);
-      widget.linkFocusNode?.addListener(_onLinkFocusChange);
-    }
     final newFile = widget.initialImageFile;
     if (newFile != null && newFile.path != _selectedImage?.path) {
       setState(() => _selectedImage = newFile);
@@ -116,15 +108,8 @@ class WishFormFieldsState extends State<WishFormFields> {
 
   @override
   void dispose() {
-    widget.linkFocusNode?.removeListener(_onLinkFocusChange);
     _dummyFocusNode.dispose();
     super.dispose();
-  }
-
-  void _onLinkFocusChange() {
-    if (widget.linkFocusNode?.hasFocus == false) {
-      widget.onLinkFieldUnfocused?.call();
-    }
   }
 
   void _focusDummyNode() {
