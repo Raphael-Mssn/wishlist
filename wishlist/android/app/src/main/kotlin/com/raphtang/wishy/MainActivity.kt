@@ -85,8 +85,11 @@ class MainActivity : FlutterActivity() {
         val subject = target.getStringExtra(Intent.EXTRA_SUBJECT)?.trim()?.takeIf { it.isNotEmpty() }
         val extraText = target.getStringExtra(Intent.EXTRA_TEXT)?.trim()?.takeIf { it.isNotEmpty() }
         if (subject != null || extraText != null) {
+            // Certaines apps répètent le titre dans EXTRA_SUBJECT et EXTRA_TEXT :
+            // ne le préfixer que s'il est absent du texte.
             val combined = when {
-                subject != null && extraText != null -> "$subject $extraText"
+                subject != null && extraText != null ->
+                    if (extraText.contains(subject, ignoreCase = true)) extraText else "$subject $extraText"
                 extraText != null -> extraText
                 else -> subject
             }

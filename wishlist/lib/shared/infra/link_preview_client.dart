@@ -69,7 +69,8 @@ String? _normalizeTitle(String? t) {
   if (s.length < 10) {
     return null;
   }
-  if (RegExp(r'^[a-z0-9_-]+$').hasMatch(s) && s.length < 20) {
+  if (RegExp(r'^[a-z0-9_-]+$', caseSensitive: false).hasMatch(s) &&
+      s.length < 20) {
     return null;
   }
   return s;
