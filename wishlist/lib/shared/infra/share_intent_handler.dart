@@ -38,11 +38,6 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    if (kDebugMode) {
-      debugPrint(
-        '[Wishy Share] ShareIntentHandler initState (iOS=${Platform.isIOS})',
-      );
-    }
     unawaited(_initShareIntent());
   }
 
@@ -83,11 +78,6 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
       final fromContainer = await _getSharedDataFromContainerWithRetry();
       if (fromContainer != null && fromContainer.hasContent) {
         initial = fromContainer;
-        if (kDebugMode) {
-          debugPrint(
-            '[Wishy Share] Using shared data from container (fallback)',
-          );
-        }
       }
     }
     if (initial != null && initial.hasContent && mounted) {
@@ -110,12 +100,6 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
         final fromContainer = await _getSharedDataFromContainerWithRetry();
         if (fromContainer != null && fromContainer.hasContent) {
           effective = fromContainer;
-          if (kDebugMode) {
-            debugPrint(
-              '[Wishy Share] Using shared data from container '
-              '(stream fallback)',
-            );
-          }
         }
       }
       if (effective.hasContent && mounted) {
@@ -198,12 +182,6 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
       return;
     }
 
-    if (kDebugMode) {
-      debugPrint(
-        '[Wishy Share] SharedData: text=${data.text?.length ?? 0} chars '
-        'filePaths=${data.filePaths.length} isImage=${data.isImage}',
-      );
-    }
 
     var text = data.text?.trim();
     var imagePath = _firstImagePath(data);
@@ -243,9 +221,6 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
     Future<void>.delayed(
       const Duration(milliseconds: _kNavigateAfterPayloadDelayMs),
       () {
-        if (kDebugMode) {
-          debugPrint('[Wishy Share] navigating to $location');
-        }
         router.go(location);
       },
     );

@@ -6,9 +6,6 @@ class ShareViewController: SLComposeServiceViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        #if DEBUG
-        print("[Wishy Share] ShareExtension viewDidLoad")
-        #endif
         
         // Hide the UI to make it seamless
         self.view.isHidden = true
@@ -22,9 +19,6 @@ class ShareViewController: SLComposeServiceViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        #if DEBUG
-        print("[Wishy Share] ShareExtension viewDidAppear")
-        #endif
         
         // Close extension immediately to avoid UI issues
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -37,9 +31,6 @@ class ShareViewController: SLComposeServiceViewController {
     }
     
     override func didSelectPost() {
-        #if DEBUG
-        print("[Wishy Share] ShareExtension didSelectPost")
-        #endif
         handleSharedContent()
     }
     
@@ -49,112 +40,65 @@ class ShareViewController: SLComposeServiceViewController {
     
     private func handleSharedContent() {
         guard let extensionContext = extensionContext else {
-            #if DEBUG
-            print("[Wishy Share] ShareExtension: no extension context")
-            #endif
             closeShareExtension()
             return
         }
         
-        #if DEBUG
-        let inputItems = extensionContext.inputItems
-        print("[Wishy Share] ShareExtension: processing \(inputItems.count) input items")
-        for (itemIndex, inputItem) in inputItems.enumerated() {
-            guard let item = inputItem as? NSExtensionItem else { continue }
-            print("[Wishy Share] ShareExtension: item \(itemIndex) attachments=\(item.attachments?.count ?? 0)")
-        }
-        #endif
         
         let attachments = extensionContext.inputItems
             .compactMap { $0 as? NSExtensionItem }
             .flatMap { $0.attachments ?? [] }
         
-        #if DEBUG
-        print("[Wishy Share] ShareExtension: flattened attachments count=\(attachments.count)")
-        #endif
         
         if attachments.isEmpty {
-            #if DEBUG
-            print("[Wishy Share] ShareExtension: no attachments, closing")
-            #endif
             closeShareExtension()
             return
         }
         
         var shareData: [String: Any] = [:]
-        var allFilePaths: [String] = []  // 🔥 KEY FIX: Use array to collect ALL files
+        var allFilePaths: [String] = []
         var allTextContent: [String] = []
         let group = DispatchGroup()
         
         for (attachmentIndex, attachment) in attachments.enumerated() {
-            #if DEBUG
-            print("[Wishy Share] ShareExtension: processing attachment \(attachmentIndex)")
-            #endif
             group.enter()
             
             // Process files first (prioritize files over text/URLs)
             if attachment.hasItemConformingToTypeIdentifier("public.file-url") {
-                #if DEBUG
-                print("[Wishy Share] ShareExtension: file-url \(attachmentIndex)")
-                #endif
                 attachment.loadItem(forTypeIdentifier: "public.file-url", options: nil) { [weak self] (item, error) in
                     self?.processFileItem(item: item, error: error, index: attachmentIndex, allFilePaths: &allFilePaths)
                     group.leave()
                 }
             } else if attachment.hasItemConformingToTypeIdentifier("public.image") {
-                #if DEBUG
-                print("[Wishy Share] ShareExtension: image \(attachmentIndex)")
-                #endif
                 attachment.loadItem(forTypeIdentifier: "public.image", options: nil) { [weak self] (item, error) in
                     self?.processFileItem(item: item, error: error, index: attachmentIndex, allFilePaths: &allFilePaths)
                     group.leave()
                 }
             } else if attachment.hasItemConformingToTypeIdentifier("public.movie") {
-                #if DEBUG
-                print("[Wishy Share] ShareExtension: movie \(attachmentIndex)")
-                #endif
                 attachment.loadItem(forTypeIdentifier: "public.movie", options: nil) { [weak self] (item, error) in
                     self?.processFileItem(item: item, error: error, index: attachmentIndex, allFilePaths: &allFilePaths)
                     group.leave()
                 }
             } else if attachment.hasItemConformingToTypeIdentifier("public.audio") {
-                #if DEBUG
-                print("[Wishy Share] ShareExtension: audio \(attachmentIndex)")
-                #endif
                 attachment.loadItem(forTypeIdentifier: "public.audio", options: nil) { [weak self] (item, error) in
                     self?.processFileItem(item: item, error: error, index: attachmentIndex, allFilePaths: &allFilePaths)
                     group.leave()
                 }
             } else if attachment.hasItemConformingToTypeIdentifier("com.adobe.pdf") {
-                #if DEBUG
-                print("[Wishy Share] ShareExtension: pdf \(attachmentIndex)")
-                #endif
                 attachment.loadItem(forTypeIdentifier: "com.adobe.pdf", options: nil) { [weak self] (item, error) in
                     self?.processFileItem(item: item, error: error, index: attachmentIndex, allFilePaths: &allFilePaths)
                     group.leave()
                 }
             } else if attachment.hasItemConformingToTypeIdentifier("public.url") {
                 // Vérifier public.url avant public.data : Safari envoie souvent l’URL sous ce type.
-                #if DEBUG
-                print("[Wishy Share] ShareExtension: url \(attachmentIndex)")
-                #endif
                 attachment.loadItem(forTypeIdentifier: "public.url", options: nil) { [weak self] (item, error) in
-                    #if DEBUG
-                    if let error = error { print("[Wishy Share] ShareExtension: URL load error: \(error)") }
-                    #endif
                     if let url = item as? URL {
                         allTextContent.append(url.absoluteString)
                     }
                     group.leave()
                 }
             } else if attachment.hasItemConformingToTypeIdentifier("public.plain-text") {
-                #if DEBUG
-                print("[Wishy Share] ShareExtension: plain-text \(attachmentIndex)")
-                #endif
                 attachment.loadItem(forTypeIdentifier: "public.plain-text", options: nil) { [weak self] (item, error) in
-                    #if DEBUG
-                    if let error = error { print("[Wishy Share] ShareExtension: text load error: \(error)") }
-                    #endif
                     if let text = item as? String, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         allTextContent.append(text.trimmingCharacters(in: .whitespacesAndNewlines))
                     }
@@ -162,13 +106,7 @@ class ShareViewController: SLComposeServiceViewController {
                 }
             } else if attachment.hasItemConformingToTypeIdentifier("text/uri-list") {
                 // Souvent utilisé pour partager des liens (ex. Safari, certaines apps).
-                #if DEBUG
-                print("[Wishy Share] ShareExtension: uri-list \(attachmentIndex)")
-                #endif
                 attachment.loadItem(forTypeIdentifier: "text/uri-list", options: nil) { [weak self] (item, error) in
-                    #if DEBUG
-                    if let error = error { print("[Wishy Share] ShareExtension: uri-list load error: \(error)") }
-                    #endif
                     if let data = item as? Data, let text = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
                         allTextContent.append(text)
                     } else if let text = item as? String, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -177,17 +115,11 @@ class ShareViewController: SLComposeServiceViewController {
                     group.leave()
                 }
             } else if attachment.hasItemConformingToTypeIdentifier("public.data") {
-                #if DEBUG
-                print("[Wishy Share] ShareExtension: data \(attachmentIndex)")
-                #endif
                 attachment.loadItem(forTypeIdentifier: "public.data", options: nil) { [weak self] (item, error) in
                     self?.processFileItem(item: item, error: error, index: attachmentIndex, allFilePaths: &allFilePaths)
                     group.leave()
                 }
             } else {
-                #if DEBUG
-                print("[Wishy Share] ShareExtension: unknown type \(attachmentIndex), trying first registered")
-                #endif
                 let typeIdentifier = attachment.registeredTypeIdentifiers.first ?? "public.data"
                 attachment.loadItem(forTypeIdentifier: typeIdentifier, options: nil) { [weak self] (item, error) in
                     if let url = item as? URL {
@@ -205,13 +137,10 @@ class ShareViewController: SLComposeServiceViewController {
         }
         
         group.notify(queue: .main) { [weak self] in
-            #if DEBUG
-            print("[Wishy Share] ShareExtension: done, filePaths=\(allFilePaths.count) textCount=\(allTextContent.count)")
-            #endif
             
             // Prepare share data
             if !allFilePaths.isEmpty {
-                shareData["filePaths"] = allFilePaths  // 🔥 KEY FIX: Use the collected array
+                shareData["filePaths"] = allFilePaths
                 shareData["mimeType"] = self?.determineMimeType(from: allFilePaths.first ?? "") ?? "application/octet-stream"
             }
             
@@ -222,9 +151,6 @@ class ShareViewController: SLComposeServiceViewController {
                 }
             }
             
-            #if DEBUG
-            print("[Wishy Share] ShareExtension: final shareData keys=\(shareData.keys)")
-            #endif
             guard !shareData.isEmpty else {
                 #if DEBUG
                 print("[Wishy Share] ShareExtension: no content extracted, not opening app")
@@ -241,11 +167,6 @@ class ShareViewController: SLComposeServiceViewController {
     }
     
     private func processFileItem(item: Any?, error: Error?, index: Int, allFilePaths: inout [String]) {
-        #if DEBUG
-        if let error = error {
-            print("[Wishy Share] ShareExtension: file \(index) error: \(error)")
-        }
-        #endif
         if let url = item as? URL {
             allFilePaths.append(url.path)
         }
@@ -309,9 +230,6 @@ class ShareViewController: SLComposeServiceViewController {
         }
         
         guard let jsonData = try? JSONSerialization.data(withJSONObject: data, options: []) else {
-            #if DEBUG
-            print("[Wishy Share] ShareExtension: failed to serialize share data")
-            #endif
             return
         }
         
@@ -371,9 +289,6 @@ class ShareViewController: SLComposeServiceViewController {
         
         let urlScheme = "SharingMedia-\(bundleId)://"
         guard let url = URL(string: urlScheme) else {
-            #if DEBUG
-            print("[Wishy Share] ShareExtension: failed to create URL \(urlScheme)")
-            #endif
             closeShareExtension()
             return
         }
@@ -400,9 +315,6 @@ class ShareViewController: SLComposeServiceViewController {
             while responder != nil {
                 if responder?.responds(to: selectorOpenURL) == true {
                     _ = responder?.perform(selectorOpenURL, with: url)
-                    #if DEBUG
-                    print("[Wishy Share] ShareExtension: opened URL via selector")
-                    #endif
                     break
                 }
                 responder = responder?.next

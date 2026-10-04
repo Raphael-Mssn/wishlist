@@ -14,9 +14,6 @@ import UIKit
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
     let result = super.application(application, didFinishLaunchingWithOptions: launchOptions)
-    #if DEBUG
-    print("[Wishy Share] didFinishLaunching done, scheduling setupShareIntentChannel")
-    #endif
     DispatchQueue.main.async { [weak self] in
       self?.setupShareIntentChannelWithRetry(attempt: 0)
     }
@@ -29,14 +26,8 @@ import UIKit
     options: [UIApplication.OpenURLOptionsKey: Any] = [:]
   ) -> Bool {
     let urlString = url.absoluteString
-    #if DEBUG
-    print("[Wishy Share] application(open url) called: \(urlString.prefix(120))\(urlString.count > 120 ? "…" : "")")
-    #endif
     // ShareExtension (share_intent_package) ouvre l’app via SharingMedia-xxx://
     if urlString.contains("ShareMedia") || urlString.contains("SharingMedia") {
-      #if DEBUG
-      print("[Wishy Share] Share URL detected, reading container file")
-      #endif
       let appGroupId = "group.com.raphtang.wishy"
       if let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupId) {
         let fileURL = containerURL.appendingPathComponent("shared_files/share_data.json")
@@ -68,9 +59,6 @@ import UIKit
   private func setupShareIntentChannelWithRetry(attempt: Int) {
     guard let controller = window?.rootViewController as? FlutterViewController else {
       if attempt < AppDelegate.kMaxShareChannelRetries {
-        #if DEBUG
-        print("[Wishy Share] setupShareIntentChannel: no FlutterViewController yet (attempt \(attempt + 1)), retrying")
-        #endif
         DispatchQueue.main.asyncAfter(deadline: .now() + AppDelegate.kShareChannelRetryInterval) { [weak self] in
           self?.setupShareIntentChannelWithRetry(attempt: attempt + 1)
         }
@@ -97,9 +85,6 @@ import UIKit
         }
         let appGroupId = "group.com.raphtang.wishy"
         guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupId) else {
-          #if DEBUG
-          print("[Wishy Share] getSharedDataFromContainer: no container")
-          #endif
           result(FlutterError(code: "no_container", message: "No App Group container", details: nil))
           return
         }
@@ -108,9 +93,6 @@ import UIKit
         guard exists,
               let data = try? Data(contentsOf: fileURL),
               let json = String(data: data, encoding: .utf8), !json.isEmpty else {
-          #if DEBUG
-          print("[Wishy Share] getSharedDataFromContainer: file exists=\(exists) at \(fileURL.path)")
-          #endif
           result(nil)
           return
         }
@@ -123,8 +105,5 @@ import UIKit
         result(FlutterMethodNotImplemented)
       }
     }
-    #if DEBUG
-    print("[Wishy Share] setupShareIntentChannel: channel registered (attempt \(attempt + 1))")
-    #endif
   }
 }
