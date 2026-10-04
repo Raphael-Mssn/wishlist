@@ -65,7 +65,15 @@ function resolveUrl(base: string, path: string): string {
 // lit la page sans navigateur headless : même résultat sur les pages testées,
 // et moins d'une seconde au lieu de 5 à 15 s avec le moteur par défaut.
 // Comparatif : tools/link_preview_benchmark/ (branche chore/link-preview-benchmark).
-const JINA_TIMEOUT_MS = 4000;
+// Le moteur "browser" (navigateur headless, ~4,5 s) ne sert que pour passer un
+// challenge Cloudflare ("Just a moment..."), ex. decathlon.fr.
+type JinaEngine = "direct" | "browser";
+const JINA_TIMEOUT_MS: Record<JinaEngine, number> = { direct: 4000, browser: 7000 };
+const CLOUDFLARE_CHALLENGE_TITLE = /^just a moment/i;
+
+type JinaResult =
+  | { preview: { title: string | null; imageUrl: string | null }; cloudflareChallenge: false }
+  | { preview: null; cloudflareChallenge: boolean };
 
 /** Les métadonnées Jina peuvent être une chaîne ou une liste (balises en double). */
 function firstString(v: unknown): string | null {
@@ -74,31 +82,32 @@ function firstString(v: unknown): string | null {
   return null;
 }
 
-async function fetchViaJina(url: string): Promise<{
-  title: string | null;
-  imageUrl: string | null;
-} | null> {
+async function fetchViaJina(url: string, engine: JinaEngine): Promise<JinaResult> {
+  const nothing: JinaResult = { preview: null, cloudflareChallenge: false };
   try {
     const res = await fetch(`https://r.jina.ai/${url}`, {
       headers: {
         Accept: "application/json",
-        "X-Engine": "direct",
+        "X-Engine": engine,
         // Liste des images de la page (légende -> URL), pour les sites sans og:image.
         "X-With-Images-Summary": "true",
       },
-      signal: AbortSignal.timeout(JINA_TIMEOUT_MS),
+      signal: AbortSignal.timeout(JINA_TIMEOUT_MS[engine]),
     });
     if (!res.ok) {
-      console.log("[link-preview] Jina status", res.status);
-      return null;
+      console.log("[link-preview] Jina status", { engine, status: res.status });
+      return nothing;
     }
     const d = (await res.json())?.data;
-    if (!d) return null;
+    if (!d) return nothing;
     // Page bloquée (anti-bot, 403...) : Jina renvoie 200 mais le titre est
     // celui de la page de blocage ("Access Denied", "fnac.com").
-    if (typeof d.httpStatus === "number" && d.httpStatus >= 400) {
-      console.log("[link-preview] Jina: page status", d.httpStatus);
-      return null;
+    // Le challenge Cloudflare peut aussi revenir avec un statut 200 : on se fie
+    // aussi à son titre.
+    const cloudflareChallenge = CLOUDFLARE_CHALLENGE_TITLE.test(firstString(d.title) ?? "");
+    if (cloudflareChallenge || (typeof d.httpStatus === "number" && d.httpStatus >= 400)) {
+      console.log("[link-preview] Jina: page status", { engine, status: d.httpStatus, cloudflareChallenge });
+      return { preview: null, cloudflareChallenge };
     }
     const meta = d.metadata ?? {};
     const title = normalizeTitle(firstString(meta["og:title"]) ?? firstString(d.title));
@@ -107,10 +116,10 @@ async function fetchViaJina(url: string): Promise<{
         firstString(meta["twitter:image"]) ??
         pickProductImage(d.images, title),
     );
-    return { title, imageUrl };
+    return { preview: { title, imageUrl }, cloudflareChallenge: false };
   } catch (e) {
-    console.log("[link-preview] Jina error", e);
-    return null;
+    console.log("[link-preview] Jina error", { engine, error: String(e) });
+    return nothing;
   }
 }
 
@@ -164,7 +173,9 @@ function usableImageUrl(url: string | null): string | null {
   return url && url.startsWith("http") ? url : null;
 }
 
-const PREVIEW_TIMEOUT_MS = 5000;
+// Lecture directe + Jina direct + Jina browser (challenge Cloudflare) : ~6 s
+// au pire constaté. Le client coupe à 25 s.
+const PREVIEW_TIMEOUT_MS = 10000;
 
 function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
   return Promise.race([
@@ -176,7 +187,7 @@ function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
 }
 
 type Preview = { title: string | null; imageUrl: string | null };
-type Source = "jina" | "html" | null;
+type Source = "html" | "jina" | "jina-browser" | null;
 type PreviewResult = Preview & { source: { title: Source; image: Source } };
 
 /** Lecture directe de la page : fetch HTML puis og:title / og:image. */
@@ -216,7 +227,7 @@ async function fetchViaHtml(targetUrl: string): Promise<Preview> {
 
 /**
  * Lecture directe de la page d'abord (gratuite, sans quota), puis Jina Reader
- * pour compléter ce qui manque. `source` indique d'où vient chaque champ
+ * pour compléter ce qui manque (moteur navigateur si challenge Cloudflare). `source` indique d'où vient chaque champ
  * (pour tester, ignoré par l'app).
  */
 async function fetchPreview(targetUrl: string): Promise<PreviewResult> {
@@ -243,7 +254,12 @@ async function fetchPreview(targetUrl: string): Promise<PreviewResult> {
       hasTitle: !!result.title,
       hasImageUrl: !!result.imageUrl,
     });
-    fill(await fetchViaJina(targetUrl), "jina");
+    const jina = await fetchViaJina(targetUrl, "direct");
+    fill(jina.preview, "jina");
+    if (jina.cloudflareChallenge) {
+      console.log("[link-preview] Cloudflare challenge, retrying Jina with browser");
+      fill((await fetchViaJina(targetUrl, "browser")).preview, "jina-browser");
+    }
   }
   return result;
 }
