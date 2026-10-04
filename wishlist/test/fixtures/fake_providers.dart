@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/app_info_provider.dart';
 import 'package:wishlist/shared/infra/booked_wishes_realtime_provider.dart';
+import 'package:wishlist/shared/infra/completed_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/infra/current_user_profile_provider.dart';
 import 'package:wishlist/shared/infra/friend_details_realtime_provider.dart';
 import 'package:wishlist/shared/infra/friendships_realtime_provider.dart';
@@ -13,6 +14,7 @@ import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wishlists_realtime_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
+import 'package:wishlist/shared/models/completed_wish_with_details/completed_wish_with_details.dart';
 import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 import 'package:wishlist/shared/models/profile.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
@@ -192,6 +194,7 @@ List<Override> wishlistScreenOverrides({
   required int wishlistId,
   Wishlist? wishlist,
   List<Wish>? wishes,
+  List<CompletedWishWithDetails>? completedWishes,
   String? currentUserId,
 }) {
   return [
@@ -199,6 +202,9 @@ List<Override> wishlistScreenOverrides({
     userServiceOverride(userId: currentUserId),
     watchWishlistByIdOverride(wishlistId, wishlist: wishlist),
     watchWishsFromWishlistOverride(wishlistId, wishes: wishes),
+    completedWishesRealtimeProvider.overrideWith(
+      (ref) => Stream.value((completedWishes ?? const []).toIList()),
+    ),
   ];
 }
 
