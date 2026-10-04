@@ -1,4 +1,4 @@
-// Link Preview Edge Function: fetch URL, parse OG / meta, return title + imageUrl (pas de prix).
+// Link Preview Edge Function: Jina Reader puis lecture directe de la page (OG / meta), renvoie title + imageUrl (pas de prix).
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const CORS_HEADERS = {
@@ -61,45 +61,55 @@ function resolveUrl(base: string, path: string): string {
   }
 }
 
-// Microlink en fallback (sans clé API = plan gratuit, suffisant pour image + titre).
-// Retry jusqu'à 2 fois en cas d'échec (réseau, rate limit, etc.).
-async function fetchViaMicrolink(url: string): Promise<{
+// Jina Reader, source principale, sans clé (20 req/min par IP). Le moteur "direct"
+// lit la page sans navigateur headless : même résultat sur les pages testées,
+// et moins d'une seconde au lieu de 5 à 15 s avec le moteur par défaut.
+// Comparatif : tools/link_preview_benchmark/ (branche chore/link-preview-benchmark).
+const JINA_TIMEOUT_MS = 4000;
+
+/** Les métadonnées Jina peuvent être une chaîne ou une liste (balises en double). */
+function firstString(v: unknown): string | null {
+  if (typeof v === "string") return v.trim() || null;
+  if (Array.isArray(v)) return v.find((x) => typeof x === "string" && x.trim()) ?? null;
+  return null;
+}
+
+async function fetchViaJina(url: string): Promise<{
   title: string | null;
   imageUrl: string | null;
 } | null> {
-  const apiUrl = new URL("https://api.microlink.io");
-  apiUrl.searchParams.set("url", url);
-  const maxAttempts = 2;
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    try {
-      const res = await fetch(apiUrl.toString(), {
-        headers: { "User-Agent": BROWSER_UA },
-      });
-      if (!res.ok) {
-        if (attempt < maxAttempts) {
-          console.log("[link-preview] Microlink attempt", attempt, "status", res.status);
-          continue;
-        }
-        return null;
-      }
-      const json = await res.json();
-      if (json?.status !== "success" || !json.data) {
-        if (attempt < maxAttempts) continue;
-        return null;
-      }
-      const d = json.data;
-      const title = normalizeTitle(d.title ?? undefined);
-      let imageUrl: string | null = null;
-      if (d.image?.url) imageUrl = d.image.url;
-      else if (d.screenshot?.url) imageUrl = d.screenshot.url;
-      else if (d.logo?.url) imageUrl = d.logo.url;
-      return { title, imageUrl };
-    } catch (e) {
-      console.log("[link-preview] Microlink attempt", attempt, "error", e);
-      if (attempt >= maxAttempts) return null;
+  try {
+    const res = await fetch(`https://r.jina.ai/${url}`, {
+      headers: { Accept: "application/json", "X-Engine": "direct" },
+      signal: AbortSignal.timeout(JINA_TIMEOUT_MS),
+    });
+    if (!res.ok) {
+      console.log("[link-preview] Jina status", res.status);
+      return null;
     }
+    const d = (await res.json())?.data;
+    if (!d) return null;
+    // Page bloquée (anti-bot, 403...) : Jina renvoie 200 mais le titre est
+    // celui de la page de blocage ("Access Denied", "fnac.com").
+    if (typeof d.httpStatus === "number" && d.httpStatus >= 400) {
+      console.log("[link-preview] Jina: page status", d.httpStatus);
+      return null;
+    }
+    const meta = d.metadata ?? {};
+    const title = normalizeTitle(firstString(meta["og:title"]) ?? firstString(d.title));
+    const imageUrl = usableImageUrl(
+      firstString(meta["og:image"]) ?? firstString(meta["twitter:image"]),
+    );
+    return { title, imageUrl };
+  } catch (e) {
+    console.log("[link-preview] Jina error", e);
+    return null;
   }
-  return null;
+}
+
+/** Écarte les images inutilisables par l'app : vide, data: (placeholder 1x1 d'Amazon). */
+function usableImageUrl(url: string | null): string | null {
+  return url && url.startsWith("http") ? url : null;
 }
 
 const PREVIEW_TIMEOUT_MS = 5000;
@@ -113,14 +123,14 @@ function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
   ]);
 }
 
-/** Logique complète fetch HTML + parse + Microlink, pour pouvoir timeout + retry. */
-async function fetchPreview(targetUrl: string): Promise<{
-  title: string | null;
-  imageUrl: string | null;
-}> {
-  let html: string;
-  let status = 0;
+type Preview = { title: string | null; imageUrl: string | null };
+type Source = "jina" | "html" | null;
+type PreviewResult = Preview & { source: { title: Source; image: Source } };
 
+/** Lecture directe de la page : fetch HTML puis og:title / og:image. */
+async function fetchViaHtml(targetUrl: string): Promise<Preview> {
+  let html = "";
+  let status = 0;
   try {
     const res = await fetch(targetUrl, {
       headers: {
@@ -134,51 +144,56 @@ async function fetchPreview(targetUrl: string): Promise<{
     html = await res.text();
   } catch (e) {
     console.error("[link-preview] fetch error", e);
-    html = "";
   }
-
   console.log("[link-preview] fetch result", {
     url: targetUrl.slice(0, 60) + (targetUrl.length > 60 ? "…" : ""),
     status,
-    htmlLength: html?.length ?? 0,
+    htmlLength: html.length,
   });
 
-  let title: string | null = null;
-  let imageUrl: string | null = null;
+  // Une page d'erreur (403 anti-bot...) n'a pas les métadonnées du produit.
+  if (status >= 400 || html.length <= 500) return { title: null, imageUrl: null };
 
-  if (html && html.length > 500) {
-    title = normalizeTitle(ogOrTwitter(html, "title") ?? metaName(html, "title"));
-    imageUrl =
-      ogOrTwitter(html, "image") ??
-      metaName(html, "twitter:image:src");
-    if (imageUrl && !imageUrl.startsWith("http")) {
-      imageUrl = resolveUrl(targetUrl, imageUrl);
-    }
-    console.log("[link-preview] from HTML", {
-      status,
-      hasTitle: !!title,
-      hasImageUrl: !!imageUrl,
-    });
+  const title = normalizeTitle(ogOrTwitter(html, "title") ?? metaName(html, "title"));
+  let imageUrl = ogOrTwitter(html, "image") ?? metaName(html, "twitter:image:src");
+  if (imageUrl && !imageUrl.startsWith("http") && !imageUrl.startsWith("data:")) {
+    imageUrl = resolveUrl(targetUrl, imageUrl);
   }
+  return { title, imageUrl: usableImageUrl(imageUrl) };
+}
 
-  if (!title || !imageUrl) {
-    console.log("[link-preview] fallback Microlink", {
-      reason: !title ? "no title" : "no imageUrl",
-    });
-    const microlink = await fetchViaMicrolink(targetUrl);
-    if (microlink) {
-      console.log("[link-preview] Microlink result", {
-        hasTitle: !!microlink.title,
-        hasImageUrl: !!microlink.imageUrl,
-      });
-      if (!title) title = microlink.title;
-      if (!imageUrl) imageUrl = microlink.imageUrl;
-    } else {
-      console.log("[link-preview] Microlink returned nothing");
+/**
+ * Jina Reader d'abord, puis lecture directe de la page pour compléter ce qui
+ * manque. `source` indique d'où vient chaque champ (pour tester, ignoré par
+ * l'app).
+ */
+async function fetchPreview(targetUrl: string): Promise<PreviewResult> {
+  const result: PreviewResult = {
+    title: null,
+    imageUrl: null,
+    source: { title: null, image: null },
+  };
+  const fill = (p: Preview | null, source: Source) => {
+    if (!p) return;
+    if (!result.title && p.title) {
+      result.title = p.title;
+      result.source.title = source;
     }
-  }
+    if (!result.imageUrl && p.imageUrl) {
+      result.imageUrl = p.imageUrl;
+      result.source.image = source;
+    }
+  };
 
-  return { title: title ?? null, imageUrl: imageUrl ?? null };
+  fill(await fetchViaJina(targetUrl), "jina");
+  if (!result.title || !result.imageUrl) {
+    console.log("[link-preview] Jina incomplete, reading page", {
+      hasTitle: !!result.title,
+      hasImageUrl: !!result.imageUrl,
+    });
+    fill(await fetchViaHtml(targetUrl), "html");
+  }
+  return result;
 }
 
 serve(async (req) => {
@@ -197,10 +212,12 @@ serve(async (req) => {
 
     const targetUrl = url.trim();
     const maxAttempts = 2;
-    let result: { title: string | null; imageUrl: string | null } = {
+    const empty: PreviewResult = {
       title: null,
       imageUrl: null,
+      source: { title: null, image: null },
     };
+    let result = empty;
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
@@ -218,23 +235,25 @@ serve(async (req) => {
           continue;
         }
         console.error("[link-preview] all attempts failed");
-        result = { title: null, imageUrl: null };
+        result = empty;
         break;
       }
-      // Pas de retry quand on a un résultat (même sans image) : refetch donnerait
-      // le même HTML et ne ferait qu’ajouter du délai. On ne retry que sur timeout/erreur.
+      // Pas de retry quand on a un résultat (même sans image) : refaire les
+      // mêmes appels donnerait la même chose. On ne retry que sur timeout/erreur.
       break;
     }
 
     console.log("[link-preview] response", {
       hasTitle: !!result.title,
       hasImageUrl: !!result.imageUrl,
+      source: result.source,
     });
 
     return new Response(
       JSON.stringify({
         title: result.title,
         imageUrl: result.imageUrl,
+        source: result.source,
       }),
       {
         status: 200,
