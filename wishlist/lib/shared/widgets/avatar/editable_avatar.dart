@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/shared/infra/current_user_avatar_provider.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/utils/app_image_cropper.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/avatar/app_avatar.dart';
 import 'package:wishlist/shared/widgets/image_options_bottom_sheet.dart';
@@ -16,6 +19,36 @@ class EditableAvatar extends ConsumerWidget {
   final bool showEditIcon;
 
   static const double _size = 120;
+
+  Future<void> _pickCropAndUploadAvatar(
+    BuildContext context,
+    WidgetRef ref,
+    ImageSource source,
+  ) async {
+    try {
+      final image = await AppImageCropper.pickAndCrop(
+        context: context,
+        source: source,
+        mode: AppImageCropMode.avatar,
+      );
+
+      if (!context.mounted || image == null) {
+        return;
+      }
+
+      await ref.read(currentUserAvatarProvider.notifier).uploadAvatar(image);
+    } on PlatformException {
+      if (!context.mounted) {
+        return;
+      }
+
+      showAppSnackBar(
+        context,
+        context.l10n.genericError,
+        type: SnackBarType.error,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -102,12 +135,16 @@ class EditableAvatar extends ConsumerWidget {
                       context,
                       title: l10n.avatarOptions,
                       hasImage: hasAvatar,
-                      onPickFromGallery: () => ref
-                          .read(currentUserAvatarProvider.notifier)
-                          .pickAndUploadAvatar(context),
-                      onTakePhoto: () => ref
-                          .read(currentUserAvatarProvider.notifier)
-                          .takePhotoAndUpload(context),
+                      onPickFromGallery: () => _pickCropAndUploadAvatar(
+                        context,
+                        ref,
+                        ImageSource.gallery,
+                      ),
+                      onTakePhoto: () => _pickCropAndUploadAvatar(
+                        context,
+                        ref,
+                        ImageSource.camera,
+                      ),
                       onRemoveImage: () => ref
                           .read(currentUserAvatarProvider.notifier)
                           .deleteAvatar(),

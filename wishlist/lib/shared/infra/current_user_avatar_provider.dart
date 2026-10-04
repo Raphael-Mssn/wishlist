@@ -1,10 +1,8 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:wishlist/shared/infra/avatar_service.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
-import 'package:wishlist/shared/utils/app_image_cropper.dart';
 
 class AvatarNotifier extends StateNotifier<AsyncValue<String?>> {
   AvatarNotifier(this._avatarService, this._userService)
@@ -32,59 +30,9 @@ class AvatarNotifier extends StateNotifier<AsyncValue<String?>> {
     }
   }
 
-  Future<void> pickAndUploadAvatar(BuildContext context) async {
-    await _pickCropAndUploadAvatar(
-      context,
-      ImageSource.gallery,
-    );
-  }
-
-  Future<void> takePhotoAndUpload(BuildContext context) async {
-    await _pickCropAndUploadAvatar(
-      context,
-      ImageSource.camera,
-    );
-  }
-
-  Future<void> _pickCropAndUploadAvatar(
-    BuildContext context,
-    ImageSource source,
-  ) async {
+  Future<void> uploadAvatar(File imageFile) async {
     try {
       state = const AsyncValue.loading();
-
-      final picker = ImagePicker();
-      final image = await picker.pickImage(
-        source: source,
-        maxWidth: 800,
-        maxHeight: 800,
-        imageQuality: 85,
-      );
-
-      if (image == null) {
-        // Restauration de l'état précédent
-        await _loadCurrentUserAvatar();
-        return;
-      }
-
-      if (!context.mounted) {
-        await _loadCurrentUserAvatar();
-        return;
-      }
-
-      final croppedImage = await AppImageCropper.cropImage(
-        context: context,
-        sourcePath: image.path,
-        mode: AppImageCropMode.avatar,
-      );
-
-      if (croppedImage == null) {
-        // Restauration de l'état précédent
-        await _loadCurrentUserAvatar();
-        return;
-      }
-
-      final imageFile = File(croppedImage.path);
       final avatarPath = await _avatarService.uploadAvatar(imageFile);
       final fullAvatarUrl = _avatarService.getAvatarUrl(avatarPath);
 

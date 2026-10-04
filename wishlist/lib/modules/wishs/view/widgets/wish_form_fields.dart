@@ -93,46 +93,40 @@ class WishFormFieldsState extends State<WishFormFields> {
   }
 
   Future<void> _pickImageFromGallery() async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      imageQuality: 85,
-    );
-
-    if (image != null) {
-      await _cropImage(image.path);
-    }
+    await _pickAndCropImage(ImageSource.gallery);
   }
 
   Future<void> _takePhoto() async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(
-      source: ImageSource.camera,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      imageQuality: 85,
-    );
-
-    if (image != null) {
-      await _cropImage(image.path);
-    }
+    await _pickAndCropImage(ImageSource.camera);
   }
 
-  Future<void> _cropImage(String sourcePath) async {
-    final croppedFile = await AppImageCropper.cropImage(
-      context: context,
-      sourcePath: sourcePath,
-      mode: AppImageCropMode.wish,
-      accentColor: widget.wishlistColor,
-    );
+  Future<void> _pickAndCropImage(ImageSource source) async {
+    try {
+      final image = await AppImageCropper.pickAndCrop(
+        context: context,
+        source: source,
+        mode: AppImageCropMode.wish,
+        accentColor: widget.wishlistColor,
+      );
 
-    if (croppedFile != null) {
+      if (!mounted || image == null) {
+        return;
+      }
+
       setState(() {
-        _selectedImage = File(croppedFile.path);
+        _selectedImage = image;
       });
       widget.onImageSelected(_selectedImage);
+    } on PlatformException {
+      if (!mounted) {
+        return;
+      }
+
+      showAppSnackBar(
+        context,
+        context.l10n.genericError,
+        type: SnackBarType.error,
+      );
     }
   }
 
