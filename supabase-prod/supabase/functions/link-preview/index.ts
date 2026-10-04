@@ -80,7 +80,12 @@ async function fetchViaJina(url: string): Promise<{
 } | null> {
   try {
     const res = await fetch(`https://r.jina.ai/${url}`, {
-      headers: { Accept: "application/json", "X-Engine": "direct" },
+      headers: {
+        Accept: "application/json",
+        "X-Engine": "direct",
+        // Liste des images de la page (légende -> URL), pour les sites sans og:image.
+        "X-With-Images-Summary": "true",
+      },
       signal: AbortSignal.timeout(JINA_TIMEOUT_MS),
     });
     if (!res.ok) {
@@ -98,13 +103,60 @@ async function fetchViaJina(url: string): Promise<{
     const meta = d.metadata ?? {};
     const title = normalizeTitle(firstString(meta["og:title"]) ?? firstString(d.title));
     const imageUrl = usableImageUrl(
-      firstString(meta["og:image"]) ?? firstString(meta["twitter:image"]),
+      firstString(meta["og:image"]) ??
+        firstString(meta["twitter:image"]) ??
+        pickProductImage(d.images, title),
     );
     return { title, imageUrl };
   } catch (e) {
     console.log("[link-preview] Jina error", e);
     return null;
   }
+}
+
+// Images à ignorer : logos, sprites, pixels de tracking, SVG...
+const NON_PRODUCT_IMAGE =
+  /logo|sprite|icon|favicon|badge|pixel|tracking|\/batch\/|\.svg(\?|$)|placeholder|spinner|loader|avatar|flag/i;
+// Indications de taille dans l'URL : Amazon (_AC_SX679_, _AC_US40_), CDN (?f=3000, ?width=416...).
+const SIZE_HINT =
+  /_(?:AC_)?(?:SX|SY|SL|US|SS|UL|SR)(\d+)|[?&](?:f|w|width|imwidth|wid)=(\d+)/i;
+const STOP_WORDS = new Set(["les", "des", "une", "avec", "pour", "the", "and", "with", "from", "sur", "par", "dans"]);
+
+function significantWords(s: string): Set<string> {
+  return new Set(
+    (s.toLowerCase().match(/[a-z0-9]+/g) ?? []).filter((w) => w.length >= 3 && !STOP_WORDS.has(w)),
+  );
+}
+
+/**
+ * Choisit la photo produit dans la liste d'images de Jina, quand la page n'a
+ * pas d'og:image (Amazon, Decathlon) :
+ * 1. la première image dont la légende partage au moins 2 mots avec le titre
+ *    (la première, pas la plus proche : les variantes et produits similaires
+ *    ont souvent des légendes encore plus proches du titre) ;
+ * 2. sinon la première image restante, hors logos, icônes et miniatures.
+ * Testé sur le panel de tools/link_preview_benchmark : bonne image sur les 5
+ * pages lisibles.
+ */
+function pickProductImage(images: unknown, title: string | null): string | null {
+  if (!images || typeof images !== "object") return null;
+  const candidates: { alt: string; url: string }[] = [];
+  for (const [caption, url] of Object.entries(images as Record<string, unknown>)) {
+    if (typeof url !== "string" || !url.startsWith("http")) continue;
+    const alt = caption.replace(/^Image [\d,]+:?\s*/, "");
+    if (NON_PRODUCT_IMAGE.test(url) || NON_PRODUCT_IMAGE.test(alt)) continue;
+    const size = url.match(SIZE_HINT);
+    if (size && Number(size[1] ?? size[2]) < 200) continue;
+    candidates.push({ alt, url });
+  }
+  const titleWords = significantWords(title ?? "");
+  const byCaption = candidates.find(({ alt }) => {
+    const altWords = significantWords(alt);
+    let shared = 0;
+    for (const w of titleWords) if (altWords.has(w)) shared++;
+    return shared >= 2;
+  });
+  return (byCaption ?? candidates[0])?.url ?? null;
 }
 
 /** Écarte les images inutilisables par l'app : vide, data: (placeholder 1x1 d'Amazon). */
