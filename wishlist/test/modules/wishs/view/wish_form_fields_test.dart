@@ -6,6 +6,20 @@ import 'package:wishlist/shared/theme/colors.dart';
 import '../../../pump_app.dart';
 
 void main() {
+  group('truncateWishName', () {
+    test('keeps a name within the limit, trimmed', () {
+      expect(truncateWishName('  Casque audio  '), 'Casque audio');
+    });
+
+    test('cuts a prefilled name to the field limit', () {
+      const longTitle = 'Apple AirPods Pro (2nd Generation) Wireless Ear Buds '
+          'with USB-C Charging, Up to 2X More Active Noise Cancelling';
+      final result = truncateWishName(longTitle);
+      expect(result.length, lessThanOrEqualTo(wishNameMaxLength));
+      expect(longTitle.startsWith(result), isTrue);
+    });
+  });
+
   testWidgets('shows the focused wish name counter from 80% of its limit', (
     tester,
   ) async {
