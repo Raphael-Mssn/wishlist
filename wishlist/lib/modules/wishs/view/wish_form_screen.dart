@@ -101,7 +101,9 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
       // Mode création : préremplissage si fourni (partage, deep link), sinon
       // vide
       final prefill = widget.prefill;
-      _nameInputController = TextEditingController(text: prefill?.name ?? '');
+      _nameInputController = TextEditingController(
+        text: truncateWishName(prefill?.name ?? ''),
+      );
       _priceInputController = TextEditingController(
         text: (prefill?.price).toStringWithout0OrEmpty(),
       );

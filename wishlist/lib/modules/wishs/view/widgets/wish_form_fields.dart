@@ -17,7 +17,17 @@ import 'package:wishlist/shared/widgets/text_form_fields/validators/not_null_val
 
 const _smallGap = Gap(8);
 const _columnSpacing = 16.0;
-const _wishNameMaxLength = 80;
+const wishNameMaxLength = 80;
+
+/// Ramène un nom prérempli (partage, titre de page) à [wishNameMaxLength]
+/// caractères : la limite du champ ne s'applique qu'à la saisie au clavier.
+String truncateWishName(String name) {
+  final trimmed = name.trim();
+  if (trimmed.length <= wishNameMaxLength) {
+    return trimmed;
+  }
+  return trimmed.substring(0, wishNameMaxLength).trimRight();
+}
 
 /// Formulaire de création/édition de wish
 class WishFormFields extends StatefulWidget {
@@ -86,7 +96,8 @@ class WishFormFieldsState extends State<WishFormFields> {
     if (widget.initialNameFromPreview != null &&
         widget.initialNameFromPreview!.isNotEmpty &&
         widget.nameController.text.trim().isEmpty) {
-      widget.nameController.text = widget.initialNameFromPreview!;
+      widget.nameController.text =
+          truncateWishName(widget.initialNameFromPreview!);
     }
   }
 
@@ -102,7 +113,7 @@ class WishFormFieldsState extends State<WishFormFields> {
         nameFromPreview.isNotEmpty &&
         nameFromPreview != oldWidget.initialNameFromPreview &&
         widget.nameController.text.trim().isEmpty) {
-      widget.nameController.text = nameFromPreview;
+      widget.nameController.text = truncateWishName(nameFromPreview);
     }
   }
 
@@ -238,7 +249,7 @@ class WishFormFieldsState extends State<WishFormFields> {
             icon: Icons.sell_outlined,
             validator: (value) => notNullValidator(value, l10n),
             textCapitalization: TextCapitalization.sentences,
-            maxLength: _wishNameMaxLength,
+            maxLength: wishNameMaxLength,
           ),
           Row(
             children: [
