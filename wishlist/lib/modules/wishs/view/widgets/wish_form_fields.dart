@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/image_upload_field.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/utils/app_image_cropper.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/image_options_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/app_text_field.dart';
@@ -27,6 +28,7 @@ class WishFormFields extends StatefulWidget {
     required this.linkController,
     required this.descriptionController,
     required this.onImageSelected,
+    required this.wishlistColor,
     this.existingImageUrl,
   });
 
@@ -37,6 +39,7 @@ class WishFormFields extends StatefulWidget {
   final TextEditingController linkController;
   final TextEditingController descriptionController;
   final ValueChanged<File?> onImageSelected;
+  final Color wishlistColor;
   final String? existingImageUrl;
 
   @override
@@ -90,36 +93,40 @@ class WishFormFieldsState extends State<WishFormFields> {
   }
 
   Future<void> _pickImageFromGallery() async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      imageQuality: 85,
-    );
-
-    if (image != null) {
-      setState(() {
-        _selectedImage = File(image.path);
-      });
-      widget.onImageSelected(_selectedImage);
-    }
+    await _pickAndCropImage(ImageSource.gallery);
   }
 
   Future<void> _takePhoto() async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(
-      source: ImageSource.camera,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      imageQuality: 85,
-    );
+    await _pickAndCropImage(ImageSource.camera);
+  }
 
-    if (image != null) {
+  Future<void> _pickAndCropImage(ImageSource source) async {
+    try {
+      final image = await AppImageCropper.pickAndCrop(
+        context: context,
+        source: source,
+        mode: AppImageCropMode.wish,
+        accentColor: widget.wishlistColor,
+      );
+
+      if (!mounted || image == null) {
+        return;
+      }
+
       setState(() {
-        _selectedImage = File(image.path);
+        _selectedImage = image;
       });
       widget.onImageSelected(_selectedImage);
+    } on PlatformException {
+      if (!mounted) {
+        return;
+      }
+
+      showAppSnackBar(
+        context,
+        context.l10n.genericError,
+        type: SnackBarType.error,
+      );
     }
   }
 
