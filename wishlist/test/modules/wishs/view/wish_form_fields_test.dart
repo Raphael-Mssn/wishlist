@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wishlist/modules/wishs/view/widgets/wish_form_fields.dart';
+import 'package:wishlist/shared/theme/colors.dart';
 
 import '../../../pump_app.dart';
 
@@ -33,6 +34,7 @@ void main() {
           linkController: linkController,
           descriptionController: descriptionController,
           onImageSelected: (_) {},
+          wishlistColor: AppColors.primary,
         ),
       ),
     );
