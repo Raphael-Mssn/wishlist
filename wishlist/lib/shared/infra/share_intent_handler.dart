@@ -182,7 +182,6 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
       return;
     }
 
-
     var text = data.text?.trim();
     var imagePath = _firstImagePath(data);
 
