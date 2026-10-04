@@ -12,6 +12,9 @@ jobs:
   update-goldens:
     name: Regenerate Golden Files
     runs-on: ubuntu-latest
+    # Needed to push the regenerated golden files
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: wishlist
