@@ -12,10 +12,8 @@
         android:icon="@mipmap/ic_launcher">
         
         <!-- MainActivity configuration -->
-        <!-- singleTask : un partage depuis une autre app (Amazon...) doit être
-             livré à l'instance existante via onNewIntent. En singleTop, Android
-             crée une seconde MainActivity dans la tâche de l'app source, donc un
-             second moteur Flutter qui reste sur un écran noir. -->
+        <!-- singleTask : une seule instance, que ShareReceiverActivity réutilise
+             (onNewIntent) au lieu d'en créer une seconde. -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -46,9 +44,20 @@
                     android:scheme="wishy"
                     android:host="com.raphtang.wishy"/>
             </intent-filter>
+        </activity>
 
-            <!-- Partage vers Wishy : un seul filtre avec text+image pour recevoir
-                 les intents qui contiennent lien ET vignette (ex. Amazon). -->
+        <!-- Partage vers Wishy : activité sans interface qui transmet le partage
+             à MainActivity (voir ShareReceiverActivity.kt). Un seul filtre avec
+             text+image pour recevoir les intents qui contiennent lien ET
+             vignette (ex. Amazon). -->
+        <activity
+            android:name=".ShareReceiverActivity"
+            android:exported="true"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:label="Wishy"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>
