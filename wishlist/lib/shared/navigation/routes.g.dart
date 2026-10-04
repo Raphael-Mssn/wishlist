@@ -220,8 +220,8 @@ extension $ConsultWishRouteExtension on ConsultWishRoute {
         showActions: _$convertMapValue(
                 'show-actions', state.uri.queryParameters, _$boolConverter) ??
             true,
-        quantityDisplay: WishQuantityDisplay.values.asNameMap()[
-                state.uri.queryParameters['quantity-display']] ??
+        quantityDisplay: WishQuantityDisplay.values
+                .asNameMap()[state.uri.queryParameters['quantity-display']] ??
             WishQuantityDisplay.total,
       );
 
