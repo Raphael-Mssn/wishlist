@@ -46,6 +46,9 @@ jobs:
   test:
     name: Tests
     runs-on: ubuntu-latest
+    # Needed to push the regenerated golden files
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: wishlist
@@ -76,7 +79,7 @@ jobs:
         id: goldens
         run: |
           cd ..
-          if git diff --quiet -- 'wishlist/test/**/preview/'; then
+          if git diff --quiet -- ':(glob)wishlist/test/**/preview/*.png'; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
