@@ -15,6 +15,7 @@ import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
+import 'package:wishlist/shared/utils/link_utils.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:wishlist/shared/widgets/dialogs/quantity_selection_dialog.dart';
 
@@ -30,8 +31,22 @@ class ConsultWishInfoContainer extends ConsumerWidget {
   final String descriptionText;
   final bool isMyWishlist;
 
-  void _onOpenLinkTap(String linkUrl) {
-    launchUrl(Uri.parse(linkUrl));
+  Future<void> _onOpenLinkTap(BuildContext context, Uri linkUri) async {
+    var isLaunched = false;
+    try {
+      isLaunched =
+          await launchUrl(linkUri, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      isLaunched = false;
+    }
+
+    if (!isLaunched && context.mounted) {
+      showAppSnackBar(
+        context,
+        context.l10n.linkNotValid,
+        type: SnackBarType.error,
+      );
+    }
   }
 
   Future<void> _onGiveItTap(BuildContext context, WidgetRef ref) async {
@@ -109,7 +124,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final linkUrl = wish.linkUrl;
+    final linkUri = parseWebLink(wish.linkUrl);
 
     final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
 
@@ -126,7 +141,6 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     final shouldShowCancelButton = isWishTakenByMe;
 
     final price = wish.price;
-    final hasLinkUrl = linkUrl != null && linkUrl.isNotEmpty;
 
     const spacing = 12.0;
 
@@ -179,9 +193,9 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                     ),
                   ),
                   const Gap(8),
-                  if (hasLinkUrl)
+                  if (linkUri != null)
                     IconButton(
-                      onPressed: () => _onOpenLinkTap(linkUrl),
+                      onPressed: () => _onOpenLinkTap(context, linkUri),
                       icon: const Icon(
                         Icons.open_in_new,
                         color: AppColors.makara,

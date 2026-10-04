@@ -9,6 +9,7 @@ import 'package:wishlist/modules/wishs/view/widgets/image_upload_field.dart';
 import 'package:wishlist/shared/theme/colors.dart';
 import 'package:wishlist/shared/utils/app_image_cropper.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
+import 'package:wishlist/shared/utils/link_utils.dart';
 import 'package:wishlist/shared/widgets/image_options_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/app_text_field.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/formatters/decimal_text_input_formatter.dart';
@@ -148,29 +149,23 @@ class WishFormFieldsState extends State<WishFormFields> {
   }
 
   Future<void> _openLink(BuildContext context) async {
-    final link = widget.linkController.text.trim();
-    if (link.isEmpty) {
-      if (context.mounted) {
-        showAppSnackBar(
-          context,
-          context.l10n.linkNotValid,
-          type: SnackBarType.error,
-        );
+    final uri = parseWebLink(widget.linkController.text);
+
+    var isLaunched = false;
+    if (uri != null) {
+      try {
+        isLaunched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } catch (_) {
+        isLaunched = false;
       }
-      return;
     }
 
-    try {
-      final uri = Uri.parse(link);
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } catch (e) {
-      if (context.mounted) {
-        showAppSnackBar(
-          context,
-          context.l10n.linkNotValid,
-          type: SnackBarType.error,
-        );
-      }
+    if (!isLaunched && context.mounted) {
+      showAppSnackBar(
+        context,
+        context.l10n.linkNotValid,
+        type: SnackBarType.error,
+      );
     }
   }
 
