@@ -37,15 +37,6 @@ class ShareIntentPayloadNotifier extends _$ShareIntentPayloadNotifier {
     return p;
   }
 
-  /// Consommé par WishFormScreen après chargement de l'image. Retourne le
-  /// chemin et le retire du state. À appeler hors des lifecycles (build,
-  /// initState, etc.) — ex. dans addPostFrameCallback.
-  String? getAndClearImagePath() {
-    final path = state.imagePath;
-    state = ShareIntentPayload(prefill: state.prefill);
-    return path;
-  }
-
   /// Efface uniquement le chemin image (sans le retourner). À appeler après
   /// le build.
   void clearImagePath() {

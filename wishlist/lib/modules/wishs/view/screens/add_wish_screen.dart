@@ -51,14 +51,10 @@ class _AddWishScreenState extends ConsumerState<AddWishScreen> {
     });
   }
 
-  /// Applique la navigation si 0 ou 1 wishlist.
+  /// Navigue directement vers le formulaire s'il n'y a qu'une wishlist.
+  /// Sans wishlist, le build affiche un message ; avec plusieurs, un choix.
   void _tryNavigateFromWishlists(List<Wishlist> wishlists) {
     if (!mounted || _navigationHandled) {
-      return;
-    }
-    if (wishlists.isEmpty) {
-      _navigationHandled = true;
-      context.pop();
       return;
     }
     if (wishlists.length == 1) {
@@ -89,8 +85,8 @@ class _AddWishScreenState extends ConsumerState<AddWishScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    // Quand le provider passe en data après un loading, naviguer si 0 ou 1
-    // wishlist (WidgetRef.listen n'a pas fireImmediately).
+    // Quand le provider passe en data après un loading, naviguer s'il n'y a
+    // qu'une wishlist (WidgetRef.listen n'a pas fireImmediately).
     ref.listen(wishlistsRealtimeProvider, (prev, next) {
       next.whenData(_tryNavigateFromWishlists);
     });

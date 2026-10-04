@@ -12,7 +12,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      scaffoldMessengerKey: scaffoldMessengerKey,
       restorationScopeId: 'app',
       onGenerateTitle: (context) => 'Wishy',
       builder: (context, child) => ShareIntentHandler(
