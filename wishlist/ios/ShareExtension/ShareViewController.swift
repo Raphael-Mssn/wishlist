@@ -17,15 +17,6 @@ class ShareViewController: SLComposeServiceViewController {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        // Close extension immediately to avoid UI issues
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
-        }
-    }
-    
     override func isContentValid() -> Bool {
         return true
     }
