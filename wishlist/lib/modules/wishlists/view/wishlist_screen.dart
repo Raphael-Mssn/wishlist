@@ -149,7 +149,7 @@ class WishlistScreen extends ConsumerWidget {
         try {
           await ref
               .read(completedWishMutationsProvider.notifier)
-              .markAsCompleted(wish, quantity: 1);
+              .markAsCompleted(wish);
           anyCompleted = true;
         } catch (e) {
           if (context.mounted) {
