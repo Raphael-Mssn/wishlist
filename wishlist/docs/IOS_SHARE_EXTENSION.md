@@ -1,69 +1,25 @@
 # iOS : partage vers Wishy (Share Extension)
 
-L’app utilise **[share_intent_package](https://pub.dev/packages/share_intent_package)** pour le partage iOS. Le plugin génère une **ShareExtension** (dossier `ios/ShareExtension/`). Le `ShareViewController` a été personnalisé pour écrire les données partagées dans le conteneur App Group (`shared_files/share_data.json`) et rouvrir l’app via l’URL `SharingMedia-$(BUNDLE_ID)://`.
+L'app utilise [share_intent_package](https://pub.dev/packages/share_intent_package) pour le partage iOS. Le plugin génère une ShareExtension (`ios/ShareExtension/`). Le `ShareViewController` a été personnalisé pour écrire les données partagées dans le conteneur App Group (`shared_files/share_data.json`) et rouvrir l'app via l'URL `SharingMedia-$(BUNDLE_ID)://`. L'AppDelegate lit ce fichier (ou le MethodChannel `getSharedDataFromContainer`) pour fournir les données à Flutter.
 
----
+## Configuration
 
-## ⚠️ Pourquoi je ne vois pas Wishy dans le menu Partager ?
-
-1. **Tester en release sur l’iPhone**  
-   En debug, l’extension peut ne pas apparaître ou crasher (limite mémoire ~120 Mo).  
-   `flutter run --release` ou build depuis Xcode (schéma **Runner**, configuration Release).
-
-2. **Après modification de l’extension**  
-   `flutter build ios --config-only` puis rebuild (Xcode ou `flutter run --release`).
-
-3. **Désinstaller puis réinstaller l’app**  
-   iOS met en cache la liste des extensions ; une réinstallation peut être nécessaire.
-
-4. **Vérifier l’extension embarquée**  
-   Après un build : `build/ios/Release-iphoneos/Runner.app/PlugIns/` doit contenir `ShareExtension.appex`.
-
-5. **App Groups**  
-   Runner et **ShareExtension** doivent être dans le même App Group (ex. `group.com.raphtang.wishy`). Vérifier les entitlements et le portail Apple.
-
-6. **Safari**  
-   Bug connu : le menu Partager ne montre pas toujours toutes les apps au premier tap. Réessayer ou redémarrer l’appareil.
-
----
-
-## Configuration (déjà en place)
-
-- **Extension** : créée par `dart run share_intent_package:setup_ios_clean` → `ios/ShareExtension/`.
-- **App Group** : `group.com.raphtang.wishy` (Runner + ShareExtension).
-- **Runner Info.plist** : schéma d’URL `SharingMedia-$(PRODUCT_BUNDLE_IDENTIFIER)` pour que l’app soit rouverte après partage.
-- **ShareViewController** : extrait les pièces jointes (URL, texte, images), écrit un JSON dans `shared_files/share_data.json` du conteneur, puis ouvre l’app. L’AppDelegate lit ce fichier (ou le MethodChannel `getSharedDataFromContainer`) pour fournir les données à Flutter.
-
----
+- App Group : `group.com.raphtang.wishy` (Runner + ShareExtension, entitlements et portail Apple).
+- Runner Info.plist : schéma d'URL `SharingMedia-$(PRODUCT_BUNDLE_IDENTIFIER)`.
+- Signing : la cible ShareExtension (`com.raphtang.wishy.ShareExtension`) a besoin de son propre profil App Store, et le profil du Runner doit inclure App Groups. La CD (`cd.yml`) signe en manuel avec un seul profil : à adapter avant la première release incluant l'extension.
 
 ## Dépannage
 
-- **Wishy s’ouvre mais pas sur l’écran « Ajouter un wish »**  
-  Les données partagées n’arrivent pas à Flutter. Vérifier les logs :
-  - `[Wishy Share] Read X chars from container file` → données lues côté natif.
-  - `getSharedDataFromContainer: returning X chars` → Flutter reçoit bien le JSON.
-  - Si tu vois `2 chars` ou `{}`, l’extension a écrit un JSON vide : vérifier l’extraction dans `ShareViewController.swift` (types d’attachments : `public.url`, `public.plain-text`, `text/uri-list`, etc.).
+Les logs `[Wishy Share]` ci-dessous ne sont émis qu'en Debug. Côté extension, les lire dans Console.app (Mac) en filtrant sur « ShareExtension ».
 
-- **Runner has NO container access**  
-  L’app n’a pas l’entitlement App Group au runtime. Portail Apple → Identifiers → ton App ID → Capabilities → App Groups → coche le groupe → régénère le profil, Clean Build, réinstalle.
-
-- **Vérifier que l’extension écrit**  
-  Console.app (Mac) → sélectionne l’iPhone → filtre par « ShareExtension » ou « Share ». Chercher les logs `[Wishy Share] ShareExtension: data saved to container (logs uniquement en Debug)` ou erreurs d’écriture.
-
-- **`Couldn't read values... Container: (null)`**  
-  App ID ou profil de provisioning sans App Groups. Même correction que ci‑dessus.
-
----
-
-## objectVersion Xcode
-
-Le projet utilise **objectVersion = 70**. Si `pod install` échoue (ex. ancienne CocoaPods), repasser à `objectVersion = 56` dans `project.pbxproj` avant `pod install`.
-
----
+- Wishy n'apparaît pas dans le menu Partager : tester en release sur iPhone (en debug l'extension peut crasher, limite mémoire ~120 Mo), désinstaller/réinstaller (iOS cache la liste des extensions), vérifier que `Runner.app/PlugIns/` contient `ShareExtension.appex`. Après modification de l'extension, `flutter build ios --config-only` puis rebuild.
+- Wishy s'ouvre mais pas sur l'écran « Ajouter un wish » : chercher `Read X chars from container file` (lecture native) puis `getSharedDataFromContainer: returning X chars` (réception Flutter). Si `X` vaut 2 (`{}`), l'extension a écrit un JSON vide : vérifier les types d'attachments gérés dans `ShareViewController.swift` (`public.url`, `public.plain-text`, `text/uri-list`...).
+- `Runner has NO container access` ou `Couldn't read values... Container: (null)` : App ID ou profil sans App Groups. Portail Apple → Identifiers → App ID → App Groups, régénérer le profil, Clean Build, réinstaller.
+- L'extension n'écrit rien : chercher `data saved to container` ou `error writing to container` dans Console.app.
 
 ## Tests manuels
 
-- [ ] **iOS cold start** : Partager un lien depuis Safari/Amazon → app fermée → Wishy s’ouvre sur l’écran add-wish, formulaire prérempli.
-- [ ] **iOS warm start** : Partager un lien alors que Wishy est ouvert → retour à l’app, navigation vers add-wish, formulaire prérempli.
-- [ ] **Prefill** : Nom, lien et image présents quand la source les fournit ou via link preview.
-- [ ] **Plusieurs wishlists** : Écran de choix avant le formulaire.
+- [ ] iOS cold start : partager un lien depuis Safari/Amazon, app fermée. Wishy s'ouvre sur add-wish, formulaire prérempli.
+- [ ] iOS warm start : partager un lien alors que Wishy est ouvert. Retour à l'app, navigation vers add-wish.
+- [ ] Prefill : nom, lien et image présents quand la source les fournit ou via link preview.
+- [ ] Plusieurs wishlists : écran de choix avant le formulaire.
