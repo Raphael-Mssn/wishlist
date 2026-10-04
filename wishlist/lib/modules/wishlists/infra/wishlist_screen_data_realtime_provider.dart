@@ -12,7 +12,18 @@ final wishlistScreenDataRealtimeProvider =
     Provider.family<AsyncValue<WishlistScreenData>, int>((ref, wishlistId) {
   final wishlist = ref.watch(watchWishlistByIdProvider(wishlistId));
   final wishs = ref.watch(watchWishsFromWishlistProvider(wishlistId));
-  final completedWishes = ref.watch(completedWishesRealtimeProvider);
+  final ownerId = wishlist.valueOrNull?.idOwner;
+
+  if (ownerId == null) {
+    return switch (wishlist) {
+      AsyncError(:final error, :final stackTrace) =>
+        AsyncError(error, stackTrace),
+      _ => const AsyncLoading(),
+    };
+  }
+
+  final completedWishes =
+      ref.watch(completedWishesByUserRealtimeProvider(ownerId));
 
   return AsyncValueGroup.group3(wishlist, wishs, completedWishes);
 });

@@ -205,6 +205,11 @@ List<Override> wishlistScreenOverrides({
     completedWishesRealtimeProvider.overrideWith(
       (ref) => Stream.value((completedWishes ?? const []).toIList()),
     ),
+    completedWishesByUserRealtimeProvider(
+      wishlist?.idOwner ?? fakeWishlist1.idOwner,
+    ).overrideWith(
+      (ref) => Stream.value((completedWishes ?? const []).toIList()),
+    ),
   ];
 }
 

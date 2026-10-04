@@ -88,6 +88,7 @@ class SupabaseWishlistRepository implements WishlistRepository {
             .from(_wishlistsTableName)
             .select()
             .eq('id', wishlistId)
+            .isFilter('deleted_at', null)
             .single();
 
         return Wishlist.fromJson(response);

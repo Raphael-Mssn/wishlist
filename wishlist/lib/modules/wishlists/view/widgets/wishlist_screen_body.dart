@@ -117,11 +117,9 @@ class WishlistScreenBody extends ConsumerWidget {
 
     final wishlist = wishlistScreenData.wishlist;
 
-    final completedWishes =
-        isMyWishlist ? wishlistScreenData.completedWishes : null;
+    final completedWishes = wishlistScreenData.completedWishes;
     final completedByWishId = <int, int>{
-      if (completedWishes != null)
-        for (final c in completedWishes) c.wish.id: c.quantity,
+      for (final c in completedWishes) c.wish.id: c.quantity,
     };
 
     final adjustedWishs = wishlistScreenData.wishs

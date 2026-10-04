@@ -217,6 +217,38 @@ void main() {
     expect(pendingStatsCard.count, 1);
   });
 
+  testWidgets('hides a fully completed wish from a friend', (tester) async {
+    final friendWishlist = Wishlist(
+      id: fakeWishlist1.id,
+      createdAt: fakeWishlist1.createdAt,
+      name: fakeWishlist1.name,
+      idOwner: fakeFriendUserId1,
+      color: fakeWishlist1.color,
+      endDate: fakeWishlist1.endDate,
+      canOwnerSeeTakenWish: fakeWishlist1.canOwnerSeeTakenWish,
+      order: fakeWishlist1.order,
+      updatedBy: fakeWishlist1.updatedBy,
+      updatedAt: fakeWishlist1.updatedAt,
+    );
+    final friendWish = fakeWish1.copyWith(wishlistId: friendWishlist.id);
+
+    await tester.pumpRouterApp(
+      WishlistRoute(wishlistId: friendWishlist.id).location,
+      overrides: wishlistScreenOverrides(
+        wishlistId: friendWishlist.id,
+        wishlist: friendWishlist,
+        wishes: [friendWish, fakeWish2],
+        completedWishes: [completedWish(friendWish, 1)],
+        currentUserId: fakeCurrentUserId,
+      ),
+    );
+
+    await tester.pumpAndSettle(const Duration(seconds: 1));
+
+    expect(find.text(friendWish.name), findsNothing);
+    expect(find.text(fakeWish2.name), findsOneWidget);
+  });
+
   testWidgets('displays the remaining quantity for a partially completed wish',
       (tester) async {
     final wishWithQuantity = fakeWish1.copyWith(quantity: 3);

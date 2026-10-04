@@ -110,32 +110,31 @@ class SupabaseUserCompletedWishRepository
     return executeSafely(
       () async {
         final response = await _client.from(_tableName).select('''
-               from_wishlist_id,
                created_at,
                quantity,
-               from_wishlist:wishlists!inner(
-                 name,
-                 deleted_at,
-                 id_owner,
-                 profiles!inner(
-                   pseudo,
-                   avatar_url
-                 )
-               ),
                wishs!inner(
                  *,
+                 wishlist:wishlists!inner(
+                   name,
+                   deleted_at,
+                   id_owner,
+                   profiles!inner(
+                     pseudo,
+                     avatar_url
+                   )
+                 ),
                  taken_by_user:$_wishTakenByUserTableName(*)
                )
             ''').eq('user_id', userId).order('created_at', ascending: false);
 
         return response.map((item) {
           final wishData = item['wishs'] as Map<String, dynamic>;
-          final wishlistData = item['from_wishlist'] as Map<String, dynamic>;
+          final wishlistData = wishData['wishlist'] as Map<String, dynamic>;
           final profileData = wishlistData['profiles'] as Map<String, dynamic>;
 
           return CompletedWishWithDetails(
             wish: Wish.fromJson(wishData),
-            fromWishlistId: item['from_wishlist_id'] as int,
+            fromWishlistId: wishData['wishlist_id'] as int,
             fromWishlistName: wishlistData['deleted_at'] == null
                 ? wishlistData['name'] as String
                 : CompletedWishWithDetails.deletedWishlistName,
