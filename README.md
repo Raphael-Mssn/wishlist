@@ -119,21 +119,11 @@ supabase projects list
 
 ---
 
-### 🔄 Syncing schemas between dev and prod
+### 🔄 Schema changes
 
-1. **Pull the latest schema from dev**
+Every schema change goes through an idempotent migration file, applied to dev then to prod with `supabase db push`. Never edit the schema from the dashboard.
 
-   ```bash
-   cd supabase-dev
-   supabase db pull
-   ```
-
-2. **Push the schema to prod**
-
-   ```bash
-   cd ../supabase-prod
-   supabase db push
-   ```
+See [docs/supabase-migrations.md](docs/supabase-migrations.md) for the workflow, how to write idempotent migrations and how to check for drift.
 
 ---
 
