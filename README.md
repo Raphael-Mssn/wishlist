@@ -36,14 +36,14 @@ Welcome to the Wishy App! This Flutter application is designed to help you effor
 3. **▶️ Run the App**
 
    ```bash
-   flutter run
+   flutter run   # dev environment by default
    ```
 
 4. **📱 Build for Production**
 
    ```bash
-   flutter build appbundle   # For Android  
-   flutter build ios         # For iOS
+   flutter build appbundle --dart-define=APP_ENV=prod   # For Android
+   flutter build ios --dart-define=APP_ENV=prod         # For iOS
    ```
 
 ---
