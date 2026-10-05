@@ -13,8 +13,6 @@ jobs:
     name: Migrate prod database
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # Approbation requise via les protection rules de l'environnement.
-    environment: production
     concurrency:
       group: supabase-prod
       cancel-in-progress: false

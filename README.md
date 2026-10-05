@@ -171,7 +171,7 @@ git push origin v0.2.3
 | Android    | Internal Testing |
 | iOS        | TestFlight       |
 
-Avant les builds, le job `migrate-database` applique les migrations Supabase en prod (après approbation, cf. ci-dessous).
+Avant les builds, le job `migrate-database` applique les migrations Supabase en prod (cf. ci-dessous).
 
 ### 🗄️ Migrations Supabase
 
@@ -184,7 +184,7 @@ Le workflow `supabase.yml` :
 | Chaque lundi | Contrôle de dérive sur dev et prod |
 | Tag `v*` (workflow CD) | `db push` sur prod et contrôle de dérive, avant les builds |
 
-Les jobs qui touchent aux projets Supabase sont inactifs tant que la variable de repo `SUPABASE_DEPLOY_ENABLED` ne vaut pas `true`. Le déploiement prod passe par l'environnement GitHub `production`, à configurer avec une approbation obligatoire.
+Les jobs qui touchent aux projets Supabase sont inactifs tant que la variable de repo `SUPABASE_DEPLOY_ENABLED` ne vaut pas `true`. Avant chaque push, le job liste dans ses logs les migrations qu'il va appliquer.
 
 Le contrôle de dérive n'affiche jamais le diff (les logs sont publics) : en cas d'échec, lancer `supabase db diff --linked --schema public` en local. Workflow complet : [docs/supabase-migrations.md](docs/supabase-migrations.md).
 
@@ -211,9 +211,9 @@ scripts/check_supabase_migrations.sh origin/main
 | `APP_STORE_CONNECT_API_PRIVATE_KEY` | Contenu du fichier .p8 |
 | `SUPABASE_URL` | URL Supabase production |
 | `SUPABASE_ANON_KEY` | Clé anonyme Supabase production |
-| `SUPABASE_ACCESS_TOKEN` | Personal access token Supabase (CLI) |
-| `SUPABASE_DB_PASSWORD_DEV` | Mot de passe de la base Supabase dev |
-| `SUPABASE_DB_PASSWORD_PROD` | Mot de passe de la base Supabase prod |
+| `SUPABASE_ACCESS_TOKEN` | Token Supabase limité aux projets dev et prod (Project Settings : read ; Database, Migrations : read & write ; Connection Pooling : read) |
+| `SUPABASE_DB_PASSWORD_DEV` | Optionnel : mot de passe de la base dev, si la CLI ne peut pas utiliser son rôle de connexion temporaire |
+| `SUPABASE_DB_PASSWORD_PROD` | Optionnel : idem pour la prod |
 
 ---
 
