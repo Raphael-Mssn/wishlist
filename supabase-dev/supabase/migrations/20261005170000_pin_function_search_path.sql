@@ -46,24 +46,6 @@ END;
 $$;
 
 
-CREATE OR REPLACE FUNCTION "public"."nb_wishs_by_user"("user_id" "uuid") RETURNS bigint
-    LANGUAGE "plpgsql"
-    SET search_path = ''
-    AS $$
-DECLARE
-    wish_count bigint;
-BEGIN
-    SELECT COUNT(*)
-    INTO wish_count
-    FROM public.wishlists
-    JOIN public.wishs ON wishlists.id = wishs.wishlist_id
-    WHERE wishlists.id_owner = user_id;
-
-    RETURN wish_count;
-END;
-$$;
-
-
 CREATE OR REPLACE FUNCTION "public"."update_user_metadata"() RETURNS "trigger"
     LANGUAGE "plpgsql" SECURITY DEFINER
     SET search_path = ''
@@ -105,8 +87,8 @@ REVOKE EXECUTE ON FUNCTION "public"."update_user_metadata"() FROM PUBLIC, "anon"
 --   FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
 --  WHERE n.nspname = 'public'
 --    AND p.proname IN ('delete_user_account', 'is_friend_or_friend_of_friend',
---                      'nb_wishs_by_user', 'update_user_metadata');
---   -> proconfig = {search_path=""} for the four functions
+--                      'update_user_metadata');
+--   -> proconfig = {search_path=""} for the three functions
 --
 -- SELECT routine_name, grantee FROM information_schema.routine_privileges
 --  WHERE routine_schema = 'public'
