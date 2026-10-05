@@ -171,6 +171,29 @@ git push origin v0.2.3
 | Android    | Internal Testing |
 | iOS        | TestFlight       |
 
+Avant les builds, le job `migrate-database` applique les migrations Supabase en prod (après approbation, cf. ci-dessous).
+
+### 🗄️ Migrations Supabase
+
+Le workflow `supabase.yml` :
+
+| Déclencheur | Ce qu'il fait |
+| ----------- | ------------- |
+| PR qui touche une migration | Vérifie que `supabase-dev` et `supabase-prod` ont les mêmes migrations, les rejoue sur une base vide, puis rejoue une 2e fois celles ajoutées par la PR (idempotence) |
+| Merge sur `main` | `db push` sur dev, puis échoue si le schéma de dev diffère des migrations |
+| Chaque lundi | Contrôle de dérive sur dev et prod |
+| Tag `v*` (workflow CD) | `db push` sur prod et contrôle de dérive, avant les builds |
+
+Les jobs qui touchent aux projets Supabase sont inactifs tant que la variable de repo `SUPABASE_DEPLOY_ENABLED` ne vaut pas `true`. Le déploiement prod passe par l'environnement GitHub `production`, à configurer avec une approbation obligatoire.
+
+Le contrôle de dérive n'affiche jamais le diff (les logs sont publics) : en cas d'échec, lancer `supabase db diff --linked --schema public` en local. Workflow complet : [docs/supabase-migrations.md](docs/supabase-migrations.md).
+
+Pour tester les migrations en local (Docker requis) :
+
+```bash
+scripts/check_supabase_migrations.sh origin/main
+```
+
 #### Secrets GitHub requis
 
 | Secret | Description |
@@ -188,6 +211,9 @@ git push origin v0.2.3
 | `APP_STORE_CONNECT_API_PRIVATE_KEY` | Contenu du fichier .p8 |
 | `SUPABASE_URL` | URL Supabase production |
 | `SUPABASE_ANON_KEY` | Clé anonyme Supabase production |
+| `SUPABASE_ACCESS_TOKEN` | Personal access token Supabase (CLI) |
+| `SUPABASE_DB_PASSWORD_DEV` | Mot de passe de la base Supabase dev |
+| `SUPABASE_DB_PASSWORD_PROD` | Mot de passe de la base Supabase prod |
 
 ---
 
