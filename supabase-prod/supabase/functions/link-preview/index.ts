@@ -9,6 +9,33 @@ const CORS_HEADERS = {
 const BROWSER_UA =
   "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36";
 
+/**
+ * Décode les entités HTML d'un attribut (« L&#039;Or&eacute;al &amp; Co » →
+ * « L'Oréal & Co »), y compris dans les URL d'image (`?a=1&amp;b=2`).
+ * Une seule passe : « &amp;lt; » donne « &lt; », pas « < ». Les entités
+ * nommées inconnues sont laissées telles quelles.
+ */
+const NAMED_ENTITIES: Record<string, string> = {
+  amp: "&", quot: '"', apos: "'", lt: "<", gt: ">", nbsp: "\u00a0",
+  eacute: "é", Eacute: "É", egrave: "è", Egrave: "È", ecirc: "ê", Ecirc: "Ê",
+  euml: "ë", agrave: "à", Agrave: "À", acirc: "â", ccedil: "ç", Ccedil: "Ç",
+  icirc: "î", iuml: "ï", ocirc: "ô", ugrave: "ù", ucirc: "û", uuml: "ü",
+  oelig: "œ", rsquo: "\u2019", lsquo: "\u2018", ldquo: "\u201c", rdquo: "\u201d",
+  laquo: "«", raquo: "»", hellip: "…", ndash: "–", mdash: "—", euro: "€",
+  deg: "°", reg: "®", copy: "©", trade: "™",
+};
+function decodeHtmlEntities(s: string): string {
+  return s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (match, code: string) => {
+    if (code[0] === "#") {
+      const n = code[1] === "x" || code[1] === "X"
+        ? parseInt(code.slice(2), 16)
+        : Number(code.slice(1));
+      return Number.isFinite(n) && n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : match;
+    }
+    return NAMED_ENTITIES[code] ?? NAMED_ENTITIES[code.toLowerCase()] ?? match;
+  });
+}
+
 function metaContent(html: string, property: string, quote: string = '"'): string | null {
   const escaped = property.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const re = new RegExp(
@@ -16,13 +43,13 @@ function metaContent(html: string, property: string, quote: string = '"'): strin
     "i"
   );
   const m = html.match(re);
-  if (m) return m[1].trim();
+  if (m) return decodeHtmlEntities(m[1]).trim();
   const re2 = new RegExp(
     `content=${quote}([^${quote}]+)${quote}[^>]*property=${quote}${escaped}${quote}`,
     "i"
   );
   const m2 = html.match(re2);
-  return m2 ? m2[1].trim() : null;
+  return m2 ? decodeHtmlEntities(m2[1]).trim() : null;
 }
 
 function metaName(html: string, name: string, quote: string = '"'): string | null {
@@ -32,23 +59,30 @@ function metaName(html: string, name: string, quote: string = '"'): string | nul
     "i"
   );
   const m = html.match(re);
-  if (m) return m[1].trim();
+  if (m) return decodeHtmlEntities(m[1]).trim();
   const re2 = new RegExp(
     `content=${quote}([^${quote}]+)${quote}[^>]*name=${quote}${escaped}${quote}`,
     "i"
   );
   const m2 = html.match(re2);
-  return m2 ? m2[1].trim() : null;
+  return m2 ? decodeHtmlEntities(m2[1]).trim() : null;
 }
 
 function ogOrTwitter(html: string, name: string): string | null {
   return metaContent(html, `og:${name}`) ?? metaName(html, `twitter:${name}`);
 }
 
+/**
+ * Écarte ce qui n'est pas un nom de produit. Pas de seuil de longueur au-delà
+ * de 3 caractères : « Switch 2 » ou « AirPods 4 » sont des titres valides.
+ */
 function normalizeTitle(t: string | null | undefined): string | null {
   const s = t?.trim();
-  if (!s || s.length < 10) return null;
-  if (/^[a-z0-9_-]+$/i.test(s) && s.length < 20) return null;
+  if (!s || s.length < 3) return null;
+  // Slug technique sans espace : « product-12345 », « index_page ».
+  if (/^[a-z0-9]+(?:[_-][a-z0-9]+)+$/i.test(s)) return null;
+  // Simple nom de domaine, titre typique des pages de blocage : « fnac.com ».
+  if (/^[a-z0-9-]+(?:\.[a-z0-9-]+)+$/i.test(s)) return null;
   return s;
 }
 
@@ -191,10 +225,40 @@ type Source = "html" | "jina" | "jina-browser" | null;
 type PreviewResult = Preview & { source: { title: Source; image: Source } };
 
 /** Lecture directe de la page : fetch HTML puis og:title / og:image. */
+// Les <meta> sont dans le <head> : inutile de lire plus que le début de la
+// page, et un lien direct vers un gros fichier ne doit pas être téléchargé.
+const HTML_FETCH_TIMEOUT_MS = 5000;
+const HTML_MAX_BYTES = 512 * 1024;
+
+async function readTextLimited(res: Response, maxBytes: number): Promise<string> {
+  const reader = res.body?.getReader();
+  if (!reader) return "";
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  while (size < maxBytes) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    size += value.length;
+  }
+  await reader.cancel().catch(() => {});
+  const bytes = new Uint8Array(Math.min(size, maxBytes));
+  let offset = 0;
+  for (const chunk of chunks) {
+    const n = Math.min(chunk.length, bytes.length - offset);
+    bytes.set(chunk.subarray(0, n), offset);
+    offset += n;
+    if (offset >= bytes.length) break;
+  }
+  return new TextDecoder().decode(bytes);
+}
+
 async function fetchViaHtml(targetUrl: string): Promise<Preview> {
   let html = "";
   let status = 0;
   try {
+    // Signal d'annulation : withTimeout abandonne la promesse mais
+    // n'interromprait pas la requête, qui continuerait en arrière-plan.
     const res = await fetch(targetUrl, {
       headers: {
         "User-Agent": BROWSER_UA,
@@ -202,9 +266,17 @@ async function fetchViaHtml(targetUrl: string): Promise<Preview> {
         "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8",
       },
       redirect: "follow",
+      signal: AbortSignal.timeout(HTML_FETCH_TIMEOUT_MS),
     });
     status = res.status;
-    html = await res.text();
+    const contentType = res.headers.get("content-type") ?? "";
+    if (contentType && !/html/i.test(contentType)) {
+      // PDF, image, vidéo... : pas de métadonnées à lire.
+      await res.body?.cancel();
+      console.log("[link-preview] not HTML", { contentType });
+      return { title: null, imageUrl: null };
+    }
+    html = await readTextLimited(res, HTML_MAX_BYTES);
   } catch (e) {
     console.error("[link-preview] fetch error", e);
   }
