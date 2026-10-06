@@ -1,0 +1,100 @@
+name: Supabase
+
+# Deploy jobs stay disabled until the repository variable
+# SUPABASE_DEPLOY_ENABLED is set to 'true' (see docs/supabase-migrations.md).
+
+on:
+  pull_request:
+    paths:
+      - 'supabase-dev/supabase/migrations/**'
+      - 'supabase-prod/supabase/migrations/**'
+      - 'scripts/check_supabase_migrations.sh'
+      - '.github/workflows/supabase.yml'
+      - '.github/actions/supabase-deploy/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'supabase-dev/supabase/migrations/**'
+      - 'supabase-prod/supabase/migrations/**'
+      - '.github/workflows/supabase.yml'
+      - '.github/actions/supabase-deploy/**'
+  schedule:
+    # Every Monday at 06:00 UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate migrations
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply migrations on an empty database
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="origin/${{ github.base_ref }}"
+          else
+            base="${{ github.event.before }}"
+          fi
+          scripts/check_supabase_migrations.sh "$base"
+
+  deploy-dev:
+    name: Deploy to dev
+    needs: validate
+    if: github.event_name == 'push' && vars.SUPABASE_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: supabase-dev
+      cancel-in-progress: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Push migrations and check drift
+        uses: ./.github/actions/supabase-deploy
+        with:
+          workdir: supabase-dev
+          project-ref: qedynftuclpdisocgzuv
+          access-token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          db-password: ${{ secrets.SUPABASE_DB_PASSWORD_DEV }}
+
+  drift:
+    name: Check drift (${{ matrix.env }})
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && vars.SUPABASE_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - env: dev
+            workdir: supabase-dev
+            project-ref: qedynftuclpdisocgzuv
+            password-secret: SUPABASE_DB_PASSWORD_DEV
+          - env: prod
+            workdir: supabase-prod
+            project-ref: cbcrtjggsmtwvqljzbnl
+            password-secret: SUPABASE_DB_PASSWORD_PROD
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check drift
+        uses: ./.github/actions/supabase-deploy
+        with:
+          workdir: ${{ matrix.workdir }}
+          project-ref: ${{ matrix.project-ref }}
+          access-token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          db-password: ${{ secrets[matrix.password-secret] }}
+          push: 'false'

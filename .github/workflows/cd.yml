@@ -7,10 +7,35 @@ on:
 
 jobs:
   # ============================================================================
+  # SUPABASE - Migrations prod, avant les builds
+  # ============================================================================
+  migrate-database:
+    name: Migrate prod database
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: supabase-prod
+      cancel-in-progress: false
+    steps:
+      - name: Checkout repository
+        if: vars.SUPABASE_DEPLOY_ENABLED == 'true'
+        uses: actions/checkout@v4
+
+      - name: Push migrations and check drift
+        if: vars.SUPABASE_DEPLOY_ENABLED == 'true'
+        uses: ./.github/actions/supabase-deploy
+        with:
+          workdir: supabase-prod
+          project-ref: cbcrtjggsmtwvqljzbnl
+          access-token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          db-password: ${{ secrets.SUPABASE_DB_PASSWORD_PROD }}
+
+  # ============================================================================
   # ANDROID - Build et deploy sur Google Play (Internal Testing)
   # ============================================================================
   build-android:
     name: Build & Deploy Android
+    needs: migrate-database
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -68,6 +93,7 @@ jobs:
   # ============================================================================
   build-ios:
     name: Build & Deploy iOS
+    needs: migrate-database
     runs-on: macos-26
     defaults:
       run:

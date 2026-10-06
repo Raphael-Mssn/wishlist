@@ -1,0 +1,84 @@
+name: Supabase deploy
+description: Push pending migrations to a Supabase project, then fail if its public schema differs from the migrations.
+
+inputs:
+  workdir:
+    description: Folder holding the supabase/ directory (supabase-dev or supabase-prod)
+    required: true
+  project-ref:
+    description: Supabase project ref
+    required: true
+  access-token:
+    description: Supabase personal access token
+    required: true
+  db-password:
+    description: Database password of the project. Optional, the CLI falls back to a temporary login role.
+    required: false
+    default: ''
+  push:
+    description: Push pending migrations before checking drift
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Supabase CLI
+      uses: supabase/setup-cli@v1
+      with:
+        version: 2.119.0
+
+    # An empty SUPABASE_DB_PASSWORD would be used as is, so only export it when set.
+    - name: Configure credentials
+      shell: bash
+      env:
+        DB_PASSWORD: ${{ inputs.db-password }}
+      run: |
+        if [ -n "$DB_PASSWORD" ]; then
+          echo "::add-mask::$DB_PASSWORD"
+          echo "SUPABASE_DB_PASSWORD=$DB_PASSWORD" >> "$GITHUB_ENV"
+        fi
+
+    - name: Link project
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      env:
+        SUPABASE_ACCESS_TOKEN: ${{ inputs.access-token }}
+      run: supabase link --project-ref "${{ inputs.project-ref }}"
+
+    # Migration file names only, already public in the repository.
+    - name: List pending migrations
+      if: inputs.push == 'true'
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      env:
+        SUPABASE_ACCESS_TOKEN: ${{ inputs.access-token }}
+      run: supabase db push --include-all --dry-run
+
+    - name: Push migrations
+      if: inputs.push == 'true'
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      env:
+        SUPABASE_ACCESS_TOKEN: ${{ inputs.access-token }}
+      # --include-all: a branch merged late can carry migrations older than
+      # the last applied one. Migrations are idempotent, so replaying is safe.
+      run: supabase db push --include-all --yes
+
+    # The repository is public: never print the diff, only whether there is one.
+    - name: Check schema drift
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      env:
+        SUPABASE_ACCESS_TOKEN: ${{ inputs.access-token }}
+      run: |
+        drift="$RUNNER_TEMP/drift.sql"
+        if ! supabase db diff --linked --schema public -o "$drift" >/dev/null 2>"$RUNNER_TEMP/diff.log"; then
+          echo "::error::supabase db diff failed on ${{ inputs.workdir }}"
+          tail -5 "$RUNNER_TEMP/diff.log"
+          exit 1
+        fi
+        if [ -s "$drift" ]; then
+          echo "::error::Schema drift on ${{ inputs.workdir }}: the remote schema differs from the migrations. Run 'supabase db diff --linked --schema public' locally (see docs/supabase-migrations.md)."
+          exit 1
+        fi
+        echo "No drift on ${{ inputs.workdir }}"
