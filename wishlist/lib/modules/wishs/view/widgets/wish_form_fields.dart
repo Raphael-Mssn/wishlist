@@ -17,7 +17,17 @@ import 'package:wishlist/shared/widgets/text_form_fields/validators/not_null_val
 
 const _smallGap = Gap(8);
 const _columnSpacing = 16.0;
-const _wishNameMaxLength = 80;
+const wishNameMaxLength = 80;
+
+/// Ramène un nom prérempli (partage, titre de page) à [wishNameMaxLength]
+/// caractères : la limite du champ ne s'applique qu'à la saisie au clavier.
+String truncateWishName(String name) {
+  final trimmed = name.trim();
+  if (trimmed.length <= wishNameMaxLength) {
+    return trimmed;
+  }
+  return trimmed.substring(0, wishNameMaxLength).trimRight();
+}
 
 /// Formulaire de création/édition de wish
 class WishFormFields extends StatefulWidget {
@@ -31,7 +41,12 @@ class WishFormFields extends StatefulWidget {
     required this.descriptionController,
     required this.onImageSelected,
     required this.wishlistColor,
+    this.linkFocusNode,
+    this.onLinkPasted,
     this.existingImageUrl,
+    this.initialImageFile,
+    this.isPreviewImageLoading = false,
+    this.initialNameFromPreview,
   });
 
   final GlobalKey<FormState> formKey;
@@ -42,7 +57,23 @@ class WishFormFields extends StatefulWidget {
   final TextEditingController descriptionController;
   final ValueChanged<File?> onImageSelected;
   final Color wishlistColor;
+
+  /// FocusNode du champ lien, possédé par l'écran parent.
+  final FocusNode? linkFocusNode;
+
+  /// Appelé quand l'utilisateur colle un lien via le bouton.
+  final VoidCallback? onLinkPasted;
+
   final String? existingImageUrl;
+
+  /// Image reçue via partage (ex. Amazon) : affichée dans le formulaire.
+  final File? initialImageFile;
+
+  /// True pendant le chargement de l'aperçu du lien (og:image / Microlink).
+  final bool isPreviewImageLoading;
+
+  /// Titre de la page (og:title) : préremplit le nom quand vide.
+  final String? initialNameFromPreview;
 
   @override
   State<WishFormFields> createState() => WishFormFieldsState();
@@ -55,6 +86,44 @@ class WishFormFieldsState extends State<WishFormFields> {
   late final FocusNode _dummyFocusNode = FocusNode(skipTraversal: true);
 
   bool get hasRemovedExistingImage => _hasRemovedExistingImage;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialImageFile != null) {
+      _selectedImage = widget.initialImageFile;
+    }
+    if (widget.initialNameFromPreview != null &&
+        widget.initialNameFromPreview!.isNotEmpty &&
+        widget.nameController.text.trim().isEmpty) {
+      widget.nameController.text =
+          truncateWishName(widget.initialNameFromPreview!);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant WishFormFields oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final newFile = widget.initialImageFile;
+    final oldFile = oldWidget.initialImageFile;
+    if (newFile != null && newFile.path != _selectedImage?.path) {
+      setState(() => _selectedImage = newFile);
+    } else if (newFile == null &&
+        oldFile != null &&
+        _selectedImage?.path == oldFile.path) {
+      // L'image affichée venait du parent (preview du lien précédent) et il
+      // n'en fournit plus : on la retire pour que l'écran montre ce qui sera
+      // enregistré. Une image choisie par l'utilisateur n'est pas concernée.
+      setState(() => _selectedImage = null);
+    }
+    final nameFromPreview = widget.initialNameFromPreview;
+    if (nameFromPreview != null &&
+        nameFromPreview.isNotEmpty &&
+        nameFromPreview != oldWidget.initialNameFromPreview &&
+        widget.nameController.text.trim().isEmpty) {
+      widget.nameController.text = truncateWishName(nameFromPreview);
+    }
+  }
 
   @override
   void dispose() {
@@ -145,6 +214,7 @@ class WishFormFieldsState extends State<WishFormFields> {
     final text = clipboardData?.text;
     if (text != null) {
       widget.linkController.text = text;
+      widget.onLinkPasted?.call();
     }
   }
 
@@ -187,7 +257,7 @@ class WishFormFieldsState extends State<WishFormFields> {
             icon: Icons.sell_outlined,
             validator: (value) => notNullValidator(value, l10n),
             textCapitalization: TextCapitalization.sentences,
-            maxLength: _wishNameMaxLength,
+            maxLength: wishNameMaxLength,
           ),
           Row(
             children: [
@@ -217,6 +287,7 @@ class WishFormFieldsState extends State<WishFormFields> {
           ),
           AppTextField(
             controller: widget.linkController,
+            focusNode: widget.linkFocusNode,
             label: l10n.wishLinkLabel,
             icon: Icons.link,
             keyboardType: TextInputType.url,
@@ -266,6 +337,7 @@ class WishFormFieldsState extends State<WishFormFields> {
             imageFile: _selectedImage,
             existingImageUrl:
                 _hasRemovedExistingImage ? null : widget.existingImageUrl,
+            isPreviewLoading: widget.isPreviewImageLoading,
             onTap: () {
               _showImageOptions();
               _focusDummyNode();

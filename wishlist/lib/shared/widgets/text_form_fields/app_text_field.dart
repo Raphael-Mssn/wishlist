@@ -11,6 +11,7 @@ class AppTextField extends StatefulWidget {
     required this.controller,
     required this.label,
     required this.icon,
+    this.focusNode,
     this.validator,
     this.keyboardType,
     this.maxLines,
@@ -24,6 +25,10 @@ class AppTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
   final IconData icon;
+
+  /// Si fourni, utilisé pour le TextFormField
+  /// (appelant responsable du dispose).
+  final FocusNode? focusNode;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final int? maxLines;
@@ -39,7 +44,12 @@ class AppTextField extends StatefulWidget {
 
 class _AppTextFieldState extends State<AppTextField> {
   bool _hasError = false;
-  final _focusNode = FocusNode();
+  FocusNode? _internalFocusNode;
+
+  FocusNode get _effectiveFocusNode {
+    _internalFocusNode ??= FocusNode();
+    return _internalFocusNode!;
+  }
 
   static Widget? _buildCounter(
     BuildContext _, {
@@ -69,12 +79,13 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   void dispose() {
-    _focusNode.dispose();
+    _internalFocusNode?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final focusNode = widget.focusNode ?? _effectiveFocusNode;
     final errorBorder =
         _hasError ? Border.all(color: Colors.red, width: 2) : null;
     final suffixButtons = widget.suffixButtons ?? const <Widget>[];
@@ -112,7 +123,7 @@ class _AppTextFieldState extends State<AppTextField> {
             Expanded(
               child: TextFormField(
                 controller: widget.controller,
-                focusNode: _focusNode,
+                focusNode: focusNode,
                 cursorErrorColor: Colors.red,
                 textCapitalization: textCapitalization,
                 validator: (value) {
@@ -124,7 +135,7 @@ class _AppTextFieldState extends State<AppTextField> {
                       });
                       // Remettre le focus sur le champ en erreur
                       if (error != null) {
-                        _focusNode.requestFocus();
+                        focusNode.requestFocus();
                       }
                     }
                   });

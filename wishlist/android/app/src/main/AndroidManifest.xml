@@ -12,10 +12,12 @@
         android:icon="@mipmap/ic_launcher">
         
         <!-- MainActivity configuration -->
+        <!-- singleTask : une seule instance, que ShareReceiverActivity réutilise
+             (onNewIntent) au lieu d'en créer une seconde. -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:taskAffinity=""
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -41,6 +43,31 @@
                 <data
                     android:scheme="wishy"
                     android:host="com.raphtang.wishy"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Partage vers Wishy : activité sans interface qui transmet le partage
+             à MainActivity (voir ShareReceiverActivity.kt). Un seul filtre avec
+             text+image pour recevoir les intents qui contiennent lien ET
+             vignette (ex. Amazon). -->
+        <activity
+            android:name=".ShareReceiverActivity"
+            android:exported="true"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:label="Wishy"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/*"/>
+                <data android:mimeType="image/*"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="image/*"/>
             </intent-filter>
         </activity>
 
