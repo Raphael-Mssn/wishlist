@@ -27,6 +27,7 @@ class AppException implements Exception {
     required this.statusCode,
     this.message,
     this.userMessageKey,
+    this.cause,
   });
 
   final int statusCode;
@@ -36,6 +37,9 @@ class AppException implements Exception {
 
   /// Message utilisateur à afficher si reconnu (sinon message générique).
   final AppUserMessageKey? userMessageKey;
+
+  /// Erreur d'origine, conservée pour le debug.
+  final Object? cause;
 
   @override
   String toString() {
