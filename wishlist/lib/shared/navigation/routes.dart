@@ -100,6 +100,7 @@ class CreateWishRoute extends GoRouteData {
     this.link,
     this.description,
     this.price,
+    this.$extra,
   });
 
   final int wishlistId;
@@ -107,6 +108,10 @@ class CreateWishRoute extends GoRouteData {
   final String? link;
   final String? description;
   final String? price;
+
+  /// Chemin local de l'image partagée. Passé en `extra` et pas en query
+  /// param : un lien profond ne doit pas pouvoir désigner un fichier de l'app.
+  final String? $extra;
 
   WishPrefillData? get prefill => WishPrefillData.fromRouteParams(
         name: name,
@@ -120,6 +125,7 @@ class CreateWishRoute extends GoRouteData {
     return WishFormScreen(
       wishlistId: wishlistId,
       prefill: prefill,
+      sharedImagePath: $extra,
     );
   }
 }

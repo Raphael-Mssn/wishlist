@@ -177,6 +177,7 @@ extension $CreateWishRouteExtension on CreateWishRoute {
         link: state.uri.queryParameters['link'],
         description: state.uri.queryParameters['description'],
         price: state.uri.queryParameters['price'],
+        $extra: state.extra as String?,
       );
 
   String get location => GoRouteData.$location(
@@ -189,14 +190,16 @@ extension $CreateWishRouteExtension on CreateWishRoute {
         },
       );
 
-  void go(BuildContext context) => context.go(location);
+  void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: $extra);
 
   void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+      context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) => context.replace(location);
+  void replace(BuildContext context) =>
+      context.replace(location, extra: $extra);
 }
 
 extension $ConsultWishRouteExtension on ConsultWishRoute {

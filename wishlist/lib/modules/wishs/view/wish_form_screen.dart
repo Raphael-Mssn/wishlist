@@ -9,7 +9,6 @@ import 'package:wishlist/modules/wishs/view/widgets/wish_form_fields.dart';
 import 'package:wishlist/shared/infra/link_preview_client.dart';
 import 'package:wishlist/shared/infra/link_preview_provider.dart';
 import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_streams_providers.dart';
-import 'package:wishlist/shared/infra/share_intent_payload_provider.dart';
 import 'package:wishlist/shared/infra/wish_image_url_provider.dart';
 import 'package:wishlist/shared/infra/wish_mutations_provider.dart';
 import 'package:wishlist/shared/models/wish/create_request/wish_create_request.dart';
@@ -30,11 +29,15 @@ class WishFormScreen extends ConsumerStatefulWidget {
     required this.wishlistId,
     this.wish,
     this.prefill,
+    this.sharedImagePath,
   });
 
   final int wishlistId;
   final Wish? wish;
   final WishPrefillData? prefill;
+
+  /// Image reçue via partage (chemin local), transmise par la route.
+  final String? sharedImagePath;
 
   bool get isEditMode => wish != null;
 
@@ -119,36 +122,12 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
       _linkFocusNode = FocusNode();
       _linkFocusNode!.addListener(_onLinkFocusChange);
 
-      _hadPendingSharedImage =
-          ref.read(shareIntentPayloadNotifierProvider).imagePath != null;
-      // Image reçue via partage : lecture (sans modifier le provider) puis
-      // clear après le build
-      _loadPendingSharedImage();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) {
-          return;
-        }
-        _loadPendingSharedImage();
-        ref.read(shareIntentPayloadNotifierProvider.notifier).clearImagePath();
-      });
-    }
-  }
-
-  /// Lit le chemin image (sans modifier le provider). Le clear est fait
-  /// dans le post-frame callback. Appelée depuis initState puis en post-frame :
-  /// pas de setState tant que le widget n'est pas monté.
-  void _loadPendingSharedImage() {
-    final path = ref.read(shareIntentPayloadNotifierProvider).imagePath;
-    if (path == null) {
-      return;
-    }
-    final file = File(path);
-    if (file.existsSync() && _selectedImage?.path != file.path) {
-      if (mounted) {
-        setState(() => _selectedImage = file);
-      } else {
-        // Appel depuis initState : pas encore de build, on fixe l'état initial.
-        _selectedImage = file;
+      // Image reçue via partage : affichée d'office, et pas d'appel à
+      // l'Edge Function pour ce formulaire.
+      final sharedPath = widget.sharedImagePath;
+      if (sharedPath != null && File(sharedPath).existsSync()) {
+        _selectedImage = File(sharedPath);
+        _hadPendingSharedImage = true;
       }
     }
   }
@@ -173,9 +152,10 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
   }
 
   /// Preview déjà chargée par le build (même clé de provider), sans
-  /// déclencher d'appel réseau.
-  LinkPreviewData? _readPreviewData() {
-    if (!_shouldFetchPreview) {
+  /// déclencher d'appel réseau. Seulement si elle correspond au lien qui sera
+  /// enregistré : sinon le wish aurait le lien B avec l'image du lien A.
+  LinkPreviewData? _readPreviewDataFor(String link) {
+    if (!_shouldFetchPreview || _previewUrl != link.trim()) {
       return null;
     }
     return ref.read(linkPreviewDataProvider(_previewUrl!)).valueOrNull;
@@ -258,24 +238,26 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
     String link,
     String description,
   ) async {
-    final wishlist = await ref.read(
-      watchWishlistByIdProvider(widget.wishlistId).future,
-    );
-
-    final wish = WishCreateRequest(
-      name: name,
-      price: double.tryParse(price),
-      quantity: quantity,
-      description: description,
-      wishlistId: widget.wishlistId,
-      updatedBy: wishlist.idOwner,
-      linkUrl: link,
-      isFavourite: _isFavourite,
-    );
-
-    final imageFile = _selectedImage ?? _readPreviewData()?.image;
+    final imageFile = _selectedImage ?? _readPreviewDataFor(link)?.image;
 
     try {
+      // Dans le try : hors ligne ou stream en erreur, l'utilisateur doit avoir
+      // un retour (showGenericError) au lieu d'un formulaire figé.
+      final wishlist = await ref.read(
+        watchWishlistByIdProvider(widget.wishlistId).future,
+      );
+
+      final wish = WishCreateRequest(
+        name: name,
+        price: double.tryParse(price),
+        quantity: quantity,
+        description: description,
+        wishlistId: widget.wishlistId,
+        updatedBy: wishlist.idOwner,
+        linkUrl: link,
+        isFavourite: _isFavourite,
+      );
+
       final notifier = ref.read(wishMutationsProvider.notifier);
       if (imageFile != null) {
         await notifier.createWithImage(

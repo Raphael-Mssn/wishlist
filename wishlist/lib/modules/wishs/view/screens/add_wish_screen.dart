@@ -28,9 +28,12 @@ class AddWishScreen extends ConsumerStatefulWidget {
 
 class _AddWishScreenState extends ConsumerState<AddWishScreen> {
   /// Prefill venant du partage (provider) ou de la route (URL).
-  /// Rempli dans addPostFrameCallback : getAndClearPrefill() modifie le
-  /// provider, interdit pendant initState/build (Riverpod).
+  /// Rempli dans addPostFrameCallback : consume() modifie le provider,
+  /// interdit pendant initState/build (Riverpod).
   WishPrefillData? _prefill;
+
+  /// Image reçue via partage, transmise au formulaire par la route.
+  String? _sharedImagePath;
 
   /// Évite les navigations en double : un seul des deux déclencheurs
   /// (post-frame ou listen) exécute la navigation.
@@ -43,10 +46,10 @@ class _AddWishScreenState extends ConsumerState<AddWishScreen> {
       if (!mounted) {
         return;
       }
-      _prefill = ref
-              .read(shareIntentPayloadNotifierProvider.notifier)
-              .getAndClearPrefill() ??
-          widget.prefill;
+      final payload =
+          ref.read(shareIntentPayloadNotifierProvider.notifier).consume();
+      _prefill = payload.prefill ?? widget.prefill;
+      _sharedImagePath = payload.imagePath;
       _resolveNavigation();
     });
   }
@@ -79,6 +82,7 @@ class _AddWishScreenState extends ConsumerState<AddWishScreen> {
       link: _prefill?.linkUrl,
       description: _prefill?.description,
       price: _prefill?.price?.toString(),
+      $extra: _sharedImagePath,
     ).go(context);
   }
 

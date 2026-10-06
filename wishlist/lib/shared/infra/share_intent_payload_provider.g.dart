@@ -7,19 +7,20 @@ part of 'share_intent_payload_provider.dart';
 // **************************************************************************
 
 String _$shareIntentPayloadNotifierHash() =>
-    r'7dd02e7a8ee4088306ba7247529d287d76e41439';
+    r'954ad0b36a2b6049bb501dd8d61bff9c24e4f3d8';
 
 /// **Flux (un seul consommateur par partage) :**
-/// 1. **Écriture** : [ShareIntentHandler] appelle [setPayload] après avoir
+/// 1. **Écriture** : `ShareIntentHandler` appelle `setPayload` après avoir
 ///    traité l'intent, puis navigue vers add-wish.
-/// 2. **Lecture prefill** : [AddWishScreen] appelle [getAndClearPrefill] une
-///    fois au mount pour obtenir le prefill et l'effacer.
-/// 3. **Lecture image** : [WishFormScreen] (mode création) lit [imagePath] pour
-///    savoir s'il y avait une image, puis [clearImagePath] dans un
-///    addPostFrameCallback pour consommer le chemin.
+/// 2. **Lecture** : `AddWishScreen` appelle `consume` une fois au mount. Le
+///    payload entier (prefill et image) est vidé immédiatement : rien ne reste
+///    en mémoire si l'utilisateur n'atteint pas le formulaire. L'image est
+///    ensuite transmise au formulaire par la route (`$extra`), pas par ce
+///    provider.
 ///
-/// Avec [singleTop] sur Android, un second partage réutilise la même
-/// activité ; le handler écrase le payload avant navigation.
+/// Sur Android, un second partage est livré à l'activité existante
+/// (ShareReceiverActivity → onNewIntent) ; le handler écrase le payload avant
+/// navigation.
 ///
 /// Copied from [ShareIntentPayloadNotifier].
 @ProviderFor(ShareIntentPayloadNotifier)

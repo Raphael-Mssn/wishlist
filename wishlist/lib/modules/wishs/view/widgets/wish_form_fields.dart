@@ -105,8 +105,16 @@ class WishFormFieldsState extends State<WishFormFields> {
   void didUpdateWidget(covariant WishFormFields oldWidget) {
     super.didUpdateWidget(oldWidget);
     final newFile = widget.initialImageFile;
+    final oldFile = oldWidget.initialImageFile;
     if (newFile != null && newFile.path != _selectedImage?.path) {
       setState(() => _selectedImage = newFile);
+    } else if (newFile == null &&
+        oldFile != null &&
+        _selectedImage?.path == oldFile.path) {
+      // L'image affichée venait du parent (preview du lien précédent) et il
+      // n'en fournit plus : on la retire pour que l'écran montre ce qui sera
+      // enregistré. Une image choisie par l'utilisateur n'est pas concernée.
+      setState(() => _selectedImage = null);
     }
     final nameFromPreview = widget.initialNameFromPreview;
     if (nameFromPreview != null &&
