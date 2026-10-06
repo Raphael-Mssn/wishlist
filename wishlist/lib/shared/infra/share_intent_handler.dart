@@ -32,6 +32,15 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
   static const _kResumedShareDelayMs = 250;
   static const _kNavigateAfterPayloadDelayMs = 350;
 
+  /// Un même partage peut arriver par deux chemins en parallèle (iOS warm
+  /// start : `resumed` → getInitialSharing, et le stream du plugin). Sans ce
+  /// dédoublonnage, le second ramènerait sur /add-wish un utilisateur déjà
+  /// sur le formulaire.
+  static const _kDuplicateShareWindow = Duration(seconds: 10);
+  bool _isHandlingShare = false;
+  String? _lastShareKey;
+  DateTime? _lastShareAt;
+
   StreamSubscription<SharedData>? _mediaStreamSubscription;
 
   @override
@@ -181,7 +190,25 @@ class _ShareIntentHandlerState extends ConsumerState<ShareIntentHandler>
     if (!data.hasContent) {
       return;
     }
+    final key = '${data.text?.trim()}|${data.filePaths.join('|')}';
+    final lastAt = _lastShareAt;
+    final isDuplicate = key == _lastShareKey &&
+        lastAt != null &&
+        DateTime.now().difference(lastAt) < _kDuplicateShareWindow;
+    if (_isHandlingShare || isDuplicate) {
+      return;
+    }
+    _isHandlingShare = true;
+    _lastShareKey = key;
+    _lastShareAt = DateTime.now();
+    try {
+      await _processSharedData(data);
+    } finally {
+      _isHandlingShare = false;
+    }
+  }
 
+  Future<void> _processSharedData(SharedData data) async {
     var text = data.text?.trim();
     var imagePath = _firstImagePath(data);
 
