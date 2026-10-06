@@ -6,7 +6,7 @@ part of 'link_preview_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$linkPreviewDataHash() => r'd183eac53db9ae74559c290dcfb192e10fdcef8c';
+String _$linkPreviewDataHash() => r'dd0596f0df8e88c466d0a6940a6b5d4d01baf265';
 
 /// Copied from Dart SDK
 class _SystemHash {

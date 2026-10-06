@@ -50,7 +50,9 @@ Future<LinkPreviewData> fetchPreviewDataViaEdgeFunction(
     return const LinkPreviewData();
   }
 
-  final title = _normalizeTitle(data['title'] as String?);
+  // Le filtrage des titres (vides, slugs...) est fait par l'Edge Function.
+  final rawTitle = (data['title'] as String?)?.trim();
+  final title = rawTitle == null || rawTitle.isEmpty ? null : rawTitle;
   final imageUrl = data['imageUrl'] as String?;
 
   File? imageFile;
@@ -59,21 +61,6 @@ Future<LinkPreviewData> fetchPreviewDataViaEdgeFunction(
   }
 
   return LinkPreviewData(image: imageFile, title: title);
-}
-
-String? _normalizeTitle(String? t) {
-  final s = t?.trim();
-  if (s == null || s.isEmpty) {
-    return null;
-  }
-  if (s.length < 10) {
-    return null;
-  }
-  if (RegExp(r'^[a-z0-9_-]+$', caseSensitive: false).hasMatch(s) &&
-      s.length < 20) {
-    return null;
-  }
-  return s;
 }
 
 /// Télécharge une image depuis [imageUrl] vers un fichier temporaire.
@@ -91,12 +78,12 @@ Future<File?> downloadImageToTempFile(String imageUrl) async {
     if (bytes.length < 500) {
       return null;
     }
-    final extFromBytes = _imageExtensionFromMagicBytes(bytes);
-    if (extFromBytes == null) {
+    // Les magic bytes valident le format et donnent l'extension : le
+    // Content-Type est souvent faux (application/octet-stream...).
+    final ext = _imageExtensionFromMagicBytes(bytes);
+    if (ext == null) {
       return null;
     }
-    final ext = _extensionFromMime(imageResponse.headers['content-type']) ??
-        extFromBytes;
     final tempFile = File(
       '${Directory.systemTemp.path}/wish_preview_'
       '${DateTime.now().millisecondsSinceEpoch}.$ext',
@@ -110,23 +97,6 @@ Future<File?> downloadImageToTempFile(String imageUrl) async {
     }
     return null;
   }
-}
-
-String? _extensionFromMime(String? contentType) {
-  if (contentType == null) {
-    return null;
-  }
-  final lower = contentType.split(';').first.trim().toLowerCase();
-  if (lower.contains('png')) {
-    return 'png';
-  }
-  if (lower.contains('gif')) {
-    return 'gif';
-  }
-  if (lower.contains('webp')) {
-    return 'webp';
-  }
-  return 'jpg';
 }
 
 /// Reconnaît le format image à partir des magic bytes et retourne l’extension.
