@@ -19,12 +19,6 @@ class FloatingNavBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    tabController.addListener(() {
-      if (tabController.indexIsChanging) {
-        onTabChanged(FloatingNavBarTab.values[tabController.index]);
-      }
-    });
-
     final friendshipsAsync = ref.watch(friendshipsRealtimeProvider);
     final hasPendingRequests = friendshipsAsync.maybeWhen(
       data: (friendsData) => friendsData.requestedFriends.isNotEmpty,
@@ -44,6 +38,7 @@ class FloatingNavBar extends ConsumerWidget {
       ),
       child: TabBar(
         controller: tabController,
+        onTap: (index) => onTabChanged(FloatingNavBarTab.values[index]),
         tabs: [
           const _TabIcon(icon: Icons.home),
           _TabIcon(icon: Icons.group, showBadge: hasPendingRequests),
