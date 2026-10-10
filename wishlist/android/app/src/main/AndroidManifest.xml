@@ -26,7 +26,10 @@
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme" />
-              
+            <meta-data
+                android:name="flutter_deeplinking_enabled"
+                android:value="true" />
+
             <!-- Intent filter for launching the app normally -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
