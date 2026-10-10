@@ -1,6 +1,6 @@
 import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:wishlist/shared/infra/avatar_service.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 
@@ -30,53 +30,9 @@ class AvatarNotifier extends StateNotifier<AsyncValue<String?>> {
     }
   }
 
-  Future<void> pickAndUploadAvatar() async {
+  Future<void> uploadAvatar(File imageFile) async {
     try {
       state = const AsyncValue.loading();
-
-      final picker = ImagePicker();
-      final image = await picker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 800,
-        maxHeight: 800,
-        imageQuality: 85,
-      );
-
-      if (image == null) {
-        // Restauration de l'état précédent
-        await _loadCurrentUserAvatar();
-        return;
-      }
-
-      final imageFile = File(image.path);
-      final avatarPath = await _avatarService.uploadAvatar(imageFile);
-      final fullAvatarUrl = _avatarService.getAvatarUrl(avatarPath);
-
-      state = AsyncValue.data(fullAvatarUrl);
-    } catch (e, stack) {
-      state = AsyncValue.error(e, stack);
-    }
-  }
-
-  Future<void> takePhotoAndUpload() async {
-    try {
-      state = const AsyncValue.loading();
-
-      final picker = ImagePicker();
-      final image = await picker.pickImage(
-        source: ImageSource.camera,
-        maxWidth: 800,
-        maxHeight: 800,
-        imageQuality: 85,
-      );
-
-      if (image == null) {
-        // Restauration de l'état précédent
-        await _loadCurrentUserAvatar();
-        return;
-      }
-
-      final imageFile = File(image.path);
       final avatarPath = await _avatarService.uploadAvatar(imageFile);
       final fullAvatarUrl = _avatarService.getAvatarUrl(avatarPath);
 

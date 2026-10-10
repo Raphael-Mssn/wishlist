@@ -93,6 +93,7 @@ class _ConsultWishScreenState extends ConsumerState<ConsultWishScreen> {
               return AnimatedTheme(
                 data: wishlistTheme,
                 child: SafeArea(
+                  bottom: false,
                   child: Stack(
                     children: [
                       SizedBox(

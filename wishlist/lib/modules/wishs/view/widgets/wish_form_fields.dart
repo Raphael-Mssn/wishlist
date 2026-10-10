@@ -7,7 +7,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wishlist/l10n/l10n.dart';
 import 'package:wishlist/modules/wishs/view/widgets/image_upload_field.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/utils/app_image_cropper.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
+import 'package:wishlist/shared/utils/link_utils.dart';
 import 'package:wishlist/shared/widgets/image_options_bottom_sheet.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/app_text_field.dart';
 import 'package:wishlist/shared/widgets/text_form_fields/formatters/decimal_text_input_formatter.dart';
@@ -15,6 +17,7 @@ import 'package:wishlist/shared/widgets/text_form_fields/validators/not_null_val
 
 const _smallGap = Gap(8);
 const _columnSpacing = 16.0;
+const _wishNameMaxLength = 80;
 
 /// Formulaire de création/édition de wish
 class WishFormFields extends StatefulWidget {
@@ -27,6 +30,7 @@ class WishFormFields extends StatefulWidget {
     required this.linkController,
     required this.descriptionController,
     required this.onImageSelected,
+    required this.wishlistColor,
     this.existingImageUrl,
   });
 
@@ -37,6 +41,7 @@ class WishFormFields extends StatefulWidget {
   final TextEditingController linkController;
   final TextEditingController descriptionController;
   final ValueChanged<File?> onImageSelected;
+  final Color wishlistColor;
   final String? existingImageUrl;
 
   @override
@@ -90,36 +95,40 @@ class WishFormFieldsState extends State<WishFormFields> {
   }
 
   Future<void> _pickImageFromGallery() async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      imageQuality: 85,
-    );
-
-    if (image != null) {
-      setState(() {
-        _selectedImage = File(image.path);
-      });
-      widget.onImageSelected(_selectedImage);
-    }
+    await _pickAndCropImage(ImageSource.gallery);
   }
 
   Future<void> _takePhoto() async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(
-      source: ImageSource.camera,
-      maxWidth: 1024,
-      maxHeight: 1024,
-      imageQuality: 85,
-    );
+    await _pickAndCropImage(ImageSource.camera);
+  }
 
-    if (image != null) {
+  Future<void> _pickAndCropImage(ImageSource source) async {
+    try {
+      final image = await AppImageCropper.pickAndCrop(
+        context: context,
+        source: source,
+        mode: AppImageCropMode.wish,
+        accentColor: widget.wishlistColor,
+      );
+
+      if (!mounted || image == null) {
+        return;
+      }
+
       setState(() {
-        _selectedImage = File(image.path);
+        _selectedImage = image;
       });
       widget.onImageSelected(_selectedImage);
+    } on PlatformException {
+      if (!mounted) {
+        return;
+      }
+
+      showAppSnackBar(
+        context,
+        context.l10n.genericError,
+        type: SnackBarType.error,
+      );
     }
   }
 
@@ -140,29 +149,23 @@ class WishFormFieldsState extends State<WishFormFields> {
   }
 
   Future<void> _openLink(BuildContext context) async {
-    final link = widget.linkController.text.trim();
-    if (link.isEmpty) {
-      if (context.mounted) {
-        showAppSnackBar(
-          context,
-          context.l10n.linkNotValid,
-          type: SnackBarType.error,
-        );
+    final uri = parseWebLink(widget.linkController.text);
+
+    var isLaunched = false;
+    if (uri != null) {
+      try {
+        isLaunched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } catch (_) {
+        isLaunched = false;
       }
-      return;
     }
 
-    try {
-      final uri = Uri.parse(link);
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } catch (e) {
-      if (context.mounted) {
-        showAppSnackBar(
-          context,
-          context.l10n.linkNotValid,
-          type: SnackBarType.error,
-        );
-      }
+    if (!isLaunched && context.mounted) {
+      showAppSnackBar(
+        context,
+        context.l10n.linkNotValid,
+        type: SnackBarType.error,
+      );
     }
   }
 
@@ -184,6 +187,7 @@ class WishFormFieldsState extends State<WishFormFields> {
             icon: Icons.sell_outlined,
             validator: (value) => notNullValidator(value, l10n),
             textCapitalization: TextCapitalization.sentences,
+            maxLength: _wishNameMaxLength,
           ),
           Row(
             children: [

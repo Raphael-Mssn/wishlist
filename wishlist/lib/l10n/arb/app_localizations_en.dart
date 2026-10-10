@@ -540,6 +540,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get imageOptions => 'Image upload';
 
   @override
+  String get cropImageTitle => 'Crop image';
+
+  @override
+  String get cropImageCancel => 'Cancel';
+
+  @override
+  String get cropImageValidate => 'Confirm';
+
+  @override
   String get removeImage => 'Remove image';
 
   @override

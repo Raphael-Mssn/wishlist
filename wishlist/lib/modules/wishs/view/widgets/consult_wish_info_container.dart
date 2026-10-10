@@ -17,6 +17,7 @@ import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/widgets/buttons.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/utils/formatters.dart';
+import 'package:wishlist/shared/utils/link_utils.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:wishlist/shared/widgets/dialogs/quantity_selection_dialog.dart';
 
@@ -34,8 +35,22 @@ class ConsultWishInfoContainer extends ConsumerWidget {
   final bool isMyWishlist;
   final bool showActions;
 
-  void _onOpenLinkTap(String linkUrl) {
-    launchUrl(Uri.parse(linkUrl));
+  Future<void> _onOpenLinkTap(BuildContext context, Uri linkUri) async {
+    var isLaunched = false;
+    try {
+      isLaunched =
+          await launchUrl(linkUri, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      isLaunched = false;
+    }
+
+    if (!isLaunched && context.mounted) {
+      showAppSnackBar(
+        context,
+        context.l10n.linkNotValid,
+        type: SnackBarType.error,
+      );
+    }
   }
 
   Future<void> _onGiveItTap(BuildContext context, WidgetRef ref) async {
@@ -157,7 +172,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final linkUrl = wish.linkUrl;
+    final linkUri = parseWebLink(wish.linkUrl);
 
     final currentUserId = ref.read(userServiceProvider).getCurrentUserId();
 
@@ -181,9 +196,14 @@ class ConsultWishInfoContainer extends ConsumerWidget {
     final shouldShowCancelButton = isWishTakenByMe;
 
     final price = wish.price;
-    final hasLinkUrl = linkUrl != null && linkUrl.isNotEmpty;
 
     const spacing = 12.0;
+    const padding = 16.0;
+
+    // The sheet extends under the bottom system inset (home indicator,
+    // navigation bar) so its background reaches the screen edge, while its
+    // content stays above it.
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
 
     late final bool showPrimaryAction;
     late final VoidCallback? primaryActionOnPressed;
@@ -208,7 +228,7 @@ class ConsultWishInfoContainer extends ConsumerWidget {
 
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.sizeOf(context).height / 1.8,
+        maxHeight: MediaQuery.sizeOf(context).height / 1.8 + bottomInset,
       ),
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -219,7 +239,9 @@ class ConsultWishInfoContainer extends ConsumerWidget {
           boxShadow: [consultBoxShadow],
         ),
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(padding).copyWith(
+            bottom: padding + bottomInset,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -234,9 +256,9 @@ class ConsultWishInfoContainer extends ConsumerWidget {
                     ),
                   ),
                   const Gap(8),
-                  if (hasLinkUrl)
+                  if (linkUri != null)
                     IconButton(
-                      onPressed: () => _onOpenLinkTap(linkUrl),
+                      onPressed: () => _onOpenLinkTap(context, linkUri),
                       icon: const Icon(
                         Icons.open_in_new,
                         color: AppColors.makara,

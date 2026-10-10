@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 
 part 'wishlist_create_request.freezed.dart';
 part 'wishlist_create_request.g.dart';
@@ -26,9 +27,4 @@ class WishlistCreateRequest with _$WishlistCreateRequest {
 
   factory WishlistCreateRequest.fromJson(Map<String, dynamic> json) =>
       _$WishlistCreateRequestFromJson(json);
-}
-
-enum WishlistVisibility {
-  private,
-  public,
 }

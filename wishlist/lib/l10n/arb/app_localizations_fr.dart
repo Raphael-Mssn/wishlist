@@ -540,6 +540,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get imageOptions => 'Ajout de l\'image';
 
   @override
+  String get cropImageTitle => 'Recadrer l\'image';
+
+  @override
+  String get cropImageCancel => 'Annuler';
+
+  @override
+  String get cropImageValidate => 'Valider';
+
+  @override
   String get removeImage => 'Supprimer l\'image';
 
   @override

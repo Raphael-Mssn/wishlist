@@ -52,7 +52,7 @@ jobs:
           EOF
 
       - name: Build App Bundle
-        run: flutter build appbundle --release --dart-define=ENV=prod
+        run: flutter build appbundle --release --dart-define=APP_ENV=prod
 
       - name: Upload to Google Play (Internal Testing)
         uses: r0adkll/upload-google-play@v1
@@ -138,7 +138,7 @@ jobs:
           pod install --repo-update
 
       - name: Build iOS
-        run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist --dart-define=ENV=prod
+        run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist --dart-define=APP_ENV=prod
 
       - name: Find IPA file
         run: echo "IPA_PATH=$(find build/ios/ipa -name '*.ipa' | head -1)" >> $GITHUB_ENV
