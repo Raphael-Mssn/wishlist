@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wishlist/shared/infra/app_info_provider.dart';
 import 'package:wishlist/shared/infra/booked_wishes_realtime_provider.dart';
+import 'package:wishlist/shared/infra/completed_wishes_realtime_provider.dart';
 import 'package:wishlist/shared/infra/current_user_profile_provider.dart';
 import 'package:wishlist/shared/infra/friend_details_realtime_provider.dart';
 import 'package:wishlist/shared/infra/friendships_realtime_provider.dart';
@@ -13,6 +14,7 @@ import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/infra/wishlists_realtime_provider.dart';
 import 'package:wishlist/shared/models/app_user.dart';
 import 'package:wishlist/shared/models/booked_wish_with_details/booked_wish_with_details.dart';
+import 'package:wishlist/shared/models/completed_wish_with_details/completed_wish_with_details.dart';
 import 'package:wishlist/shared/models/friend_details/friend_details.dart';
 import 'package:wishlist/shared/models/profile.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
@@ -171,9 +173,15 @@ List<Override> settingsScreenOverrides({
 // =============================================================================
 
 /// Override pour watchWishlistByIdProvider
-Override watchWishlistByIdOverride(int wishlistId, {Wishlist? wishlist}) {
+///
+/// [isDeleted] simule une wishlist supprimée ou archivée (le flux émet `null`)
+Override watchWishlistByIdOverride(
+  int wishlistId, {
+  Wishlist? wishlist,
+  bool isDeleted = false,
+}) {
   return watchWishlistByIdProvider(wishlistId).overrideWith(
-    (ref) => Stream.value(wishlist ?? fakeWishlist1),
+    (ref) => Stream.value(isDeleted ? null : wishlist ?? fakeWishlist1),
   );
 }
 
@@ -192,13 +200,27 @@ List<Override> wishlistScreenOverrides({
   required int wishlistId,
   Wishlist? wishlist,
   List<Wish>? wishes,
+  List<CompletedWishWithDetails>? completedWishes,
   String? currentUserId,
+  bool isWishlistDeleted = false,
 }) {
   return [
     supabaseClientOverride(userId: currentUserId),
     userServiceOverride(userId: currentUserId),
-    watchWishlistByIdOverride(wishlistId, wishlist: wishlist),
+    watchWishlistByIdOverride(
+      wishlistId,
+      wishlist: wishlist,
+      isDeleted: isWishlistDeleted,
+    ),
     watchWishsFromWishlistOverride(wishlistId, wishes: wishes),
+    completedWishesRealtimeProvider.overrideWith(
+      (ref) => Stream.value((completedWishes ?? const []).toIList()),
+    ),
+    completedWishesByUserRealtimeProvider(
+      wishlist?.idOwner ?? fakeWishlist1.idOwner,
+    ).overrideWith(
+      (ref) => Stream.value((completedWishes ?? const []).toIList()),
+    ),
   ];
 }
 

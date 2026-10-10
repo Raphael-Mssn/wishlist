@@ -363,6 +363,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get modifyBooking => 'Modify my booking';
 
   @override
+  String get modifyCompletedQuantity => 'Modify completed quantity';
+
+  @override
   String get cancelBookingDialogTitle => 'Cancel booking';
 
   @override
@@ -410,10 +413,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Are you sure you want to delete this wishlist?';
 
   @override
-  String get deleteWishlistWishesWarning => 'Wishes will also be deleted.';
+  String get deleteWishlistWishesWarning =>
+      'Uncompleted wishes will be deleted. Completed wishes will remain in your history.';
 
   @override
   String get deleteWishlistSuccess => 'Wishlist successfully deleted!';
+
+  @override
+  String get wishlistDeleted => 'This wishlist has been deleted';
 
   @override
   String get wishlistColor => 'Wishlist color';
@@ -434,10 +441,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sortByDate => 'By creation date';
 
   @override
+  String get sortByCompletedAt => 'By completion date';
+
+  @override
   String get sortByBookingCount => 'By booking count';
 
   @override
   String get selectQuantityToGive => 'How much would you like to offer?';
+
+  @override
+  String get selectQuantityToComplete => 'How many did you complete?';
 
   @override
   String get wishReservedSuccess => 'Wish reserved successfully!';
@@ -469,6 +482,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moveButton => 'Move';
+
+  @override
+  String get reintegrateWish => 'Restore a wish';
+
+  @override
+  String get reintegrateWishExplanation =>
+      'The wishlist this wish came from has been deleted. Select the wishlist in which you want to restore it:';
+
+  @override
+  String get reintegrateButton => 'Restore';
 
   @override
   String get selectWishlist => 'Select a wishlist';
@@ -585,4 +608,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get comingSoonMessage => 'This feature is coming soon!';
+
+  @override
+  String get completedWishesScreenTitle => 'Completed wishes';
+
+  @override
+  String get completedWishesEmptyTitle => 'No completed wishes';
+
+  @override
+  String get markWishAsCompleted => 'Mark as completed';
+
+  @override
+  String get unmarkWishAsCompleted => 'Remove from completed';
+
+  @override
+  String get settingsCompletedWishes => 'My completed wishes';
+
+  @override
+  String get unmarkWishConfirmTitle => 'Remove from completed';
+
+  @override
+  String unmarkWishConfirmMessage(String wishlistName) {
+    return 'This wish will become visible again in the wishlist \"$wishlistName\".';
+  }
+
+  @override
+  String get unmarkWishArchivedConfirmMessage =>
+      'Choose a wishlist in which to restore this wish.';
+
+  @override
+  String get deletedWishlist => 'Deleted wishlist';
+
+  @override
+  String get friendCompletedWishesTitle => 'Completed wishes';
+
+  @override
+  String get completeSelectedWishes => 'Complete';
+
+  @override
+  String completedWishFromWishlist(String wishlistName) {
+    return 'Wishlist: $wishlistName';
+  }
 }

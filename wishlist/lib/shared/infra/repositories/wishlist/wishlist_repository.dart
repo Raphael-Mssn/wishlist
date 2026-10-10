@@ -11,7 +11,8 @@ abstract class WishlistRepository {
 
   Future<int> getNbWishlistsByUser(String userId);
 
-  Future<Wishlist> getWishlistById(int wishlistId);
+  /// Renvoie `null` si la wishlist n'existe pas ou a été archivée
+  Future<Wishlist?> findWishlistById(int wishlistId);
 
   Future<Wishlist> updateWishlist(Wishlist wishlist);
 

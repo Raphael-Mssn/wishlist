@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wishlist/l10n/l10n.dart';
+import 'package:wishlist/shared/infra/completed_wish_mutations_provider.dart';
 import 'package:wishlist/shared/infra/wish_taken_by_user_service.dart';
 import 'package:wishlist/shared/models/wish/wish.dart';
 import 'package:wishlist/shared/theme/colors.dart';
@@ -292,4 +293,55 @@ Future<void> _handleQuantitySelectionConfirm(
       type: SnackBarType.success,
     );
   }
+}
+
+Future<bool> showCompleteWishQuantityDialog(
+  BuildContext context,
+  WidgetRef ref, {
+  required Wish wish,
+  int initialQuantity = 1,
+  bool isModifying = false,
+  int alreadyCompletedQuantity = 0,
+}) async {
+  final l10n = context.l10n;
+  var selectedQuantity = initialQuantity;
+  final isValidNotifier = ValueNotifier<bool>(true);
+  var confirmed = false;
+
+  await showAppDialog(
+    context,
+    title: l10n.selectQuantityToComplete,
+    content: _QuantitySelectionDialogContent(
+      maxQuantity: isModifying
+          ? wish.quantity
+          : wish.quantity - alreadyCompletedQuantity,
+      initialQuantity: initialQuantity,
+      onQuantityChanged: (quantity) {
+        selectedQuantity = quantity;
+      },
+      onValidationChanged: (valid) {
+        isValidNotifier.value = valid;
+      },
+    ),
+    confirmButtonLabel: l10n.confirmDialogConfirmButtonLabel,
+    isConfirmEnabled: isValidNotifier,
+    onCancel: () {},
+    onConfirm: () async {
+      if (isModifying) {
+        await ref
+            .read(completedWishMutationsProvider.notifier)
+            .updateCompletedWishQuantity(
+              wishId: wish.id,
+              newQuantity: selectedQuantity,
+            );
+      } else {
+        await ref
+            .read(completedWishMutationsProvider.notifier)
+            .markAsCompleted(wish, quantity: selectedQuantity);
+      }
+      confirmed = true;
+    },
+  );
+
+  return confirmed;
 }

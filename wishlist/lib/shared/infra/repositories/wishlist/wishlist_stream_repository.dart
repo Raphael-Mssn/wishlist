@@ -10,8 +10,9 @@ abstract class WishlistStreamRepository {
 
   /// Écoute les changements sur une wishlist spécifique
   ///
-  /// Émet la wishlist mise à jour à chaque changement
-  Stream<Wishlist> watchWishlistById(int wishlistId);
+  /// Émet la wishlist mise à jour à chaque changement, ou `null` si elle
+  /// n'existe pas, a été supprimée ou archivée
+  Stream<Wishlist?> watchWishlistById(int wishlistId);
 
   /// Écoute uniquement les wishlists publiques d'un utilisateur
   Stream<IList<Wishlist>> watchPublicWishlistsByUser(String userId);

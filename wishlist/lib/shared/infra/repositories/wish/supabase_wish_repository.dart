@@ -82,8 +82,9 @@ class SupabaseWishRepository implements WishRepository {
   ) async {
     return executeSafely(
       () async {
-        final response =
-            await _client.from(_wishTakenByUserTableName).select('''
+        final response = await _client
+            .from(_wishTakenByUserTableName)
+            .select('''
               quantity,
               wishs!inner(
                 *,
@@ -97,7 +98,10 @@ class SupabaseWishRepository implements WishRepository {
                   )
                 )
               )
-            ''').eq('user_id', userId).order('created_at', ascending: false);
+            ''')
+            .eq('user_id', userId)
+            .isFilter('wishs.wishlists.deleted_at', null)
+            .order('created_at', ascending: false);
 
         return response.map((item) {
           final wishData = item['wishs'] as Map<String, dynamic>;

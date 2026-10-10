@@ -13,9 +13,11 @@ class ConsultWishImage extends ConsumerWidget {
   const ConsultWishImage({
     super.key,
     required this.wish,
+    required this.quantityToDisplay,
   });
 
   final Wish wish;
+  final int quantityToDisplay;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,12 +53,12 @@ class ConsultWishImage extends ConsumerWidget {
                       : imageNotFound,
                 ),
               ),
-              if (wish.quantity > 1)
+              if (quantityToDisplay > 1)
                 Positioned(
                   bottom: 8,
                   right: 8,
                   child: Pill(
-                    text: 'x${wish.quantity}',
+                    text: 'x$quantityToDisplay',
                     backgroundColor: Theme.of(context).primaryColor,
                     textStyle: AppTextStyles.medium,
                   ),
