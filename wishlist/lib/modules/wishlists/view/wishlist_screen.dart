@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:wishlist/app/config/deeplink_config.dart';
 import 'package:wishlist/l10n/l10n.dart';
@@ -13,10 +14,12 @@ import 'package:wishlist/modules/wishlists/view/widgets/wishlist_settings_bottom
 import 'package:wishlist/modules/wishlists/view/wishlist_screen_notifier.dart';
 import 'package:wishlist/shared/infra/completed_wish_mutations_provider.dart';
 import 'package:wishlist/shared/infra/completed_wishes_realtime_provider.dart';
+import 'package:wishlist/shared/infra/repositories/wishlist/wishlist_streams_providers.dart';
 import 'package:wishlist/shared/infra/user_service.dart';
 import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 import 'package:wishlist/shared/navigation/routes.dart';
 import 'package:wishlist/shared/theme/colors.dart';
+import 'package:wishlist/shared/theme/text_styles.dart';
 import 'package:wishlist/shared/theme/utils/get_wishlist_theme.dart';
 import 'package:wishlist/shared/utils/app_snackbar.dart';
 import 'package:wishlist/shared/widgets/dialogs/confirm_dialog.dart';
@@ -188,13 +191,60 @@ class WishlistScreen extends ConsumerWidget {
     }
   }
 
+  void _onWishlistDeleted(BuildContext context) {
+    // Quand le propriétaire supprime la wishlist depuis cet écran, le dialog
+    // de confirmation est au premier plan et gère lui-même la navigation
+    if (!(ModalRoute.of(context)?.isCurrent ?? false)) {
+      return;
+    }
+
+    showAppSnackBar(
+      context,
+      context.l10n.wishlistDeleted,
+      type: SnackBarType.error,
+    );
+
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      HomeRoute().go(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(watchWishlistByIdProvider(wishlistId), (_, next) {
+      if (next case AsyncData(value: null)) {
+        _onWishlistDeleted(context);
+      }
+    });
+
     final screenState = ref.watch(wishlistScreenNotifierProvider(wishlistId));
     final notifier =
         ref.read(wishlistScreenNotifierProvider(wishlistId).notifier);
+    final isWishlistDeleted = ref.watch(
+      watchWishlistByIdProvider(wishlistId).select(
+        (wishlist) => switch (wishlist) {
+          AsyncData(value: null) => true,
+          _ => false,
+        },
+      ),
+    );
     final wishlistScreenData =
         ref.watch(wishlistScreenDataRealtimeProvider(wishlistId));
+
+    if (isWishlistDeleted) {
+      return Scaffold(
+        appBar: AppBar(backgroundColor: AppColors.background),
+        body: Center(
+          child: Text(
+            context.l10n.wishlistDeleted,
+            style: AppTextStyles.medium,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
 
     return wishlistScreenData.when(
       data: (data) {

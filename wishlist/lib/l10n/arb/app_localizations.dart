@@ -842,6 +842,12 @@ abstract class AppLocalizations {
   /// **'Wishlist supprimée avec succès !'**
   String get deleteWishlistSuccess;
 
+  /// No description provided for @wishlistDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette wishlist a été supprimée'**
+  String get wishlistDeleted;
+
   /// No description provided for @wishlistColor.
   ///
   /// In fr, this message translates to:

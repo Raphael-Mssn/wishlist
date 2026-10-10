@@ -81,7 +81,7 @@ class SupabaseWishlistRepository implements WishlistRepository {
   }
 
   @override
-  Future<Wishlist> getWishlistById(int wishlistId) async {
+  Future<Wishlist?> findWishlistById(int wishlistId) async {
     return executeSafely(
       () async {
         final response = await _client
@@ -89,9 +89,9 @@ class SupabaseWishlistRepository implements WishlistRepository {
             .select()
             .eq('id', wishlistId)
             .isFilter('deleted_at', null)
-            .single();
+            .maybeSingle();
 
-        return Wishlist.fromJson(response);
+        return response == null ? null : Wishlist.fromJson(response);
       },
       errorMessage: 'Failed to get wishlist',
     );

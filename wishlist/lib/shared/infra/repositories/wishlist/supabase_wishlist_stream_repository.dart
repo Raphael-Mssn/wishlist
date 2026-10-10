@@ -18,7 +18,7 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
 
   final Map<String, RealtimeChannel> _channels = {};
   final Map<String, StreamController<IList<Wishlist>>> _controllers = {};
-  final Map<String, StreamController<Wishlist>> _singleControllers = {};
+  final Map<String, StreamController<Wishlist?>> _singleControllers = {};
 
   @override
   Stream<IList<Wishlist>> watchWishlistsByUser(String userId) {
@@ -58,7 +58,7 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
   }
 
   @override
-  Stream<Wishlist> watchWishlistById(int wishlistId) {
+  Stream<Wishlist?> watchWishlistById(int wishlistId) {
     final key = 'wishlist_$wishlistId';
 
     // ignore: close_sinks - Le controller est déjà créé et sera fermé dans _cleanupSingleStream
@@ -67,7 +67,7 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
       return existingController.stream;
     }
 
-    final controller = StreamController<Wishlist>.broadcast(
+    final controller = StreamController<Wishlist?>.broadcast(
       onCancel: () => _cleanupSingleStream(key),
     );
     _singleControllers[key] = controller;
@@ -158,7 +158,7 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
     StreamController<Wishlist?> controller,
   ) async {
     try {
-      final wishlist = await _wishlistRepository.getWishlistById(wishlistId);
+      final wishlist = await _wishlistRepository.findWishlistById(wishlistId);
       if (!controller.isClosed) {
         controller.add(wishlist);
       }
@@ -226,14 +226,16 @@ class SupabaseWishlistStreamRepository implements WishlistStreamRepository {
     PostgresChangePayload payload,
   ) async {
     try {
-      if (payload.eventType == PostgresChangeEvent.delete) {
+      // L'archivage d'une wishlist arrive en UPDATE avec deleted_at renseigné
+      if (payload.eventType == PostgresChangeEvent.delete ||
+          payload.newRecord['deleted_at'] != null) {
         if (!controller.isClosed) {
           controller.add(null);
         }
         return;
       }
 
-      final wishlist = await _wishlistRepository.getWishlistById(wishlistId);
+      final wishlist = await _wishlistRepository.findWishlistById(wishlistId);
       if (!controller.isClosed) {
         controller.add(wishlist);
       }

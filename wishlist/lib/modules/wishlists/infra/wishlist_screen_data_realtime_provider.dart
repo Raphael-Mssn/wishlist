@@ -10,12 +10,13 @@ import 'package:wishlist/shared/models/wishlist/wishlist.dart';
 
 final wishlistScreenDataRealtimeProvider =
     Provider.family<AsyncValue<WishlistScreenData>, int>((ref, wishlistId) {
-  final wishlist = ref.watch(watchWishlistByIdProvider(wishlistId));
+  final wishlistAsync = ref.watch(watchWishlistByIdProvider(wishlistId));
   final wishs = ref.watch(watchWishsFromWishlistProvider(wishlistId));
-  final ownerId = wishlist.valueOrNull?.idOwner;
+  final wishlist = wishlistAsync.valueOrNull;
 
-  if (ownerId == null) {
-    return switch (wishlist) {
+  // Une wishlist supprimée ou archivée est gérée par WishlistScreen
+  if (wishlist == null) {
+    return switch (wishlistAsync) {
       AsyncError(:final error, :final stackTrace) =>
         AsyncError(error, stackTrace),
       _ => const AsyncLoading(),
@@ -23,9 +24,13 @@ final wishlistScreenDataRealtimeProvider =
   }
 
   final completedWishes =
-      ref.watch(completedWishesByUserRealtimeProvider(ownerId));
+      ref.watch(completedWishesByUserRealtimeProvider(wishlist.idOwner));
 
-  return AsyncValueGroup.group3(wishlist, wishs, completedWishes);
+  return AsyncValueGroup.group3(
+    wishlistAsync.whenData((_) => wishlist),
+    wishs,
+    completedWishes,
+  );
 });
 
 typedef WishlistScreenData = (

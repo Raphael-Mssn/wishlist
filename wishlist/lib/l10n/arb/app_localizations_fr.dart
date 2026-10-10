@@ -420,6 +420,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get deleteWishlistSuccess => 'Wishlist supprimée avec succès !';
 
   @override
+  String get wishlistDeleted => 'Cette wishlist a été supprimée';
+
+  @override
   String get wishlistColor => 'Couleur de la wishlist';
 
   @override

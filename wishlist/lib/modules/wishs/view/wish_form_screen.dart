@@ -149,6 +149,15 @@ class _WishFormScreenState extends ConsumerState<WishFormScreen> {
         ref.read(watchWishlistByIdProvider(widget.wishlistId));
 
     wishlistAsync.whenData((wishlist) async {
+      if (wishlist == null) {
+        showAppSnackBar(
+          context,
+          context.l10n.wishlistDeleted,
+          type: SnackBarType.error,
+        );
+        return;
+      }
+
       final wish = WishCreateRequest(
         name: name,
         price: double.tryParse(price),

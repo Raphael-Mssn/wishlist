@@ -131,6 +131,7 @@
   "deleteWishlistConfirmation": "Es-tu sûr de vouloir supprimer cette wishlist ?",
   "deleteWishlistWishesWarning": "Les wishs non complétés seront supprimés. Les wishs complétés resteront dans ton historique.",
   "deleteWishlistSuccess": "Wishlist supprimée avec succès !",
+  "wishlistDeleted": "Cette wishlist a été supprimée",
   "wishlistColor": "Couleur de la wishlist",
   "sortWishs": "Trier les wishs",
   "sortByFavorite": "Par favoris",

@@ -189,6 +189,30 @@ void main() {
     },
   );
 
+  testWidgets(
+    'displays a message and leaves the screen when the wishlist is deleted',
+    (tester) async {
+      await tester.pumpRouterApp(
+        WishlistRoute(wishlistId: 1).location,
+        overrides: wishlistScreenOverrides(
+          wishlistId: 1,
+          isWishlistDeleted: true,
+          currentUserId: fakeCurrentUserId,
+        ),
+      );
+
+      // Pas de pumpAndSettle : il irait jusqu'à la fermeture du snackbar
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('Cette wishlist a été supprimée'), findsOneWidget);
+      expect(find.byType(WishlistScreen), findsNothing);
+
+      // Laisse le snackbar se fermer avant la fin du test
+      await tester.pumpAndSettle();
+    },
+  );
+
   testWidgets('hides a fully completed wish and updates the pending count',
       (tester) async {
     await tester.pumpRouterApp(
